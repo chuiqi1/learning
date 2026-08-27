@@ -2500,7 +2500,7 @@ if (typeof module !== 'undefined' && module.exports) {
 /* ================================================================
    SECTION C: QUIZ DATA
    ================================================================ */
-const QUIZ_DATA = // QUIZ_DATA - 学习工作台题库
+// QUIZ_DATA - 学习工作台题库
 // 包含三个科目：Riemann几何 (30题)、代数拓扑 (30题)、CET-6英语 (30题)
 // 共计 90 题
 // ============================================================
@@ -4209,9 +4209,9 @@ function showQuizQuestion(){
     <h3>📝 测验 — ${KNOWLEDGE[currentSubject].name}</h3>
     <div class="quiz-progress">第 ${quizState.current+1}/${quizState.questions.length} 题 ${diffLabel}</div>
     <div class="quiz-question">${q.question}</div>
-    ${q.options.map((opt,i)=>\`
+    ${q.options.map((opt,i)=>`
       <div class="quiz-option" id="opt${i}" onclick="answerQuiz(${i})">${opt}</div>
-    \`).join('')}
+    `).join('')}
     <div class="quiz-solution" id="quizSol">
       <div class="sol-title">📖 解析</div>
       <div>${q.solution}</div>
