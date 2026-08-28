@@ -16,6 +16,7 @@ const riemannBig = require('./data-riemann-big.js');
 const topoBig = require('./data-topo-big.js');
 const riemannBig2 = require('./data-riemann-big2.js');
 const topoBig2 = require('./data-topo-big2.js');
+const exampleDetails = require('./example-details.js');
 
 // ---- 构建学科数据 ----
 const subjects = [
@@ -127,6 +128,82 @@ console.log(`Topo: ${topo.chapters.length} chapters, ${topo.nodes.length} nodes,
 console.log(`Total: ${allChapters.length} chapters, ${allNodes.length} nodes, ${allEdges.length} edges (含${validCrossEdges.length}条跨学科), ${allQuizzes.length} quizzes`);
 console.log(`大题(proof/computation): ${allQuizzes.filter(q => q.type !== 'choice').length}, 选择题: ${allQuizzes.filter(q => q.type === 'choice').length}`);
 console.log(`学习路径: ${LEARNING_PATH.length} 个阶段`);
+
+// ---- 数学符号可视化：把 ^ / _ 代码形式转成 <sup>/<sub> ----
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function mathHTML(s) {
+  if (typeof s !== 'string' || s.length === 0) return s;
+  var t = escapeHtml(s);
+  // 1. 花括号形式 x^{...} / x_{...}（最明确，优先处理）
+  t = t.replace(/\^\{([^{}]*)\}/g, '<sup>$1</sup>');
+  t = t.replace(/_\{([^{}]*)\}/g, '<sub>$1</sub>');
+  // 1.5 花括号内嵌方括号（数据中偶有 "σ|_{[v₀,…]}"，内部可能已含 <sub>/<sup> 标签）
+  t = t.replace(/\^\{(\[[^\]]*\])\}/g, '<sup>$1</sup>');
+  t = t.replace(/_\{(\[[^\]]*\])\}/g, '<sub>$1</sub>');
+  // 2. 圆括号形式 x^(...) / x_(...)
+  t = t.replace(/\^\(([^()]*)\)/g, '<sup>$1</sup>');
+  t = t.replace(/_\(([^()]*)\)/g, '<sub>$1</sub>');
+  // 3. 方括号形式 ∇_[X,Y] / σ|_{[v₀,...]}
+  t = t.replace(/\^\[([^\[\]]*)\]/g, '<sup>$1</sup>');
+  t = t.replace(/_\[([^\[\]]*)\]/g, '<sub>$1</sub>');
+  // 4. 汉字形式 _前 / _后 / ^旧 / ^新
+  t = t.replace(/\^([\u4e00-\u9fa5]+)/g, '<sup>$1</sup>');
+  t = t.replace(/_([\u4e00-\u9fa5]+)/g, '<sub>$1</sub>');
+  // 5. 裸形式：^ 与 _ 后跟脚本字符（大小写字母/数字/希腊字母/星号/升降号/偏导/无穷/平行/垂/加/减/井号）
+  var SCRIPT = 'a-z0-9A-Zα-ωΑ-Ω*♭♯∂∞#⊤⊥+-';
+  t = t.replace(new RegExp('\\^([' + SCRIPT + ']+)', 'g'), '<sup>$1</sup>');
+  t = t.replace(new RegExp('_([' + SCRIPT + ']+)', 'g'), '<sub>$1</sub>');
+  return t;
+}
+
+// 对节点与题目的数学字段做渲染转换（不动 svg，svg 需保持原始标签）
+function sanitizeData() {
+  allNodes.forEach(function (n) {
+    ['desc', 'content', 'understanding', 'applications'].forEach(function (k) {
+      if (typeof n[k] === 'string') n[k] = mathHTML(n[k]);
+    });
+    (n.examples || []).forEach(function (ex) {
+      if (typeof ex.title === 'string') ex.title = mathHTML(ex.title);
+      if (typeof ex.content === 'string') ex.content = mathHTML(ex.content);
+      if (typeof ex.detail === 'string') ex.detail = mathHTML(ex.detail);
+    });
+    (n.theorems || []).forEach(function (th) {
+      if (typeof th.name === 'string') th.name = mathHTML(th.name);
+      if (typeof th.statement === 'string') th.statement = mathHTML(th.statement);
+      if (typeof th.proof === 'string') th.proof = mathHTML(th.proof);
+      if (typeof th.detailProof === 'string') th.detailProof = mathHTML(th.detailProof);
+    });
+  });
+  allQuizzes.forEach(function (q) {
+    ['q', 'answer', 'explanation'].forEach(function (k) {
+      if (typeof q[k] === 'string') q[k] = mathHTML(q[k]);
+    });
+    if (Array.isArray(q.options)) {
+      q.options = q.options.map(function (o) { return mathHTML(o); });
+    }
+  });
+}
+
+// 注入例子“按定义逐步计算”与定理“详细证明”的补充内容
+// example-details.js 形如 { "节点id": { "例子序号": "①②③…" }, ... }
+(function injectDetails() {
+  Object.keys(exampleDetails).forEach(function (nodeId) {
+    var node = allNodes.find(function (n) { return n.id === nodeId; });
+    if (!node) return;
+    var map = exampleDetails[nodeId];
+    Object.keys(map).forEach(function (k) {
+      if (node.examples && node.examples[k]) node.examples[k].detail = map[k];
+    });
+  });
+})();
+
+sanitizeData();
 
 // ---- 构建HTML ----
 function buildHTML() {
@@ -758,14 +835,13 @@ body {
 .quiz-question .q-option.wrong-answer { background: var(--danger); color: #fff; border-color: var(--danger); }
 .quiz-question .q-explanation {
   margin-top: 8px;
-  padding: 8px 12px;
+  padding: 8px 0;
   font-size: 12px;
-  background: var(--bg);
+  background: transparent;
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   display: none;
   line-height: 1.6;
-  white-space: pre-wrap;
 }
 .quiz-question .q-explanation.show { display: block; }
 .quiz-question .q-difficulty {
@@ -819,6 +895,158 @@ body {
 .quiz-pagination button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .quiz-pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 .quiz-pagination .page-info { font-size: 12px; color: var(--text-muted); }
+
+/* ============================================================
+   数学上下标 & 详情展开 & 弹窗 & 思路
+   ============================================================ */
+sup, sub { line-height: 0; font-size: 0.75em; }
+sup { vertical-align: super; }
+sub { vertical-align: sub; }
+
+.detail-header .btn-group { display: flex; gap: 6px; }
+.detail-header .expand-btn {
+  height: 28px; padding: 0 10px; border: none; background: var(--bg); border-radius: 14px;
+  cursor: pointer; font-size: 11px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); white-space: nowrap;
+}
+.detail-header .expand-btn:hover { background: var(--accent-light); color: var(--accent); }
+.detail-panel.expanded {
+  position: fixed;
+  top: var(--header-height);
+  left: 0; right: 0; bottom: 0;
+  width: 100% !important;
+  min-width: 100% !important;
+  z-index: 90;
+  border-left: none;
+}
+.detail-panel.expanded .detail-body { font-size: 15px; }
+.detail-panel.expanded .detail-body .section-content,
+.detail-panel.expanded .detail-body .th-proof { font-size: 14px; }
+
+.detail-action-btn {
+  margin-top: 6px;
+  padding: 4px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.detail-action-btn:hover { background: var(--accent); color: #fff; }
+.detail-action-btn.warning { border-color: var(--warning); background: #fef3c7; color: #b45309; }
+.detail-action-btn.warning:hover { background: var(--warning); color: #fff; }
+
+/* 弹窗 */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: min(820px, 100%);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.modal-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #eff6ff, #fef2f2);
+}
+.modal-header h3 { font-size: 15px; font-weight: 700; }
+.modal-header .close-btn {
+  width: 28px; height: 28px; border: none; background: var(--bg); border-radius: 50%;
+  cursor: pointer; font-size: 16px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-header .close-btn:hover { background: #fee2e2; color: var(--danger); }
+.modal-body { flex: 1; overflow-y: auto; padding: 18px; }
+.modal-body .m-section { margin-bottom: 16px; }
+.modal-body .m-title {
+  font-size: 12px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-light);
+}
+.modal-body .m-text { font-size: 14px; line-height: 1.85; color: var(--text); }
+.modal-body .m-proof {
+  padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a;
+  border-radius: var(--radius-sm); font-size: 14px; line-height: 1.85; color: #92400e;
+}
+.modal-body .m-tag {
+  display: inline-block; padding: 3px 10px; background: var(--accent-light);
+  color: var(--accent); border-radius: 12px; font-size: 12px; margin: 2px 5px 2px 0;
+  cursor: pointer; transition: all var(--transition);
+}
+.modal-body .m-tag:hover { background: var(--accent); color: #fff; }
+.modal-body .m-tag.warning { background: #fef3c7; color: #b45309; }
+.modal-body .m-tag.warning:hover { background: var(--warning); color: #fff; }
+
+/* 思路 / 解答 */
+.idea-box {
+  margin-bottom: 8px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.idea-box .idea-label {
+  padding: 4px 12px; font-size: 11px; font-weight: 700; color: #fff;
+  background: var(--accent);
+}
+.idea-box.answer .idea-label { background: var(--success); }
+.idea-box .idea-content {
+  padding: 8px 12px; font-size: 13px; line-height: 1.8; color: var(--text);
+  white-space: pre-wrap;
+}
+
+/* 步骤徽标 & 单步 */
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.proof-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  line-height: 1.85;
+}
+.proof-step:last-child { margin-bottom: 0; }
+.quiz-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  line-height: 1.8;
+}
+.quiz-step:last-child { margin-bottom: 0; }
+.m-tag.small { font-size: 11px; padding: 2px 9px; }
 
 /* ============================================================
    Responsive
@@ -885,7 +1113,10 @@ body {
   <div class="detail-panel" id="detail-panel">
     <div class="detail-header">
       <h3 id="detail-title"></h3>
-      <button class="close-btn" id="detail-close">&times;</button>
+      <div class="btn-group">
+        <button class="expand-btn" id="detail-expand" title="展开/收起面板">&#128470;</button>
+        <button class="close-btn" id="detail-close">&times;</button>
+      </div>
     </div>
     <div class="detail-body" id="detail-body"></div>
   </div>
@@ -925,6 +1156,17 @@ body {
   <div class="quiz-body" id="quiz-body"></div>
 </div>
 
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title"></h3>
+      <button class="close-btn" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <!-- ============================================================
      Inline Data
      ============================================================ -->
@@ -958,6 +1200,47 @@ const LEARNING_PATH = ${pathJSON};
   var layerFilter = 'all';
   var sidebarCollapsed = false;
   var readNodes = loadProgress();
+  var currentDetailNode = null;
+
+  // ---- 文本拆分为步骤（支持中文句号/分号，避免破坏 sup/sub 标签）----
+  function toSteps(text) {
+    if (!text) return [];
+    var parts = String(text).split(/(。|；)/);
+    var steps = [], cur = '';
+    parts.forEach(function (p) {
+      cur += p;
+      if (p === '。' || p === '；') {
+        var s = cur.trim();
+        if (s) { steps.push(s); cur = ''; }
+      }
+    });
+    if (cur.trim()) steps.push(cur.trim());
+    return steps;
+  }
+
+  // ---- 把 ①②③… 引导的解答拆成编号步骤 ----
+  function toNumberedSteps(text) {
+    if (!text) return [];
+    var tokens = String(text).split(/([①-⑩])/);
+    var steps = [], cur = '';
+    tokens.forEach(function (t) {
+      if (/^[①-⑩]$/.test(t)) {
+        if (cur.trim()) steps.push(cur.trim());
+        cur = t;
+      } else {
+        cur += t;
+      }
+    });
+    if (cur.trim()) steps.push(cur.trim());
+    return steps;
+  }
+
+  // ---- 与某道题关联的知识点（同章节点 = 相关定义/定理）----
+  function relatedNodesForQuiz(q) {
+    return ALL_NODES.filter(function (n) {
+      return n.subject === q.subject && n.chapter === q.chapter;
+    });
+  }
 
   // ---- Progress ----
   var STORAGE_KEY = 'learning-workbench-progress';
@@ -1190,6 +1473,7 @@ const LEARNING_PATH = ${pathJSON};
   // ---- 详情面板 ----
   function showDetail(node) {
     markRead(node.id);
+    currentDetailNode = node;
     var title = document.getElementById('detail-title');
     var body = document.getElementById('detail-body');
     var ch = ALL_CHAPTERS.find(function(c) { return c.id === node.chapter && c.subject === node.subject; });
@@ -1220,8 +1504,12 @@ const LEARNING_PATH = ${pathJSON};
     }
     if (node.examples && node.examples.length > 0) {
       html += '<div class="section"><div class="section-title">例子</div>';
-      node.examples.forEach(function(ex) {
-        html += '<div class="example-item"><div class="ex-title">' + ex.title + '</div><div class="ex-content">' + ex.content + '</div></div>';
+      node.examples.forEach(function(ex, exi) {
+        html += '<div class="example-item">';
+        html += '<div class="ex-title">' + ex.title + '</div>';
+        html += '<div class="ex-content">' + ex.content + '</div>';
+        html += '<button class="detail-action-btn" data-example="' + exi + '">查看详细步骤 &#8594;</button>';
+        html += '</div>';
       });
       html += '</div>';
     }
@@ -1232,6 +1520,7 @@ const LEARNING_PATH = ${pathJSON};
         html += '<div class="th-name">定理 ' + (thi + 1) + ': ' + th.name + '</div>';
         html += '<div class="th-statement">' + th.statement + '</div>';
         if (th.proof) html += '<div class="th-proof"><span class="th-proof-label">证明概要</span>' + th.proof + '</div>';
+        html += '<button class="detail-action-btn warning" data-theorem="' + thi + '">查看详细证明 &#8594;</button>';
         html += '</div>';
       });
       html += '</div>';
@@ -1250,9 +1539,182 @@ const LEARNING_PATH = ${pathJSON};
 
     body.innerHTML = html;
     document.getElementById('detail-panel').classList.add('open');
+
+    // 例子/定理 点击查看详情
+    body.querySelectorAll('[data-example]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var exi = parseInt(btn.getAttribute('data-example'), 10);
+        if (node.examples && node.examples[exi]) openExampleModal(node, node.examples[exi], exi);
+      });
+    });
+    body.querySelectorAll('[data-theorem]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var thi = parseInt(btn.getAttribute('data-theorem'), 10);
+        if (node.theorems && node.theorems[thi]) openTheoremModal(node, node.theorems[thi], thi);
+      });
+    });
+
+    // 详情面板内的 "关联知识点" 标签
+    body.querySelectorAll('[data-node-ref]').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        var id = tag.getAttribute('data-node-ref');
+        var target = ALL_NODES.find(function(n) { return n.id === id; });
+        if (target) showDetail(target);
+      });
+    });
   }
   function closeDetail() {
     document.getElementById('detail-panel').classList.remove('open');
+    var panel = document.getElementById('detail-panel');
+    panel.classList.remove('expanded');
+    var btn = document.getElementById('detail-expand');
+    if (btn) btn.innerHTML = '&#128470;';
+  }
+
+  // ============================================================
+  // 弹窗：例子详细步骤 / 定理详细证明
+  // ============================================================
+  function openModal(title, bodyHTML) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = bodyHTML;
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  // 抽取定理名里的关键词（去掉常见尾缀），用于跨知识点搜索使用处
+  function theoremKeyword(name) {
+    return String(name || '').replace(/(定理|公式|方程|不等式|引理|恒等式|命题|推论|变换)$/g, '');
+  }
+
+  function findTheoremRelated(name) {
+    var kw = theoremKeyword(name);
+    var examples = [];
+    var quizzes = [];
+    ALL_NODES.forEach(function (n) {
+      (n.examples || []).forEach(function (ex) {
+        var hay = (ex.title || '') + ' ' + (ex.content || '') + ' ' + (n.label || '');
+        if (kw && kw.length >= 2 && (hay.indexOf(kw) >= 0 || hay.indexOf(name) >= 0)) {
+          examples.push({ nodeId: n.id, nodeLabel: n.label, title: ex.title });
+        }
+      });
+    });
+    ALL_QUIZZES.forEach(function (q) {
+      var hay = (q.q || '') + ' ' + (q.answer || '') + ' ' + (q.explanation || '');
+      if (kw && kw.length >= 2 && (hay.indexOf(kw) >= 0 || hay.indexOf(name) >= 0)) {
+        quizzes.push(q);
+      }
+    });
+    return { examples: examples, quizzes: quizzes };
+  }
+
+  function openExampleModal(node, ex, exi) {
+    var body = '';
+    body += '<div class="m-section"><div class="m-title">例子</div><div class="m-text">' + (ex.content || '') + '</div></div>';
+    if (node.desc) body += '<div class="m-section"><div class="m-title">依据的定义</div><div class="m-text">' + node.desc + '</div></div>';
+    // 详细“根据定义逐步计算”：优先用例子专属 detail，其次用节点完整内容
+    var detailSteps = ex.detail ? toNumberedSteps(ex.detail) : [];
+    if (detailSteps.length > 0) {
+      body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div>';
+      body += '<div class="m-proof">';
+      detailSteps.forEach(function (s) {
+        var m = s.match(/^([①-⑩])\s*/);
+        var num = m ? m[1] : '';
+        var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
+        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + rest + '</span></div>';
+      });
+      body += '</div></div>';
+    } else {
+      var steps = toSteps(node.content);
+      if (steps.length > 1) {
+        body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div>';
+        body += '<div class="m-proof">';
+        steps.forEach(function (s, i) {
+          body += '<div class="proof-step"><span class="step-badge">' + (i + 1) + '</span><span>' + s + '</span></div>';
+        });
+        body += '</div></div>';
+      } else if (node.content) {
+        body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div><div class="m-text">' + node.content + '</div></div>';
+      }
+    }
+    if (node.theorems && node.theorems.length > 0) {
+      body += '<div class="m-section"><div class="m-title">相关定理</div><div class="m-text">';
+      node.theorems.forEach(function (th, i) {
+        body += '<span class="m-tag warning" data-thnode="' + node.id + '" data-thidx="' + i + '">' + th.name + '</span>';
+      });
+      body += '</div></div>';
+    }
+    openModal('例子 · ' + (ex.title || ''), body);
+    document.getElementById('modal-body').querySelectorAll('[data-thnode]').forEach(function (tag) {
+      tag.addEventListener('click', function () {
+        var nid = tag.getAttribute('data-thnode');
+        var idx = parseInt(tag.getAttribute('data-thidx'), 10);
+        var n = ALL_NODES.find(function (x) { return x.id === nid; });
+        if (n && n.theorems && n.theorems[idx]) openTheoremModal(n, n.theorems[idx], idx);
+      });
+    });
+  }
+
+  function openTheoremModal(node, th, thi) {
+    var rel = findTheoremRelated(th.name);
+    var body = '';
+    body += '<div class="m-section"><div class="m-title">定理陈述</div><div class="m-text" style="font-style:italic">' + (th.statement || '') + '</div></div>';
+    body += '<div class="m-section"><div class="m-title">详细证明</div>';
+    // 优先展示定理专属的详细证明 detailProof（用①②③编号），其次把 proof 按句拆步
+    if (th.detailProof) {
+      var dSteps = toNumberedSteps(th.detailProof);
+      body += '<div class="m-proof">';
+      dSteps.forEach(function (s) {
+        var m = s.match(/^([①-⑩])\s*/);
+        var num = m ? m[1] : '';
+        var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
+        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + rest + '</span></div>';
+      });
+      body += '</div>';
+    } else {
+      var pSteps = toSteps(th.proof);
+      if (pSteps.length > 1) {
+        body += '<div class="m-proof">';
+        pSteps.forEach(function (s, i) {
+          body += '<div class="proof-step"><span class="step-badge">' + (i + 1) + '</span><span>' + s + '</span></div>';
+        });
+        body += '</div>';
+      } else {
+        body += '<div class="m-proof">' + (th.proof || '（暂无证明拓写，请结合教材对应章节阅读。）') + '</div>';
+      }
+    }
+    body += '</div>';
+    if (node.examples && node.examples.length > 0) {
+      body += '<div class="m-section"><div class="m-title">本知识点的例题</div><div class="m-text">';
+      node.examples.forEach(function (ex) {
+        body += '<div style="margin-bottom:8px"><strong>' + ex.title + '</strong>：' + ex.content + '</div>';
+      });
+      body += '</div></div>';
+    }
+    var otherExamples = rel.examples.filter(function (e) { return e.nodeId !== node.id; });
+    if (otherExamples.length > 0) {
+      body += '<div class="m-section"><div class="m-title">其他使用本定理的例题</div><div class="m-text">';
+      otherExamples.slice(0, 8).forEach(function (e) {
+        body += '<span class="m-tag" data-node="' + e.nodeId + '">' + e.nodeLabel + '：' + e.title + '</span>';
+      });
+      body += '</div></div>';
+    }
+    if (rel.quizzes.length > 0) {
+      body += '<div class="m-section"><div class="m-title">用到本定理的测验题</div><div class="m-text">';
+      rel.quizzes.slice(0, 6).forEach(function (q) {
+        body += '<div style="font-size:12px;margin-bottom:6px;color:var(--text-secondary);line-height:1.6">· ' + q.q + '</div>';
+      });
+      body += '</div></div>';
+    }
+    openModal('定理 · ' + (th.name || ''), body);
+    document.getElementById('modal-body').querySelectorAll('[data-node]').forEach(function (tag) {
+      tag.addEventListener('click', function () {
+        var id = tag.getAttribute('data-node');
+        var target = ALL_NODES.find(function (n) { return n.id === id; });
+        if (target) { closeModal(); showDetail(target); }
+      });
+    });
   }
 
   // ---- 侧边栏 ----
@@ -1418,6 +1880,52 @@ const LEARNING_PATH = ${pathJSON};
     return quizzes;
   }
 
+  // ---- 题解：思路 + 详细代入计算 ----
+  function ideaLine(q) {
+    if (q.type === 'proof') {
+      return '先明确结论中要证明的量，回顾它的定义；再借助本知识点对应的定理（点击下方标签查看），按逻辑逐层推导，最后化简收敛到目标等式。';
+    }
+    if (q.type === 'computation') {
+      return '先识别题目考查的定义与公式，把给定对象代入求导、叉积、缩并或积分等运算，再按公式化简，得出具体数值或表达式。';
+    }
+    return '先审题定位考点，结合相关定义与定理（见下方标签）选择公式，代入题目给定数据计算。';
+  }
+
+  function buildQuizExplanation(q) {
+    var answerText = q.type === 'choice' ? (q.explanation || '') : (q.answer || '');
+    var rel = relatedNodesForQuiz(q);
+    var html = '';
+    // 思路
+    html += '<div class="idea-box"><div class="idea-label">思路</div><div class="idea-content">';
+    html += '<div>' + ideaLine(q) + '</div>';
+    if (rel.length > 0) {
+      html += '<div style="margin-top:8px;font-size:12px;color:var(--text-muted)">涉及的定义 / 定理：</div>';
+      html += '<div style="margin-top:4px">';
+      rel.slice(0, 6).forEach(function (n) {
+        html += '<span class="m-tag small" data-node="' + n.id + '">' + n.label + '</span>';
+      });
+      html += '</div>';
+    }
+    html += '</div></div>';
+    // 解答
+    var steps = toNumberedSteps(answerText);
+    html += '<div class="idea-box answer"><div class="idea-label">解答（详细代入计算）</div><div class="idea-content">';
+    if (steps.length > 1) {
+      steps.forEach(function (s) {
+        var m = s.match(/^([①-⑩])\s*/);
+        var num = m ? m[1] : '';
+        var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
+        html += '<div class="quiz-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + rest + '</span></div>';
+      });
+    } else if (answerText) {
+      html += answerText;
+    } else {
+      html += '（本题暂未附详细解析。）';
+    }
+    html += '</div></div>';
+    return html;
+  }
+
   function renderQuiz() {
     var body = document.getElementById('quiz-body');
     var quizzes = filteredQuizzes();
@@ -1451,10 +1959,10 @@ const LEARNING_PATH = ${pathJSON};
           html += '<button class="q-option" data-answer="' + oi + '">' + String.fromCharCode(65 + oi) + '. ' + opt + '</button>';
         });
         html += '</div>';
-        html += '<div class="q-explanation">' + (q.explanation || '') + '</div>';
+        html += '<div class="q-explanation">' + buildQuizExplanation(q) + '</div>';
       } else {
-        html += '<button class="show-answer">显示解答</button>';
-        html += '<div class="q-explanation">' + (q.answer || '') + '</div>';
+        html += '<button class="show-answer">显示详细解答</button>';
+        html += '<div class="q-explanation">' + buildQuizExplanation(q) + '</div>';
       }
       html += '</div>';
     });
@@ -1494,9 +2002,17 @@ const LEARNING_PATH = ${pathJSON};
           var expl = question.querySelector('.q-explanation');
           var isShowing = expl.classList.contains('show');
           expl.classList.toggle('show');
-          showBtn.textContent = isShowing ? '显示解答' : '收起解答';
+          showBtn.textContent = isShowing ? '显示详细解答' : '收起详细解答';
         });
       }
+      // 题解中的 "涉及定义/定理" 标签：点击跳转到对应知识点
+      question.querySelectorAll('[data-node]').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          var id = tag.getAttribute('data-node');
+          var target = ALL_NODES.find(function(n) { return n.id === id; });
+          if (target) showDetail(target);
+        });
+      });
     });
 
     // 分页按钮
@@ -1512,6 +2028,24 @@ const LEARNING_PATH = ${pathJSON};
 
   // ---- 事件绑定 ----
   document.getElementById('detail-close').addEventListener('click', closeDetail);
+
+  // 展开/收起详情面板
+  document.getElementById('detail-expand').addEventListener('click', function() {
+    var panel = document.getElementById('detail-panel');
+    var btn = document.getElementById('detail-expand');
+    var expanded = panel.classList.toggle('expanded');
+    btn.innerHTML = expanded ? '&#128473;' : '&#128470;';
+    btn.title = expanded ? '收起为右侧面板' : '展开为全屏面板';
+  });
+
+  // 弹窗关闭
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeModal(); }
+  });
   document.getElementById('clear-filter').addEventListener('click', function() {
     activeChapter = null;
     applyChapterHighlight();
