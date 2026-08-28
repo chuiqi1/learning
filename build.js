@@ -12,9 +12,10 @@ const riemann = require('./data-riemann.js');
 const topo = require('./data-topo.js');
 const riemannExtraQuiz = require('./data-riemann-quiz.js');
 const topoExtraQuiz = require('./data-topo-quiz.js');
-
-console.log(`Loading data: Riemann (${riemann.chapters.length} chapters, ${riemann.nodes.length} nodes, ${riemann.edges.length} edges, ${riemann.quizzes.length} quizzes + ${riemannExtraQuiz.length} extra)`);
-console.log(`Loading data: Topo (${topo.chapters.length} chapters, ${topo.nodes.length} nodes, ${topo.edges.length} edges, ${topo.quizzes.length} quizzes + ${topoExtraQuiz.length} extra)`);
+const riemannBig = require('./data-riemann-big.js');
+const topoBig = require('./data-topo-big.js');
+const riemannBig2 = require('./data-riemann-big2.js');
+const topoBig2 = require('./data-topo-big2.js');
 
 // ---- 构建学科数据 ----
 const subjects = [
@@ -38,11 +39,15 @@ const subjects = [
   }
 ];
 
-// ---- 为所有节点分配学科标记 ----
+// ---- 为所有节点/边/章分配学科标记 ----
 const allNodes = [];
 const allEdges = [];
 const allQuizzes = [];
 const allChapters = [];
+
+function addQuiz(q, subject) {
+  allQuizzes.push({ ...q, subject: subject, type: q.type || 'choice' });
+}
 
 subjects.forEach(subj => {
   subj.data.nodes.forEach(n => {
@@ -51,58 +56,77 @@ subjects.forEach(subj => {
   subj.data.edges.forEach(e => {
     allEdges.push({ ...e });
   });
-  subj.data.quizzes.forEach(q => {
-    allQuizzes.push({ ...q, subject: subj.id });
-  });
-  // Merge extra quizzes
-  if (subj.id === 'riemann') {
-    riemannExtraQuiz.forEach(q => {
-      allQuizzes.push({ ...q, subject: subj.id });
-    });
-  } else if (subj.id === 'topo') {
-    topoExtraQuiz.forEach(q => {
-      allQuizzes.push({ ...q, subject: subj.id });
-    });
-  }
+  subj.data.quizzes.forEach(q => addQuiz(q, subj.id));
   subj.data.chapters.forEach(c => {
     allChapters.push({ ...c, subject: subj.id });
   });
 });
 
-console.log(`Total: ${allChapters.length} chapters, ${allNodes.length} nodes, ${allEdges.length} edges, ${allQuizzes.length} quizzes`);
+// 合并扩展题库
+riemannExtraQuiz.forEach(q => addQuiz(q, 'riemann'));
+topoExtraQuiz.forEach(q => addQuiz(q, 'topo'));
+riemannBig.forEach(q => addQuiz(q, 'riemann'));
+topoBig.forEach(q => addQuiz(q, 'topo'));
+riemannBig2.forEach(q => addQuiz(q, 'riemann'));
+topoBig2.forEach(q => addQuiz(q, 'topo'));
 
-// ---- 章节颜色映射 ----
-const chapterColors = {
-  // 黎曼
-  'ch1': '#2563eb', 'ch2': '#7c3aed', 'ch3': '#db2777', 'ch4': '#ea580c', 'ch5': '#65a30d',
-  'ch6': '#0891b2', 'ch7': '#4f46e5', 'ch8': '#b91c1c', 'ch9': '#c026d3', 'ch10': '#0d9488',
-  // 拓扑
-  'ch1_t': '#dc2626', 'ch2_t': '#d97706', 'ch3_t': '#059669', 'ch4_t': '#7c3aed'
-};
+// ---- 跨学科关联边（黎曼几何 ↔ 代数拓扑）----
+const CROSS_EDGES = [
+  { source: 'r5',  target: 't16', label: 'Gauss-Bonnet与Euler示性数' },
+  { source: 'r42', target: 't10', label: 'Euler示性数' },
+  { source: 'r40', target: 't9',  label: '三角剖分' },
+  { source: 'r41', target: 't16', label: '总曲率与同调' },
+  { source: 'r43', target: 't21', label: '示性类与对偶' },
+  { source: 'r1',  target: 't1',  label: '曲线与同伦' },
+  { source: 'r34', target: 't25', label: '常曲率与空间分类' }
+];
+// 只保留两端节点都存在的跨学科边
+const nodeIdSet = new Set(allNodes.map(n => n.id));
+const validCrossEdges = CROSS_EDGES.filter(e => nodeIdSet.has(e.source) && nodeIdSet.has(e.target));
+validCrossEdges.forEach(e => allEdges.push(e));
 
-// ---- 为拓扑章节重新映射ID ----
-allChapters.forEach(c => {
-  if (c.subject === 'topo') {
-    c.colorKey = c.id + '_t';
-  } else {
-    c.colorKey = c.id;
-  }
-});
-
-// ---- 构建节点形状大小映射 ----
-function getNodeSize(node) {
-  const layer = node.layer || 2;
-  // 重要性: layer越低越基础, 越大
-  const base = 12 - layer * 1.5;
-  return Math.max(5, Math.min(14, base));
-}
-
-// ---- 章节颜色 ----
+// ---- 章节颜色映射：统一 key 为 "subject:chapter" ----
 const CH_COLORS = [
   '#2563eb', '#7c3aed', '#db2777', '#ea580c', '#65a30d',
   '#0891b2', '#4f46e5', '#b91c1c', '#c026d3', '#0d9488',
   '#dc2626', '#d97706', '#059669', '#9333ea'
 ];
+const CHAPTER_COLORS = {};
+allChapters.forEach((ch, idx) => {
+  const key = ch.subject + ':' + ch.id;
+  CHAPTER_COLORS[key] = CH_COLORS[idx % CH_COLORS.length];
+});
+
+// ---- 学习路径生成（按学科→章节→layer 排序）----
+function buildLearningPath() {
+  const stages = [];
+  subjects.forEach(subj => {
+    const chapters = allChapters
+      .filter(c => c.subject === subj.id)
+      .sort((a, b) => parseInt(a.id.replace(/\D/g, ''), 10) - parseInt(b.id.replace(/\D/g, ''), 10));
+    chapters.forEach(ch => {
+      const nodes = allNodes
+        .filter(n => n.subject === subj.id && n.chapter === ch.id)
+        .sort((a, b) => (a.layer || 0) - (b.layer || 0));
+      stages.push({
+        subject: subj.id,
+        subjectName: subj.name,
+        subjectColor: subj.color,
+        chapter: ch.id,
+        title: ch.title,
+        nodes: nodes.map(n => ({ id: n.id, label: n.label, layer: n.layer || 0 }))
+      });
+    });
+  });
+  return stages;
+}
+const LEARNING_PATH = buildLearningPath();
+
+console.log(`Riemann: ${riemann.chapters.length} chapters, ${riemann.nodes.length} nodes, ${riemann.edges.length} edges, ${riemann.quizzes.length + riemannExtraQuiz.length + riemannBig.length + riemannBig2.length} quizzes`);
+console.log(`Topo: ${topo.chapters.length} chapters, ${topo.nodes.length} nodes, ${topo.edges.length} edges, ${topo.quizzes.length + topoExtraQuiz.length + topoBig.length + topoBig2.length} quizzes`);
+console.log(`Total: ${allChapters.length} chapters, ${allNodes.length} nodes, ${allEdges.length} edges (含${validCrossEdges.length}条跨学科), ${allQuizzes.length} quizzes`);
+console.log(`大题(proof/computation): ${allQuizzes.filter(q => q.type !== 'choice').length}, 选择题: ${allQuizzes.filter(q => q.type === 'choice').length}`);
+console.log(`学习路径: ${LEARNING_PATH.length} 个阶段`);
 
 // ---- 构建HTML ----
 function buildHTML() {
@@ -111,7 +135,8 @@ function buildHTML() {
   const quizzesJSON = JSON.stringify(allQuizzes);
   const chaptersJSON = JSON.stringify(allChapters);
   const subjectsJSON = JSON.stringify(subjects);
-  const chColorsJSON = JSON.stringify(CH_COLORS);
+  const chColorsJSON = JSON.stringify(CHAPTER_COLORS);
+  const pathJSON = JSON.stringify(LEARNING_PATH);
 
   return `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -139,6 +164,8 @@ function buildHTML() {
   --danger: #dc2626;
   --success: #16a34a;
   --warning: #d97706;
+  --riemann: #2563eb;
+  --topo: #dc2626;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
   --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
@@ -150,6 +177,7 @@ function buildHTML() {
   --sidebar-width: 280px;
   --detail-width: 380px;
   --header-height: 52px;
+  --quiz-bar-height: 40px;
   --quiz-height: 320px;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -175,13 +203,13 @@ body {
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  gap: 12px;
+  padding: 0 12px;
+  gap: 8px;
   z-index: 100;
   box-shadow: var(--shadow-sm);
 }
 .header h1 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
   background: linear-gradient(135deg, var(--accent), #7c3aed);
@@ -189,34 +217,54 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.header .subject-tabs {
-  display: flex;
-  gap: 4px;
-  margin-left: 16px;
-}
-.header .subject-tab {
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
+.btn-icon {
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.btn-icon:hover { background: var(--accent-light); color: var(--accent); }
+
+/* 学科多选按钮 */
+.subject-toggle {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
   background: var(--bg);
   color: var(--text-secondary);
   transition: all var(--transition);
+  white-space: nowrap;
+  font-family: var(--font);
 }
-.header .subject-tab:hover { background: var(--accent-light); color: var(--accent); }
-.header .subject-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.subject-toggle:hover { border-color: var(--accent); }
+.subject-toggle.riemann.active { background: var(--riemann); color: #fff; border-color: var(--riemann); }
+.subject-toggle.topo.active { background: var(--topo); color: #fff; border-color: var(--topo); }
+.subject-toggle.merge-btn { background: linear-gradient(135deg, var(--riemann), var(--topo)); color: #fff; border-color: transparent; }
+.subject-toggle.merge-btn:hover { opacity: 0.9; border-color: transparent; }
+
 .header .search-box {
   margin-left: auto;
   position: relative;
+  flex-shrink: 1;
 }
 .header .search-box input {
-  width: 220px;
-  padding: 6px 12px 6px 32px;
+  width: 160px;
+  padding: 6px 12px 6px 30px;
   border: 1px solid var(--border);
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 12px;
   font-family: var(--font);
   outline: none;
   transition: all var(--transition);
@@ -225,7 +273,7 @@ body {
 .header .search-box input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-light);
-  width: 280px;
+  width: 220px;
 }
 .header .search-box .search-icon {
   position: absolute;
@@ -233,27 +281,23 @@ body {
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
 }
-.header .btn-icon {
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: var(--text-secondary);
-  transition: all var(--transition);
-}
-.header .btn-icon:hover { background: var(--accent-light); color: var(--accent); }
-.header .progress-info {
+.header select.layer-filter {
+  padding: 5px 8px;
   font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg);
+  font-family: var(--font);
+  outline: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.header .progress-info {
+  font-size: 11px;
   color: var(--text-muted);
-  margin-left: 8px;
+  white-space: nowrap;
 }
 
 /* ============================================================
@@ -280,7 +324,7 @@ body {
 }
 .sidebar.collapsed { width: 0; min-width: 0; border-right: none; }
 .sidebar-header {
-  padding: 12px 16px;
+  padding: 10px 14px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -288,6 +332,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 .sidebar-list {
   flex: 1;
@@ -295,6 +340,7 @@ body {
   padding: 8px;
 }
 .subject-group { margin-bottom: 12px; }
+.subject-group.disabled { opacity: 0.4; pointer-events: none; }
 .subject-group-title {
   font-size: 12px;
   font-weight: 700;
@@ -302,14 +348,11 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding: 6px 8px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
   border-radius: var(--radius-sm);
-  transition: all var(--transition);
 }
-.subject-group-title:hover { background: var(--border); }
 .subject-group-title .dot {
   width: 8px;
   height: 8px;
@@ -360,47 +403,37 @@ body {
   cursor: grab;
 }
 .graph-area svg:active { cursor: grabbing; }
-.graph-legend {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  font-size: 11px;
-  box-shadow: var(--shadow);
-  display: none;
-}
 .graph-hint {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 12px;
   color: var(--text-muted);
   pointer-events: none;
+  background: rgba(255,255,255,0.8);
+  padding: 4px 12px;
+  border-radius: 16px;
 }
 
-/* Link styles */
 .link {
   stroke: #cbd5e1;
-  stroke-opacity: 0.7;
-  stroke-width: 1.5;
+  stroke-opacity: 0.55;
+  stroke-width: 1.4;
 }
-.link.dimmed { stroke-opacity: 0.1; }
-.link.highlighted { stroke: var(--accent); stroke-opacity: 0.8; stroke-width: 2.5; }
+.link.cross { stroke: #a855f7; stroke-opacity: 0.7; stroke-width: 2; stroke-dasharray: 5,3; }
+.link.dimmed { stroke-opacity: 0.08; }
+.link.highlighted { stroke: var(--accent); stroke-opacity: 0.9; stroke-width: 2.5; }
 
-/* Node styles */
 .node circle {
   stroke: #fff;
-  stroke-width: 2;
+  stroke-width: 2.2;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.node circle:hover { stroke-width: 3; filter: brightness(0.9); }
-.node circle.dimmed { opacity: 0.2; }
-.node circle.highlighted { stroke: var(--accent); stroke-width: 3; filter: drop-shadow(0 0 4px rgba(37,99,235,0.5)); }
+.node circle:hover { stroke-width: 3.4; filter: brightness(0.9); }
+.node circle.dimmed { opacity: 0.15; }
+.node circle.highlighted { stroke: var(--accent); stroke-width: 3.5; filter: drop-shadow(0 0 4px rgba(37,99,235,0.5)); }
 .node circle.searched { animation: pulse 1.5s ease-in-out infinite; }
 .node text {
   font-family: var(--font);
@@ -409,7 +442,7 @@ body {
   fill: var(--text);
   text-anchor: middle;
 }
-.node text.dimmed { opacity: 0.15; }
+.node text.dimmed { opacity: 0.1; }
 .node text.highlighted { fill: var(--accent); font-weight: 700; }
 
 @keyframes pulse {
@@ -438,11 +471,7 @@ body {
   justify-content: space-between;
   flex-shrink: 0;
 }
-.detail-header h3 {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-}
+.detail-header h3 { font-size: 15px; font-weight: 700; color: var(--text); }
 .detail-header .close-btn {
   width: 28px;
   height: 28px;
@@ -464,9 +493,7 @@ body {
   padding: 16px;
   white-space: pre-wrap;
 }
-.detail-body .section {
-  margin-bottom: 16px;
-}
+.detail-body .section { margin-bottom: 16px; }
 .detail-body .section-title {
   font-size: 12px;
   font-weight: 700;
@@ -477,11 +504,7 @@ body {
   padding-bottom: 4px;
   border-bottom: 1px solid var(--border-light);
 }
-.detail-body .section-content {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text);
-}
+.detail-body .section-content { font-size: 13px; line-height: 1.7; color: var(--text); }
 .detail-body .tag {
   display: inline-block;
   padding: 2px 8px;
@@ -501,10 +524,7 @@ body {
   display: flex;
   justify-content: center;
 }
-.detail-body .svg-chart svg {
-  max-width: 220px;
-  max-height: 220px;
-}
+.detail-body .svg-chart svg { max-width: 220px; max-height: 220px; }
 .detail-body .example-item {
   padding: 8px 12px;
   background: var(--bg);
@@ -512,16 +532,8 @@ body {
   margin-bottom: 6px;
   border-left: 3px solid var(--accent);
 }
-.detail-body .example-item .ex-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text);
-}
-.detail-body .example-item .ex-content {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
+.detail-body .example-item .ex-title { font-size: 12px; font-weight: 600; color: var(--text); }
+.detail-body .example-item .ex-content { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 .detail-body .theorem-item {
   padding: 8px 12px;
   background: #fefce8;
@@ -529,17 +541,8 @@ body {
   margin-bottom: 6px;
   border-left: 3px solid var(--warning);
 }
-.detail-body .theorem-item .th-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--warning);
-}
-.detail-body .theorem-item .th-statement {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-  font-style: italic;
-}
+.detail-body .theorem-item .th-name { font-size: 12px; font-weight: 700; color: var(--warning); }
+.detail-body .theorem-item .th-statement { font-size: 12px; color: var(--text-secondary); margin-top: 2px; font-style: italic; }
 .detail-body .th-proof {
   margin-top: 6px;
   padding: 8px 10px;
@@ -570,26 +573,102 @@ body {
 }
 
 /* ============================================================
+   学习路径面板
+   ============================================================ */
+.path-panel {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 90vw;
+  background: var(--bg-card);
+  z-index: 80;
+  box-shadow: var(--shadow-lg);
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.path-panel.open { transform: translateX(0); }
+.path-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #eff6ff, #fef2f2);
+}
+.path-header h3 { font-size: 14px; font-weight: 700; }
+.path-header .path-desc { font-size: 11px; color: var(--text-secondary); font-weight: 400; margin-top: 2px; }
+.path-header .close-btn {
+  width: 28px; height: 28px; border: none; background: var(--bg); border-radius: 50%;
+  cursor: pointer; font-size: 16px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+}
+.path-header .close-btn:hover { background: #fee2e2; color: var(--danger); }
+.path-body { flex: 1; overflow-y: auto; padding: 12px; }
+.path-stage {
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.path-stage-head {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-sidebar);
+  cursor: pointer;
+}
+.path-stage-head .stage-num {
+  min-width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #fff; flex-shrink: 0;
+}
+.path-stage-head .stage-title { flex: 1; }
+.path-stage-head .stage-count { font-size: 10px; color: var(--text-muted); font-weight: 400; }
+.path-node {
+  padding: 6px 12px 6px 20px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  transition: all var(--transition);
+  border-top: 1px solid var(--border-light);
+}
+.path-node:hover { background: var(--accent-light); color: var(--accent); }
+.path-node .pn-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: #cbd5e1; }
+.path-node.read .pn-dot { background: var(--success); }
+.path-node.current { background: #fef9c3; color: #854d0e; font-weight: 600; }
+.path-node.current .pn-dot { background: var(--warning); width: 8px; height: 8px; }
+
+/* ============================================================
    Quiz Panel
    ============================================================ */
 .quiz-panel {
-  height: var(--quiz-height);
   background: var(--bg-card);
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  transition: height var(--transition);
 }
-.quiz-panel.collapsed { height: 0; overflow: hidden; border-top: none; }
-.quiz-header {
-  padding: 8px 16px;
+.quiz-bar {
+  height: var(--quiz-bar-height);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 0 12px;
   flex-shrink: 0;
+  background: var(--bg-sidebar);
 }
-.quiz-header .quiz-toggle {
+.quiz-bar .quiz-toggle {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -600,8 +679,12 @@ body {
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   transition: all var(--transition);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  white-space: nowrap;
+  font-family: var(--font);
 }
-.quiz-header .quiz-toggle:hover { background: var(--border); }
+.quiz-bar .quiz-toggle:hover { background: var(--border); }
 .quiz-tabs {
   display: flex;
   gap: 2px;
@@ -627,20 +710,26 @@ body {
   display: flex;
   gap: 4px;
   align-items: center;
+  flex-shrink: 0;
 }
 .quiz-filter select {
-  padding: 4px 8px;
+  padding: 4px 6px;
   font-size: 11px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: var(--font);
   outline: none;
+  background: var(--bg-card);
+  color: var(--text-secondary);
 }
 .quiz-body {
-  flex: 1;
+  height: var(--quiz-height);
   overflow-y: auto;
   padding: 12px 16px;
+  transition: height var(--transition);
 }
+.quiz-panel.collapsed .quiz-body { height: 0; padding: 0; }
+
 .quiz-question {
   padding: 12px;
   margin-bottom: 10px;
@@ -650,11 +739,8 @@ body {
 }
 .quiz-question.correct { border-color: var(--success); background: #f0fdf4; }
 .quiz-question.wrong { border-color: var(--danger); background: #fef2f2; }
-.quiz-question .q-text {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
+.quiz-question .q-meta { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+.quiz-question .q-text { font-size: 13px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
 .quiz-question .q-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .quiz-question .q-option {
   padding: 6px 12px;
@@ -678,7 +764,8 @@ body {
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   display: none;
-  line-height: 1.5;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 .quiz-question .q-explanation.show { display: block; }
 .quiz-question .q-difficulty {
@@ -686,11 +773,52 @@ body {
   padding: 2px 6px;
   border-radius: 10px;
   display: inline-block;
-  margin-bottom: 4px;
 }
 .quiz-question .q-difficulty.easy { background: #dcfce7; color: #16a34a; }
 .quiz-question .q-difficulty.medium { background: #fef3c7; color: #d97706; }
 .quiz-question .q-difficulty.hard { background: #fee2e2; color: #dc2626; }
+.quiz-question .q-type {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: inline-block;
+  background: #ede9fe; color: #6d28d9;
+}
+.quiz-question .show-answer {
+  margin-top: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.quiz-question .show-answer:hover { background: var(--accent-hover); }
+
+.quiz-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+.quiz-pagination button {
+  padding: 5px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.quiz-pagination button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.quiz-pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+.quiz-pagination .page-info { font-size: 12px; color: var(--text-muted); }
 
 /* ============================================================
    Responsive
@@ -699,13 +827,13 @@ body {
   .sidebar { width: 0; min-width: 0; border-right: none; }
   .sidebar.mobile-open { width: var(--sidebar-width); min-width: var(--sidebar-width); border-right: 1px solid var(--border); position: absolute; top: var(--header-height); left: 0; bottom: 0; z-index: 50; }
   .detail-panel.open { width: 100%; min-width: 100%; position: absolute; top: var(--header-height); right: 0; bottom: 0; z-index: 50; }
-  .header .search-box input { width: 140px; }
-  .header .search-box input:focus { width: 180px; }
+  .header .search-box input { width: 110px; }
+  .header .search-box input:focus { width: 150px; }
   .header h1 { font-size: 13px; }
+  .header .subject-toggle { padding: 5px 9px; font-size: 11px; }
   .graph-hint { font-size: 10px; }
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -718,23 +846,22 @@ body {
 <div class="header">
   <button class="btn-icon" id="btn-sidebar" title="章节列表">&#9776;</button>
   <h1>学习工作台</h1>
-  <div class="subject-tabs" id="subject-tabs">
-    <button class="subject-tab active" data-subject="all">全部</button>
-    <button class="subject-tab" data-subject="riemann">黎曼几何</button>
-    <button class="subject-tab" data-subject="topo">代数拓扑</button>
-  </div>
-  <div class="search-box">
-    <span class="search-icon">&#128269;</span>
-    <input type="text" id="search-input" placeholder="搜索知识点...">
-  </div>
-  <select id="layer-filter" style="padding:4px 8px;font-size:12px;border:1px solid var(--border);border-radius:16px;background:var(--bg);font-family:var(--font);outline:none;cursor:pointer;margin-left:4px">
+  <button class="subject-toggle riemann active" data-subject="riemann">黎曼几何</button>
+  <button class="subject-toggle topo active" data-subject="topo">代数拓扑</button>
+  <button class="subject-toggle merge-btn" id="btn-merge">&#8644; 合并视图</button>
+  <button class="btn-icon" id="btn-path" title="学习路径">&#128218;</button>
+  <select class="layer-filter" id="layer-filter">
     <option value="all">全部层级</option>
     <option value="0-1">基础入门 (Layer 0-1)</option>
     <option value="0-2">进阶学习 (Layer 0-2)</option>
     <option value="0-3">深入学习 (Layer 0-3)</option>
     <option value="0-4">全部掌握 (Layer 0-4)</option>
   </select>
-  <span class="progress-info" id="progress-info">已读: 0/${allNodes.length}</span>
+  <div class="search-box">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="search-input" placeholder="搜索知识点...">
+  </div>
+  <span class="progress-info" id="progress-info"></span>
 </div>
 
 <!-- Main Layout -->
@@ -743,7 +870,7 @@ body {
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <span>章节导航</span>
-      <span style="font-size:11px;cursor:pointer" id="clear-filter">清除筛选</span>
+      <span style="font-size:11px;cursor:pointer;color:var(--accent)" id="clear-filter">清除筛选</span>
     </div>
     <div class="sidebar-list" id="sidebar-list"></div>
   </div>
@@ -751,7 +878,7 @@ body {
   <!-- Graph Area -->
   <div class="graph-area" id="graph-area">
     <svg id="graph-svg"></svg>
-    <div class="graph-hint">&#128269; 滚轮缩放 &nbsp;|&nbsp; 拖拽平移 &nbsp;|&nbsp; 点击节点查看详情</div>
+    <div class="graph-hint">滚轮缩放 &nbsp;|&nbsp; 拖拽平移 &nbsp;|&nbsp; 点击节点查看详情</div>
   </div>
 
   <!-- Detail Panel -->
@@ -764,10 +891,22 @@ body {
   </div>
 </div>
 
+<!-- 学习路径面板 -->
+<div class="path-panel" id="path-panel">
+  <div class="path-header">
+    <div>
+      <h3>学习路径</h3>
+      <div class="path-desc">推荐阅读顺序：从上到下，从基础到进阶</div>
+    </div>
+    <button class="close-btn" id="path-close">&times;</button>
+  </div>
+  <div class="path-body" id="path-body"></div>
+</div>
+
 <!-- Quiz Panel -->
 <div class="quiz-panel" id="quiz-panel">
-  <div class="quiz-header">
-    <span class="quiz-toggle" id="quiz-toggle">&#9660; 测验</span>
+  <div class="quiz-bar">
+    <button class="quiz-toggle" id="quiz-toggle">&#9660; 收起测验</button>
     <div class="quiz-tabs" id="quiz-tabs"></div>
     <div class="quiz-filter">
       <select id="quiz-difficulty">
@@ -775,6 +914,11 @@ body {
         <option value="easy">简单</option>
         <option value="medium">中等</option>
         <option value="hard">困难</option>
+      </select>
+      <select id="quiz-type">
+        <option value="all">全部题型</option>
+        <option value="choice">选择题</option>
+        <option value="big">大题</option>
       </select>
     </div>
   </div>
@@ -790,7 +934,8 @@ const ALL_EDGES = ${edgesJSON};
 const ALL_QUIZZES = ${quizzesJSON};
 const ALL_CHAPTERS = ${chaptersJSON};
 const SUBJECTS = ${subjectsJSON};
-const CH_COLORS = ${chColorsJSON};
+const CHAPTER_COLORS = ${chColorsJSON};
+const LEARNING_PATH = ${pathJSON};
 </script>
 
 <!-- ============================================================
@@ -801,33 +946,30 @@ const CH_COLORS = ${chColorsJSON};
   'use strict';
 
   // ---- State ----
-  let activeSubject = 'all';
-  let activeChapter = null;
-  let activeNode = null;
-  let searchTerm = '';
-  let quizChapter = null;
-  let quizDifficulty = 'all';
-  let quizCollapsed = false;
-  let sidebarCollapsed = false;
-  let layerFilter = 'all';
-  let readNodes = loadProgress();
+  var activeSubjects = { riemann: true, topo: true };
+  var activeChapter = null;
+  var searchTerm = '';
+  var quizChapter = null;
+  var quizDifficulty = 'all';
+  var quizType = 'all';
+  var quizCollapsed = false;
+  var quizPage = 0;
+  var PAGE_SIZE = 10;
+  var layerFilter = 'all';
+  var sidebarCollapsed = false;
+  var readNodes = loadProgress();
 
   // ---- Progress ----
-  const STORAGE_KEY = 'learning-workbench-progress';
-
+  var STORAGE_KEY = 'learning-workbench-progress';
   function loadProgress() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(STORAGE_KEY);
       return raw ? JSON.parse(raw) : {};
     } catch (e) { return {}; }
   }
-
   function saveProgress() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(readNodes));
-    } catch (e) { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(readNodes)); } catch (e) {}
   }
-
   function markRead(nodeId) {
     if (!readNodes[nodeId]) {
       readNodes[nodeId] = Date.now();
@@ -835,597 +977,603 @@ const CH_COLORS = ${chColorsJSON};
       updateProgress();
     }
   }
-
   function updateProgress() {
-    const count = Object.keys(readNodes).filter(k => ALL_NODES.some(n => n.id === k)).length;
-    document.getElementById('progress-info').textContent = '已读: ' + count + '/' + ALL_NODES.length;
+    var count = Object.keys(readNodes).filter(function(k) { return ALL_NODES.some(function(n) { return n.id === k; }); }).length;
+    document.getElementById('progress-info').textContent = '已读 ' + count + '/' + ALL_NODES.length;
   }
 
-  // ---- Filter nodes by subject ----
-  function filterBySubject(nodes) {
-    if (activeSubject === 'all') return nodes;
-    return nodes.filter(n => n.subject === activeSubject);
+  // ---- 学科选中状态 ----
+  function subjectCount() {
+    return (activeSubjects.riemann ? 1 : 0) + (activeSubjects.topo ? 1 : 0);
+  }
+  function hasSubject(id) { return !!activeSubjects[id]; }
+  function visibleNodeIds() {
+    return ALL_NODES.filter(function(n) { return hasSubject(n.subject); }).map(function(n) { return n.id; });
   }
 
-  // ---- Filter nodes by chapter ----
-  function filterByChapter(nodes) {
-    if (!activeChapter) return nodes;
-    return nodes.filter(n => {
-      const ch = ALL_CHAPTERS.find(c => c.id === n.chapter && c.subject === n.subject);
-      return ch && (ch.id + (ch.subject === 'topo' ? '_t' : '') === activeChapter ||
-                    ch.id === activeChapter);
-    });
-  }
-
-  // ---- Chapter color ----
+  // ---- 章节颜色 ----
   function getChapterColor(node) {
-    const ch = ALL_CHAPTERS.find(c => c.id === node.chapter && c.subject === node.subject);
-    if (!ch) return '#94a3b8';
-    const key = ch.subject === 'topo' ? ch.id + '_t' : ch.id;
-    const idx = ALL_CHAPTERS.findIndex(c => {
-      const k = c.subject === 'topo' ? c.id + '_t' : c.id;
-      return k === key;
-    });
-    return CH_COLORS[idx % CH_COLORS.length] || '#94a3b8';
+    var key = node.subject + ':' + node.chapter;
+    return CHAPTER_COLORS[key] || '#94a3b8';
   }
-
-  // ---- Node size ----
+  function getSubjectColor(node) {
+    return node.subject === 'riemann' ? '#2563eb' : '#dc2626';
+  }
   function getNodeSize(node) {
-    const layer = node.layer || 2;
-    const base = 14 - layer * 1.8;
-    return Math.max(5, Math.min(14, base));
+    var layer = node.layer || 2;
+    var base = 13 - layer * 1.6;
+    return Math.max(5, Math.min(13, base));
   }
 
   // ---- Graph rendering ----
-  const graphArea = document.getElementById('graph-area');
-  const svg = d3.select('#graph-svg');
-  const width = () => graphArea.clientWidth;
-  const height = () => graphArea.clientHeight;
+  var graphArea = document.getElementById('graph-area');
+  var svg = d3.select('#graph-svg');
+  var w = function() { return graphArea.clientWidth; };
+  var h = function() { return graphArea.clientHeight; };
+  var g = svg.append('g');
+  var linkGroup = g.append('g');
+  var nodeGroup = g.append('g');
+  var simulation = null;
 
-  // Create SVG groups
-  const g = svg.append('g');
-  const linkGroup = g.append('g').attr('class', 'links');
-  const nodeGroup = g.append('g').attr('class', 'nodes');
-
-  // Zoom behavior
-  const zoom = d3.zoom()
-    .scaleExtent([0.2, 4])
-    .on('zoom', (event) => { g.attr('transform', event.transform); });
+  var zoom = d3.zoom()
+    .scaleExtent([0.15, 4])
+    .on('zoom', function(event) { g.attr('transform', event.transform); });
   svg.call(zoom);
 
-  // Force simulation
-  let simulation;
-
   function initGraph() {
-    let nodes = ALL_NODES.map(n => ({ ...n }));
-    let links = ALL_EDGES.map(e => ({ ...e }));
+    if (simulation) simulation.stop();
 
-    // Filter by layer
+    // 学科过滤
+    var nodes = ALL_NODES.filter(function(n) { return hasSubject(n.subject); });
+    var visibleIds = {};
+    nodes.forEach(function(n) { visibleIds[n.id] = true; });
+    var links = ALL_EDGES.filter(function(e) {
+      return visibleIds[e.source] && visibleIds[e.target];
+    });
+
+    // 层级过滤
     if (layerFilter !== 'all') {
-      const [minL, maxL] = layerFilter.split('-').map(Number);
-      const filteredIds = new Set(nodes.filter(n => n.layer >= minL && n.layer <= maxL).map(n => n.id));
-      nodes = nodes.filter(n => filteredIds.has(n.id));
-      links = links.filter(e => filteredIds.has(e.source) && filteredIds.has(e.target));
+      var parts = layerFilter.split('-');
+      var minL = parseInt(parts[0], 10);
+      var maxL = parseInt(parts[1], 10);
+      nodes = nodes.filter(function(n) { return n.layer >= minL && n.layer <= maxL; });
+      var ids = {};
+      nodes.forEach(function(n) { ids[n.id] = true; });
+      links = links.filter(function(e) { return ids[e.source] && ids[e.target]; });
     }
 
-    // Clear
+    // 清空
     linkGroup.selectAll('*').remove();
     nodeGroup.selectAll('*').remove();
 
-    const w = width();
-    const h = height();
+    var W = w(), H = h();
+    var merged = subjectCount() === 2;
+
+    var xForce = d3.forceX(function(d) {
+      if (merged) return d.subject === 'riemann' ? W * 0.33 : W * 0.67;
+      return W / 2;
+    }).strength(merged ? 0.12 : 0.06);
+
+    var yForce = d3.forceY().y(function(d) {
+      var layer = d.layer || 2;
+      var topMargin = 70;
+      var bottomMargin = 70;
+      var layerHeight = (H - topMargin - bottomMargin) / 5;
+      return topMargin + layer * layerHeight + layerHeight / 2;
+    }).strength(0.45);
 
     simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(80))
-      .force('charge', d3.forceManyBody().strength(-300))
-      .force('center', d3.forceCenter(w / 2, h / 2))
-      .force('collision', d3.forceCollide().radius(d => getNodeSize(d) + 4))
-      .force('y', d3.forceY().y(d => {
-        // Layer-based y positioning: layer 0 at top, layer 4 at bottom
-        const layer = d.layer || 2;
-        const topMargin = 80;
-        const bottomMargin = 80;
-        const layerHeight = (h - topMargin - bottomMargin) / 5;
-        return topMargin + layer * layerHeight + layerHeight / 2;
-      }).strength(0.5))
-      .force('x', d3.forceX(w / 2).strength(0.05));
+      .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(75))
+      .force('charge', d3.forceManyBody().strength(-280))
+      .force('center', d3.forceCenter(W / 2, H / 2))
+      .force('collision', d3.forceCollide().radius(function(d) { return getNodeSize(d) + 5; }))
+      .force('y', yForce)
+      .force('x', xForce);
 
-    // Draw links
-    const link = linkGroup.selectAll('line')
+    // 判断是否为跨学科边
+    function isCross(e) {
+      var s = e.source, t = e.target;
+      var ss = (typeof s === 'object') ? s.subject : null;
+      var ts = (typeof t === 'object') ? t.subject : null;
+      if (!ss || !ts) {
+        var sn = ALL_NODES.find(function(n) { return n.id === s; });
+        var tn = ALL_NODES.find(function(n) { return n.id === t; });
+        ss = sn ? sn.subject : null;
+        ts = tn ? tn.subject : null;
+      }
+      return ss && ts && ss !== ts;
+    }
+
+    var link = linkGroup.selectAll('line')
       .data(links)
       .join('line')
-      .attr('class', 'link')
-      .attr('stroke', '#cbd5e1')
-      .attr('stroke-opacity', 0.7)
-      .attr('stroke-width', 1.5);
+      .attr('class', function(e) { return 'link' + (isCross(e) ? ' cross' : ''); });
 
-    // Draw nodes
-    const node = nodeGroup.selectAll('g')
+    var node = nodeGroup.selectAll('g')
       .data(nodes)
       .join('g')
       .attr('class', 'node')
       .call(d3.drag()
-        .on('start', (event, d) => {
+        .on('start', function(event, d) {
           if (!event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
+          d.fx = d.x; d.fy = d.y;
         })
-        .on('drag', (event, d) => {
-          d.fx = event.x;
-          d.fy = event.y;
-        })
-        .on('end', (event, d) => {
+        .on('drag', function(event, d) { d.fx = event.x; d.fy = event.y; })
+        .on('end', function(event, d) {
           if (!event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
+          d.fx = null; d.fy = null;
         })
       );
 
     node.append('circle')
-      .attr('r', d => getNodeSize(d))
-      .attr('fill', d => getChapterColor(d))
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2)
-      .on('click', (event, d) => {
+      .attr('r', function(d) { return getNodeSize(d); })
+      .attr('fill', function(d) { return getChapterColor(d); })
+      .attr('stroke', function(d) { return getSubjectColor(d); })
+      .attr('stroke-width', 2.2)
+      .on('click', function(event, d) {
         event.stopPropagation();
         showDetail(d);
-      })
-      .on('mouseenter', function() {
-        d3.select(this).attr('stroke-width', 3);
-      })
-      .on('mouseleave', function() {
-        d3.select(this).attr('stroke-width', 2);
       });
 
     node.append('text')
-      .text(d => d.label.length > 6 ? d.label.substring(0, 6) + '..' : d.label)
-      .attr('dy', d => -getNodeSize(d) - 6)
+      .text(function(d) { return d.label.length > 6 ? d.label.substring(0, 6) + '..' : d.label; })
+      .attr('dy', function(d) { return -getNodeSize(d) - 5; })
       .attr('font-size', 10)
       .attr('fill', '#1e293b')
       .attr('text-anchor', 'middle');
 
-    simulation.on('tick', () => {
+    simulation.on('tick', function() {
       link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
-      node.attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
+        .attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+      node.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
     });
 
-    // Click on background to close detail
-    svg.on('click', () => {
-      if (d3.event && d3.event.target === svg.node()) {
-        closeDetail();
-      }
+    svg.on('click', function(event) {
+      if (event.target === svg.node()) closeDetail();
     });
   }
 
-  // ---- Highlight nodes by chapter ----
-  function highlightByChapter(chapterKey) {
-    const allCircles = nodeGroup.selectAll('circle');
-    const allTexts = nodeGroup.selectAll('text');
-    const allLinks = linkGroup.selectAll('line');
-
-    if (!chapterKey) {
-      allCircles.classed('dimmed', false).classed('highlighted', false);
-      allTexts.classed('dimmed', false).classed('highlighted', false);
-      allLinks.classed('dimmed', false).classed('highlighted', false);
+  // ---- 高亮章节 ----
+  function applyChapterHighlight() {
+    if (!activeChapter) {
+      nodeGroup.selectAll('circle').classed('dimmed', false).classed('highlighted', false);
+      nodeGroup.selectAll('text').classed('dimmed', false).classed('highlighted', false);
+      linkGroup.selectAll('line').classed('dimmed', false).classed('highlighted', false);
       return;
     }
-
-    allCircles.classed('dimmed', true).classed('highlighted', false);
-    allTexts.classed('dimmed', true).classed('highlighted', false);
-    allLinks.classed('dimmed', true).classed('highlighted', false);
-
     nodeGroup.selectAll('g').each(function(d) {
-      const ch = ALL_CHAPTERS.find(c => c.id === d.chapter && c.subject === d.subject);
-      if (!ch) return;
-      const key = ch.subject === 'topo' ? ch.id + '_t' : ch.id;
-      if (key === chapterKey || ch.id === chapterKey) {
-        d3.select(this).select('circle').classed('dimmed', false).classed('highlighted', true);
-        d3.select(this).select('text').classed('dimmed', false).classed('highlighted', true);
-      }
+      var key = d.subject + ':' + d.chapter;
+      var match = key === activeChapter;
+      d3.select(this).select('circle').classed('dimmed', !match).classed('highlighted', match);
+      d3.select(this).select('text').classed('dimmed', !match).classed('highlighted', match);
     });
-
-    // Highlight links between highlighted nodes
     linkGroup.selectAll('line').each(function(d) {
-      const sCh = ALL_CHAPTERS.find(c => c.id === d.source.chapter && c.subject === d.source.subject);
-      const tCh = ALL_CHAPTERS.find(c => c.id === d.target.chapter && c.subject === d.target.subject);
-      if (!sCh || !tCh) return;
-      const sKey = sCh.subject === 'topo' ? sCh.id + '_t' : sCh.id;
-      const tKey = tCh.subject === 'topo' ? tCh.id + '_t' : tCh.id;
-      if ((sKey === chapterKey || sCh.id === chapterKey) &&
-          (tKey === chapterKey || tCh.id === chapterKey)) {
-        d3.select(this).classed('dimmed', false).classed('highlighted', true);
-      }
+      var sKey = null, tKey = null;
+      if (typeof d.source === 'object' && d.source.subject) sKey = d.source.subject + ':' + d.source.chapter;
+      if (typeof d.target === 'object' && d.target.subject) tKey = d.target.subject + ':' + d.target.chapter;
+      var match = sKey === activeChapter && tKey === activeChapter;
+      d3.select(this).classed('dimmed', !match).classed('highlighted', match);
     });
   }
 
-  // ---- Search ----
-  function searchNodes(term) {
-    const allCircles = nodeGroup.selectAll('circle');
-    const allTexts = nodeGroup.selectAll('text');
-    const allLinks = linkGroup.selectAll('line');
-
+  // ---- 搜索 ----
+  function applySearch() {
+    var term = searchTerm.toLowerCase();
     if (!term) {
-      allCircles.classed('dimmed', false).classed('searched', false).classed('highlighted', false);
-      allTexts.classed('dimmed', false).classed('highlighted', false);
-      allLinks.classed('dimmed', false).classed('highlighted', false);
-      if (activeChapter) highlightByChapter(activeChapter);
-      return [];
+      nodeGroup.selectAll('circle').classed('dimmed', false).classed('searched', false).classed('highlighted', false);
+      nodeGroup.selectAll('text').classed('dimmed', false).classed('highlighted', false);
+      linkGroup.selectAll('line').classed('dimmed', false).classed('highlighted', false);
+      applyChapterHighlight();
+      return;
     }
-
-    const lower = term.toLowerCase();
-    const matched = new Set();
-
+    var matched = {};
     nodeGroup.selectAll('g').each(function(d) {
-      const match = d.label.toLowerCase().includes(lower) ||
-                    d.desc.toLowerCase().includes(lower) ||
-                    d.content.toLowerCase().includes(lower) ||
-                    (d.understanding && d.understanding.toLowerCase().includes(lower));
-      if (match) {
-        matched.add(d.id);
-        d3.select(this).select('circle').classed('dimmed', false).classed('searched', true).classed('highlighted', true);
-        d3.select(this).select('text').classed('dimmed', false).classed('highlighted', true);
-      } else {
-        d3.select(this).select('circle').classed('dimmed', true).classed('searched', false).classed('highlighted', false);
-        d3.select(this).select('text').classed('dimmed', true).classed('highlighted', false);
-      }
+      var match = (d.label && d.label.toLowerCase().indexOf(term) >= 0) ||
+                  (d.desc && d.desc.toLowerCase().indexOf(term) >= 0) ||
+                  (d.content && d.content.toLowerCase().indexOf(term) >= 0) ||
+                  (d.understanding && d.understanding.toLowerCase().indexOf(term) >= 0);
+      if (match) matched[d.id] = true;
+      d3.select(this).select('circle').classed('dimmed', !match).classed('searched', match).classed('highlighted', match);
+      d3.select(this).select('text').classed('dimmed', !match).classed('highlighted', match);
     });
-
-    allLinks.classed('dimmed', true).classed('highlighted', false);
     linkGroup.selectAll('line').each(function(d) {
-      if (matched.has(d.source.id) || matched.has(d.target.id)) {
-        d3.select(this).classed('dimmed', false).classed('highlighted', true);
-      }
+      var sId = typeof d.source === 'object' ? d.source.id : d.source;
+      var tId = typeof d.target === 'object' ? d.target.id : d.target;
+      var m = matched[sId] || matched[tId];
+      d3.select(this).classed('dimmed', !m).classed('highlighted', !!m);
     });
-
-    return Array.from(matched);
   }
 
-  // ---- Detail Panel ----
+  // ---- 详情面板 ----
   function showDetail(node) {
-    activeNode = node;
     markRead(node.id);
-
-    const panel = document.getElementById('detail-panel');
-    const title = document.getElementById('detail-title');
-    const body = document.getElementById('detail-body');
-
-    const ch = ALL_CHAPTERS.find(c => c.id === node.chapter && c.subject === node.subject);
-    const chName = ch ? ch.title : node.chapter;
-
+    var title = document.getElementById('detail-title');
+    var body = document.getElementById('detail-body');
+    var ch = ALL_CHAPTERS.find(function(c) { return c.id === node.chapter && c.subject === node.subject; });
+    var chName = ch ? ch.title : node.chapter;
+    var subjName = node.subject === 'riemann' ? '黎曼几何' : '代数拓扑';
     title.textContent = node.label;
 
-    let html = '';
-
-    // Tags
+    var html = '';
     html += '<div class="section">';
-    html += '<span class="tag">' + (node.subject === 'riemann' ? '黎曼几何' : '代数拓扑') + '</span>';
+    html += '<span class="tag">' + subjName + '</span>';
     html += '<span class="tag">' + chName + '</span>';
     html += '<span class="tag">Layer ' + (node.layer || '?') + '</span>';
-    if (readNodes[node.id]) {
-      html += '<span class="tag" style="background:#dcfce7;color:#16a34a;">已读</span>';
-    }
+    if (readNodes[node.id]) html += '<span class="tag" style="background:#dcfce7;color:#16a34a;">已读</span>';
     html += '</div>';
 
-    // SVG chart
     if (node.svg) {
       html += '<div class="section"><div class="section-title">示意图</div>';
       html += '<div class="svg-chart">' + node.svg + '</div></div>';
     }
-
-    // Description
-    html += '<div class="section"><div class="section-title">描述</div>';
-    html += '<div class="section-content">' + (node.desc || '') + '</div></div>';
-
-    // Content
-    html += '<div class="section"><div class="section-title">详细内容</div>';
-    html += '<div class="section-content">' + (node.content || '') + '</div></div>';
-
-    // Understanding
-    if (node.understanding) {
-      html += '<div class="section"><div class="section-title">通俗理解</div>';
-      html += '<div class="section-content">' + node.understanding + '</div></div>';
+    if (node.desc) {
+      html += '<div class="section"><div class="section-title">描述</div><div class="section-content">' + node.desc + '</div></div>';
     }
-
-    // Examples
+    if (node.content) {
+      html += '<div class="section"><div class="section-title">详细内容</div><div class="section-content">' + node.content + '</div></div>';
+    }
+    if (node.understanding) {
+      html += '<div class="section"><div class="section-title">通俗理解</div><div class="section-content">' + node.understanding + '</div></div>';
+    }
     if (node.examples && node.examples.length > 0) {
       html += '<div class="section"><div class="section-title">例子</div>';
-      node.examples.forEach(ex => {
-        html += '<div class="example-item"><div class="ex-title">' + ex.title + '</div>';
-        html += '<div class="ex-content">' + ex.content + '</div></div>';
+      node.examples.forEach(function(ex) {
+        html += '<div class="example-item"><div class="ex-title">' + ex.title + '</div><div class="ex-content">' + ex.content + '</div></div>';
       });
       html += '</div>';
     }
-
-    // Theorems
     if (node.theorems && node.theorems.length > 0) {
       html += '<div class="section"><div class="section-title">定理与证明</div>';
-      node.theorems.forEach((th, thi) => {
+      node.theorems.forEach(function(th, thi) {
         html += '<div class="theorem-item">';
         html += '<div class="th-name">定理 ' + (thi + 1) + ': ' + th.name + '</div>';
         html += '<div class="th-statement">' + th.statement + '</div>';
-        if (th.proof) {
-          html += '<div class="th-proof"><span class="th-proof-label">证明概要</span> ' + th.proof + '</div>';
-        }
+        if (th.proof) html += '<div class="th-proof"><span class="th-proof-label">证明概要</span>' + th.proof + '</div>';
         html += '</div>';
       });
       html += '</div>';
     }
-
-    // Applications
     if (node.applications) {
-      html += '<div class="section"><div class="section-title">应用</div>';
-      html += '<div class="section-content">' + node.applications + '</div></div>';
+      html += '<div class="section"><div class="section-title">应用</div><div class="section-content">' + node.applications + '</div></div>';
     }
-
-    // References
     if (node.refs) {
       html += '<div class="section"><div class="section-title">教材引用</div>';
-      const refs = Array.isArray(node.refs) ? node.refs : [node.refs];
-      refs.forEach(ref => {
+      var refs = Array.isArray(node.refs) ? node.refs : [node.refs];
+      refs.forEach(function(ref) {
         html += '<span class="ref-item">' + (ref.book || '') + ' ' + (ref.ch || '') + ' ' + (ref.sec || '') + '</span>';
       });
       html += '</div>';
     }
 
     body.innerHTML = html;
-    panel.classList.add('open');
+    document.getElementById('detail-panel').classList.add('open');
   }
-
   function closeDetail() {
-    activeNode = null;
     document.getElementById('detail-panel').classList.remove('open');
   }
 
-  document.getElementById('detail-close').addEventListener('click', closeDetail);
-
-  // ---- Sidebar ----
+  // ---- 侧边栏 ----
   function renderSidebar() {
-    const list = document.getElementById('sidebar-list');
-    let html = '';
-
-    subjects.forEach(subj => {
-      const chapters = ALL_CHAPTERS.filter(c => c.subject === subj.id);
-      const nodeCount = ALL_NODES.filter(n => n.subject === subj.id).length;
-
-      html += '<div class="subject-group">';
-      html += '<div class="subject-group-title" data-subject="' + subj.id + '">';
-      html += '<span class="dot" style="background:' + subj.color + '"></span>';
-      html += subj.name + ' <span style="font-size:10px;color:var(--text-muted)">(' + nodeCount + ')</span>';
-      html += '</div>';
-
-      chapters.forEach(ch => {
-        const key = ch.subject === 'topo' ? ch.id + '_t' : ch.id;
-        const chNodes = ALL_NODES.filter(n => n.chapter === ch.id && n.subject === ch.subject);
-        const isActive = activeChapter === key;
-        const color = CH_COLORS[ALL_CHAPTERS.findIndex(c => {
-          const k = c.subject === 'topo' ? c.id + '_t' : c.id;
-          return k === key;
-        }) % CH_COLORS.length] || '#94a3b8';
-
+    var list = document.getElementById('sidebar-list');
+    var html = '';
+    SUBJECTS.forEach(function(subj) {
+      var chapters = ALL_CHAPTERS.filter(function(c) { return c.subject === subj.id; })
+        .sort(function(a, b) { return parseInt(a.id.replace(/\\D/g, ''), 10) - parseInt(b.id.replace(/\\D/g, ''), 10); });
+      var nodeCount = ALL_NODES.filter(function(n) { return n.subject === subj.id; }).length;
+      var disabled = !hasSubject(subj.id);
+      html += '<div class="subject-group' + (disabled ? ' disabled' : '') + '">';
+      html += '<div class="subject-group-title"><span class="dot" style="background:' + subj.color + '"></span>' + subj.name + ' <span style="font-size:10px;color:var(--text-muted)">(' + nodeCount + ')</span></div>';
+      chapters.forEach(function(ch) {
+        var key = ch.subject + ':' + ch.id;
+        var chNodes = ALL_NODES.filter(function(n) { return n.chapter === ch.id && n.subject === ch.subject; });
+        var isActive = activeChapter === key;
+        var color = CHAPTER_COLORS[key] || '#94a3b8';
         html += '<div class="chapter-item' + (isActive ? ' active' : '') + '" data-chapter="' + key + '">';
         html += '<span class="ch-indicator" style="background:' + color + '"></span>';
         html += ch.title;
         html += '<span class="ch-count">' + chNodes.length + '</span>';
         html += '</div>';
       });
-
       html += '</div>';
     });
-
     list.innerHTML = html;
 
-    // Click handlers
-    list.querySelectorAll('.chapter-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const chKey = item.dataset.chapter;
-        if (activeChapter === chKey) {
-          activeChapter = null;
-        } else {
-          activeChapter = chKey;
-        }
-        highlightByChapter(activeChapter);
+    list.querySelectorAll('.chapter-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var key = item.getAttribute('data-chapter');
+        activeChapter = (activeChapter === key) ? null : key;
+        applyChapterHighlight();
         renderSidebar();
-        renderQuizTabs();
-        renderQuiz();
-      });
-    });
-
-    list.querySelectorAll('.subject-group-title').forEach(title => {
-      title.addEventListener('click', () => {
-        const subjId = title.dataset.subject;
-        document.querySelectorAll('.subject-tab').forEach(t => {
-          t.classList.toggle('active', t.dataset.subject === subjId);
-        });
-        setSubject(subjId);
       });
     });
   }
 
-  // ---- Subject switching ----
-  function setSubject(subjId) {
-    activeSubject = subjId;
-    activeChapter = null;
-    searchTerm = '';
-    document.getElementById('search-input').value = '';
-    document.querySelectorAll('.subject-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.subject === subjId);
+  // ---- 学科切换 ----
+  function updateSubjectButtons() {
+    document.querySelectorAll('.subject-toggle[data-subject]').forEach(function(btn) {
+      var id = btn.getAttribute('data-subject');
+      btn.classList.toggle('active', hasSubject(id));
     });
-    highlightByChapter(null);
-    searchNodes('');
+  }
+  function toggleSubject(id) {
+    if (activeSubjects[id] && subjectCount() === 1) return; // 至少保留一个
+    activeSubjects[id] = !activeSubjects[id];
+    activeChapter = null;
+    updateSubjectButtons();
+    initGraph();
     renderSidebar();
     renderQuizTabs();
     renderQuiz();
     closeDetail();
-    updateProgress();
+  }
+  function mergeSubjects() {
+    activeSubjects.riemann = true;
+    activeSubjects.topo = true;
+    activeChapter = null;
+    updateSubjectButtons();
+    initGraph();
+    renderSidebar();
+    renderQuizTabs();
+    renderQuiz();
+    closeDetail();
   }
 
-  document.querySelectorAll('.subject-tab').forEach(tab => {
-    tab.addEventListener('click', () => setSubject(tab.dataset.subject));
-  });
+  // ---- 学习路径面板 ----
+  function renderPathPanel() {
+    var body = document.getElementById('path-body');
+    var html = '';
+    var currentFound = false;
+    var stageIndex = 0;
+    LEARNING_PATH.forEach(function(stage) {
+      stageIndex++;
+      var readCount = stage.nodes.filter(function(n) { return readNodes[n.id]; }).length;
+      var color = stage.subjectColor;
+      html += '<div class="path-stage">';
+      html += '<div class="path-stage-head"><span class="stage-num" style="background:' + color + '">' + stageIndex + '</span>';
+      html += '<span class="stage-title">' + stage.subjectName + ' · ' + stage.title + '</span>';
+      html += '<span class="stage-count">' + readCount + '/' + stage.nodes.length + ' 已读</span></div>';
+      stage.nodes.forEach(function(n) {
+        var isRead = !!readNodes[n.id];
+        var isCurrent = !currentFound && !isRead;
+        if (isCurrent) currentFound = true;
+        html += '<div class="path-node' + (isRead ? ' read' : '') + (isCurrent ? ' current' : '') + '" data-node="' + n.id + '">';
+        html += '<span class="pn-dot"></span>' + n.label;
+        if (isCurrent) html += '<span style="margin-left:auto;font-size:10px;color:#d97706">&#8594; 推荐从这里继续</span>';
+        if (isRead) html += '<span style="margin-left:auto;font-size:10px;color:#16a34a">&#10003;</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+    body.innerHTML = html;
 
-  document.getElementById('clear-filter').addEventListener('click', () => {
-    activeChapter = null;
-    highlightByChapter(null);
-    renderSidebar();
-  });
+    body.querySelectorAll('.path-node').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var id = item.getAttribute('data-node');
+        var node = ALL_NODES.find(function(n) { return n.id === id; });
+        if (node) {
+          // 确保该学科可见
+          if (!hasSubject(node.subject)) {
+            activeSubjects[node.subject] = true;
+            updateSubjectButtons();
+            initGraph();
+            renderSidebar();
+          }
+          document.getElementById('path-panel').classList.remove('open');
+          showDetail(node);
+          // 高亮该节点
+          nodeGroup.selectAll('circle').classed('highlighted', function(d) { return d.id === id; });
+        }
+      });
+    });
+  }
 
-  // ---- Search ----
-  document.getElementById('search-input').addEventListener('input', (e) => {
-    searchTerm = e.target.value.trim();
-    const results = searchNodes(searchTerm);
-    if (results.length === 1) {
-      // Auto-select single result
-      const node = ALL_NODES.find(n => n.id === results[0]);
-      if (node) showDetail(node);
-    }
-  });
+  // ---- 测验 ----
+  function chapterKeyOf(ch) { return ch.subject + ':' + ch.id; }
 
-  // ---- Sidebar toggle ----
-  document.getElementById('btn-sidebar').addEventListener('click', () => {
-    sidebarCollapsed = !sidebarCollapsed;
-    document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
-    setTimeout(() => {
-      simulation.force('center', d3.forceCenter(width() / 2, height() / 2));
-      simulation.alpha(0.3).restart();
-    }, 300);
-  });
-
-  // ---- Quiz ----
   function renderQuizTabs() {
-    const tabs = document.getElementById('quiz-tabs');
-    let chapters = ALL_CHAPTERS;
-    if (activeSubject !== 'all') {
-      chapters = chapters.filter(c => c.subject === activeSubject);
-    }
-
-    let html = '<button class="quiz-tab' + (!quizChapter ? ' active' : '') + '" data-chapter="">全部</button>';
-    chapters.forEach(ch => {
-      const key = ch.subject === 'topo' ? ch.id + '_t' : ch.id;
-      const isActive = quizChapter === key;
-      html += '<button class="quiz-tab' + (isActive ? ' active' : '') + '" data-chapter="' + key + '">' + ch.title + '</button>';
+    var tabs = document.getElementById('quiz-tabs');
+    var chapters = ALL_CHAPTERS.filter(function(c) { return hasSubject(c.subject); })
+      .sort(function(a, b) { return parseInt(a.id.replace(/\\D/g, ''), 10) - parseInt(b.id.replace(/\\D/g, ''), 10); });
+    var html = '<button class="quiz-tab' + (!quizChapter ? ' active' : '') + '" data-chapter="">全部</button>';
+    chapters.forEach(function(ch) {
+      var key = chapterKeyOf(ch);
+      html += '<button class="quiz-tab' + (quizChapter === key ? ' active' : '') + '" data-chapter="' + key + '">' + ch.title + '</button>';
     });
     tabs.innerHTML = html;
-
-    tabs.querySelectorAll('.quiz-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        quizChapter = tab.dataset.chapter || null;
+    tabs.querySelectorAll('.quiz-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        quizChapter = tab.getAttribute('data-chapter') || null;
+        quizPage = 0;
         renderQuizTabs();
         renderQuiz();
       });
     });
   }
 
-  function renderQuiz() {
-    const body = document.getElementById('quiz-body');
-    let quizzes = ALL_QUIZZES;
-
-    // Filter by subject
-    if (activeSubject !== 'all') {
-      quizzes = quizzes.filter(q => q.subject === activeSubject);
-    }
-
-    // Filter by chapter
+  function filteredQuizzes() {
+    var quizzes = ALL_QUIZZES.slice();
+    // 学科过滤
+    quizzes = quizzes.filter(function(q) { return hasSubject(q.subject); });
+    // 章节过滤
     if (quizChapter) {
-      quizzes = quizzes.filter(q => {
-        const ch = ALL_CHAPTERS.find(c => c.id === q.chapter && c.subject === q.subject);
+      quizzes = quizzes.filter(function(q) {
+        var ch = ALL_CHAPTERS.find(function(c) { return c.id === q.chapter && c.subject === q.subject; });
         if (!ch) return false;
-        const key = ch.subject === 'topo' ? ch.id + '_t' : ch.id;
-        return key === quizChapter || ch.id === quizChapter;
+        return chapterKeyOf(ch) === quizChapter;
       });
     }
-
-    // Filter by difficulty
+    // 难度过滤
     if (quizDifficulty !== 'all') {
-      quizzes = quizzes.filter(q => q.difficulty === quizDifficulty);
+      quizzes = quizzes.filter(function(q) { return q.difficulty === quizDifficulty; });
     }
+    // 题型过滤
+    if (quizType === 'choice') {
+      quizzes = quizzes.filter(function(q) { return q.type === 'choice'; });
+    } else if (quizType === 'big') {
+      quizzes = quizzes.filter(function(q) { return q.type !== 'choice'; });
+    }
+    return quizzes;
+  }
+
+  function renderQuiz() {
+    var body = document.getElementById('quiz-body');
+    var quizzes = filteredQuizzes();
 
     if (quizzes.length === 0) {
       body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">暂无匹配的测验题</div>';
       return;
     }
 
-    let html = '';
-    quizzes.forEach((q, idx) => {
-      const diffLabel = { easy: '简单', medium: '中等', hard: '困难' }[q.difficulty] || q.difficulty;
+    var totalPages = Math.max(1, Math.ceil(quizzes.length / PAGE_SIZE));
+    if (quizPage >= totalPages) quizPage = totalPages - 1;
+    if (quizPage < 0) quizPage = 0;
+    var pageQuizzes = quizzes.slice(quizPage * PAGE_SIZE, (quizPage + 1) * PAGE_SIZE);
+    var startIdx = quizPage * PAGE_SIZE;
+
+    var html = '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">共 ' + quizzes.length + ' 题，第 ' + (quizPage + 1) + '/' + totalPages + ' 页</div>';
+
+    pageQuizzes.forEach(function(q, i) {
+      var idx = startIdx + i;
+      var diffLabel = { easy: '简单', medium: '中等', hard: '困难' }[q.difficulty] || q.difficulty;
+      var typeLabel = q.type === 'choice' ? '选择题' : (q.type === 'proof' ? '证明题' : '计算题');
       html += '<div class="quiz-question" data-idx="' + idx + '">';
-      html += '<span class="q-difficulty ' + q.difficulty + '">' + diffLabel + '</span>';
-      html += '<div class="q-text">' + (idx + 1) + '. ' + q.q + '</div>';
-      html += '<div class="q-options">';
-      q.options.forEach((opt, oi) => {
-        html += '<button class="q-option" data-answer="' + oi + '">' + String.fromCharCode(65 + oi) + '. ' + opt + '</button>';
-      });
+      html += '<div class="q-meta">';
+      html += '<span class="q-type">' + typeLabel + '</span>';
+      html += '<span class="q-difficulty ' + (q.difficulty || 'medium') + '">' + diffLabel + '</span>';
       html += '</div>';
-      html += '<div class="q-explanation">' + (q.explanation || '') + '</div>';
+      html += '<div class="q-text">' + (idx + 1) + '. ' + q.q + '</div>';
+      if (q.type === 'choice') {
+        html += '<div class="q-options">';
+        q.options.forEach(function(opt, oi) {
+          html += '<button class="q-option" data-answer="' + oi + '">' + String.fromCharCode(65 + oi) + '. ' + opt + '</button>';
+        });
+        html += '</div>';
+        html += '<div class="q-explanation">' + (q.explanation || '') + '</div>';
+      } else {
+        html += '<button class="show-answer">显示解答</button>';
+        html += '<div class="q-explanation">' + (q.answer || '') + '</div>';
+      }
       html += '</div>';
     });
+
+    // 分页控件
+    html += '<div class="quiz-pagination">';
+    html += '<button id="pg-prev"' + (quizPage === 0 ? ' disabled' : '') + '>上一页</button>';
+    html += '<span class="page-info">' + (quizPage + 1) + ' / ' + totalPages + '</span>';
+    html += '<button id="pg-next"' + (quizPage >= totalPages - 1 ? ' disabled' : '') + '>下一页</button>';
+    html += '</div>';
 
     body.innerHTML = html;
 
-    // Click handlers
-    body.querySelectorAll('.q-option').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const question = btn.closest('.quiz-question');
-        const idx = parseInt(question.dataset.idx);
-        const q = quizzes[idx];
-        const selectedAnswer = parseInt(btn.dataset.answer);
-
-        // Prevent re-selection
-        if (question.querySelector('.q-option.correct-answer') || question.querySelector('.q-option.wrong-answer')) return;
-
-        // Mark all options
-        question.querySelectorAll('.q-option').forEach(opt => {
-          const ans = parseInt(opt.dataset.answer);
-          if (ans === q.answer) {
-            opt.classList.add('correct-answer');
-          }
-          if (ans === selectedAnswer && ans !== q.answer) {
-            opt.classList.add('wrong-answer');
-          }
-          opt.style.pointerEvents = 'none';
+    // 选择题点击
+    body.querySelectorAll('.quiz-question').forEach(function(question) {
+      var idx = parseInt(question.getAttribute('data-idx'), 10);
+      var q = quizzes[idx];
+      if (q.type === 'choice') {
+        question.querySelectorAll('.q-option').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (question.querySelector('.q-option.correct-answer') || question.querySelector('.q-option.wrong-answer')) return;
+            var selected = parseInt(btn.getAttribute('data-answer'), 10);
+            question.querySelectorAll('.q-option').forEach(function(opt) {
+              var ans = parseInt(opt.getAttribute('data-answer'), 10);
+              if (ans === q.answer) opt.classList.add('correct-answer');
+              if (ans === selected && ans !== q.answer) opt.classList.add('wrong-answer');
+              opt.style.pointerEvents = 'none';
+            });
+            question.querySelector('.q-explanation').classList.add('show');
+            if (selected === q.answer) question.classList.add('correct');
+            else question.classList.add('wrong');
+          });
         });
+      } else {
+        var showBtn = question.querySelector('.show-answer');
+        showBtn.addEventListener('click', function() {
+          var expl = question.querySelector('.q-explanation');
+          var isShowing = expl.classList.contains('show');
+          expl.classList.toggle('show');
+          showBtn.textContent = isShowing ? '显示解答' : '收起解答';
+        });
+      }
+    });
 
-        // Show explanation
-        question.querySelector('.q-explanation').classList.add('show');
-
-        // Mark correct/wrong
-        if (selectedAnswer === q.answer) {
-          question.classList.add('correct');
-        } else {
-          question.classList.add('wrong');
-        }
-      });
+    // 分页按钮
+    var prevBtn = document.getElementById('pg-prev');
+    var nextBtn = document.getElementById('pg-next');
+    if (prevBtn) prevBtn.addEventListener('click', function() {
+      if (quizPage > 0) { quizPage--; renderQuiz(); body.scrollTop = 0; }
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function() {
+      if (quizPage < totalPages - 1) { quizPage++; renderQuiz(); body.scrollTop = 0; }
     });
   }
 
-  document.getElementById('quiz-difficulty').addEventListener('change', (e) => {
+  // ---- 事件绑定 ----
+  document.getElementById('detail-close').addEventListener('click', closeDetail);
+  document.getElementById('clear-filter').addEventListener('click', function() {
+    activeChapter = null;
+    applyChapterHighlight();
+    renderSidebar();
+  });
+
+  document.querySelectorAll('.subject-toggle[data-subject]').forEach(function(tab) {
+    tab.addEventListener('click', function() { toggleSubject(tab.getAttribute('data-subject')); });
+  });
+  document.getElementById('btn-merge').addEventListener('click', mergeSubjects);
+
+  document.getElementById('btn-path').addEventListener('click', function() {
+    document.getElementById('path-panel').classList.toggle('open');
+    if (document.getElementById('path-panel').classList.contains('open')) renderPathPanel();
+  });
+  document.getElementById('path-close').addEventListener('click', function() {
+    document.getElementById('path-panel').classList.remove('open');
+  });
+
+  document.getElementById('search-input').addEventListener('input', function(e) {
+    searchTerm = e.target.value.trim();
+    applySearch();
+  });
+
+  document.getElementById('btn-sidebar').addEventListener('click', function() {
+    sidebarCollapsed = !sidebarCollapsed;
+    document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+    setTimeout(function() {
+      if (simulation) {
+        simulation.force('center', d3.forceCenter(w() / 2, h() / 2));
+        simulation.alpha(0.3).restart();
+      }
+    }, 300);
+  });
+
+  document.getElementById('quiz-difficulty').addEventListener('change', function(e) {
     quizDifficulty = e.target.value;
+    quizPage = 0;
     renderQuiz();
   });
-
-  document.getElementById('quiz-toggle').addEventListener('click', () => {
+  document.getElementById('quiz-type').addEventListener('change', function(e) {
+    quizType = e.target.value;
+    quizPage = 0;
+    renderQuiz();
+  });
+  document.getElementById('quiz-toggle').addEventListener('click', function() {
     quizCollapsed = !quizCollapsed;
     document.getElementById('quiz-panel').classList.toggle('collapsed', quizCollapsed);
-    document.getElementById('quiz-toggle').innerHTML = quizCollapsed ? '&#9654; 测验' : '&#9660; 测验';
+    document.getElementById('quiz-toggle').innerHTML = quizCollapsed ? '&#9654; 展开测验' : '&#9660; 收起测验';
   });
 
-  // ---- Resize handler ----
-  window.addEventListener('resize', () => {
-    if (simulation) {
-      simulation.force('center', d3.forceCenter(width() / 2, height() / 2));
-      simulation.alpha(0.3).restart();
-    }
-  });
-
-  // ---- Layer filter ----
-  document.getElementById('layer-filter').addEventListener('change', (e) => {
+  document.getElementById('layer-filter').addEventListener('change', function(e) {
     layerFilter = e.target.value;
     initGraph();
     closeDetail();
-    updateProgress();
+  });
+
+  window.addEventListener('resize', function() {
+    if (simulation) {
+      simulation.force('center', d3.forceCenter(w() / 2, h() / 2));
+      simulation.alpha(0.3).restart();
+    }
   });
 
   // ---- Init ----
@@ -1436,7 +1584,6 @@ const CH_COLORS = ${chColorsJSON};
     renderQuiz();
     updateProgress();
   }
-
   init();
 })();
 </script>
