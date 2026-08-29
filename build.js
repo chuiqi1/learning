@@ -159,6 +159,9 @@ function mathHTML(s) {
   var SCRIPT = 'a-z0-9A-Zα-ωΑ-Ω*♭♯∂∞#⊤⊥+-';
   t = t.replace(new RegExp('\\^([' + SCRIPT + ']+)', 'g'), '<sup>$1</sup>');
   t = t.replace(new RegExp('_([' + SCRIPT + ']+)', 'g'), '<sub>$1</sub>');
+  // 6. 张量指标竖向堆叠：连续的 <sup>…</sup><sub>…</sub>（或反向）合并为上下对齐，如 Γ^k_ij
+  t = t.replace(/<sup>([^<]*)<\/sup><sub>([^<]*)<\/sub>/g, '<span class="ts"><span class="ts-top">$1</span><span class="ts-bot">$2</span></span>');
+  t = t.replace(/<sub>([^<]*)<\/sub><sup>([^<]*)<\/sup>/g, '<span class="ts"><span class="ts-top">$2</span><span class="ts-bot">$1</span></span>');
   return t;
 }
 
@@ -899,9 +902,38 @@ body {
 /* ============================================================
    数学上下标 & 详情展开 & 弹窗 & 思路
    ============================================================ */
-sup, sub { line-height: 0; font-size: 0.75em; }
+sup, sub { line-height: 0; font-size: 0.72em; }
 sup { vertical-align: super; }
 sub { vertical-align: sub; }
+
+/* 张量指标上下堆叠（如 Γ^k_ij → 上 k 下 ij） */
+.ts {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.68em;
+  line-height: 1.12;
+  margin: 0 1px;
+}
+.ts-top, .ts-bot { display: block; }
+
+/* “查看完整详情”按钮 */
+.node-detail-btn {
+  display: block;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.node-detail-btn:hover { background: var(--accent-hover); }
 
 .detail-header .btn-group { display: flex; gap: 6px; }
 .detail-header .expand-btn {
@@ -1489,6 +1521,8 @@ const LEARNING_PATH = ${pathJSON};
     if (readNodes[node.id]) html += '<span class="tag" style="background:#dcfce7;color:#16a34a;">已读</span>';
     html += '</div>';
 
+    html += '<button class="node-detail-btn">查看完整详情 &#8594;</button>';
+
     if (node.svg) {
       html += '<div class="section"><div class="section-title">示意图</div>';
       html += '<div class="svg-chart">' + node.svg + '</div></div>';
@@ -1540,6 +1574,10 @@ const LEARNING_PATH = ${pathJSON};
     body.innerHTML = html;
     document.getElementById('detail-panel').classList.add('open');
 
+    // “查看完整详情”按钮：在弹窗中以大字号通读知识点
+    var detailBtn = body.querySelector('.node-detail-btn');
+    if (detailBtn) detailBtn.addEventListener('click', function() { openNodeModal(node); });
+
     // 例子/定理 点击查看详情
     body.querySelectorAll('[data-example]').forEach(function(btn) {
       btn.addEventListener('click', function() {
@@ -1581,6 +1619,52 @@ const LEARNING_PATH = ${pathJSON};
   }
   function closeModal() {
     document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  // ---- 弹窗：知识点的完整详情（大字号通读）----
+  function openNodeModal(node) {
+    var ch = ALL_CHAPTERS.find(function(c) { return c.id === node.chapter && c.subject === node.subject; });
+    var chName = ch ? ch.title : node.chapter;
+    var subjName = node.subject === 'riemann' ? '黎曼几何' : '代数拓扑';
+    var html = '';
+    html += '<div class="m-section" style="margin-bottom:10px">';
+    html += '<span class="m-tag">' + subjName + '</span>';
+    html += '<span class="m-tag">' + chName + '</span>';
+    html += '<span class="m-tag">Layer ' + (node.layer || '?') + '</span>';
+    html += '</div>';
+    if (node.svg) {
+      html += '<div class="m-section"><div class="m-title">示意图</div>';
+      html += '<div style="text-align:center;background:var(--bg);border-radius:var(--radius);padding:12px">' + node.svg + '</div></div>';
+    }
+    if (node.desc) html += '<div class="m-section"><div class="m-title">描述</div><div class="m-text">' + node.desc + '</div></div>';
+    if (node.content) html += '<div class="m-section"><div class="m-title">详细内容</div><div class="m-text">' + node.content + '</div></div>';
+    if (node.understanding) html += '<div class="m-section"><div class="m-title">通俗理解</div><div class="m-text">' + node.understanding + '</div></div>';
+    if (node.examples && node.examples.length > 0) {
+      html += '<div class="m-section"><div class="m-title">例子</div>';
+      node.examples.forEach(function(ex) {
+        html += '<div class="m-text" style="margin-bottom:10px;padding:10px 12px;background:var(--bg);border-left:3px solid var(--accent);border-radius:6px"><strong>' + ex.title + '</strong><br>' + ex.content + '</div>';
+      });
+      html += '</div>';
+    }
+    if (node.theorems && node.theorems.length > 0) {
+      html += '<div class="m-section"><div class="m-title">定理与证明</div>';
+      node.theorems.forEach(function(th) {
+        html += '<div class="m-text" style="margin-bottom:10px;padding:10px 12px;background:#fefce8;border-left:3px solid var(--warning);border-radius:6px"><strong>' + th.name + '</strong><br><em>' + th.statement + '</em>';
+        if (th.proof) html += '<div class="m-proof" style="margin-top:8px">' + th.proof + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    if (node.applications) html += '<div class="m-section"><div class="m-title">应用</div><div class="m-text">' + node.applications + '</div></div>';
+    if (node.refs) {
+      html += '<div class="m-section"><div class="m-title">教材引用</div><div class="m-text">';
+      var refs = Array.isArray(node.refs) ? node.refs : [node.refs];
+      refs.forEach(function(ref) {
+        html += '<span class="m-tag" style="cursor:default">' + (ref.book || '') + ' ' + (ref.ch || '') + ' ' + (ref.sec || '') + '</span>';
+      });
+      html += '</div></div>';
+    }
+    openModal(node.label, html);
   }
 
   // 抽取定理名里的关键词（去掉常见尾缀），用于跨知识点搜索使用处
