@@ -17,6 +17,7 @@ const topoBig = require('./data-topo-big.js');
 const riemannBig2 = require('./data-riemann-big2.js');
 const topoBig2 = require('./data-topo-big2.js');
 const exampleDetails = require('./example-details.js');
+const theoremDetails = require('./theorem-details.js');
 
 // ---- 构建学科数据 ----
 const subjects = [
@@ -202,6 +203,15 @@ function sanitizeData() {
     var map = exampleDetails[nodeId];
     Object.keys(map).forEach(function (k) {
       if (node.examples && node.examples[k]) node.examples[k].detail = map[k];
+    });
+  });
+  // theorem-details.js 形如 { "节点id": { "定理序号(0起)": "①②③…详细证明" }, ... }
+  Object.keys(theoremDetails).forEach(function (nodeId) {
+    var node = allNodes.find(function (n) { return n.id === nodeId; });
+    if (!node) return;
+    var map = theoremDetails[nodeId];
+    Object.keys(map).forEach(function (k) {
+      if (node.theorems && node.theorems[k]) node.theorems[k].detailProof = map[k];
     });
   });
 })();
@@ -1071,6 +1081,24 @@ sub { vertical-align: sub; }
   line-height: 1.85;
 }
 .proof-step:last-child { margin-bottom: 0; }
+.proof-step > span:last-child { flex: 1; min-width: 0; }
+/* 步骤内 思路/计算/结论 标签 */
+.st-line { display: block; margin-bottom: 7px; }
+.st-line:last-child { margin-bottom: 0; }
+.st-tag {
+  display: inline-block;
+  padding: 0 7px;
+  margin-right: 7px;
+  font-size: 11px; font-weight: 700;
+  border-radius: 4px;
+  line-height: 19px;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
+.st-tag.step-why { background: #ede9fe; color: #6d28d9; }
+.st-tag.step-calc { background: #dbeafe; color: #1d4ed8; }
+.st-tag.step-concl { background: #dcfce7; color: #16a34a; }
+.st-body { vertical-align: middle; }
 .quiz-step {
   display: flex;
   align-items: flex-start;
@@ -1265,6 +1293,37 @@ const LEARNING_PATH = ${pathJSON};
     });
     if (cur.trim()) steps.push(cur.trim());
     return steps;
+  }
+
+  // ---- 把单步正文里的【思路】【计算】【结论】等标记渲染成带标签的分块 ----
+  function renderStepBody(text) {
+    if (!text) return '';
+    var LABELS = {
+      '【思路】': 'step-why',
+      '【依据】': 'step-why',
+      '【计算】': 'step-calc',
+      '【推导】': 'step-calc',
+      '【结论】': 'step-concl'
+    };
+    var MARK = /(【思路】|【依据】|【计算】|【推导】|【结论】)/;
+    if (!MARK.test(text)) return '<span>' + text + '</span>';
+    var parts = text.split(MARK);
+    var html = '';
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (!p) continue;
+      if (LABELS[p]) {
+        var cls = LABELS[p];
+        var content = (i + 1 < parts.length) ? parts[i + 1] : '';
+        i += 1;
+        if (content && content.trim()) {
+          html += '<span class="st-line"><span class="st-tag ' + cls + '">' + p.replace(/【|】/g, '') + '</span><span class="st-body">' + content + '</span></span>';
+        }
+      } else if (p.trim()) {
+        html += '<span class="st-line"><span class="st-body">' + p + '</span></span>';
+      }
+    }
+    return html;
   }
 
   // ---- 与某道题关联的知识点（同章节点 = 相关定义/定理）----
@@ -1706,7 +1765,7 @@ const LEARNING_PATH = ${pathJSON};
         var m = s.match(/^([①-⑩])\s*/);
         var num = m ? m[1] : '';
         var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
-        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + rest + '</span></div>';
+        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + renderStepBody(rest) + '</span></div>';
       });
       body += '</div></div>';
     } else {
@@ -1753,7 +1812,7 @@ const LEARNING_PATH = ${pathJSON};
         var m = s.match(/^([①-⑩])\s*/);
         var num = m ? m[1] : '';
         var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
-        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + rest + '</span></div>';
+        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + renderStepBody(rest) + '</span></div>';
       });
       body += '</div>';
     } else {
