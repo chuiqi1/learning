@@ -324,6 +324,33 @@ body {
 }
 .btn-icon:hover { background: var(--accent-light); color: var(--accent); }
 
+/* 醒目的学习路径按钮 */
+.btn-path {
+  display: flex; align-items: center; gap: 5px;
+  padding: 0 14px; height: 32px;
+  border: none; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff; font-size: 13px; font-weight: 600;
+  cursor: pointer; flex-shrink: 0; white-space: nowrap;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+  animation: pathPulse 2.5s ease-in-out infinite;
+}
+.btn-path:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.5);
+  transform: translateY(-1px);
+}
+@keyframes pathPulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35); }
+  50% { box-shadow: 0 2px 16px rgba(79, 70, 229, 0.6); }
+}
+@media (max-width: 768px) {
+  .btn-path { animation: none; padding: 0 10px; font-size: 12px; }
+  .btn-path .btn-path-label { display: none; }
+  .btn-path::after { content: '\\01F4DA'; font-size: 16px; }
+}
+
 /* 学科多选按钮 */
 .subject-toggle {
   padding: 6px 12px;
@@ -966,6 +993,64 @@ sub { vertical-align: sub; }
 .detail-panel.expanded .detail-body .section-content,
 .detail-panel.expanded .detail-body .th-proof { font-size: 14px; }
 
+/* 学习路径触发的全屏模式 */
+.detail-panel.path-fullscreen {
+  position: fixed;
+  top: var(--header-height);
+  left: 0; right: 0; bottom: 0;
+  width: 100% !important;
+  min-width: 100% !important;
+  z-index: 90;
+  border-left: none;
+  background: var(--bg-card);
+}
+.detail-panel.path-fullscreen .detail-body { font-size: 15px; }
+.detail-panel.path-fullscreen .detail-body .section-content,
+.detail-panel.path-fullscreen .detail-body .th-proof { font-size: 14px; }
+
+/* 知识点底部导航按钮 */
+.node-nav {
+  margin-top: 20px; padding-top: 16px;
+  border-top: 2px solid var(--border);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.node-nav-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.nav-btn {
+  flex: 1; min-width: 120px;
+  padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--bg);
+  cursor: pointer; font-size: 13px; color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+  transition: all var(--transition); text-align: left;
+}
+.nav-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.nav-btn.primary {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff; border: none;
+}
+.nav-btn.primary:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  transform: translateY(-1px);
+}
+.nav-btn .nav-arrow { font-size: 16px; flex-shrink: 0; }
+.nav-btn .nav-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nav-btn:disabled:hover { background: var(--bg); border-color: var(--border); color: var(--text); transform: none; }
+.nav-related-title {
+  font-size: 12px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.nav-related-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.nav-chip {
+  padding: 5px 12px; border: 1px solid var(--border);
+  border-radius: 16px; background: var(--bg);
+  cursor: pointer; font-size: 12px; color: var(--text-secondary);
+  transition: all var(--transition);
+}
+.nav-chip:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
 .detail-action-btn {
   margin-top: 6px;
   padding: 4px 12px;
@@ -1137,7 +1222,7 @@ sub { vertical-align: sub; }
   <button class="subject-toggle riemann active" data-subject="riemann">黎曼几何</button>
   <button class="subject-toggle topo active" data-subject="topo">代数拓扑</button>
   <button class="subject-toggle merge-btn" id="btn-merge">&#8644; 合并视图</button>
-  <button class="btn-icon" id="btn-path" title="学习路径">&#128218;</button>
+  <button class="btn-path" id="btn-path" title="学习路径">&#128218; <span class="btn-path-label">学习路径</span></button>
   <select class="layer-filter" id="layer-filter">
     <option value="all">全部层级</option>
     <option value="0-1">基础入门 (Layer 0-1)</option>
@@ -1561,6 +1646,34 @@ const LEARNING_PATH = ${pathJSON};
     });
   }
 
+  // ---- 获取学习路径中的上一个/下一个节点 ----
+  function getPathNeighbors(nodeId) {
+    var flat = [];
+    LEARNING_PATH.forEach(function(stage) {
+      stage.nodes.forEach(function(n) { flat.push(n); });
+    });
+    var idx = -1;
+    for (var i = 0; i < flat.length; i++) {
+      if (flat[i].id === nodeId) { idx = i; break; }
+    }
+    var prev = idx > 0 ? flat[idx - 1] : null;
+    var next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
+    // 同章节的相邻节点（不在学习路径中的也可作为关联）
+    var related = [];
+    if (idx >= 0) {
+      var cur = flat[idx];
+      var stage = LEARNING_PATH.find(function(s) {
+        return s.nodes.some(function(n) { return n.id === nodeId; });
+      });
+      if (stage) {
+        stage.nodes.forEach(function(n) {
+          if (n.id !== nodeId) related.push(n);
+        });
+      }
+    }
+    return { prev: prev, next: next, related: related.slice(0, 6) };
+  }
+
   // ---- 详情面板 ----
   function showDetail(node) {
     markRead(node.id);
@@ -1630,6 +1743,31 @@ const LEARNING_PATH = ${pathJSON};
       html += '</div>';
     }
 
+    // ---- 底部导航：上一个 / 下一个 / 关联知识点 ----
+    var neighbors = getPathNeighbors(node.id);
+    html += '<div class="node-nav">';
+    html += '<div class="node-nav-row">';
+    if (neighbors.prev) {
+      html += '<button class="nav-btn" data-nav="' + neighbors.prev.id + '"><span class="nav-arrow">&#8592;</span><span class="nav-text">' + neighbors.prev.label + '</span></button>';
+    } else {
+      html += '<button class="nav-btn" disabled><span class="nav-arrow">&#8592;</span><span class="nav-text">已是第一个</span></button>';
+    }
+    if (neighbors.next) {
+      html += '<button class="nav-btn primary" data-nav="' + neighbors.next.id + '"><span class="nav-arrow">&#8594;</span><span class="nav-text">' + neighbors.next.label + '</span></button>';
+    } else {
+      html += '<button class="nav-btn" disabled><span class="nav-arrow">&#8594;</span><span class="nav-text">已是最后一个</span></button>';
+    }
+    html += '</div>';
+    if (neighbors.related.length > 0) {
+      html += '<div class="nav-related-title">同章节知识点</div>';
+      html += '<div class="nav-related-chips">';
+      neighbors.related.forEach(function(r) {
+        html += '<span class="nav-chip" data-nav="' + r.id + '">' + r.label + '</span>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+
     body.innerHTML = html;
     document.getElementById('detail-panel').classList.add('open');
 
@@ -1659,9 +1797,27 @@ const LEARNING_PATH = ${pathJSON};
         if (target) showDetail(target);
       });
     });
+
+    // 底部导航按钮
+    body.querySelectorAll('[data-nav]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var id = btn.getAttribute('data-nav');
+        var target = ALL_NODES.find(function(n) { return n.id === id; });
+        if (target) {
+          var panel = document.getElementById('detail-panel');
+          var wasFullscreen = panel.classList.contains('path-fullscreen');
+          showDetail(target);
+          if (wasFullscreen) {
+            panel.classList.add('path-fullscreen');
+          }
+          panel.querySelector('.detail-body').scrollTop = 0;
+        }
+      });
+    });
   }
   function closeDetail() {
     document.getElementById('detail-panel').classList.remove('open');
+    document.getElementById('detail-panel').classList.remove('path-fullscreen');
     var panel = document.getElementById('detail-panel');
     panel.classList.remove('expanded');
     var btn = document.getElementById('detail-expand');
@@ -1968,6 +2124,8 @@ const LEARNING_PATH = ${pathJSON};
           }
           document.getElementById('path-panel').classList.remove('open');
           showDetail(node);
+          // 从学习路径打开时自动全屏
+          document.getElementById('detail-panel').classList.add('path-fullscreen');
           // 高亮该节点
           nodeGroup.selectAll('circle').classed('highlighted', function(d) { return d.id === id; });
         }
