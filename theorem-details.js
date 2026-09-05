@@ -555,10 +555,56 @@ J 是 Jacobi 场且满足边界条件 J(a)=J(b)=0。第二变分公式给出
 <div class="memobox"><strong>一句话记忆：</strong>第一个共轭点是“最短性”的生命线——越过它，测地线就“输了”。</div>`
   },
   "r46": {
-    0: "①【思路】第二变分公式给出能量泛函的二阶导，用于判定临界点（测地线）的极小性。设 Γ(s,t) 是测地线 γ 的变分，V(t)=∂Γ/∂s|_{s=0}，沿 γ 记 ∇=∇_{γ′}。【计算】E(γ_s)=∫_a^b ⟨∂Γ/∂t,∂Γ/∂t⟩dt，对 s 求二阶导。②【思路】第一次求导得 dE/ds=2∫⟨∇_s∂Γ/∂t,∂Γ/∂t⟩dt。再求导用 Leibniz 与无挠性。【推导】d²E/ds²=2∫(⟨∇_s∇_s∂Γ/∂t,∂Γ/∂t⟩+⟨∇_s∂Γ/∂t,∇_s∂Γ/∂t⟩)dt。③【思路】用无挠性 ∇_s∂Γ/∂t=∇_t∂Γ/∂s=∇_t V，并把 ∇_s∇_s∂Γ/∂t 换为含 V 的式。【计算】∇_s∇_s∂Γ/∂t=∇_s∇_t V=∇_t∇_s V+R(∂Γ/∂s,∂Γ/∂t)V=∇_t∇_s V+R(V,γ′)V（s=0 处）。④【思路】代入并分部积分（固定端点）。【计算】d²E/ds²|_{s=0}=2∫_a^b(⟨∇_t V,∇_t V⟩+⟨∇_t∇_s V,γ′⟩+⟨R(V,γ′)V,γ′⟩)dt=2∫_a^b(|∇ V|²−⟨R(V,γ′)γ′,V⟩)dt（∇_s V 项分部积分消失）。⑤【结论】δ²E(V,V)=∫_a^b(|∇V|²−⟨R(V,γ′)γ′,V⟩)dt，右端是 Morse 二次型，其负特征值个数对应共轭点。"
+    0: L`<h4>我们要证明什么</h4>
+第二变分公式给出能量泛函在测地线处的二阶导数：
+
+<div class="eq">$$\delta^2 E(V,V)=\int_a^b\Big(\lvert\nabla_{\dot\gamma}V\rvert^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\Big)dt$$</div>
+
+它是判断测地线是否为「能量极小」的基本工具。
+
+<h4>第一步：设变分，写能量</h4>
+设 $\Gamma(s,t)$ 是测地线 $\gamma$ 的变分，$V(t)=\left.\frac{\partial\Gamma}{\partial s}\right|_{s=0}$ 是变分场，记 $\nabla=\nabla_{\dot\gamma}$。能量：
+
+<div class="eq">$$E(\gamma_s)=\int_a^b\Big\langle\frac{\partial\Gamma}{\partial t},\frac{\partial\Gamma}{\partial t}\Big\rangle dt$$</div>
+
+<h4>第二步：一阶变分</h4>
+对 $s$ 求导一次，用无挠性与分部积分：
+
+<div class="eq">$$\frac{dE}{ds}=2\int_a^b\Big\langle\nabla_s\frac{\partial\Gamma}{\partial t},\frac{\partial\Gamma}{\partial t}\Big\rangle dt$$</div>
+
+$\gamma$ 是测地线 ⟹ 一阶变分为零（$\gamma$ 是临界点）。
+
+<h4>第三步：二阶变分</h4>
+再对 $s$ 求导，交换协变导数（出现曲率项 $R$），并在 $s=0$ 处取值：
+
+<div class="keybox">$$\boxed{\delta^2 E(V,V)=\int_a^b\Big(\lvert\nabla_{\dot\gamma}V\rvert^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\Big)dt}$$</div>
+
+<h4>第四步：共轭点 ⟹ 负特征方向</h4>
+若 $\gamma$ 上存在共轭点，则存在非零 Jacobi 场 $V$（两端为零）使 $\delta^2E(V,V)=0$；进一步可构造变分使 $\delta^2E<0$——测地线不再是极小。
+
+<div class="memobox"><strong>一句话记忆：</strong>第二变分 = $\int(|V'|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle)$，曲率项是「变负」的根源，共轭点带来负方向。</div>`
   },
   "r47": {
-    0: "①【思路】Morse 指标定理：测地线上能量泛函的 Morse 指标=共轭点个数（计重数）。Morse 指标是第二变分 δ²E 的负特征值个数，而 δ²E(V,V)=∫⟨LV,V⟩dt，其中 L=−∇_{γ′}²−R(·,γ′)γ′ 是 Jacobi 算子（Sturm–Liouville 型）。【推导】固定端点 V(a)=V(b)=0，特征方程 LV=λV。②【思路】Jacobi 场的零点与 L 的特征值变号有对应关系。由 Sturm 比较/分离定理，特征值在参数端点处穿过零。【推导】λ 连续减少经过 0 时，对应特征函数的端点个数变化；Jacobi 方程（λ=0 情形）解的零点正是共轭点。③【思路】沿 γ 从 a 到 t 移动，当 t 通过一个共轭点时，二次型 δ²E_{[a,t]} 的负特征值个数 +1（重数=共轭点重数）。【计算】故负特征值个数=位于 (a,b) 内共轭点个数计重数。④【结论】Morse 指标=共轭点个数（计重数），这是变分法与谱理论在测地线理论的核心桥接。"
+    0: L`<h4>这一定理在说什么</h4>
+Morse 指标定理：能量泛函 $E$ 在测地线 $\gamma$ 上的 Morse 指标（负特征值个数）等于沿 $\gamma$ 的共轭点个数（计重数）：
+
+<div class="eq">$$\mathrm{index}(\gamma)=\#\{\text{共轭点（计重数）}\}$$</div>
+
+<h4>第一步：第二变分与 Jacobi 算子</h4>
+第二变分 $\delta^2E(V,V)=\int_a^b\langle LV,V\rangle dt$，其中 Jacobi 算子
+
+<div class="eq">$$L=-\nabla_{\dot\gamma}^2-R(\cdot,\dot\gamma)\dot\gamma$$</div>
+
+是 Sturm–Liouville 型算子。Morse 指标就是 $L$ 的负特征值个数。
+
+<h4>第二步：特征值与共轭点对应</h4>
+固定端点 $V(a)=V(b)=0$。$L$ 的特征值 $\lambda_1<\lambda_2<\cdots$ 单调依赖于区间 $[a,b]$。当 $b$ 增大经过一个共轭点时，就有一个特征值从正变负——因为共轭点对应 $LV=0$ 的非零解（零特征值）。
+
+<h4>第三步：结论</h4>
+
+<div class="keybox">$$\boxed{\mathrm{index}(\gamma)=\sum_{t\in(a,b)}\dim\{\text{Jacobi 场在 }t\text{ 为零}\}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>测地线的 Morse 指标 = 它经过的共轭点个数（计重数），共轭点 = 负特征值「新生的地方」。</div>`
   },
   "r48": {
     0: "①【思路】Rauch 比较定理是比较几何的基石：曲率越大，Jacobi 场（同样初始条件）增长越慢。设截面曲率 K_M≥K_M̃，取两条等长单位速度测地线 γ、γ̃，沿它们的 Jacobi 场 J、J̃ 有相同初值且 J⊥γ′、J̃⊥γ̃′。【推导】要证 |J(t)|≤|J̃(t)|（在无共轭点区间）。②【思路】引入指标形式 I_t(J,J)=∫₀^t(|∇J|²−⟨R(J,γ′)γ′,J⟩)ds（这里 ⟨R(J,γ′)γ′,J⟩=K(J,γ′)|J|²）。由曲率下界，指标形式满足 I_t(J,J)≤I_t(J̃,J̃)（当 t 在无共轭区间）。【计算】因为 K_M≥K_M̃ ⟹ −K_M|J|²≤−K_M̃|J|²，被积函数（同 |J|）下，指标形式更小。③【思路】用“指标形式比较”把长度比的信息推出来：考虑函数 φ(t)=|J(t)|²/|J̃(t)|²，用 Jacobi 方程结合指标形式证明 φ 单调不增、极限（t→0）为 1。【推导】关键技术：Riccati 方程的单调性——令 u=|J|′/|J|（径向对数导数），曲率下界给出 u≤ũ，积分得 |J|/|J̃| 单调不增。④【结论】故 |J(t)|≤|J̃(t)|，Rauch 比较定理得证，它是 Bonnet–Myers、Toponogov、Bishop–Gromov 的共同基础。"
