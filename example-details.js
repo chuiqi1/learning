@@ -786,24 +786,191 @@ $S^n\subset\mathbb R^{n+1}$ 的位置向量 $x$ 即单位法向量。对 $S^n$ �
 <div class="memobox"><strong>关键词：</strong>截面曲率 pinching $>\frac{n-2}{2n-3}$ ⟹ 全测地大球面。</div>`
   },
   "r40": {
-    0: "①【思路】球面三角形的局部 Gauss-Bonnet：∫_T K dA=α+β+γ−π（内角和减 π）。【计算】对半径 R 球面，面积=R²(α+β+γ−π)，即内角和 =π+Area/R²。②【思路】这是球面三角形面积公式（Girard 定理）。【计算】Area=R²(内角和−π)。③【结论】正曲率 ⟹ 三角形内角和大于 π，是 Gauss-Bonnet 局部形式的直接体现。",
-    1: "①【思路】测地三角形（边为测地线的区域）的 Gauss-Bonnet：∫K dA+Σ外角=2π−Σ内角补充。【计算】局部 Gauss-Bonnet：∫_Ω K dA+∫_∂Ω k_g ds+Σ外角=2πχ(Ω)。②【思路】对测地三角形边界，k_g=0（边是测地线），只剩角项。【计算】∫K dA=2π−(π−α)−(π−β)−(π−γ)=α+β+γ−π。③【结论】测地盘地区域曲率积分=内角和−π，是局部 Gauss-Bonnet 的核心。",
-    2: "①【思路】一般区域（带曲边）的局部 Gauss-Bonnet 公式包含测地曲率积分与角项。【计算】∫_Ω K dA+∫_∂Ω k_g ds+Σ(外角)=2πχ(Ω)。②【思路】χ(Ω)=1（盘），故 ∫K dA=2π−∫k_g ds−Σ外角。【计算】代入具体区域即得。③【结论】这是 Gauss-Bonnet 局部（含边界）形式，全局定理由三角形剖分求和得到。"
+    0: L`<h4>目标</h4>
+用球面三角形验证局部 Gauss–Bonnet 定理。
+
+<h4>第一步：球面三角形的面积</h4>
+球面上由赤道和两条经线构成的三角形（两条经线夹角 $\pi/2$），三个内角都是 $\pi/2$，内角和 $=\frac{3\pi}{2}$。Girard 定理给出面积：
+
+<div class="eq">$$\mathrm{Area}=R^2(\alpha+\beta+\gamma-\pi)=R^2\cdot\frac{\pi}{2}=\frac{\pi R^2}{2}$$</div>
+
+这恰好是 $1/8$ 球面面积 $4\pi R^2/8$。
+
+<h4>第二步：验证 Gauss–Bonnet</h4>
+边界是测地线（赤道、经线），$\kappa_g=0$；三个角点外角各 $\pi-\frac\pi2=\frac\pi2$。Gauss–Bonnet 给出：
+
+<div class="eq">$$\int_T K\,dA=\frac{1}{R^2}\cdot\frac{\pi R^2}{2}=\frac{\pi}{2}=\alpha+\beta+\gamma-\pi$$</div>
+
+<div class="keybox">$$\boxed{\int_T K\,dA=\alpha+\beta+\gamma-\pi=\frac{\pi}{2}}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>球面三角形内角和 $>\pi$，差量 = 曲率积分 = $K\cdot$面积。</div>`,
+    1: L`<h4>目标</h4>
+说明测地三角形的 Gauss–Bonnet 公式 $\int K\,dA=\sum\alpha_i-\pi$。
+
+<h4>第一步：测地边界 ⟹ 无测地曲率项</h4>
+测地三角形边界是测地线，$\kappa_g=0$，角点内角 $\alpha_i$。局部 Gauss–Bonnet 化为：
+
+<div class="eq">$$\int_T K\,dA+\sum_i(\pi-\alpha_i)=2\pi\ \Longrightarrow\ \int_T K\,dA=\sum_i\alpha_i-\pi$$</div>
+
+<div class="keybox">$$\boxed{\int_T K\,dA=\alpha_1+\alpha_2+\alpha_3-\pi}$$</div>
+
+<h4>第二步：平面特例</h4>
+平面上 $K=0$，于是 $\alpha_1+\alpha_2+\alpha_3-\pi=0$，即内角和 $=\pi$——正是欧氏几何的三角形内角和定理。
+
+<div class="memobox"><strong>关键词：</strong>测地三角形 $\int K\,dA=\sum\alpha_i-\pi$；平面 $K=0$ 退回内角和 $=\pi$。</div>`,
+    2: L`<h4>目标</h4>
+球冠（球面上半径 $\theta$ 的球冠）的局部 Gauss–Bonnet 验证。
+
+<h4>第一步：球冠的测地曲率</h4>
+球冠边界（纬度 $\theta$ 的圆）的测地曲率：
+
+<div class="eq">$$\kappa_g=\frac{\cot\theta}{R}$$</div>
+
+<h4>第二步：球冠的曲率积分与边界贡献</h4>
+球冠面积 $=2\pi R^2(1-\cos\theta)$，故曲率积分 $=\frac{1}{R^2}\cdot 2\pi R^2(1-\cos\theta)=2\pi(1-\cos\theta)$。边界长度 $=2\pi R\sin\theta$，边界测地曲率积分 $=2\pi R\sin\theta\cdot\frac{\cot\theta}{R}=2\pi\cos\theta$。
+
+<h4>第三步：两者之和</h4>
+
+<div class="keybox">$$\boxed{\int K\,dA+\int\kappa_g\,ds=2\pi(1-\cos\theta)+2\pi\cos\theta=2\pi=2\pi\chi(\text{球冠})}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>球冠的曲率积分与边界测地曲率互补，之和恰为 $2\pi$。</div>`
   },
   "r41": {
-    0: "①【思路】全局 Gauss-Bonnet 对闭曲面：∫_M K dA=2πχ(M)。球面 χ=2。【计算】∫_{S²}K dA=(1/R²)·4πR²=4π=2π·2。②【思路】验证与半径无关。【结论】球面总曲率恒 4π，是 Gauss-Bonnet 的最基本验证。",
-    1: "①【思路】环面 T²：∫K dA=2πχ(T²)=0。【计算】χ(T²)=0 ⟹ ∫K dA=0。②【思路】几何上外侧正曲率与内侧负曲率抵消（参考 r3、r5）。【结论】环面总曲率为零，可承载平坦度量。",
-    2: "①【思路】亏格 2 曲面 χ=2−2·2=−2，总曲率 −4π。【计算】∫K dA=2π·(−2)=−4π。②【思路】任何连续变形都无法改变这一拓扑不变量。【结论】双孔曲面总曲率恒负。"
+    0: L`<h4>目标</h4>
+验证球面 $S^2$ 的总曲率。
+
+<h4>计算</h4>
+球面 $\chi=2$，$K=1/R^2$，面积 $=4\pi R^2$：
+
+<div class="eq">$$\int_{S^2}K\,dA=\frac{1}{R^2}\cdot 4\pi R^2=4\pi=2\pi\cdot 2=2\pi\chi(S^2)$$</div>
+
+<div class="keybox">$$\boxed{\int_{S^2}K\,dA=4\pi\quad(\text{与半径无关})}$$</div>
+
+<h4>关键观察</h4>
+无论球面半径多大，总曲率恒为 $4\pi$。曲率 $1/R^2$ 变小，但面积 $4\pi R^2$ 变大，乘积不变——这是 Gauss–Bonnet 的深刻体现：总曲率是拓扑量。
+
+<div class="memobox"><strong>关键词：</strong>球面总曲率恒 $4\pi$，半径任意，拓扑量不随度量变。</div>`,
+    1: L`<h4>目标</h4>
+验证环面 $T^2$ 的总曲率为零。
+
+<h4>计算</h4>
+环面 $\chi=0$。环面外侧正曲率、内侧负曲率：
+
+<div class="eq">$$\int_{T^2}K\,dA=2\pi\chi(T^2)=2\pi\cdot 0=0$$</div>
+
+<div class="keybox">$$\boxed{\int_{T^2}K\,dA=0}$$</div>
+
+<h4>几何含义</h4>
+正曲率（外侧）与负曲率（内侧）恰好抵消。虽然环面上处处有弯曲，但「总弯曲」为零——这只有 Gauss–Bonnet 能保证，也解释了为什么环面可以摊平度量（$K\equiv 0$ 的平坦度量存在）。
+
+<div class="memobox"><strong>关键词：</strong>环面 $\chi=0$，正负曲率抵消，总曲率为零。</div>`,
+    2: L`<h4>目标</h4>
+亏格 2 曲面（双环面）的总曲率。
+
+<h4>计算</h4>
+亏格 $g=2$ 曲面 $\chi=2-2g=-2$：
+
+<div class="eq">$$\int_M K\,dA=2\pi\chi(M)=2\pi\cdot(-2)=-4\pi$$</div>
+
+<div class="keybox">$$\boxed{\int_M K\,dA=-4\pi\quad(\text{亏格 }2)}$$</div>
+
+<h4>几何含义</h4>
+亏格 $\ge 2$ 的闭曲面<strong>总曲率为负</strong>。这强制了高亏格曲面必然存在负曲率区域（不能处处 $K\ge 0$），是 Gauss–Bonnet 对曲率符号的拓扑约束。
+
+<div class="memobox"><strong>关键词：</strong>亏格 $g$ ⟹ 总曲率 $2\pi(2-2g)$，亏格 $\ge2$ 必为负总曲率。</div>`
   },
   "r42": {
-    0: "①【思路】正多面体的 Euler 公式 V−E+F=2 由顶点、棱、面计数验证。【计算】立方体 V=8, E=12, F=6，χ=8−12+6=2。②【思路】这是正多面体分类（柏拉图立体）的基础：由 V−E+F=2 与边点约束导出只有五种。【结论】Euler 示性数是组合与拓扑的桥梁。",
-    1: "①【思路】环面剖分为两块矩形粘合，计数含对角边。【计算】一个标准剖分给出 χ=0。②【思路】验证 V−E+F=0（环面）。【结论】三角剖分的 Euler 示性数与剖分无关，是拓扑不变量。",
-    2: "①【思路】Klein 瓶 χ=0（不可定向，亏格“非定向”=2，χ=2−2=0 用可定向公式对应 χ=0）。【计算】χ(K)=0。②【思路】Klein 瓶 V−E+F=0 由典型剖分计数。【结论】Klein 瓶与环面 χ 相同但不可定向，区分的更进一步需要同调/H¹。"
+    0: L`<h4>目标</h4>
+用 Euler 公式 $V-E+F=2$ 验证五种正多面体的 $\chi=2$。
+
+<h4>计算</h4>
+五种柏拉图立体都满足 $\chi=V-E+F=2$：
+
+<div class="eq">$$\text{四面体 }4-6+4=2,\quad \text{立方体 }8-12+6=2,\quad \text{八面体 }6-12+8=2$$</div>
+
+<div class="keybox">$$\boxed{V-E+F=2\quad(\text{五种正多面体})}$$</div>
+
+<h4>几何含义</h4>
+正多面体分类（只有五种）正是由 Euler 公式 $V-E+F=2$ 加上边、面的度约束推出来的。$\chi=2$ 是「球面形」曲面的共同特征。
+
+<div class="memobox"><strong>关键词：</strong>Euler 公式 $V-E+F=2$ 限制出五种正多面体，$\chi=2$ 是球面拓扑。</div>`,
+    1: L`<h4>目标</h4>
+环面剖分的 Euler 示性数。
+
+<h4>计算</h4>
+环面可剖分为 $16$ 个矩形：$V=16$，$E=32$，$F=16$：
+
+<div class="eq">$$\chi=V-E+F=16-32+16=0$$</div>
+
+<div class="keybox">$$\boxed{\chi(T^2)=0\quad(\text{与剖分方式无关})}$$</div>
+
+<h4>关键观察</h4>
+任何剖分都给出 $\chi=0$——Euler 示性数是<strong>拓扑不变量</strong>，不依赖剖分的粗细。
+
+<div class="memobox"><strong>关键词：</strong>环面 $\chi=0$，Euler 示性数不依赖剖分。</div>`,
+    2: L`<h4>目标</h4>
+不可定向曲面 Klein 瓶的 Euler 示性数，及 Gauss–Bonnet 的修正。
+
+<h4>计算</h4>
+Klein 瓶不可定向，$\chi=0$。对不可定向曲面，$\chi=2-k$（$k$ 为交叉帽数）。
+
+<h4>Gauss–Bonnet 的修正</h4>
+Gauss–Bonnet 定理要求<strong>可定向</strong>。对不可定向曲面，需转到它的<strong>定向二重覆盖</strong> $\widetilde M$：
+
+<div class="keybox">$$\boxed{\int_{\widetilde M}K\,dA=2\pi\chi(\widetilde M)=2\cdot 2\pi\chi(M)}$$</div>
+
+（二重覆盖的 Euler 示性数翻倍。）
+
+<div class="memobox"><strong>关键词：</strong>Klein 瓶 $\chi=0$；不可定向曲面需用定向覆盖修正 Gauss–Bonnet。</div>`
   },
   "r43": {
-    0: "①【思路】高维 Gauss-Bonnet-Chern 定理用 Pfaffian 表达 Euler 示性数：∫_M Pf(Ω)=χ(M)。二维退化回经典 Gauss-Bonnet。【计算】n=2 时 Pf(Ω)=(1/2π)K dA。②【思路】二维时 Pfaffian 恰是 Gauss 曲率密度。【结论】经典 Gauss-Bonnet 是高维 Chern 定理的二维特例。",
-    1: "①【思路】四维公式 ∫_M (|R|²−4|Ric|²+S²) dV=32π²χ(M)（Chern-Gauss-Bonnet）。【计算】被积式是 Euler 类的超曲率多项式。②【思路】对 CP²，χ=3，代入得 ∫(…)dV=32π²·3=96π²。【结论】四维 Chern-Gauss-Bonnet 通过曲率多项式计算 Euler 数。",
-    2: "①【思路】CP² 的 Euler 示性数 χ=3，由胞腔结构（偶维各一个胞腔）。【计算】χ(CP²)=1+1+1=3（0、2、4 维各一格）。②【思路】这也给出上例曲率积分的值。【结论】CP² 展示偶数维复射影空间 χ=n+1 的规律。"
+    0: L`<h4>目标</h4>
+说明 $n=1$ 时 Chern–Gauss–Bonnet 退化为经典 Gauss–Bonnet。
+
+<h4>计算</h4>
+二维（$2n=2$，$n=1$）时，Pfaffian 恰是 Gauss 曲率密度：
+
+<div class="eq">$$\mathrm{Pf}(\Omega)=\frac{1}{2\pi}K\,dA$$</div>
+
+代入 Chern–Gauss–Bonnet：
+
+<div class="keybox">$$\boxed{\int_M\frac{K}{2\pi}\,dA=(2\pi)^1\chi(M)=2\pi\chi(M)\ \Longrightarrow\ \int_M K\,dA=2\pi\chi(M)}$$</div>
+
+<h4>结论</h4>
+正是经典的全局 Gauss–Bonnet 定理。所以 Chern 的公式是「经典 → 高维」的自然推广。
+
+<div class="memobox"><strong>关键词：</strong>$n=1$ 时 Pfaffian $=K/2\pi$，Chern–GB 退回经典 GB。</div>`,
+    1: L`<h4>目标</h4>
+写出四维的 Chern–Gauss–Bonnet 公式，含 Weyl 张量贡献。
+
+<h4>四维公式</h4>
+四维（$n=2$）时，Pfaffian 展开为曲率张量的二次组合，可分解为 Weyl 张量、Ricci、标量曲率三部分：
+
+<div class="eq">$$\int_M\frac{1}{32\pi^2}\Big(|W|^2-2|\mathrm{Ric}|^2+\frac{S^2}{3}\Big)dV=\chi(M)$$</div>
+
+<div class="keybox">$$\boxed{\frac{1}{32\pi^2}\int_M\Big(|W|^2-2|\mathrm{Ric}|^2+\frac{S^2}{3}\Big)dV=\chi(M)}$$</div>
+
+<h4>应用：引力瞬子</h4>
+引力瞬子的拓扑荷（Euler 数）由此公式确定，Weyl 张量 $|W|^2$ 描述引力波/瞬子的贡献。
+
+<div class="memobox"><strong>关键词：</strong>四维 GB 含 $|W|^2$、$|\mathrm{Ric}|^2$、$S^2$ 三项，确定引力瞬子拓扑荷。</div>`,
+    2: L`<h4>目标</h4>
+计算 $\mathbb{CP}^2$ 的 Euler 示性数。
+
+<h4>第一步：$\mathbb{CP}^2$ 的拓扑</h4>
+$\mathbb{CP}^2$ 的 Betti 数 $b_0=b_2=b_4=1$，故：
+
+<div class="eq">$$\chi(\mathbb{CP}^2)=1+1+1=3$$</div>
+
+<h4>第二步：Chern–Gauss–Bonnet</h4>
+配 Fubini–Study 度量，Chern–Gauss–Bonnet 给出曲率形式的 Pfaffian 积分：
+
+<div class="keybox">$$\boxed{\int_{\mathbb{CP}^2}\mathrm{Pf}(\Omega)=(2\pi)^2\chi=(2\pi)^2\cdot 3=12\pi^2}$$</div>
+
+<h4>几何含义</h4>
+$\mathbb{CP}^2$ 是四维紧致流形里 $\chi=3$ 的典型例子，其 Fubini–Study 度量的曲率积分被拓扑锁定为 $12\pi^2$。
+
+<div class="memobox"><strong>关键词：</strong>$\chi(\mathbb{CP}^2)=3$，Pfaffian 积分 $=12\pi^2$。</div>`
   },
   "r44": {
     0: L`<h4>已知与目标</h4>
