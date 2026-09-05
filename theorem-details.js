@@ -607,19 +607,112 @@ Morse 指标定理：能量泛函 $E$ 在测地线 $\gamma$ 上的 Morse 指标�
 <div class="memobox"><strong>一句话记忆：</strong>测地线的 Morse 指标 = 它经过的共轭点个数（计重数），共轭点 = 负特征值「新生的地方」。</div>`
   },
   "r48": {
-    0: "①【思路】Rauch 比较定理是比较几何的基石：曲率越大，Jacobi 场（同样初始条件）增长越慢。设截面曲率 K_M≥K_M̃，取两条等长单位速度测地线 γ、γ̃，沿它们的 Jacobi 场 J、J̃ 有相同初值且 J⊥γ′、J̃⊥γ̃′。【推导】要证 |J(t)|≤|J̃(t)|（在无共轭点区间）。②【思路】引入指标形式 I_t(J,J)=∫₀^t(|∇J|²−⟨R(J,γ′)γ′,J⟩)ds（这里 ⟨R(J,γ′)γ′,J⟩=K(J,γ′)|J|²）。由曲率下界，指标形式满足 I_t(J,J)≤I_t(J̃,J̃)（当 t 在无共轭区间）。【计算】因为 K_M≥K_M̃ ⟹ −K_M|J|²≤−K_M̃|J|²，被积函数（同 |J|）下，指标形式更小。③【思路】用“指标形式比较”把长度比的信息推出来：考虑函数 φ(t)=|J(t)|²/|J̃(t)|²，用 Jacobi 方程结合指标形式证明 φ 单调不增、极限（t→0）为 1。【推导】关键技术：Riccati 方程的单调性——令 u=|J|′/|J|（径向对数导数），曲率下界给出 u≤ũ，积分得 |J|/|J̃| 单调不增。④【结论】故 |J(t)|≤|J̃(t)|，Rauch 比较定理得证，它是 Bonnet–Myers、Toponogov、Bishop–Gromov 的共同基础。"
+    0: L`<h4>这一定理在说什么</h4>
+Rauch 比较定理是比较几何的基石：<strong>曲率越大，Jacobi 场增长越慢</strong>。设截面曲率 $K_M\ge K_{\tilde M}$，两条等长单位速度测地线 $\gamma,\tilde\gamma$ 上的 Jacobi 场 $J,\tilde J$ 有相同初值，则
+
+<div class="eq">$$\lvert J(t)\rvert\le\lvert\tilde J(t)\rvert$$</div>
+
+<h4>第一步：Jacobi 方程的比较</h4>
+$J$ 满足 $J''+R(J,\dot\gamma)\dot\gamma=0$。曲率大 ⟹ $R$ 大 ⟹ 回复力强 ⟹ 振荡更快、模长更早收缩。
+
+<h4>第二步：指标形式的单调性</h4>
+引入指标形式 $I_t(J,J)=\int_0^t(\lvert J'\rvert^2-\langle R(J,\dot\gamma)\dot\gamma,J\rangle)ds$。由于 $K_M\ge K_{\tilde M}$，被积函数里 $-R$ 更小，故指标形式之间有关系，进而推出模长比较。
+
+<h4>第三步：积分比较</h4>
+对 $f(t)=\lvert J(t)\rvert^2$ 求二阶导，用 Jacobi 方程与初值相同，得到微分不等式，解得：
+
+<div class="keybox">$$\boxed{K_M\ge K_{\tilde M}\ \Longrightarrow\ \lvert J(t)\rvert\le\lvert\tilde J(t)\rvert}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Rauch 定理：曲率越大 = 回复力越强 = Jacobi 场增长越慢（无共轭点区间内）。</div>`
   },
   "r49": {
-    0: "①【思路】Toponogov 定理：K≥c 时测地三角形的角不小于常曲率 c 空间中同边三角形的对应角。核心工具是 Rauch 比较与“铰链”构造。设 Δ=Δ(p,q,r) 是测地三角形，边长 a=d(q,r) 对顶点 p 等。【推导】在常曲率 c 空间构造同边三角形 Δ̃(p̃,q̃,r̃)。②【思路】固定边 γ 连接 p,q。沿 γ 构造 Jacobi 场 J，其初值 J(0)=0、J′(0) 取使 J(L)=r 方向的速度。由 Rauch 定理，|J(t)|≤|J̃(t)|。【计算】从而第三条边 d(r,·) 沿三角形受控，得 d(p,r) 与 d(q,r) 的关系满足“比较三角形”的约束。③【思路】把长度比较翻译成角度比较：在常曲率 c 空间用余弦定理（双曲/球面余弦律）。Rauch 给出的边长关系 ⟹ 比较三角形的角 α̃ 与 Δ 的角 α 满足 α̃≤α。【计算】例如“铰链”情形：两条边及其夹角确定时，K 越大第三边越短；Toponogov 是其对称/对偶表述。④【结论】顶角不小于常曲率 c 空间中同边三角形的角，Toponogov 是局部曲率比较到全局几何的关键桥。"
+    0: L`<h4>这一定理在说什么</h4>
+Toponogov 定理把截面曲率下界转化为测地三角形的<strong>角度</strong>关系：
+
+<div class="eq">$$K\ge c\ \Longrightarrow\ \text{顶角 }\ge\text{ 常曲率 }c\text{ 空间中同边长三角形的对应角}$$</div>
+
+<h4>第一步：构造比较三角形</h4>
+设 $\Delta(p,q,r)$ 是 $M$ 中测地三角形。在常曲率 $c$ 空间 $\widetilde M$ 中构造「同边长」的比较三角形 $\tilde\Delta(\tilde p,\tilde q,\tilde r)$。
+
+<h4>第二步：固定一条边，用 Rauch 比较</h4>
+固定边 $pq$，沿它构造 Jacobi 场 $J$，比较 $M$ 与 $\widetilde M$ 中从同一顶点发出的 Jacobi 场。由 Rauch 定理（$K\ge c$），$M$ 中 Jacobi 场模长 $\le\widetilde M$ 中对应场。
+
+<h4>第三步：角度比较</h4>
+两边模长与夹角的关系（余弦定理的变分版本）把「模长比较」翻译成「角度比较」，得到：
+
+<div class="keybox">$$\boxed{K\ge c\ \Longrightarrow\ \angle(pqr)\ge\angle(\tilde p\tilde q\tilde r)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Toponogov：曲率有下界 ⟹ 三角形「更胖」，顶角不小于常曲率比较三角形的角。</div>`
   },
   "r50": {
-    0: "①【思路】Bishop–Gromov 体积比较：Ric≥(n−1)c·g ⟹ 体积比 Vol(B(p,r))/V_c(r) 单调非增且≤1。法坐标下体积元 dV=A(t,θ)dt dθ，A=det(沿径向测地线的 Jacobi 场行列式)。【推导】A_c(t) 为常曲率 c 空间对应量（初值同）。②【思路】Ricci 下界对 A 的增长给出微分不等式：令 u=A′/A，Ric≥(n−1)c 等价于 Riccati 不等式 u′+u²/(n−1)·…（精确地 u′+u²≤−(n−1)c）。【计算】与常曲率空间的 u_c=A_c′/A_c（满足 u_c′+u_c²=−(n−1)c）比较，得 u≤u_c，从而 A/A_c 单调不增。③【思路】极限 lim_{t→0}A(t,θ)/A_c(t)=1（法坐标局部欧氏化）。故 A(t,θ)≤A_c(t)。【推导】对球体积积分：Vol(B(p,r))=∫₀^r∫_{∥θ∥=1}A(t,θ)dθ dt ≤∫₀^r∫ A_c(t)dθ dt=V_c(r)。④【结论】Vol(B(p,r))/V_c(r) 单调非增、≤1、趋于 1（r→0）。此即 Bishop–Gromov 定理。"
+    0: L`<h4>这一定理在说什么</h4>
+Bishop–Gromov 体积比较：Ricci 下界控制测地球体积的增长。若 $\mathrm{Ric}\ge(n-1)c\,g$，则体积比
+
+<div class="eq">$$r\mapsto\frac{\mathrm{Vol}(B(p,r))}{V_c(r)}\quad\text{单调非增},\ \le 1,\ \lim_{r\to0}=1$$</div>
+
+<h4>第一步：法坐标下的体积元</h4>
+法坐标下体积元 $dV=A(t,\theta)\,dt\,d\theta$，其中 $A=\det(\text{沿径向测地线的 Jacobi 场行列式})$。
+
+<h4>第二步：Ricci 下界 ⟹ $A$ 增长受控</h4>
+$A$ 满足的微分不等式由 Ricci 曲率下界控制。设 $A_c$ 是常曲率 $c$ 空间的对应量，则
+
+<div class="eq">$$\frac{A(t)}{A_c(t)}\ \text{单调非增}$$</div>
+
+这是核心的「相对体积元单调性」。
+
+<h4>第三步：积分得体积比较</h4>
+对 $\theta$ 积分得到体积比 $\mathrm{Vol}(B(p,r))/V_c(r)$ 单调非增；当 $r\to0$ 时两体积都趋于欧氏小球体积，比值为 $1$：
+
+<div class="keybox">$$\boxed{\mathrm{Ric}\ge(n-1)c\ \Longrightarrow\ \frac{\mathrm{Vol}(B(p,r))}{V_c(r)}\ \text{单调非增}\le 1}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Bishop–Gromov：Ricci 下界 ⟹ 体积比单调非增，测地球体积 ≤ 常曲率空间对应体积。</div>`
   },
   "r51": {
-    0: "①【思路】Bonnet–Myers（直径界版本）：Ric≥(n−1)/R²·g ⟹ diam(M)≤πR。设 γ:[0,L]→M 是长度 L 的测地线（最短路径），沿 γ 取平行标准正交法向量场 E_1,…,E_{n−1}。【推导】构造固定端点变分 V_i(t)=sin(πt/L)E_i(t)。②【思路】第二变分（能量）公式对每个 V_i 算出，再求和用 Ricci 下界。【计算】δ²E(V_i,V_i)=∫₀^L(|∇V_i|²−⟨R(V_i,γ′)γ′,V_i⟩)dt=∫₀^L[(π²/L²)cos²(πt/L)−sin²(πt/L)⟨R(E_i,γ′)γ′,E_i⟩]dt。③【思路】对 i 求和：Σ_i⟨R(E_i,γ′)γ′,E_i⟩=Ric(γ′,γ′)，用下界 ≥(n−1)/R²；同时 Σ_i 的 cos²/sin² 积分用 ∫₀^L cos²=∫₀^L sin²=L/2。【计算】Σ_i δ²E(V_i,V_i)=∫₀^L[(n−1)(π²/L²)cos²(πt/L)−Ric(γ′,γ′)sin²(πt/L)]dt ≤(n−1)(π²/L²)(L/2)−(n−1)(1/R²)(L/2)=(n−1)L/2·(π²/L²−1/R²)。④【思路】γ 是最短测地线 ⟹ 其第二变分对一切变分非负，故 Σδ²E≥0，结合上界得 π²/L²−1/R²≥0。【计算】⟹ L≤πR。故 diam≤πR；万有覆盖同理紧致 ⟹ π₁(M) 有限。⑤【结论】Bonnet–Myers 定理得证。"
+    0: L`<h4>这一定理在说什么</h4>
+Bonnet–Myers 定理（直径界版本）：正 Ricci 下界 ⟹ 直径上界 + 基本群有限。
+
+<div class="eq">$$\mathrm{Ric}\ge\frac{n-1}{R^2}g\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R,\quad\pi_1(M)\ \text{有限}$$</div>
+
+<h4>第一步：沿最长测地线构造变分</h4>
+设 $\gamma:[0,L]\to M$ 是最短测地线（$L=\mathrm{diam}$），取平行正交法向量场 $E_1,\dots,E_{n-1}$，构造固定端点的变分场：
+
+<div class="eq">$$V_i(t)=\sin\frac{\pi t}{L}E_i(t),\qquad V_i(0)=V_i(L)=0$$</div>
+
+<h4>第二步：第二变分公式</h4>
+
+<div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\Big(\lvert\dot V_i\rvert^2-\langle R(V_i,\dot\gamma)\dot\gamma,V_i\rangle\Big)dt$$</div>
+
+代入并利用 $\sin^2$，得
+
+<div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{\pi^2}{L^2}-\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle\Big)dt$$</div>
+
+<h4>第三步：求和 + Ricci 下界 ⟹ 直径界</h4>
+$\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}$。若 $L>\pi R$，则 $\sum_i\delta^2E<0$，与最短矛盾：
+
+<div class="keybox">$$\boxed{\mathrm{diam}(M)\le\pi R}$$</div>
+
+<h4>第四步：基本群有限</h4>
+完备 + 直径有界 ⟹ 紧致；万有覆盖保留 Ricci 下界，也紧致 ⟹ $\pi_1(M)$ 有限。
+
+<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧，测地线在 $\pi R$ 内被拉回重逢，流形紧致、基本群有限。</div>`
   },
   "r52": {
-    0: "①【思路】Gromov 紧致性：满足截曲率 |K|≤1、diam≤D、vol≥v>0 的 n 维闭流形在 Gromov–Hausdorff 拓扑下紧致（预紧）。证明分两步：先构造统一的 ε-网。由 Bishop–Gromov 体积比较，体积上界与下界给出一致覆盖数。【推导】|K|≤1 给出曲率上下界 → 体积球比较 → 每个流形可被 N(N(ε,n,D)) 个半径为 ε 的球覆盖，N 只依赖 ε,n,D（vol≥v 提供下界保证不塌缩）。②【思路】有了有限 ε-网 {x_i}，记录网中点间的距离矩阵（组合/度量信息），用此构图嵌入到某个大空间。【推导】对每个流形构造距离矩阵 A=(d(x_i,x_j))，两流形距离矩阵相近 ⟺ GH 距离小（网结构近似）。③【思路】距离矩阵空间（有界）是紧致的，故这些矩阵有收敛子列；收敛子列给出对应流形的 Gromov–Hausdorff 收敛子列。【计算】所有满足条件的流形嵌入到同一个有界距离矩阵空间（紧致），故序列有收敛子列。④【结论】体积下界 v>0 防止“崩塌”到低维，得到 GH 拓扑下的预紧性，即 Gromov 紧致性定理。"
+    0: L`<h4>这一定理在说什么</h4>
+Gromov 紧致性定理：曲率、直径、体积有界的流形族在 Gromov–Hausdorff 拓扑下是<strong>预紧</strong>的。
+
+<div class="eq">$$\{\lvert K\rvert\le1,\ \mathrm{diam}\le D,\ \mathrm{vol}\ge v>0\}\ \text{GH 预紧}$$</div>
+
+<h4>第一步：构造一致的 ε-网</h4>
+由 Bishop–Gromov 体积比较，曲率有界 + 体积下界给出每个流形可被一致有界个数（$N(\varepsilon)$ 个）的 $\varepsilon$-球覆盖。
+
+<h4>第二步：Gromov 的预紧判别</h4>
+Gromov 证明：一族紧致度量空间若（1）直径一致有界，（2）对任意 $\varepsilon$ 存在一致的 $\varepsilon$-网个数上界，则该族在 GH 拓扑下预紧。
+
+<h4>第三步：结论</h4>
+
+<div class="keybox">$$\boxed{\lvert K\rvert\le1+\mathrm{diam}\le D+\mathrm{vol}\ge v\ \Longrightarrow\ \text{GH 预紧}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率/直径/体积有界 ⟹ 流形族只有「有限种形状」，GH 拓扑下预紧。</div>`
   },
   "t1": {
     0: "①【思路】证同伦是等价关系在映射集上的关系（自反、对称、传递）。自反：X×I 上 F(x,t)=f(x) 给出 f≃f。对称：若 f≃g 由同伦 F，则反转时间 F(x,1−t) 给出 g≃f。【推导】对称性的实现就是 F(x,t) 换成 F(x,1−t)。②【思路】传递：f≃g 用 F、g≃h 用 G，拼接成 f≃h 的同伦 H。定义 H(x,t)=F(x,2t)（0≤t≤1/2）、H(x,t)=G(x,2t−1)（1/2≤t≤1）。【计算】H(x,0)=F(x,0)=f(x)，H(x,1/2)=F(x,1)=g(x)=G(x,0)，H(x,1)=G(x,1)=h(x)；t=1/2 处连续（两者都取 g(x)）。③【思路】验证连续性：两个闭集 [0,1/2]、[1/2,1] 上连续且在交点上值一致，由粘合引理 H 连续。【结论】同伦是等价关系，映射集按同伦分等价类。",
