@@ -5,6 +5,8 @@
 // 数学用 ^ / _ 记法，构建时自动转成上下标。
 // ============================================================
 
+const L = String.raw;
+
 module.exports = {
   "r1": {
     0: "①【思路】曲率是切向角变化率，但一般参数下直接用公式 κ=|x′y″−y′x″|/(x′²+y′²)^{3/2} 最方便，先写出圆的参数化。【计算】γ(t)=(R cos t, R sin t)。②【思路】对两个分量分别求导，用到 (cos t)′=−sin t、(sin t)′=cos t，再乘上 R。【计算】γ′(t)=(−R sin t, R cos t)。③【思路】再求二阶导，继续逐分量求导。【计算】γ″(t)=(−R cos t, −R sin t)。④【思路】代入公式，令 x=γ₁、y=γ₂，即 x′=−R sin t, y′=R cos t, x″=−R cos t, y″=−R sin t。先算分子十字相乘。【计算】|x′y″−y′x″|=|(−R sin t)(−R sin t)−(R cos t)(−R cos t)|=|R² sin²t + R² cos²t|=R²(sin²t+cos²t)=R²。⑤【思路】再算分母 (x′²+y′²)^{3/2}，注意 sin²t+cos²t=1 是化简关键。【计算】分母=(R² sin²t+R² cos²t)^{3/2}=(R²)^{3/2}=R³。⑥【结论】κ=R²/R³=1/R，与 t 无关，故圆处处等曲率，曲率半径 1/κ=R 恰为圆的半径。",
@@ -220,14 +222,139 @@ module.exports = {
     2: "①【思路】CP² 的 Euler 示性数 χ=3，由胞腔结构（偶维各一个胞腔）。【计算】χ(CP²)=1+1+1=3（0、2、4 维各一格）。②【思路】这也给出上例曲率积分的值。【结论】CP² 展示偶数维复射影空间 χ=n+1 的规律。"
   },
   "r44": {
-    0: "①【思路】欧氏空间曲率为零，Jacobi 方程 J″+R(J,γ′)γ′=0 退化为 J″=0。【计算】J″=0 ⟹ J(t)=J(0)+t J′(0)（线性）。②【思路】故 Jacobi 场是沿测地线的线性向量场，无共轭点。【结论】平坦空间 Jacobi 场线性增长，印证无曲率聚焦。",
-    1: "①【思路】球面 Sⁿ 曲率张量 R(U,V)V=U−⟨U,V⟩V（半径 1），沿大圆的 Jacobi 方程 J″+J=0（法向分量）。【计算】J″+J=0 ⟹ J(t)=cos t·J(0)+sin t·J′(0)。②【思路】解在 t=π 处所有法向 Jacobi 场回到零向量。【计算】J(π)=−J(0)（对 J(0)=0 的场，J(π)=0）。③【结论】对径点（t=π）是共轭点，Jacobi 场在这里聚焦，正是割点的来源。",
-    2: "①【思路】双曲空间 Hⁿ 曲率 R(U,V)V=−(U−⟨U,V⟩V)，Jacobi 方程 J″−J=0（法向）。【计算】J″−J=0 ⟹ J(t)=cosh t·J(0)+sinh t·J′(0)。②【思路】解指数发散，永不回到零（除平凡）。【计算】cosh t>0 恒成立，无法在 t>0 处归零。③【结论】负曲率 ⟹ 无共轭点 ⟹ 指数映射全局微分同胚（Cartan-Hadamard），与球面相反。"
+    0: L`<h4>已知与目标</h4>
+在欧氏空间 \(\mathbb R^n\) 中曲率为零，\(R\equiv 0\)。Jacobi 方程退化为
+
+<div class="eq">$$J''(t)=0$$</div>
+
+我们要解出 Jacobi 场的显式表达式，并看它的几何意义。
+
+<h4>直接积分两次</h4>
+
+<div class="eq">$$J''=0\;\Longrightarrow\;J'(t)=\text{常数}=J'(0)\;\Longrightarrow\;J(t)=J(0)+t\,J'(0)$$</div>
+
+所以平坦空间里的 Jacobi 场是<strong>线性</strong>的：沿测地线匀速“张开”。
+
+<div class="keybox">$$\boxed{J(t)=J(0)+t\,J'(0)\quad\text{线性增长，永不聚焦}}$$</div>
+
+<h4>几何含义</h4>
+若 \(J(0)=0\)，则 \(J(t)=tJ'(0)\)，只要 \(J'(0)\neq 0\) 就永不为零，所以<strong>不存在共轭点</strong>——这正是平坦空间“无曲率聚焦”的体现。
+
+<div class="memobox"><strong>关键词：</strong>曲率 \(=0\) ⟹ Jacobi 场线性 ⟹ 无共轭点 ⟹ \(\exp_p\) 是全局微分同胚。</div>`,
+    1: L`<h4>已知与目标</h4>
+标准球面 \(S^n(1)\) 的曲率张量为 \(R(U,V)V=U-\langle U,V\rangle V\)。沿大圆（测地线）取法向 Jacobi 场，曲率项简化为
+
+<div class="eq">$$R(J,\dot\gamma)\dot\gamma=J\quad(\text{法向分量})$$</div>
+
+于是 Jacobi 方程变成简谐振子方程
+
+<div class="eq">$$J''+J=0$$</div>
+
+<h4>解方程</h4>
+特征方程 \(r^2+1=0\)，通解为
+
+<div class="eq">$$J(t)=\cos t\cdot J(0)+\sin t\cdot J'(0)$$</div>
+
+<h4>观察：何时回到零？</h4>
+若 \(J(0)=0\)（从同一点出发的 Jacobi 场），则
+
+<div class="eq">$$J(t)=\sin t\cdot J'(0),\qquad J(\pi)=\sin\pi\cdot J'(0)=0$$</div>
+
+所以在 \(t=\pi\) 处，<strong>所有</strong>法向 Jacobi 场同时回到零向量。
+
+<div class="keybox">$$\boxed{\text{对径点 }t=\pi\text{ 是共轭点，Jacobi 场在此聚焦}}$$</div>
+
+<h4>几何意义</h4>
+球面从北极出发的所有大圆，都在南极（对径点）重新汇聚。这种“正曲率使测地线聚焦”的现象，正是共轭点与割点的来源。
+
+<div class="memobox"><strong>一句话记忆：</strong>正曲率 = 回复力，测地线像弹簧一样振荡并聚焦（\(\sin/\cos\) 解）。</div>`,
+    2: L`<h4>已知与目标</h4>
+双曲空间 \(H^n(-1)\) 的曲率张量为 \(R(U,V)V=-(U-\langle U,V\rangle V)\)。沿测地线的法向 Jacobi 方程变成
+
+<div class="eq">$$J''-J=0$$</div>
+
+注意曲率项前面是<strong>负号</strong>，与球面 \(J''+J=0\) 恰好相反。
+
+<h4>解方程</h4>
+特征方程 \(r^2-1=0\)，通解为双曲函数
+
+<div class="eq">$$J(t)=\cosh t\cdot J(0)+\sinh t\cdot J'(0)$$</div>
+
+<h4>观察：能否回到零？</h4>
+若 \(J(0)=0\)，则 \(J(t)=\sinh t\cdot J'(0)\)。而
+
+<div class="eq">$$\sinh t>0\ (t>0),\qquad \cosh t\ge 1$$</div>
+
+所以非零 Jacobi 场<strong>永远不可能</strong>在 \(t>0\) 处再次归零。
+
+<div class="keybox">$$\boxed{\text{负曲率 }\Longrightarrow\text{ 无共轭点}}$$</div>
+
+<h4>几何意义</h4>
+双曲空间中相邻测地线<strong>指数发散</strong>，永不相交。这直接导致 Cartan–Hadamard 定理：负曲率完备单连通流形的指数映射是全局微分同胚。
+
+<div class="memobox"><strong>一句话记忆：</strong>负曲率 = 排斥力，测地线像 \(\sinh/\cosh\) 一样指数发散，永不聚焦。</div>`
   },
   "r45": {
-    0: "①【思路】球面 Sⁿ 的共轭点：沿大圆在 t=π 处出现共轭点（对径点）。【计算】Jacobi 场 J(0)=0, J(π)=0，故 γ(π) 与 γ(0) 共轭。②【思路】共轭点重数为 n−1（法向 Jacobi 场维数）。【计算】index 处有 n−1 个线性无关 Jacobi 场。③【结论】球面共轭点与割点重合（在对径点），是共轭点结构的样板。",
-    1: "①【思路】欧氏空间无共轭点，因 Jacobi 场线性且不返回零。【计算】J(t)=J(0)+tJ′(0)，若 J(0)=0 则 J(t)≠0（t>0）。②【思路】故 Rⁿ 指数映射全局微分同胚（平坦无聚焦）。【结论】曲率为零 ⟹ 无共轭点。",
-    2: "①【思路】平坦环面 T²=R²/Z² 曲率为零，无共轭点（投影局部等距于平面）。【计算】R=0 ⟹ Jacobi 场线性，无共轭。②【思路】但 T² 有割点（测地线双向到达同点），展示“割点≠共轭点”。【结论】平坦环面说明割点可无共轭点出现（由拓扑/周期性导致），是最重要的反例。"
+    0: L`<h4>目标</h4>
+确定标准球面 \(S^n(1)\) 上，从一点 p 出发的测地线在何处出现共轭点。
+
+<h4>计算</h4>
+沿大圆 \(\gamma(t)\)，法向 Jacobi 场满足 \(J''+J=0\)，解为
+
+<div class="eq">$$J(t)=\cos t\cdot J(0)+\sin t\cdot J'(0)$$</div>
+
+取 \(J(0)=0\)，则 \(J(t)=\sin t\cdot J'(0)\)，它在
+
+<div class="eq">$$t=\pi$$</div>
+
+处回到零。所以 p 的第一个共轭点是对径点 \(\gamma(\pi)=-p\)，共轭距离为 \(\pi\)。
+
+<div class="keybox">$$\boxed{\text{球面 }S^n(1)\text{ 的共轭距离 }=\pi}$$</div>
+
+<h4>重数</h4>
+满足 \(J(0)=J(\pi)=0\) 的线性无关法向 Jacobi 场有 \(n-1\) 个（法向空间的维数），所以这个共轭点的重数是 \(n-1\)。
+
+<h4>与割点的关系</h4>
+
+<div class="warnbox">在球面上，共轭点与割点<strong>重合</strong>（都在对径点）：从 p 出发的所有大圆在对径点汇聚，且恰好越过它之后不再最短。</div>
+
+<div class="memobox"><strong>关键词：</strong>正曲率聚焦 ⟹ 共轭点在对径点 ⟹ 共轭距离 \(\pi\)，重数 \(n-1\)。</div>`,
+    1: L`<h4>目标</h4>
+证明欧氏空间 \(\mathbb R^n\) 中<strong>不存在</strong>共轭点。
+
+<h4>计算</h4>
+曲率为零，Jacobi 方程为 \(J''=0\)，解为
+
+<div class="eq">$$J(t)=J(0)+t\,J'(0)$$</div>
+
+若 \(J(0)=0\)，则 \(J(t)=tJ'(0)\)。要使 \(J(b)=0\)（\(b>0\)）且 J 非零，必须 \(J'(0)=0\)，此时 J 恒为零，矛盾。
+
+<div class="keybox">$$\boxed{\text{平坦空间无共轭点}}$$</div>
+
+<h4>几何意义</h4>
+所有测地线都是直线，永不相交。因此 \(\exp_p:T_p\mathbb R^n\to\mathbb R^n\) 是全局微分同胚——平坦空间里指数映射“完美”。
+
+<div class="memobox"><strong>关键词：</strong>曲率 \(=0\) ⟹ 无聚焦 ⟹ 无共轭点 ⟹ \(\exp_p\) 全局微分同胚。</div>`,
+    2: L`<h4>目标</h4>
+平坦环面 \(T^2=\mathbb R^2/\mathbb Z^2\) 是一个重要的<strong>反例</strong>：它有割点，却<strong>没有</strong>共轭点。这证明“割点”和“共轭点”是两个不同的概念。
+
+<h4>为什么无共轭点</h4>
+环面是平面按 \(\mathbb Z^2\) 平移作商，投影 \(\mathbb R^2\to T^2\) 是局部等距，曲率保持为零：
+
+<div class="eq">$$R\equiv 0$$</div>
+
+于是 Jacobi 方程仍是 \(J''=0\)，Jacobi 场线性，永不在 \(t>0\) 归零——所以<strong>无共轭点</strong>。
+
+<h4>为什么有割点</h4>
+在环面上，从一点 p 出发、沿“水平”和“竖直”两个方向的测地线，会各自绕一圈后<strong>同时回到同一点</strong>。于是存在两条等长的不同测地线连接同一对端点——这正是<strong>割点</strong>的定义。
+
+<div class="keybox">$$\boxed{T^2:\ \text{无共轭点，但有割点}}$$</div>
+
+<h4>结论</h4>
+
+<div class="warnbox">“割点”可以纯粹由<strong>拓扑 / 周期性</strong>产生（多条等长测地线相遇），不一定需要曲率聚焦（共轭点）。这是共轭点理论里最重要的反例。</div>
+
+<div class="memobox"><strong>关键词：</strong>共轭点 = 曲率聚焦（Jacobi 场归零）；割点 = 最短性失效（可来自拓扑）。两者在球面重合，在环面分离。</div>`
   },
   "r46": {
     0: "①【思路】第二变分公式给能量泛函的 Hesse 型：对测地线 γ 的变分场 V，δ²E=(1/2)∫(|J′|²−⟨R(J,γ′)γ′,J⟩)dt。【计算】I(V,V)=∫_a^b (|V′|²−⟨R(V,γ′)γ′,V⟩)dt。②【思路】对球面大圆 V 取法向正弦场 V(t)=sin t·E（E 平行），代入。【计算】I(V,V)=∫_0^π (cos²t−sin²t)dt=[sin t cos t/2−t/2+…]|… =−π/2<0。③【思路】负指标说明大圆在越过共轭点后不再是极大/极小。【结论】第二变分决定测地线稳定性，负指标对应共轭点。",
