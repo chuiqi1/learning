@@ -143,10 +143,10 @@ module.exports = {
   },
   "r28": {
     0: L`<h4>目标</h4>
-二维黎曼流形上，曲率张量的分量看似有 $2^4=16$ 个，但对称性把独立分量压到<strong>只有一个</strong>。我们要找出它与 Gauss 曲率 $K$ 的关系。
+二维黎曼流形上，曲率张量的分量看似有 \(2^4=16\) 个，但对称性把独立分量压到<strong>只有一个</strong>。我们要找出它与 Gauss 曲率 \(K\) 的关系。
 
 <h4>第一步：数独立分量</h4>
-曲率张量的对称性（反对称性 $R_{ijkl}=-R_{jikl}=-R_{ijlk}$ 与对偶对称 $R_{ijkl}=R_{klij}$）在二维时把所有分量都约化到一个：$R_{1212}$。其余分量要么为零、要么是 $\pm R_{1212}$。
+曲率张量的对称性（反对称性 \(R_{ijkl}=-R_{jikl}=-R_{ijlk}\) 与对偶对称 \(R_{ijkl}=R_{klij}\)）在二维时把所有分量都约化到一个：\(R_{1212}\)。其余分量要么为零、要么是 \(\pm R_{1212}\)。
 
 <h4>第二步：与 Gauss 曲率挂钩</h4>
 截面曲率定义在唯一的二维切平面（整个切空间）上，恰好就是 Gauss 曲率：
@@ -156,30 +156,30 @@ module.exports = {
 <div class="keybox">$$\boxed{R_{1212}=K\det g}$$</div>
 
 <h4>结论</h4>
-二维时曲率张量完全退化为标量 $K$——这就是为什么二维曲面的弯曲只需一个函数即可描述，也是 Gauss 曲率是内蕴量（仅由度量决定）的体现。
+二维时曲率张量完全退化为标量 \(K\)——这就是为什么二维曲面的弯曲只需一个函数即可描述，也是 Gauss 曲率是内蕴量（仅由度量决定）的体现。
 
-<div class="memobox"><strong>关键词：</strong>二维 ⟹ 曲率张量只有一个独立分量 ⟹ 它正是 Gauss 曲率 $K$。</div>`,
+<div class="memobox"><strong>关键词：</strong>二维 ⟹ 曲率张量只有一个独立分量 ⟹ 它正是 Gauss 曲率 \(K\)。</div>`,
     1: L`<h4>目标</h4>
-常截面曲率 $c$ 的空间里，曲率张量有极其简洁的规范形式，我们要把它写出来。
+常截面曲率 \(c\) 的空间里，曲率张量有极其简洁的规范形式，我们要把它写出来。
 
 <h4>推导</h4>
-若所有二维截面的曲率都等于同一个数 $c$，则曲率张量作为 (0,4) 型张量必须是唯一的、由 $g$ 和 $c$ 决定的那个张量。这个规范形式是：
+若所有二维截面的曲率都等于同一个数 \(c\)，则曲率张量作为 (0,4) 型张量必须是唯一的、由 \(g\) 和 \(c\) 决定的那个张量。这个规范形式是：
 
 <div class="keybox">$$\boxed{R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)}$$</div>
 
 <h4>验证</h4>
-代入截面曲率公式验证：取正交单位向量 $u,v$，则
+代入截面曲率公式验证：取正交单位向量 \(u,v\)，则
 
 <div class="eq">$$\langle R(u,v)v,u\rangle=c\big(\langle v,v\rangle\langle u,u\rangle-\langle u,v\rangle^2\big)=c\cdot(1\cdot 1-0)=c$$</div>
 
-确实每个截面的曲率都是 $c$。
+确实每个截面的曲率都是 \(c\)。
 
-<div class="memobox"><strong>一句话记忆：</strong>常曲率 $c$ ⟹ 曲率张量 = 规范形式 $c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$，完全由标量 $c$ 决定。</div>`,
+<div class="memobox"><strong>一句话记忆：</strong>常曲率 \(c\) ⟹ 曲率张量 = 规范形式 \(c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)\)，完全由标量 \(c\) 决定。</div>`,
     2: L`<h4>目标</h4>
-欧氏空间 $\mathbb R^n$ 的曲率张量恒为零，我们要验证它，并说明判断「是否局部等距于欧氏度量」的判据。
+欧氏空间 \(\mathbb R^n\) 的曲率张量恒为零，我们要验证它，并说明判断「是否局部等距于欧氏度量」的判据。
 
 <h4>第一步：欧氏空间协变导数可交换</h4>
-在 $\mathbb R^n$ 的标准坐标系下，Christoffel 符号全部为零，协变导数退化为普通偏导：
+在 \(\mathbb R^n\) 的标准坐标系下，Christoffel 符号全部为零，协变导数退化为普通偏导：
 
 <div class="eq">$$\nabla_i=\partial_i,\qquad \nabla_i\nabla_j=\partial_i\partial_j=\partial_j\partial_i$$</div>
 
@@ -192,20 +192,20 @@ module.exports = {
 <div class="keybox">$$\boxed{\text{平坦空间 }\iff R\equiv 0}$$</div>
 
 <h4>结论</h4>
-反过来，若一个度量满足 $R\equiv 0$，则它局部等距于欧氏度量（曲率张量是「偏离欧氏」的唯一障碍）。这就是判断度量是否平坦的根本判据。
+反过来，若一个度量满足 \(R\equiv 0\)，则它局部等距于欧氏度量（曲率张量是「偏离欧氏」的唯一障碍）。这就是判断度量是否平坦的根本判据。
 
 <div class="memobox"><strong>关键词：</strong>协变导数可交换 ⟺ 曲率为零 ⟺ 局部平坦。</div>`
   },
   "r29": {
     0: L`<h4>目标</h4>
-模型空间 $S^n$、$\mathbb R^n$、$H^n$ 的截面曲率分别为 $1/R^2$、$0$、$-1$，我们要说明它们「所有截面方向曲率相同」的含义。
+模型空间 \(S^n\)、\(\mathbb R^n\)、\(H^n\) 的截面曲率分别为 \(1/R^2\)、\(0\)、\(-1\)，我们要说明它们「所有截面方向曲率相同」的含义。
 
 <h4>计算</h4>
 这三个模型空间的共同点是曲率张量都是规范形式：
 
 <div class="eq">$$R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
 
-其中 $c$ 分别取 $1/R^2,\ 0,\ -1$。代入截面曲率公式，对<strong>任意</strong>二维平面 $\sigma$：
+其中 \(c\) 分别取 \(1/R^2,\ 0,\ -1\)。代入截面曲率公式，对<strong>任意</strong>二维平面 \(\sigma\)：
 
 <div class="eq">$$K(\sigma)=\frac{c(|u|^2|v|^2-\langle u,v\rangle^2)}{|u|^2|v|^2-\langle u,v\rangle^2}=c$$</div>
 
@@ -216,34 +216,34 @@ module.exports = {
 
 <div class="memobox"><strong>关键词：</strong>正 / 零 / 负曲率的三个模型：球面 / 欧氏 / 双曲。</div>`,
     1: L`<h4>目标</h4>
-复射影空间 $\mathbb{CP}^n$ 配 Fubini–Study 度量，截面曲率不是常数，而是落在区间 $[1/4,\,1]$ 内，取决于二维平面相对复结构的位置。
+复射影空间 \(\mathbb{CP}^n\) 配 Fubini–Study 度量，截面曲率不是常数，而是落在区间 \([1/4,\,1]\) 内，取决于二维平面相对复结构的位置。
 
 <h4>第一步：Fubini–Study 度量的截面曲率</h4>
-对 $\mathbb{CP}^n$，截面曲率由平面与复结构 $J$ 的夹角决定：
+对 \(\mathbb{CP}^n\)，截面曲率由平面与复结构 \(J\) 的夹角决定：
 
 <div class="eq">$$K(\sigma)=\frac{1+3\cos^2\theta}{4},\qquad \theta=\text{平面 }\sigma\text{ 与 }J\sigma\text{ 的夹角}$$</div>
 
 <h4>第二步：两种极端情形</h4>
 
-<div class="warnbox"><strong>全实平面</strong>（$\sigma$ 垂直于 $J\sigma$，$\cos\theta=0$）：$K=1/4$。<br><strong>全复平面</strong>（$\sigma$ 是复直线，$\cos\theta=1$）：$K=1$。</div>
+<div class="warnbox"><strong>全实平面</strong>（\(\sigma\) 垂直于 \(J\sigma\)，\(\cos\theta=0\)）：\(K=1/4\)。<br><strong>全复平面</strong>（\(\sigma\) 是复直线，\(\cos\theta=1\)）：\(K=1\)。</div>
 
 <div class="keybox">$$\boxed{\tfrac14\le K(\mathbb{CP}^n)\le 1}$$</div>
 
 <h4>几何含义</h4>
-$\mathbb{CP}^n$ 是「非负但非零」曲率的经典例子——它不常曲率，但截面曲率被严格控制在 $[1/4,1]$ 之间，这使它成为比较定理的重要测试场。
+\(\mathbb{CP}^n\) 是「非负但非零」曲率的经典例子——它不常曲率，但截面曲率被严格控制在 \([1/4,1]\) 之间，这使它成为比较定理的重要测试场。
 
 <div class="memobox"><strong>关键词：</strong>复结构「扭曲」曲率：复方向曲率最大（1），实方向最小（1/4）。</div>`,
     2: L`<h4>目标</h4>
-乘积流形 $M\times N$ 的截面曲率取决于截面「横跨」还是「落在」两个因子，我们要分三种情形算。
+乘积流形 \(M\times N\) 的截面曲率取决于截面「横跨」还是「落在」两个因子，我们要分三种情形算。
 
 <h4>第一步：乘积度量的曲率结构</h4>
-乘积度量的曲率张量在因子间「解耦」：若 $X,Y$ 分别在 $M$、$N$ 的切空间里，则
+乘积度量的曲率张量在因子间「解耦」：若 \(X,Y\) 分别在 \(M\)、\(N\) 的切空间里，则
 
 <div class="eq">$$R(X,Y)Z=0\quad(\text{跨因子的方向})$$</div>
 
 <h4>第二步：三种截面</h4>
 
-<div class="warnbox">1. <strong>跨因子</strong>（一个方向在 $M$，一个在 $N$）：$K=0$。<br>2. <strong>全在 $M$</strong>：$K=K_M$（原流形 $M$ 的截面曲率）。<br>3. <strong>全在 $N$</strong>：$K=K_N$。</div>
+<div class="warnbox">1. <strong>跨因子</strong>（一个方向在 \(M\)，一个在 \(N\)）：\(K=0\)。<br>2. <strong>全在 \(M\)</strong>：\(K=K_M\)（原流形 \(M\) 的截面曲率）。<br>3. <strong>全在 \(N\)</strong>：\(K=K_N\)。</div>
 
 <div class="keybox">$$\boxed{K(\text{跨因子})=0,\quad K(\text{全在 }M)=K_M,\quad K(\text{全在 }N)=K_N}$$</div>
 
@@ -254,15 +254,15 @@ $\mathbb{CP}^n$ 是「非负但非零」曲率的经典例子——它不常曲�
   },
   "r30": {
     0: L`<h4>目标</h4>
-计算半径 $R$ 的球面 $S^n$ 的 Ricci 曲率与标量曲率，验证它是 Einstein 流形。
+计算半径 \(R\) 的球面 \(S^n\) 的 Ricci 曲率与标量曲率，验证它是 Einstein 流形。
 
 <h4>第一步：写出曲率张量</h4>
-$S^n(R)$ 是常曲率 $c=1/R^2$ 空间，曲率张量为
+\(S^n(R)\) 是常曲率 \(c=1/R^2\) 空间，曲率张量为
 
 <div class="eq">$$R_{ijkl}=\frac{1}{R^2}(g_{ik}g_{jl}-g_{il}g_{jk})$$</div>
 
 <h4>第二步：缩并得 Ricci</h4>
-对 $i,l$ 缩并（即 $R_{jk}=g^{il}R_{ijkl}$）：
+对 \(i,l\) 缩并（即 \(R_{jk}=g^{il}R_{ijkl}\)）：
 
 <div class="eq">$$R_{jk}=g^{il}\frac{1}{R^2}(g_{ik}g_{jl}-g_{il}g_{jk})=\frac{n-1}{R^2}g_{jk}$$</div>
 
@@ -275,35 +275,35 @@ $S^n(R)$ 是常曲率 $c=1/R^2$ 空间，曲率张量为
 <div class="keybox">$$\boxed{S=\frac{n(n-1)}{R^2}}$$</div>
 
 <h4>结论</h4>
-$\mathrm{Ric}=\lambda g$（$\lambda=\frac{n-1}{R^2}$），所以球面是 <strong>Einstein 流形</strong>，且标量曲率恒正。
+\(\mathrm{Ric}=\lambda g\)（\(\lambda=\frac{n-1}{R^2}\)），所以球面是 <strong>Einstein 流形</strong>，且标量曲率恒正。
 
-<div class="memobox"><strong>关键词：</strong>球面 $\mathrm{Ric}=\frac{n-1}{R^2}g$、$S=\frac{n(n-1)}{R^2}$，是 Einstein 流形的标准模型。</div>`,
+<div class="memobox"><strong>关键词：</strong>球面 \(\mathrm{Ric}=\frac{n-1}{R^2}g\)、\(S=\frac{n(n-1)}{R^2}\)，是 Einstein 流形的标准模型。</div>`,
     1: L`<h4>目标</h4>
-Einstein 度量指 $\mathrm{Ric}=\lambda g$（Ricci 与度量成比例）。我们要看一个极端情形：Ricci 平坦但曲率非零的 Einstein 流形。
+Einstein 度量指 \(\mathrm{Ric}=\lambda g\)（Ricci 与度量成比例）。我们要看一个极端情形：Ricci 平坦但曲率非零的 Einstein 流形。
 
-<h4>第一步：Ricci 平坦 $\neq$ 平坦</h4>
+<h4>第一步：Ricci 平坦 \(\neq\) 平坦</h4>
 Ricci 曲率是曲率张量的<strong>迹</strong>。迹为零只说明「部分」曲率信息消失，但曲率张量本身（尤其是无迹的 Weyl 部分）可以非零：
 
 <div class="eq">$$\mathrm{Ric}=0\quad\nRightarrow\quad R=0$$</div>
 
 <h4>第二步：Calabi–Yau / K3 曲面</h4>
-K3 曲面上的 Calabi–Yau 度量满足 $\mathrm{Ric}=0$（Ricci 平坦），但它是紧致 Ricci 平坦但<strong>非平坦</strong>的 4 维流形，$R\neq 0$。
+K3 曲面上的 Calabi–Yau 度量满足 \(\mathrm{Ric}=0\)（Ricci 平坦），但它是紧致 Ricci 平坦但<strong>非平坦</strong>的 4 维流形，\(R\neq 0\)。
 
 <div class="keybox">$$\boxed{\mathrm{Ric}=0,\ R\neq 0\quad(\text{Ricci 平坦但不平坦})}$$</div>
 
 <h4>几何含义</h4>
-这类流形是 $\lambda=0$ 的 Einstein 流形，在弦论与 Kähler 几何里极其重要。它说明「Einstein」是一类比「平坦」宽松得多的条件。
+这类流形是 \(\lambda=0\) 的 Einstein 流形，在弦论与 Kähler 几何里极其重要。它说明「Einstein」是一类比「平坦」宽松得多的条件。
 
 <div class="memobox"><strong>关键词：</strong>Ricci 平坦（迹为零）≠ 平坦（全张量为零），中间隔着 Weyl 张量。</div>`,
     2: L`<h4>目标</h4>
-Schwarzschild 解是真空 Einstein 方程 $\mathrm{Ric}=0$ 的解，我们要说明它 Ricci 为零但曲率张量非零。
+Schwarzschild 解是真空 Einstein 方程 \(\mathrm{Ric}=0\) 的解，我们要说明它 Ricci 为零但曲率张量非零。
 
 <h4>第一步：真空 Einstein 方程</h4>
 真空（无物质）时，Einstein 方程化为
 
 <div class="eq">$$\mathrm{Ric}-\frac12 Sg=0\ \Longrightarrow\ \mathrm{Ric}=0$$</div>
 
-所以 Schwarzschild 时空满足 $\mathrm{Ric}=0$。
+所以 Schwarzschild 时空满足 \(\mathrm{Ric}=0\)。
 
 <h4>第二步：曲率张量非零</h4>
 但 Schwarzschild 时空不是平坦的——它的 Weyl 张量非零：
@@ -315,14 +315,14 @@ Schwarzschild 解是真空 Einstein 方程 $\mathrm{Ric}=0$ 的解，我们要�
 <h4>几何含义</h4>
 Weyl 张量描述的是「潮汐力」——真空引力场里，物体不受 Ricci（体积收缩）影响，但仍被 Weyl 张量（形状拉伸压缩）作用。这就是引力波携带的曲率信息。
 
-<div class="memobox"><strong>关键词：</strong>真空 ⟹ $\mathrm{Ric}=0$，但引力（潮汐力）由 Weyl 张量承载。</div>`
+<div class="memobox"><strong>关键词：</strong>真空 ⟹ \(\mathrm{Ric}=0\)，但引力（潮汐力）由 Weyl 张量承载。</div>`
   },
   "r31": {
     0: L`<h4>目标</h4>
-从第二 Bianchi 恒等式缩并出 $\nabla^j G_{ij}=0$（Einstein 张量无散度），说明它与能量-动量守恒的联系。
+从第二 Bianchi 恒等式缩并出 \(\nabla^j G_{ij}=0\)（Einstein 张量无散度），说明它与能量-动量守恒的联系。
 
 <h4>第一步：对第二 Bianchi 缩并</h4>
-对 $m$ 与 $l$ 缩并（乘 $g^l{}_m$）：
+对 \(m\) 与 \(l\) 缩并（乘 \(g^l{}_m\)）：
 
 <div class="eq">$$\nabla_m R^m{}_{ijk}+\nabla_i R^m{}_{jmk}+\nabla_j R^m{}_{mik}=0$$</div>
 
@@ -330,76 +330,76 @@ Weyl 张量描述的是「潮汐力」——真空引力场里，物体不受 Ri
 
 <div class="eq">$$\nabla_m R^m{}_{ijk}+\nabla_i R_{jk}-\nabla_j R_{ik}=0$$</div>
 
-<h4>第二步：再缩并 $g^{ik}$</h4>
+<h4>第二步：再缩并 \(g^{ik}\)</h4>
 
 <div class="eq">$$\nabla_m R^m{}_j+\nabla_i R^i{}_j-\nabla_j S=0\ \Longrightarrow\ \nabla^i R_{ij}=\frac12\nabla_j S$$</div>
 
 <h4>第三步：得到 Einstein 张量无散度</h4>
-定义 Einstein 张量 $G_{ij}=R_{ij}-\frac12 S g_{ij}$，于是
+定义 Einstein 张量 \(G_{ij}=R_{ij}-\frac12 S g_{ij}\)，于是
 
 <div class="keybox">$$\boxed{\nabla^j G_{ij}=0}$$</div>
 
 <h4>物理意义</h4>
-Einstein 场方程 $G_{ij}=8\pi G\,T_{ij}$，左边无散度 $\nabla^j G_{ij}=0$ 自动给出 $\nabla^j T_{ij}=0$——即<strong>能量-动量守恒</strong>。这就是场方程自洽性的几何保证。
+Einstein 场方程 \(G_{ij}=8\pi G\,T_{ij}\)，左边无散度 \(\nabla^j G_{ij}=0\) 自动给出 \(\nabla^j T_{ij}=0\)——即<strong>能量-动量守恒</strong>。这就是场方程自洽性的几何保证。
 
-<div class="memobox"><strong>关键词：</strong>第二 Bianchi ⟹ $\nabla^j G_{ij}=0$ ⟹ 场方程 ⟹ 能量守恒。</div>`,
+<div class="memobox"><strong>关键词：</strong>第二 Bianchi ⟹ \(\nabla^j G_{ij}=0\) ⟹ 场方程 ⟹ 能量守恒。</div>`,
     1: L`<h4>目标</h4>
-Einstein 流形（$\mathrm{Ric}=\lambda g$）自动满足缩并 Bianchi 恒等式，且 $n\ge 3$ 时标量曲率 $S$ 为常数。
+Einstein 流形（\(\mathrm{Ric}=\lambda g\)）自动满足缩并 Bianchi 恒等式，且 \(n\ge 3\) 时标量曲率 \(S\) 为常数。
 
 <h4>第一步：Einstein 条件代入缩并恒等式</h4>
-由缩并 Bianchi 恒等式 $\nabla^i R_{ij}=\frac12\nabla_j S$。又 $\mathrm{Ric}=\lambda g$ 给出 $S=\lambda n$（缩并 $n$ 次）。
+由缩并 Bianchi 恒等式 \(\nabla^i R_{ij}=\frac12\nabla_j S\)。又 \(\mathrm{Ric}=\lambda g\) 给出 \(S=\lambda n\)（缩并 \(n\) 次）。
 
 <h4>第二步：两边比较</h4>
-对 $\mathrm{Ric}=\lambda g$ 取散度：$\nabla^i R_{ij}=\nabla_j\lambda$。同时 $\frac12\nabla_j S=\frac{n}{2}\nabla_j\lambda$。二者相等要求：
+对 \(\mathrm{Ric}=\lambda g\) 取散度：\(\nabla^i R_{ij}=\nabla_j\lambda\)。同时 \(\frac12\nabla_j S=\frac{n}{2}\nabla_j\lambda\)。二者相等要求：
 
 <div class="eq">$$\nabla_j\lambda=\frac{n}{2}\nabla_j\lambda\ \Longrightarrow\ (1-\tfrac{n}{2})\nabla_j\lambda=0$$</div>
 
 <div class="keybox">$$\boxed{n\ge 3\ \Longrightarrow\ \nabla\lambda=0\ \Longrightarrow\ \lambda,\ S\text{ 为常数}}$$</div>
 
 <h4>结论</h4>
-$n\ge 3$ 时，Einstein 流形的比例系数 $\lambda$（从而 $S=n\lambda$）必为常数。这也是 Schur 引理的一个直接推论。
+\(n\ge 3\) 时，Einstein 流形的比例系数 \(\lambda\)（从而 \(S=n\lambda\)）必为常数。这也是 Schur 引理的一个直接推论。
 
-<div class="memobox"><strong>关键词：</strong>Einstein 条件 + Bianchi ⟹ $\lambda$ 常数（$n\ge 3$）。</div>`,
+<div class="memobox"><strong>关键词：</strong>Einstein 条件 + Bianchi ⟹ \(\lambda\) 常数（\(n\ge 3\)）。</div>`,
     2: L`<h4>目标</h4>
 对比黎曼几何的 Bianchi 恒等式与 Yang–Mills 理论的 Bianchi 恒等式，看到两者结构上的「同源性」。
 
 <h4>第一步：黎曼几何的 Bianchi（外微分形式）</h4>
-用曲率 2-形式 $\Omega^i{}_j$，第二 Bianchi 恒等式写作：
+用曲率 2-形式 \(\Omega^i{}_j\)，第二 Bianchi 恒等式写作：
 
 <div class="eq">$$d\Omega+\omega\wedge\Omega-\Omega\wedge\omega=0$$</div>
 
-即曲率的<strong>协变外微分</strong>为零：$D\Omega=0$。
+即曲率的<strong>协变外微分</strong>为零：\(D\Omega=0\)。
 
 <h4>第二步：Yang–Mills 的 Bianchi</h4>
-规范场强 $F=dA+A\wedge A$ 自动满足
+规范场强 \(F=dA+A\wedge A\) 自动满足
 
 <div class="keybox">$$\boxed{d_A F=0\quad(\text{Bianchi 恒等式})}$$</div>
 
 <h4>结论：结构同源</h4>
-两者本质相同——都是「曲率 $=$ 联络的某种微分，故曲率自动满足一个恒等式」。黎曼几何的 Christoffel 符号对应规范场的联络 $A$，黎曼曲率对应场强 $F$。
+两者本质相同——都是「曲率 \(=\) 联络的某种微分，故曲率自动满足一个恒等式」。黎曼几何的 Christoffel 符号对应规范场的联络 \(A\)，黎曼曲率对应场强 \(F\)。
 
-<div class="memobox"><strong>关键词：</strong>黎曼 Bianchi $\leftrightarrow$ Yang–Mills Bianchi，都是「曲率自动无源」的微分恒等式。</div>`
+<div class="memobox"><strong>关键词：</strong>黎曼 Bianchi \(\leftrightarrow\) Yang–Mills Bianchi，都是「曲率自动无源」的微分恒等式。</div>`
   },
   "r32": {
     0: L`<h4>目标</h4>
-说明 $S^n$、$H^n$、$\mathbb R^n$ 都是共形平坦的（Weyl 张量为零）。
+说明 \(S^n\)、\(H^n\)、\(\mathbb R^n\) 都是共形平坦的（Weyl 张量为零）。
 
 <h4>第一步：常曲率空间 Weyl 为零</h4>
-Weyl 张量是曲率张量去掉 Ricci 部分后的「无迹」剩余。常曲率空间 $R(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$ 的曲率完全由 $c$（标量曲率）决定，所以 Ricci 部分已经「吃掉」了全部曲率信息：
+Weyl 张量是曲率张量去掉 Ricci 部分后的「无迹」剩余。常曲率空间 \(R(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)\) 的曲率完全由 \(c\)（标量曲率）决定，所以 Ricci 部分已经「吃掉」了全部曲率信息：
 
 <div class="eq">$$R_{ijkl}=c(g_{ik}g_{jl}-g_{il}g_{jk})\ \Longrightarrow\ W_{ijkl}=0$$</div>
 
 <div class="keybox">$$\boxed{W(S^n)=W(H^n)=W(\mathbb R^n)=0}$$</div>
 
 <h4>第二步：共形等价</h4>
-因此球面、双曲空间都与欧氏空间<strong>共形等价</strong>——它们之间只差一个共形因子，几何「形状」信息全由 $W$ 承载，而这三个空间 $W=0$。
+因此球面、双曲空间都与欧氏空间<strong>共形等价</strong>——它们之间只差一个共形因子，几何「形状」信息全由 \(W\) 承载，而这三个空间 \(W=0\)。
 
-<div class="memobox"><strong>关键词：</strong>常曲率 ⟹ $W=0$ ⟹ 共形平坦。球面 / 双曲 / 欧氏互相共形等价。</div>`,
+<div class="memobox"><strong>关键词：</strong>常曲率 ⟹ \(W=0\) ⟹ 共形平坦。球面 / 双曲 / 欧氏互相共形等价。</div>`,
     1: L`<h4>目标</h4>
-Schwarzschild 时空 $\mathrm{Ric}=0$ 但 $W\neq 0$，说明 Weyl 张量承载潮汐力。
+Schwarzschild 时空 \(\mathrm{Ric}=0\) 但 \(W\neq 0\)，说明 Weyl 张量承载潮汐力。
 
 <h4>第一步：Ricci 为零但曲率非零</h4>
-Schwarzschild 解是真空解，$\mathrm{Ric}=0$。但曲率张量非零，故它的「无迹部分」——Weyl 张量——非零：
+Schwarzschild 解是真空解，\(\mathrm{Ric}=0\)。但曲率张量非零，故它的「无迹部分」——Weyl 张量——非零：
 
 <div class="eq">$$\mathrm{Ric}=0,\quad W\neq 0$$</div>
 
@@ -413,9 +413,9 @@ Schwarzschild 解是真空解，$\mathrm{Ric}=0$。但曲率张量非零，故�
 说明二维时 Weyl 张量无定义，所有曲率信息都由 Gauss 曲率承载。
 
 <h4>第一步：Weyl 的定义在低维退化</h4>
-Weyl 张量的构造要求「曲率张量 − Ricci 部分 − 标量部分」在 $n\ge 3$ 才有非平凡定义。具体地：
+Weyl 张量的构造要求「曲率张量 − Ricci 部分 − 标量部分」在 \(n\ge 3\) 才有非平凡定义。具体地：
 
-<div class="warnbox">$n=2$：Weyl 张量<strong>无定义</strong>（所有分量恒为零）。$n=3$：Weyl 张量<strong>恒为零</strong>。$n\ge4$：Weyl 张量非平凡。</div>
+<div class="warnbox">\(n=2\)：Weyl 张量<strong>无定义</strong>（所有分量恒为零）。\(n=3\)：Weyl 张量<strong>恒为零</strong>。\(n\ge4\)：Weyl 张量非平凡。</div>
 
 <h4>第二步：二维曲率全由 Gauss 曲率决定</h4>
 二维时曲率张量只有一个独立分量，等于 Gauss 曲率（=标量曲率的一半）：
@@ -427,14 +427,14 @@ Weyl 张量的构造要求「曲率张量 − Ricci 部分 − 标量部分」�
 <h4>结论</h4>
 二维没有「纯共形弯曲」可言——共形变换在二维总是把任何度量变平（等温坐标），所以 Weyl 张量这一概念在二维失去意义。
 
-<div class="memobox"><strong>关键词：</strong>Weyl 张量在 $n\ge4$ 才非平凡；二维曲率 = Gauss 曲率一个标量。</div>`
+<div class="memobox"><strong>关键词：</strong>Weyl 张量在 \(n\ge4\) 才非平凡；二维曲率 = Gauss 曲率一个标量。</div>`
   },
   "r33": {
     0: L`<h4>目标</h4>
 用 Ricci 恒等式把曲率张量写成协变导数交换子，作为曲率张量的经典定义。
 
 <h4>推导</h4>
-对向量场 $X$，协变导数交换子：
+对向量场 \(X\)，协变导数交换子：
 
 <div class="eq">$$\nabla_i\nabla_j X^k-\nabla_j\nabla_i X^k=R^k{}_{lij}X^l$$</div>
 
@@ -443,25 +443,25 @@ Weyl 张量的构造要求「曲率张量 − Ricci 部分 − 标量部分」�
 <div class="keybox">$$\boxed{R(X,Y)Z=\nabla_X\nabla_Y Z-\nabla_Y\nabla_X Z-\nabla_{[X,Y]}Z}$$</div>
 
 <h4>为什么两种写法等价</h4>
-取 $X=\partial_i,\ Y=\partial_j$（坐标向量场，$[X,Y]=0$），第二式的 $\nabla_{[X,Y]}Z$ 项消失，就回到第一式的分量形式。
+取 \(X=\partial_i,\ Y=\partial_j\)（坐标向量场，\([X,Y]=0\)），第二式的 \(\nabla_{[X,Y]}Z\) 项消失，就回到第一式的分量形式。
 
 <div class="memobox"><strong>关键词：</strong>曲率张量 = 协变导数交换子，两种定义（分量 / 坐标自由）等价。</div>`,
     1: L`<h4>目标</h4>
 说明函数的 Hessian 是对称的——因为函数没有指标让曲率作用。
 
 <h4>推导</h4>
-对函数 $f$，两次协变导数：$\nabla_j\nabla_i f$。用 Ricci 恒等式（作用于 (0,1) 型张量，即 $X_l=\nabla_l f$）：
+对函数 \(f\)，两次协变导数：\(\nabla_j\nabla_i f\)。用 Ricci 恒等式（作用于 (0,1) 型张量，即 \(X_l=\nabla_l f\)）：
 
 <div class="eq">$$\nabla_i\nabla_j f-\nabla_j\nabla_i f=R^l{}_{lij}\nabla_l f=0$$</div>
 
-右边为零是因为 $R^l{}_{lij}=0$（曲率张量对第一、三指标缩并为零）。于是：
+右边为零是因为 \(R^l{}_{lij}=0\)（曲率张量对第一、三指标缩并为零）。于是：
 
 <div class="keybox">$$\boxed{\nabla_i\nabla_j f=\nabla_j\nabla_i f\quad(\text{Hessian 对称})}$$</div>
 
 <h4>几何含义</h4>
-函数没有「向量指标」让曲率去交换，所以 Hessian 自动对称。这与欧氏空间里 $\partial_i\partial_j f=\partial_j\partial_i f$ 一致。
+函数没有「向量指标」让曲率去交换，所以 Hessian 自动对称。这与欧氏空间里 \(\partial_i\partial_j f=\partial_j\partial_i f\) 一致。
 
-<div class="memobox"><strong>关键词：</strong>函数 Hessian 对称，因为 $R^l{}_{lij}=0$ 使曲率对纯函数不起作用。</div>`,
+<div class="memobox"><strong>关键词：</strong>函数 Hessian 对称，因为 \(R^l{}_{lij}=0\) 使曲率对纯函数不起作用。</div>`,
     2: L`<h4>目标</h4>
 推导 Bochner 公式——它是 Ricci 曲率与分析（Laplace 算子）之间的桥梁，是 Bochner 技巧的核心。
 
@@ -471,10 +471,10 @@ Weyl 张量的构造要求「曲率张量 − Ricci 部分 − 标量部分」�
 
 <h4>第二步：各项含义</h4>
 
-<div class="warnbox">$|\nabla^2 f|^2$：Hessian 的模平方（非负）。$\langle\nabla f,\nabla\Delta f\rangle$：梯度与 Laplace 梯度的内积。$\mathrm{Ric}(\nabla f,\nabla f)$：<strong>Ricci 曲率项</strong>，这是唯一与曲率相关的项。</div>
+<div class="warnbox">\(|\nabla^2 f|^2\)：Hessian 的模平方（非负）。\(\langle\nabla f,\nabla\Delta f\rangle\)：梯度与 Laplace 梯度的内积。\(\mathrm{Ric}(\nabla f,\nabla f)\)：<strong>Ricci 曲率项</strong>，这是唯一与曲率相关的项。</div>
 
 <h4>第三步：为什么重要</h4>
-Bochner 公式把 $|\nabla f|^2$ 的 Laplacian 分解为「Hessian 正项 + Ricci 项」。当 $\mathrm{Ric}\ge 0$ 时，这一项非负，可推出调和函数或特征函数的刚性结论（如：正 Ricci 流形上没有非常数调和函数）。
+Bochner 公式把 \(|\nabla f|^2\) 的 Laplacian 分解为「Hessian 正项 + Ricci 项」。当 \(\mathrm{Ric}\ge 0\) 时，这一项非负，可推出调和函数或特征函数的刚性结论（如：正 Ricci 流形上没有非常数调和函数）。
 
 <div class="keybox">$$\boxed{\mathrm{Ric}\ge 0\ \Longrightarrow\ \text{Bochner 技巧适用}}$$</div>
 
@@ -482,46 +482,46 @@ Bochner 公式把 $|\nabla f|^2$ 的 Laplacian 分解为「Hessian 正项 + Ricc
   },
   "r34": {
     0: L`<h4>目标</h4>
-陈述 Bonnet–Myers 定理并指出球面 $S^n(1)$ 是达到上界的刚性例子。
+陈述 Bonnet–Myers 定理并指出球面 \(S^n(1)\) 是达到上界的刚性例子。
 
 <h4>定理</h4>
-若完备黎曼流形满足 $\mathrm{Ric}\ge(n-1)c>0$，则
+若完备黎曼流形满足 \(\mathrm{Ric}\ge(n-1)c>0\)，则
 
 <div class="keybox">$$\boxed{\mathrm{diam}(M)\le\frac{\pi}{\sqrt c}}$$</div>
 
 <h4>刚性</h4>
-$S^n(1)$ 有 $\mathrm{Ric}=(n-1)g$（即 $c=1$），直径 $=\pi$，恰好达到上界 $\pi/\sqrt c=\pi$。
+\(S^n(1)\) 有 \(\mathrm{Ric}=(n-1)g\)（即 \(c=1\)），直径 \(=\pi\)，恰好达到上界 \(\pi/\sqrt c=\pi\)。
 
-<div class="warnbox">达到上界时（且 $\mathrm{Ric}\ge(n-1)c$ 取等），流形等距于半径 $1/\sqrt c$ 的球面——这是 Bonnet–Myers 的刚性情形。</div>
+<div class="warnbox">达到上界时（且 \(\mathrm{Ric}\ge(n-1)c\) 取等），流形等距于半径 \(1/\sqrt c\) 的球面——这是 Bonnet–Myers 的刚性情形。</div>
 
-<div class="memobox"><strong>关键词：</strong>Ricci 正下界 ⟹ 直径上界 $\pi/\sqrt c$，球面是取等号的刚性模型。</div>`,
+<div class="memobox"><strong>关键词：</strong>Ricci 正下界 ⟹ 直径上界 \(\pi/\sqrt c\)，球面是取等号的刚性模型。</div>`,
     1: L`<h4>目标</h4>
-Cartan–Hadamard 定理：完备单连通 + 非正截面曲率 ⟹ 微分同胚于 $\mathbb R^n$。
+Cartan–Hadamard 定理：完备单连通 + 非正截面曲率 ⟹ 微分同胚于 \(\mathbb R^n\)。
 
 <h4>第一步：非正曲率 ⟹ 无共轭点</h4>
-截面曲率 $K\le 0$ 时，沿任何测地线的 Jacobi 场满足 $J''\ge 0$，故非零 Jacobi 场不会回到零（与 $H^n$ 里 $\sinh$ 解同理）：
+截面曲率 \(K\le 0\) 时，沿任何测地线的 Jacobi 场满足 \(J''\ge 0\)，故非零 Jacobi 场不会回到零（与 \(H^n\) 里 \(\sinh\) 解同理）：
 
 <div class="eq">$$K\le 0\ \Longrightarrow\ \text{无共轭点}$$</div>
 
 <h4>第二步：指数映射是局部微分同胚</h4>
-无共轭点 ⟹ $d\exp_p$ 处处非退化 ⟹ $\exp_p$ 是局部微分同胚。
+无共轭点 ⟹ \(d\exp_p\) 处处非退化 ⟹ \(\exp_p\) 是局部微分同胚。
 
 <h4>第三步：完备 + 单连通 ⟹ 全局</h4>
-完备性保证测地线可无限延伸；单连通 + 无共轭点保证 $\exp_p$ 是覆盖映射，故是全局微分同胚：
+完备性保证测地线可无限延伸；单连通 + 无共轭点保证 \(\exp_p\) 是覆盖映射，故是全局微分同胚：
 
 <div class="keybox">$$\boxed{\exp_p:T_pM\simeq\mathbb R^n\ \xrightarrow{\ \sim\ }\ M}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>非正曲率 + 完备 + 单连通 ⟹ $M\simeq\mathbb R^n$（$H^n$ 是典型例子）。</div>`,
+<div class="memobox"><strong>关键词：</strong>非正曲率 + 完备 + 单连通 ⟹ \(M\simeq\mathbb R^n\)（\(H^n\) 是典型例子）。</div>`,
     2: L`<h4>目标</h4>
 Gromov 的 Betti 数定理：截面曲率有界 + 直径有界 ⟹ 所有 Betti 数有界。
 
 <h4>定理</h4>
-若截面曲率 $|K|\le 1$ 且 $\mathrm{diam}(M)\le D$，则存在常数 $C(n,D)$，使得所有 Betti 数满足：
+若截面曲率 \(|K|\le 1\) 且 \(\mathrm{diam}(M)\le D\)，则存在常数 \(C(n,D)\)，使得所有 Betti 数满足：
 
 <div class="keybox">$$\boxed{\sum_i b_i(M)\le C(n,D)}$$</div>
 
 <h4>为什么深刻</h4>
-Betti 数是拓扑量，本可任意大（如拼接许多环柄）。Gromov 的定理说：一旦曲率和直径都被「钳住」，拓扑复杂度（Betti 数之和）就被一个只依赖 $n$ 和 $D$ 的常数限制。
+Betti 数是拓扑量，本可任意大（如拼接许多环柄）。Gromov 的定理说：一旦曲率和直径都被「钳住」，拓扑复杂度（Betti 数之和）就被一个只依赖 \(n\) 和 \(D\) 的常数限制。
 
 <div class="warnbox">这是「曲率控制拓扑」的巅峰结果之一：几何有界 ⟹ 拓扑有界。证明用体积比较与 Gromov 的临界半径覆盖技巧。</div>
 
@@ -529,17 +529,17 @@ Betti 数是拓扑量，本可任意大（如拼接许多环柄）。Gromov 的�
   },
   "r35": {
     0: L`<h4>目标</h4>
-写出 $\mathbb R^3$ 中曲面的第二基本形式的经典表示，并联系主曲率。
+写出 \(\mathbb R^3\) 中曲面的第二基本形式的经典表示，并联系主曲率。
 
 <h4>第一步：第二基本形式的坐标表示</h4>
-$\mathbb R^3$ 中曲面 $M$ 的第二基本形式写作
+\(\mathbb R^3\) 中曲面 \(M\) 的第二基本形式写作
 
 <div class="eq">$$\mathrm{II}=L\,du^2+2M\,dudv+N\,dv^2$$</div>
 
-其中 $L=\langle r_{uu},N\rangle,\ M=\langle r_{uv},N\rangle,\ N=\langle r_{vv},N\rangle$，$N$ 是单位法向量。
+其中 \(L=\langle r_{uu},N\rangle,\ M=\langle r_{uv},N\rangle,\ N=\langle r_{vv},N\rangle\)，\(N\) 是单位法向量。
 
 <h4>第二步：形状算子（Weingarten 映射）</h4>
-形状算子 $S(X)=-\nabla_X N$ 满足 $\langle S(X),Y\rangle=\mathrm{II}(X,Y)$。它的特征值就是主曲率 $\kappa_1,\kappa_2$：
+形状算子 \(S(X)=-\nabla_X N\) 满足 \(\langle S(X),Y\rangle=\mathrm{II}(X,Y)\)。它的特征值就是主曲率 \(\kappa_1,\kappa_2\)：
 
 <div class="keybox">$$\boxed{S\ \text{的特征值}=\text{主曲率 }\kappa_1,\kappa_2}$$</div>
 
@@ -547,37 +547,37 @@ $\mathbb R^3$ 中曲面 $M$ 的第二基本形式写作
 
 <div class="eq">$$K=\kappa_1\kappa_2=\frac{LN-M^2}{EG-F^2},\qquad H=\frac{\kappa_1+\kappa_2}{2}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>第二基本形式 $Ldu^2+2Mdudv+Ndv^2$，主曲率 = 形状算子特征值。</div>`,
+<div class="memobox"><strong>关键词：</strong>第二基本形式 \(Ldu^2+2Mdudv+Ndv^2\)，主曲率 = 形状算子特征值。</div>`,
     1: L`<h4>目标</h4>
-余维 1 的超曲面的第二基本形式可写成 $h\cdot g$ 的简化形式，并给出平均曲率。
+余维 1 的超曲面的第二基本形式可写成 \(h\cdot g\) 的简化形式，并给出平均曲率。
 
 <h4>第一步：超曲面的第二基本形式</h4>
-超曲面（余维数 1）的法空间是一维的，所以第二基本形式（法向值）等价于一个对称 $(0,2)$ 张量 $h$：
+超曲面（余维数 1）的法空间是一维的，所以第二基本形式（法向值）等价于一个对称 \((0,2)\) 张量 \(h\)：
 
 <div class="eq">$$\mathrm{II}(X,Y)=h(X,Y)\,N$$</div>
 
 <h4>第二步：平均曲率</h4>
-平均曲率是 $h$ 的迹（再除维数）：
+平均曲率是 \(h\) 的迹（再除维数）：
 
 <div class="keybox">$$\boxed{H=\frac{1}{n}\mathrm{tr}(h)=\frac{\kappa_1+\cdots+\kappa_n}{n}}$$</div>
 
 <h4>几何含义</h4>
-$H=0$ 就是极小超曲面（平均曲率为零），这类曲面是变分问题（面积泛函的临界点）的解。
+\(H=0\) 就是极小超曲面（平均曲率为零），这类曲面是变分问题（面积泛函的临界点）的解。
 
-<div class="memobox"><strong>关键词：</strong>超曲面的第二基本形式 = 对称张量 $h$，平均曲率 $H=\frac1n\mathrm{tr}(h)$。</div>`,
+<div class="memobox"><strong>关键词：</strong>超曲面的第二基本形式 = 对称张量 \(h\)，平均曲率 \(H=\frac1n\mathrm{tr}(h)\)。</div>`,
     2: L`<h4>目标</h4>
-说明全测地子流形（$\mathrm{II}\equiv 0$）的概念，并举球面中赤道 vs 纬线的例子。
+说明全测地子流形（\(\mathrm{II}\equiv 0\)）的概念，并举球面中赤道 vs 纬线的例子。
 
 <h4>第一步：全测地的定义</h4>
 若第二基本形式恒为零，则子流形是<strong>全测地</strong>的：
 
 <div class="eq">$$\mathrm{II}\equiv 0\ \Longrightarrow\ \nabla^N_X Y=\nabla^M_X Y$$</div>
 
-此时 $M$ 的测地线也是 $N$ 的测地线——沿 $M$ 走「最直」的线，在整个外围空间里也是最直的。
+此时 \(M\) 的测地线也是 \(N\) 的测地线——沿 \(M\) 走「最直」的线，在整个外围空间里也是最直的。
 
 <h4>第二步：球面中的例子</h4>
 
-<div class="warnbox"><strong>赤道 $S^{n-1}\subset S^n$</strong>：全测地（大圆是球面测地线）。<br><strong>一般纬线</strong>：不是全测地，因为沿纬线走会「向外弯」，$\mathrm{II}\neq 0$。</div>
+<div class="warnbox"><strong>赤道 \(S^{n-1}\subset S^n\)</strong>：全测地（大圆是球面测地线）。<br><strong>一般纬线</strong>：不是全测地，因为沿纬线走会「向外弯」，\(\mathrm{II}\neq 0\)。</div>
 
 <div class="keybox">$$\boxed{\text{全测地 }\iff \mathrm{II}\equiv 0\iff\text{ 子流形测地线}=外围测地线}$$</div>
 
@@ -585,10 +585,10 @@ $H=0$ 就是极小超曲面（平均曲率为零），这类曲面是变分问�
   },
   "r36": {
     0: L`<h4>目标</h4>
-推导 $\mathbb R^3$ 中曲面的 Gauss 曲率公式，说明「绝妙定理」。
+推导 \(\mathbb R^3\) 中曲面的 Gauss 曲率公式，说明「绝妙定理」。
 
-<h4>第一步：Gauss 方程用于 $\mathbb R^3$ 中曲面</h4>
-外围 $\mathbb R^3$ 平坦（$R^N=0$），Gauss 方程给出
+<h4>第一步：Gauss 方程用于 \(\mathbb R^3\) 中曲面</h4>
+外围 \(\mathbb R^3\) 平坦（\(R^N=0\)），Gauss 方程给出
 
 <div class="eq">$$R^M(X,Y,Z,W)=\mathrm{II}(X,W)\mathrm{II}(Y,Z)-\mathrm{II}(X,Z)\mathrm{II}(Y,W)$$</div>
 
@@ -598,14 +598,14 @@ $H=0$ 就是极小超曲面（平均曲率为零），这类曲面是变分问�
 <div class="keybox">$$\boxed{K=\frac{LN-M^2}{EG-F^2}}$$</div>
 
 <h4>第三步：绝妙定理</h4>
-左边 $K$ 是内蕴量（只依赖度量 $E,F,G$），右边看似依赖 $L,M,N$（外蕴的第二基本形式），但等式说右边结果只由 $E,F,G$ 决定。Gauss 称此为「绝妙定理」——$K$ 是内蕴的。
+左边 \(K\) 是内蕴量（只依赖度量 \(E,F,G\)），右边看似依赖 \(L,M,N\)（外蕴的第二基本形式），但等式说右边结果只由 \(E,F,G\) 决定。Gauss 称此为「绝妙定理」——\(K\) 是内蕴的。
 
-<div class="memobox"><strong>关键词：</strong>$K=\frac{LN-M^2}{EG-F^2}$ 只依赖第一基本形式 ⟹ 绝妙定理。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(K=\frac{LN-M^2}{EG-F^2}\) 只依赖第一基本形式 ⟹ 绝妙定理。</div>`,
     1: L`<h4>目标</h4>
-写出常曲率空间 $c$ 中子流形的 Gauss 方程。
+写出常曲率空间 \(c\) 中子流形的 Gauss 方程。
 
 <h4>第一步：外围曲率的贡献</h4>
-若外围是常曲率 $c$ 空间，则 $R^N(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$。代入 Gauss 方程：
+若外围是常曲率 \(c\) 空间，则 \(R^N(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)\)。代入 Gauss 方程：
 
 <div class="eq">$$R^M(X,Y,Z,W)=c(\langle Y,Z\rangle\langle X,W\rangle-\langle X,Z\rangle\langle Y,W\rangle)+\langle\mathrm{II}(X,W),\mathrm{II}(Y,Z)\rangle-\langle\mathrm{II}(X,Z),\mathrm{II}(Y,W)\rangle$$</div>
 
@@ -615,52 +615,52 @@ $H=0$ 就是极小超曲面（平均曲率为零），这类曲面是变分问�
 <div class="keybox">$$\boxed{K^M=c+\frac{\det(\mathrm{II})}{\det(\mathrm I)}}$$</div>
 
 <h4>几何含义</h4>
-外围曲率 $c$ 是「基底」，第二基本形式的行列式是「外蕴弯曲的附加项」。球面 $c>0$ 里的曲面，即使 $\mathrm{II}$ 退化也有正的内蕴曲率。
+外围曲率 \(c\) 是「基底」，第二基本形式的行列式是「外蕴弯曲的附加项」。球面 \(c>0\) 里的曲面，即使 \(\mathrm{II}\) 退化也有正的内蕴曲率。
 
-<div class="memobox"><strong>关键词：</strong>常曲率 $c$ 外围 ⟹ $K^M=c+\det(\mathrm{II})/\det(\mathrm I)$。</div>`,
+<div class="memobox"><strong>关键词：</strong>常曲率 \(c\) 外围 ⟹ \(K^M=c+\det(\mathrm{II})/\det(\mathrm I)\)。</div>`,
     2: L`<h4>目标</h4>
-说明 $\mathbb R^3$ 中 Gauss 曲率为零的曲面是可展曲面。
+说明 \(\mathbb R^3\) 中 Gauss 曲率为零的曲面是可展曲面。
 
 <h4>第一步：平坦曲面 ⟹ 第二基本形式退化</h4>
-$\mathbb R^3$ 中曲面 $K=0$ 代入 $K=\frac{LN-M^2}{EG-F^2}$，得
+\(\mathbb R^3\) 中曲面 \(K=0\) 代入 \(K=\frac{LN-M^2}{EG-F^2}\)，得
 
 <div class="eq">$$K=0\ \Longrightarrow\ LN-M^2=0\ \Longrightarrow\ \det(\mathrm{II})=0$$</div>
 
 <div class="keybox">$$\boxed{\mathbb R^3\text{ 中 }K=0\iff\det(\mathrm{II})=0}$$</div>
 
 <h4>第二步：可展曲面</h4>
-$\det(\mathrm{II})=0$ 意味着两个主曲率至少一个为零，曲面沿某个方向「不弯」。这类曲面叫<strong>可展曲面</strong>——可以摊平到平面而不拉伸（如圆柱面、锥面）。
+\(\det(\mathrm{II})=0\) 意味着两个主曲率至少一个为零，曲面沿某个方向「不弯」。这类曲面叫<strong>可展曲面</strong>——可以摊平到平面而不拉伸（如圆柱面、锥面）。
 
-<div class="memobox"><strong>关键词：</strong>平坦曲面（$K=0$）⟹ $\det(\mathrm{II})=0$ ⟹ 可展曲面。</div>`
+<div class="memobox"><strong>关键词：</strong>平坦曲面（\(K=0\)）⟹ \(\det(\mathrm{II})=0\) ⟹ 可展曲面。</div>`
   },
   "r37": {
     0: L`<h4>目标</h4>
-写出 $\mathbb R^3$ 中曲面 Codazzi 方程的 Christoffel 符号形式。
+写出 \(\mathbb R^3\) 中曲面 Codazzi 方程的 Christoffel 符号形式。
 
 <h4>第一步：分量形式</h4>
-Codazzi 方程 $\nabla_i h_{jk}=\nabla_j h_{ik}$ 展开（协变导数用 Christoffel 符号表示）：
+Codazzi 方程 \(\nabla_i h_{jk}=\nabla_j h_{ik}\) 展开（协变导数用 Christoffel 符号表示）：
 
 <div class="eq">$$\partial_1 h_{22}-\partial_2 h_{12}=h_{1j}\Gamma^j_{22}-h_{2j}\Gamma^j_{12}$$</div>
 
-<h4>第二步：用 $L,M,N$ 写出</h4>
-记 $h_{11}=L,\ h_{12}=M,\ h_{22}=N$，则 Codazzi 方程化为
+<h4>第二步：用 \(L,M,N\) 写出</h4>
+记 \(h_{11}=L,\ h_{12}=M,\ h_{22}=N\)，则 Codazzi 方程化为
 
 <div class="keybox">$$\boxed{L_v-M_u=L\Gamma^1_{12}+M(\Gamma^2_{12}-\Gamma^1_{11})-N\Gamma^2_{11}}$$</div>
 
-（及关于 $M_v-N_u$ 的对称式。）
+（及关于 \(M_v-N_u\) 的对称式。）
 
 <h4>几何含义</h4>
-Codazzi 方程是 $L,M,N$ 必须满足的微分关系——它们是子流形可嵌入的<strong>可积性条件</strong>之一。
+Codazzi 方程是 \(L,M,N\) 必须满足的微分关系——它们是子流形可嵌入的<strong>可积性条件</strong>之一。
 
-<div class="memobox"><strong>关键词：</strong>Codazzi 方程用 Christoffel 符号给出 $L,M,N$ 的可积性约束。</div>`,
+<div class="memobox"><strong>关键词：</strong>Codazzi 方程用 Christoffel 符号给出 \(L,M,N\) 的可积性约束。</div>`,
     1: L`<h4>目标</h4>
 说明常平均曲率（CMC）曲面中 Gauss–Codazzi 方程构成可积系统。
 
 <h4>第一步：CMC 条件</h4>
-常平均曲率曲面 $H=\mathrm{const}$（肥皂膜是物理实现）。
+常平均曲率曲面 \(H=\mathrm{const}\)（肥皂膜是物理实现）。
 
 <h4>第二步：Gauss + Codazzi = 可积系统</h4>
-Gauss 方程给出 $K$ 与 $\mathrm{II}$ 的关系，Codazzi 方程给出 $\mathrm{II}$ 的协变导数对称性。二者合起来是 $h_{ij}$ 的<strong>非线性偏微分方程组</strong>：
+Gauss 方程给出 \(K\) 与 \(\mathrm{II}\) 的关系，Codazzi 方程给出 \(\mathrm{II}\) 的协变导数对称性。二者合起来是 \(h_{ij}\) 的<strong>非线性偏微分方程组</strong>：
 
 <div class="eq">$$K=\frac{LN-M^2}{EG-F^2}\ (\text{Gauss}),\qquad \nabla_i h_{jk}=\nabla_j h_{ik}\ (\text{Codazzi})$$</div>
 
@@ -684,7 +684,7 @@ Nash 定理断言任何黎曼流形都能等距嵌入到足够高维的欧氏空
 <div class="keybox">$$\boxed{\text{任何 }(M^n,g)\ \text{可等距嵌入 }\mathbb R^N\ (N\gg n)}$$</div>
 
 <h4>联系</h4>
-Gauss–Codazzi 方程就是这个嵌入的<strong>局部障碍</strong>——它们必须满足才能局部等距嵌入；Nash 定理说全局上总能找到足够大的 $N$ 使一切光滑嵌入。
+Gauss–Codazzi 方程就是这个嵌入的<strong>局部障碍</strong>——它们必须满足才能局部等距嵌入；Nash 定理说全局上总能找到足够大的 \(N\) 使一切光滑嵌入。
 
 <div class="memobox"><strong>关键词：</strong>Gauss–Codazzi = 局部可积条件；Nash = 全局嵌入总存在（高维）。</div>`
   },
@@ -693,7 +693,7 @@ Gauss–Codazzi 方程就是这个嵌入的<strong>局部障碍</strong>——�
 介绍悬链面（catenoid）——唯一的极小旋转曲面（除平面外）。
 
 <h4>第一步：旋转极小曲面的方程</h4>
-旋转曲面 $y=y(x)$ 绕轴旋转，极小条件 $H=0$ 化为 ODE，解为悬链线：
+旋转曲面 \(y=y(x)\) 绕轴旋转，极小条件 \(H=0\) 化为 ODE，解为悬链线：
 
 <div class="eq">$$y=a\cosh\frac{x}{a}$$</div>
 
@@ -703,9 +703,9 @@ Gauss–Codazzi 方程就是这个嵌入的<strong>局部障碍</strong>——�
 <div class="keybox">$$\boxed{\kappa_1=-\kappa_2\ \Longrightarrow\ H=\frac{\kappa_1+\kappa_2}{2}=0}$$</div>
 
 <h4>第三步：Gauss 曲率</h4>
-$K=\kappa_1\kappa_2=-\kappa_1^2<0$，悬链面处处负曲率。它与螺旋面是「共轭极小曲面对」。
+\(K=\kappa_1\kappa_2=-\kappa_1^2<0\)，悬链面处处负曲率。它与螺旋面是「共轭极小曲面对」。
 
-<div class="memobox"><strong>关键词：</strong>悬链面 = 悬链线旋转 = 唯一极小旋转面，$H=0$、$K<0$。</div>`,
+<div class="memobox"><strong>关键词：</strong>悬链面 = 悬链线旋转 = 唯一极小旋转面，\(H=0\)、\(K<0\)。</div>`,
     1: L`<h4>目标</h4>
 介绍螺旋面（helicoid）——直纹极小曲面，与悬链面共形等价。
 
@@ -713,7 +713,7 @@ $K=\kappa_1\kappa_2=-\kappa_1^2<0$，悬链面处处负曲率。它与螺旋面�
 螺旋面由一条直线沿轴旋转并同时上升生成，是<strong>直纹面</strong>（由直线族织成）。
 
 <h4>第二步：极小性</h4>
-螺旋面满足 $H=0$，是极小曲面。它与悬链面通过 Weierstrass 表示联系，是<strong>共形等价</strong>的一对：
+螺旋面满足 \(H=0\)，是极小曲面。它与悬链面通过 Weierstrass 表示联系，是<strong>共形等价</strong>的一对：
 
 <div class="keybox">$$\boxed{\text{螺旋面}\ \xleftrightarrow{\text{共形}}\ \text{悬链面}}$$</div>
 
@@ -725,210 +725,210 @@ $K=\kappa_1\kappa_2=-\kappa_1^2<0$，悬链面处处负曲率。它与螺旋面�
 说明球面是唯一紧致无边 CMC 曲面，并联系等周问题。
 
 <h4>第一步：Alexandrov 定理</h4>
-$\mathbb R^3$ 中紧致无边 CMC 曲面 = 球面。球面的平均曲率：
+\(\mathbb R^3\) 中紧致无边 CMC 曲面 = 球面。球面的平均曲率：
 
 <div class="eq">$$H=\frac{1}{R}$$</div>
 
 <h4>第二步：等周问题</h4>
-等周问题：给定面积，求体积最大的曲面。解是球面——因为体积变分的一阶条件正是 $H=\mathrm{const}$（常数平均曲率），而球面是唯一紧致解。
+等周问题：给定面积，求体积最大的曲面。解是球面——因为体积变分的一阶条件正是 \(H=\mathrm{const}\)（常数平均曲率），而球面是唯一紧致解。
 
 <div class="keybox">$$\boxed{\text{等周问题（定面积最大体积）的解}=\text{球面}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>球面 = 唯一紧致 CMC 曲面 = 等周问题最优解，$H=1/R$。</div>`
+<div class="memobox"><strong>关键词：</strong>球面 = 唯一紧致 CMC 曲面 = 等周问题最优解，\(H=1/R\)。</div>`
   },
   "r39": {
     0: L`<h4>目标</h4>
-说明 $S^3$ 中极小曲面的 Gauss 曲率 $K\le 1$，并提 Lawson 构造。
+说明 \(S^3\) 中极小曲面的 Gauss 曲率 \(K\le 1\)，并提 Lawson 构造。
 
-<h4>第一步：$S^3$ 中曲面的 Gauss 方程</h4>
-外围 $S^3$ 曲率 $c=1$，Gauss 方程 $K^M=1+\det(\mathrm{II})/\det(\mathrm I)$。极小曲面 $H=0$ 意味着 $\kappa_1=-\kappa_2$，故 $\det(\mathrm{II})=\kappa_1\kappa_2=-\kappa_1^2\le 0$：
+<h4>第一步：\(S^3\) 中曲面的 Gauss 方程</h4>
+外围 \(S^3\) 曲率 \(c=1\)，Gauss 方程 \(K^M=1+\det(\mathrm{II})/\det(\mathrm I)\)。极小曲面 \(H=0\) 意味着 \(\kappa_1=-\kappa_2\)，故 \(\det(\mathrm{II})=\kappa_1\kappa_2=-\kappa_1^2\le 0\)：
 
 <div class="eq">$$K=1-\frac{\kappa_1^2}{EG-F^2}\le 1$$</div>
 
 <div class="keybox">$$\boxed{S^3\text{ 中极小曲面：}K\le 1}$$</div>
 
 <h4>第二步：Lawson 构造</h4>
-Lawson 构造了 $S^3$ 中任意亏格的紧致极小曲面——说明 $S^3$ 中极小曲面极其丰富。
+Lawson 构造了 \(S^3\) 中任意亏格的紧致极小曲面——说明 \(S^3\) 中极小曲面极其丰富。
 
-<div class="memobox"><strong>关键词：</strong>$S^3$ 中极小曲面 $K\le 1$，Lawson 构造任意亏格紧致极小曲面。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(S^3\) 中极小曲面 \(K\le 1\)，Lawson 构造任意亏格紧致极小曲面。</div>`,
     1: L`<h4>目标</h4>
-说明 $S^n$ 中极小子流形满足 $\Delta x=-nx$，这是 Simons 刚性研究的出发点。
+说明 \(S^n\) 中极小子流形满足 \(\Delta x=-nx\)，这是 Simons 刚性研究的出发点。
 
 <h4>第一步：位置向量与第二基本形式</h4>
-$S^n\subset\mathbb R^{n+1}$ 的位置向量 $x$ 即单位法向量。对 $S^n$ 中的极小子流形 $M^k$，平均曲率向量 $H=0$，而 $H=\frac1k\Delta x$（子流形 Laplacian 作用于位置向量 = 平均曲率向量）。
+\(S^n\subset\mathbb R^{n+1}\) 的位置向量 \(x\) 即单位法向量。对 \(S^n\) 中的极小子流形 \(M^k\)，平均曲率向量 \(H=0\)，而 \(H=\frac1k\Delta x\)（子流形 Laplacian 作用于位置向量 = 平均曲率向量）。
 
 <h4>第二步：极小 ⟹ 特征方程</h4>
 
 <div class="keybox">$$\boxed{\Delta x=-k\,x}$$</div>
 
-（其中 $-k$ 来自 $S^n$ 的曲率。）
+（其中 \(-k\) 来自 \(S^n\) 的曲率。）
 
 <h4>几何含义</h4>
-位置向量 $x$ 是 $M$ 上 Laplace 算子的<strong>特征函数</strong>（特征值 $-k$）。这使极小子流形可以用谱理论工具研究，是 Simons 刚性定理的起点。
+位置向量 \(x\) 是 \(M\) 上 Laplace 算子的<strong>特征函数</strong>（特征值 \(-k\)）。这使极小子流形可以用谱理论工具研究，是 Simons 刚性定理的起点。
 
-<div class="memobox"><strong>关键词：</strong>极小 ⟹ $\Delta x=-kx$，位置向量是 Laplace 的特征函数。</div>`,
+<div class="memobox"><strong>关键词：</strong>极小 ⟹ \(\Delta x=-kx\)，位置向量是 Laplace 的特征函数。</div>`,
     2: L`<h4>目标</h4>
 陈述球面中子流形的曲率 pinching 定理。
 
 <h4>第一步：pinching 条件</h4>
-若 $S^n$ 中子流形的截面曲率满足
+若 \(S^n\) 中子流形的截面曲率满足
 
 <div class="eq">$$K>\frac{n-2}{2n-3}$$</div>
 
 <h4>第二步：结论</h4>
-则子流形必为<strong>全测地</strong>的——即 $S^n$ 的大球面 $S^k$。
+则子流形必为<strong>全测地</strong>的——即 \(S^n\) 的大球面 \(S^k\)。
 
 <div class="keybox">$$\boxed{K>\frac{n-2}{2n-3}\ \Longrightarrow\ \text{全测地（大球面）}}$$</div>
 
 <h4>几何含义</h4>
-「曲率被压得很紧（接近 $1$）⟹ 子流形就是最标准的大球面」。这是球面曲率 pinching 的经典结果，说明高曲率钳制住了子流形的形状。
+「曲率被压得很紧（接近 \(1\)）⟹ 子流形就是最标准的大球面」。这是球面曲率 pinching 的经典结果，说明高曲率钳制住了子流形的形状。
 
-<div class="memobox"><strong>关键词：</strong>截面曲率 pinching $>\frac{n-2}{2n-3}$ ⟹ 全测地大球面。</div>`
+<div class="memobox"><strong>关键词：</strong>截面曲率 pinching \(>\frac{n-2}{2n-3}\) ⟹ 全测地大球面。</div>`
   },
   "r40": {
     0: L`<h4>目标</h4>
 用球面三角形验证局部 Gauss–Bonnet 定理。
 
 <h4>第一步：球面三角形的面积</h4>
-球面上由赤道和两条经线构成的三角形（两条经线夹角 $\pi/2$），三个内角都是 $\pi/2$，内角和 $=\frac{3\pi}{2}$。Girard 定理给出面积：
+球面上由赤道和两条经线构成的三角形（两条经线夹角 \(\pi/2\)），三个内角都是 \(\pi/2\)，内角和 \(=\frac{3\pi}{2}\)。Girard 定理给出面积：
 
 <div class="eq">$$\mathrm{Area}=R^2(\alpha+\beta+\gamma-\pi)=R^2\cdot\frac{\pi}{2}=\frac{\pi R^2}{2}$$</div>
 
-这恰好是 $1/8$ 球面面积 $4\pi R^2/8$。
+这恰好是 \(1/8\) 球面面积 \(4\pi R^2/8\)。
 
 <h4>第二步：验证 Gauss–Bonnet</h4>
-边界是测地线（赤道、经线），$\kappa_g=0$；三个角点外角各 $\pi-\frac\pi2=\frac\pi2$。Gauss–Bonnet 给出：
+边界是测地线（赤道、经线），\(\kappa_g=0\)；三个角点外角各 \(\pi-\frac\pi2=\frac\pi2\)。Gauss–Bonnet 给出：
 
 <div class="eq">$$\int_T K\,dA=\frac{1}{R^2}\cdot\frac{\pi R^2}{2}=\frac{\pi}{2}=\alpha+\beta+\gamma-\pi$$</div>
 
 <div class="keybox">$$\boxed{\int_T K\,dA=\alpha+\beta+\gamma-\pi=\frac{\pi}{2}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>球面三角形内角和 $>\pi$，差量 = 曲率积分 = $K\cdot$面积。</div>`,
+<div class="memobox"><strong>关键词：</strong>球面三角形内角和 \(>\pi\)，差量 = 曲率积分 = \(K\cdot\)面积。</div>`,
     1: L`<h4>目标</h4>
-说明测地三角形的 Gauss–Bonnet 公式 $\int K\,dA=\sum\alpha_i-\pi$。
+说明测地三角形的 Gauss–Bonnet 公式 \(\int K\,dA=\sum\alpha_i-\pi\)。
 
 <h4>第一步：测地边界 ⟹ 无测地曲率项</h4>
-测地三角形边界是测地线，$\kappa_g=0$，角点内角 $\alpha_i$。局部 Gauss–Bonnet 化为：
+测地三角形边界是测地线，\(\kappa_g=0\)，角点内角 \(\alpha_i\)。局部 Gauss–Bonnet 化为：
 
 <div class="eq">$$\int_T K\,dA+\sum_i(\pi-\alpha_i)=2\pi\ \Longrightarrow\ \int_T K\,dA=\sum_i\alpha_i-\pi$$</div>
 
 <div class="keybox">$$\boxed{\int_T K\,dA=\alpha_1+\alpha_2+\alpha_3-\pi}$$</div>
 
 <h4>第二步：平面特例</h4>
-平面上 $K=0$，于是 $\alpha_1+\alpha_2+\alpha_3-\pi=0$，即内角和 $=\pi$——正是欧氏几何的三角形内角和定理。
+平面上 \(K=0\)，于是 \(\alpha_1+\alpha_2+\alpha_3-\pi=0\)，即内角和 \(=\pi\)——正是欧氏几何的三角形内角和定理。
 
-<div class="memobox"><strong>关键词：</strong>测地三角形 $\int K\,dA=\sum\alpha_i-\pi$；平面 $K=0$ 退回内角和 $=\pi$。</div>`,
+<div class="memobox"><strong>关键词：</strong>测地三角形 \(\int K\,dA=\sum\alpha_i-\pi\)；平面 \(K=0\) 退回内角和 \(=\pi\)。</div>`,
     2: L`<h4>目标</h4>
-球冠（球面上半径 $\theta$ 的球冠）的局部 Gauss–Bonnet 验证。
+球冠（球面上半径 \(\theta\) 的球冠）的局部 Gauss–Bonnet 验证。
 
 <h4>第一步：球冠的测地曲率</h4>
-球冠边界（纬度 $\theta$ 的圆）的测地曲率：
+球冠边界（纬度 \(\theta\) 的圆）的测地曲率：
 
 <div class="eq">$$\kappa_g=\frac{\cot\theta}{R}$$</div>
 
 <h4>第二步：球冠的曲率积分与边界贡献</h4>
-球冠面积 $=2\pi R^2(1-\cos\theta)$，故曲率积分 $=\frac{1}{R^2}\cdot 2\pi R^2(1-\cos\theta)=2\pi(1-\cos\theta)$。边界长度 $=2\pi R\sin\theta$，边界测地曲率积分 $=2\pi R\sin\theta\cdot\frac{\cot\theta}{R}=2\pi\cos\theta$。
+球冠面积 \(=2\pi R^2(1-\cos\theta)\)，故曲率积分 \(=\frac{1}{R^2}\cdot 2\pi R^2(1-\cos\theta)=2\pi(1-\cos\theta)\)。边界长度 \(=2\pi R\sin\theta\)，边界测地曲率积分 \(=2\pi R\sin\theta\cdot\frac{\cot\theta}{R}=2\pi\cos\theta\)。
 
 <h4>第三步：两者之和</h4>
 
 <div class="keybox">$$\boxed{\int K\,dA+\int\kappa_g\,ds=2\pi(1-\cos\theta)+2\pi\cos\theta=2\pi=2\pi\chi(\text{球冠})}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>球冠的曲率积分与边界测地曲率互补，之和恰为 $2\pi$。</div>`
+<div class="memobox"><strong>关键词：</strong>球冠的曲率积分与边界测地曲率互补，之和恰为 \(2\pi\)。</div>`
   },
   "r41": {
     0: L`<h4>目标</h4>
-验证球面 $S^2$ 的总曲率。
+验证球面 \(S^2\) 的总曲率。
 
 <h4>计算</h4>
-球面 $\chi=2$，$K=1/R^2$，面积 $=4\pi R^2$：
+球面 \(\chi=2\)，\(K=1/R^2\)，面积 \(=4\pi R^2\)：
 
 <div class="eq">$$\int_{S^2}K\,dA=\frac{1}{R^2}\cdot 4\pi R^2=4\pi=2\pi\cdot 2=2\pi\chi(S^2)$$</div>
 
 <div class="keybox">$$\boxed{\int_{S^2}K\,dA=4\pi\quad(\text{与半径无关})}$$</div>
 
 <h4>关键观察</h4>
-无论球面半径多大，总曲率恒为 $4\pi$。曲率 $1/R^2$ 变小，但面积 $4\pi R^2$ 变大，乘积不变——这是 Gauss–Bonnet 的深刻体现：总曲率是拓扑量。
+无论球面半径多大，总曲率恒为 \(4\pi\)。曲率 \(1/R^2\) 变小，但面积 \(4\pi R^2\) 变大，乘积不变——这是 Gauss–Bonnet 的深刻体现：总曲率是拓扑量。
 
-<div class="memobox"><strong>关键词：</strong>球面总曲率恒 $4\pi$，半径任意，拓扑量不随度量变。</div>`,
+<div class="memobox"><strong>关键词：</strong>球面总曲率恒 \(4\pi\)，半径任意，拓扑量不随度量变。</div>`,
     1: L`<h4>目标</h4>
-验证环面 $T^2$ 的总曲率为零。
+验证环面 \(T^2\) 的总曲率为零。
 
 <h4>计算</h4>
-环面 $\chi=0$。环面外侧正曲率、内侧负曲率：
+环面 \(\chi=0\)。环面外侧正曲率、内侧负曲率：
 
 <div class="eq">$$\int_{T^2}K\,dA=2\pi\chi(T^2)=2\pi\cdot 0=0$$</div>
 
 <div class="keybox">$$\boxed{\int_{T^2}K\,dA=0}$$</div>
 
 <h4>几何含义</h4>
-正曲率（外侧）与负曲率（内侧）恰好抵消。虽然环面上处处有弯曲，但「总弯曲」为零——这只有 Gauss–Bonnet 能保证，也解释了为什么环面可以摊平度量（$K\equiv 0$ 的平坦度量存在）。
+正曲率（外侧）与负曲率（内侧）恰好抵消。虽然环面上处处有弯曲，但「总弯曲」为零——这只有 Gauss–Bonnet 能保证，也解释了为什么环面可以摊平度量（\(K\equiv 0\) 的平坦度量存在）。
 
-<div class="memobox"><strong>关键词：</strong>环面 $\chi=0$，正负曲率抵消，总曲率为零。</div>`,
+<div class="memobox"><strong>关键词：</strong>环面 \(\chi=0\)，正负曲率抵消，总曲率为零。</div>`,
     2: L`<h4>目标</h4>
 亏格 2 曲面（双环面）的总曲率。
 
 <h4>计算</h4>
-亏格 $g=2$ 曲面 $\chi=2-2g=-2$：
+亏格 \(g=2\) 曲面 \(\chi=2-2g=-2\)：
 
 <div class="eq">$$\int_M K\,dA=2\pi\chi(M)=2\pi\cdot(-2)=-4\pi$$</div>
 
 <div class="keybox">$$\boxed{\int_M K\,dA=-4\pi\quad(\text{亏格 }2)}$$</div>
 
 <h4>几何含义</h4>
-亏格 $\ge 2$ 的闭曲面<strong>总曲率为负</strong>。这强制了高亏格曲面必然存在负曲率区域（不能处处 $K\ge 0$），是 Gauss–Bonnet 对曲率符号的拓扑约束。
+亏格 \(\ge 2\) 的闭曲面<strong>总曲率为负</strong>。这强制了高亏格曲面必然存在负曲率区域（不能处处 \(K\ge 0\)），是 Gauss–Bonnet 对曲率符号的拓扑约束。
 
-<div class="memobox"><strong>关键词：</strong>亏格 $g$ ⟹ 总曲率 $2\pi(2-2g)$，亏格 $\ge2$ 必为负总曲率。</div>`
+<div class="memobox"><strong>关键词：</strong>亏格 \(g\) ⟹ 总曲率 \(2\pi(2-2g)\)，亏格 \(\ge2\) 必为负总曲率。</div>`
   },
   "r42": {
     0: L`<h4>目标</h4>
-用 Euler 公式 $V-E+F=2$ 验证五种正多面体的 $\chi=2$。
+用 Euler 公式 \(V-E+F=2\) 验证五种正多面体的 \(\chi=2\)。
 
 <h4>计算</h4>
-五种柏拉图立体都满足 $\chi=V-E+F=2$：
+五种柏拉图立体都满足 \(\chi=V-E+F=2\)：
 
 <div class="eq">$$\text{四面体 }4-6+4=2,\quad \text{立方体 }8-12+6=2,\quad \text{八面体 }6-12+8=2$$</div>
 
 <div class="keybox">$$\boxed{V-E+F=2\quad(\text{五种正多面体})}$$</div>
 
 <h4>几何含义</h4>
-正多面体分类（只有五种）正是由 Euler 公式 $V-E+F=2$ 加上边、面的度约束推出来的。$\chi=2$ 是「球面形」曲面的共同特征。
+正多面体分类（只有五种）正是由 Euler 公式 \(V-E+F=2\) 加上边、面的度约束推出来的。\(\chi=2\) 是「球面形」曲面的共同特征。
 
-<div class="memobox"><strong>关键词：</strong>Euler 公式 $V-E+F=2$ 限制出五种正多面体，$\chi=2$ 是球面拓扑。</div>`,
+<div class="memobox"><strong>关键词：</strong>Euler 公式 \(V-E+F=2\) 限制出五种正多面体，\(\chi=2\) 是球面拓扑。</div>`,
     1: L`<h4>目标</h4>
 环面剖分的 Euler 示性数。
 
 <h4>计算</h4>
-环面可剖分为 $16$ 个矩形：$V=16$，$E=32$，$F=16$：
+环面可剖分为 \(16\) 个矩形：\(V=16\)，\(E=32\)，\(F=16\)：
 
 <div class="eq">$$\chi=V-E+F=16-32+16=0$$</div>
 
 <div class="keybox">$$\boxed{\chi(T^2)=0\quad(\text{与剖分方式无关})}$$</div>
 
 <h4>关键观察</h4>
-任何剖分都给出 $\chi=0$——Euler 示性数是<strong>拓扑不变量</strong>，不依赖剖分的粗细。
+任何剖分都给出 \(\chi=0\)——Euler 示性数是<strong>拓扑不变量</strong>，不依赖剖分的粗细。
 
-<div class="memobox"><strong>关键词：</strong>环面 $\chi=0$，Euler 示性数不依赖剖分。</div>`,
+<div class="memobox"><strong>关键词：</strong>环面 \(\chi=0\)，Euler 示性数不依赖剖分。</div>`,
     2: L`<h4>目标</h4>
 不可定向曲面 Klein 瓶的 Euler 示性数，及 Gauss–Bonnet 的修正。
 
 <h4>计算</h4>
-Klein 瓶不可定向，$\chi=0$。对不可定向曲面，$\chi=2-k$（$k$ 为交叉帽数）。
+Klein 瓶不可定向，\(\chi=0\)。对不可定向曲面，\(\chi=2-k\)（\(k\) 为交叉帽数）。
 
 <h4>Gauss–Bonnet 的修正</h4>
-Gauss–Bonnet 定理要求<strong>可定向</strong>。对不可定向曲面，需转到它的<strong>定向二重覆盖</strong> $\widetilde M$：
+Gauss–Bonnet 定理要求<strong>可定向</strong>。对不可定向曲面，需转到它的<strong>定向二重覆盖</strong> \(\widetilde M\)：
 
 <div class="keybox">$$\boxed{\int_{\widetilde M}K\,dA=2\pi\chi(\widetilde M)=2\cdot 2\pi\chi(M)}$$</div>
 
 （二重覆盖的 Euler 示性数翻倍。）
 
-<div class="memobox"><strong>关键词：</strong>Klein 瓶 $\chi=0$；不可定向曲面需用定向覆盖修正 Gauss–Bonnet。</div>`
+<div class="memobox"><strong>关键词：</strong>Klein 瓶 \(\chi=0\)；不可定向曲面需用定向覆盖修正 Gauss–Bonnet。</div>`
   },
   "r43": {
     0: L`<h4>目标</h4>
-说明 $n=1$ 时 Chern–Gauss–Bonnet 退化为经典 Gauss–Bonnet。
+说明 \(n=1\) 时 Chern–Gauss–Bonnet 退化为经典 Gauss–Bonnet。
 
 <h4>计算</h4>
-二维（$2n=2$，$n=1$）时，Pfaffian 恰是 Gauss 曲率密度：
+二维（\(2n=2\)，\(n=1\)）时，Pfaffian 恰是 Gauss 曲率密度：
 
 <div class="eq">$$\mathrm{Pf}(\Omega)=\frac{1}{2\pi}K\,dA$$</div>
 
@@ -939,26 +939,26 @@ Gauss–Bonnet 定理要求<strong>可定向</strong>。对不可定向曲面，
 <h4>结论</h4>
 正是经典的全局 Gauss–Bonnet 定理。所以 Chern 的公式是「经典 → 高维」的自然推广。
 
-<div class="memobox"><strong>关键词：</strong>$n=1$ 时 Pfaffian $=K/2\pi$，Chern–GB 退回经典 GB。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(n=1\) 时 Pfaffian \(=K/2\pi\)，Chern–GB 退回经典 GB。</div>`,
     1: L`<h4>目标</h4>
 写出四维的 Chern–Gauss–Bonnet 公式，含 Weyl 张量贡献。
 
 <h4>四维公式</h4>
-四维（$n=2$）时，Pfaffian 展开为曲率张量的二次组合，可分解为 Weyl 张量、Ricci、标量曲率三部分：
+四维（\(n=2\)）时，Pfaffian 展开为曲率张量的二次组合，可分解为 Weyl 张量、Ricci、标量曲率三部分：
 
 <div class="eq">$$\int_M\frac{1}{32\pi^2}\Big(|W|^2-2|\mathrm{Ric}|^2+\frac{S^2}{3}\Big)dV=\chi(M)$$</div>
 
 <div class="keybox">$$\boxed{\frac{1}{32\pi^2}\int_M\Big(|W|^2-2|\mathrm{Ric}|^2+\frac{S^2}{3}\Big)dV=\chi(M)}$$</div>
 
 <h4>应用：引力瞬子</h4>
-引力瞬子的拓扑荷（Euler 数）由此公式确定，Weyl 张量 $|W|^2$ 描述引力波/瞬子的贡献。
+引力瞬子的拓扑荷（Euler 数）由此公式确定，Weyl 张量 \(|W|^2\) 描述引力波/瞬子的贡献。
 
-<div class="memobox"><strong>关键词：</strong>四维 GB 含 $|W|^2$、$|\mathrm{Ric}|^2$、$S^2$ 三项，确定引力瞬子拓扑荷。</div>`,
+<div class="memobox"><strong>关键词：</strong>四维 GB 含 \(|W|^2\)、\(|\mathrm{Ric}|^2\)、\(S^2\) 三项，确定引力瞬子拓扑荷。</div>`,
     2: L`<h4>目标</h4>
-计算 $\mathbb{CP}^2$ 的 Euler 示性数。
+计算 \(\mathbb{CP}^2\) 的 Euler 示性数。
 
-<h4>第一步：$\mathbb{CP}^2$ 的拓扑</h4>
-$\mathbb{CP}^2$ 的 Betti 数 $b_0=b_2=b_4=1$，故：
+<h4>第一步：\(\mathbb{CP}^2\) 的拓扑</h4>
+\(\mathbb{CP}^2\) 的 Betti 数 \(b_0=b_2=b_4=1\)，故：
 
 <div class="eq">$$\chi(\mathbb{CP}^2)=1+1+1=3$$</div>
 
@@ -968,9 +968,9 @@ $\mathbb{CP}^2$ 的 Betti 数 $b_0=b_2=b_4=1$，故：
 <div class="keybox">$$\boxed{\int_{\mathbb{CP}^2}\mathrm{Pf}(\Omega)=(2\pi)^2\chi=(2\pi)^2\cdot 3=12\pi^2}$$</div>
 
 <h4>几何含义</h4>
-$\mathbb{CP}^2$ 是四维紧致流形里 $\chi=3$ 的典型例子，其 Fubini–Study 度量的曲率积分被拓扑锁定为 $12\pi^2$。
+\(\mathbb{CP}^2\) 是四维紧致流形里 \(\chi=3\) 的典型例子，其 Fubini–Study 度量的曲率积分被拓扑锁定为 \(12\pi^2\)。
 
-<div class="memobox"><strong>关键词：</strong>$\chi(\mathbb{CP}^2)=3$，Pfaffian 积分 $=12\pi^2$。</div>`
+<div class="memobox"><strong>关键词：</strong>\(\chi(\mathbb{CP}^2)=3\)，Pfaffian 积分 \(=12\pi^2\)。</div>`
   },
   "r44": {
     0: L`<h4>已知与目标</h4>
@@ -1112,34 +1112,34 @@ $\mathbb{CP}^2$ 是四维紧致流形里 $\chi=3$ 的典型例子，其 Fubini�
 用球面大圆验证第二变分的正定性与共轭点处的退化。
 
 <h4>第一步：指数形式的第二变分</h4>
-对测地线 $\gamma$ 的变分场 $V$，指标形式（第二变分的两倍）：
+对测地线 \(\gamma\) 的变分场 \(V\)，指标形式（第二变分的两倍）：
 
 <div class="eq">$$I(V,V)=\int_a^b\Big(\lvert V'\rvert^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\Big)dt$$</div>
 
 <h4>第二步：球面大圆，取法向正弦场</h4>
-$S^2$ 上取 $V(t)=\sin t\cdot E$（$E$ 平行法向场）。球面曲率 $R(V,\dot\gamma)\dot\gamma=V$，于是
+\(S^2\) 上取 \(V(t)=\sin t\cdot E\)（\(E\) 平行法向场）。球面曲率 \(R(V,\dot\gamma)\dot\gamma=V\)，于是
 
 <div class="eq">$$I(V,V)=\int_0^L(\cos^2 t-\sin^2 t)dt=\int_0^L\cos 2t\,dt$$</div>
 
 <h4>第三步：分情况</h4>
 
-<div class="warnbox">$L<\pi$：$I>0$，大圆弧是<strong>极小值</strong>。<br>$L=\pi$：$I=0$，半圆有零特征值（$V$ 是对径点处的 Jacobi 场，即共轭点）。</div>
+<div class="warnbox">\(L<\pi\)：\(I>0\)，大圆弧是<strong>极小值</strong>。<br>\(L=\pi\)：\(I=0\)，半圆有零特征值（\(V\) 是对径点处的 Jacobi 场，即共轭点）。</div>
 
 <div class="keybox">$$\boxed{L<\pi:\ \delta^2E>0;\quad L=\pi:\ \delta^2E=0\ (\text{共轭点})}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>大圆弧 $<\pi$ 极小；$=\pi$ 时零特征值 = 共轭点。</div>`,
+<div class="memobox"><strong>关键词：</strong>大圆弧 \(<\pi\) 极小；\(=\pi\) 时零特征值 = 共轭点。</div>`,
     1: L`<h4>目标</h4>
 Morse 指标定理：能量泛函在测地线上的 Morse 指标等于共轭点个数（计重数）。
 
 <h4>第一步：Morse 指标的定义</h4>
-Morse 指标 = 第二变分 $\delta^2E$ 的<strong>负特征值个数</strong>。而 $\delta^2E(V,V)=\int\langle LV,V\rangle dt$，其中
+Morse 指标 = 第二变分 \(\delta^2E\) 的<strong>负特征值个数</strong>。而 \(\delta^2E(V,V)=\int\langle LV,V\rangle dt\)，其中
 
 <div class="eq">$$L=-\nabla_{\dot\gamma}^2-R(\cdot,\dot\gamma)\dot\gamma$$</div>
 
 是 Jacobi 算子（Sturm–Liouville 型二阶算子）。
 
 <h4>第二步：Sturm–Liouville 理论</h4>
-Jacobi 算子 $L$ 的特征值关于边界条件单调。随着区间长度增长，每当穿过一个共轭点（对应一个零特征值的 Jacobi 场），就多一个负特征值。
+Jacobi 算子 \(L\) 的特征值关于边界条件单调。随着区间长度增长，每当穿过一个共轭点（对应一个零特征值的 Jacobi 场），就多一个负特征值。
 
 <div class="keybox">$$\boxed{\text{Morse 指标}=\text{共轭点个数（计重数）}}$$</div>
 
@@ -1155,7 +1155,7 @@ Jacobi 算子 $L$ 的特征值关于边界条件单调。随着区间长度增�
 
 <div class="eq">$$\Delta+\lvert\mathrm{II}\rvert^2+\mathrm{Ric}(\nu,\nu)$$</div>
 
-其中 $\nu$ 是法向量，$\mathrm{II}$ 是第二基本形式，$\mathrm{Ric}(\nu,\nu)$ 是外围 Ricci 曲率在法向的值。
+其中 \(\nu\) 是法向量，\(\mathrm{II}\) 是第二基本形式，\(\mathrm{Ric}(\nu,\nu)\) 是外围 Ricci 曲率在法向的值。
 
 <h4>第二步：稳定性条件</h4>
 极小曲面<strong>稳定</strong> ⟺ 这个算子的特征值全部非负：
@@ -1163,36 +1163,36 @@ Jacobi 算子 $L$ 的特征值关于边界条件单调。随着区间长度增�
 <div class="keybox">$$\boxed{\Delta+\lvert\mathrm{II}\rvert^2+\mathrm{Ric}(\nu,\nu)\ge 0\ \Longrightarrow\ \text{稳定}}$$</div>
 
 <h4>几何含义</h4>
-第二基本形式（$\lvert\mathrm{II}\rvert^2$）与外围曲率（$\mathrm{Ric}(\nu,\nu)$）共同决定极小曲面的稳定性。肥皂膜稳定 ⟺ 扰动面积不减。
+第二基本形式（\(\lvert\mathrm{II}\rvert^2\)）与外围曲率（\(\mathrm{Ric}(\nu,\nu)\)）共同决定极小曲面的稳定性。肥皂膜稳定 ⟺ 扰动面积不减。
 
-<div class="memobox"><strong>关键词：</strong>极小曲面稳定性由 Jacobi 算子 $\Delta+|\mathrm{II}|^2+\mathrm{Ric}(\nu,\nu)$ 的谱决定。</div>`
+<div class="memobox"><strong>关键词：</strong>极小曲面稳定性由 Jacobi 算子 \(\Delta+|\mathrm{II}|^2+\mathrm{Ric}(\nu,\nu)\) 的谱决定。</div>`
   },
   "r47": {
     0: L`<h4>目标</h4>
-用 Morse 理论解释球面 $S^n$ 上连接对径点的测地线的退化性。
+用 Morse 理论解释球面 \(S^n\) 上连接对径点的测地线的退化性。
 
 <h4>第一步：大圆弧与共轭点</h4>
-$S^n$ 上大圆弧每隔 $\pi$ 经过一个共轭点（对径点），每个共轭点重数 $n-1$（法向 Jacobi 场维数）。过 $k$ 个共轭点的大弧：
+\(S^n\) 上大圆弧每隔 \(\pi\) 经过一个共轭点（对径点），每个共轭点重数 \(n-1\)（法向 Jacobi 场维数）。过 \(k\) 个共轭点的大弧：
 
 <div class="eq">$$\mathrm{index}=(n-1)k$$</div>
 
 <h4>第二步：临界点的退化</h4>
-连接对径点 $p,-p$ 的测地线有<strong>无穷多条</strong>（所有大圆）。Morse 理论解释：这些是能量泛函在环路空间 $\Omega(S^n)$ 上的退化临界点，其指标随「绕数」递增。
+连接对径点 \(p,-p\) 的测地线有<strong>无穷多条</strong>（所有大圆）。Morse 理论解释：这些是能量泛函在环路空间 \(\Omega(S^n)\) 上的退化临界点，其指标随「绕数」递增。
 
 <div class="keybox">$$\boxed{\text{绕 }k\text{ 圈的大圆：}\mathrm{index}=(n-1)k}$$</div>
 
 <h4>意义</h4>
 球面测地线族是 Morse 理论在环路空间上最标准的例子，也是 Bott 周期定理的起点。
 
-<div class="memobox"><strong>关键词：</strong>球面对径点间无穷多条测地线 = 不同绕数的退化临界点，指标 $(n-1)k$。</div>`,
+<div class="memobox"><strong>关键词：</strong>球面对径点间无穷多条测地线 = 不同绕数的退化临界点，指标 \((n-1)k\)。</div>`,
     1: L`<h4>目标</h4>
 紧致 Lie 群上的闭测地线，与 Morse 理论的估计。
 
 <h4>第一步：双不变度量与单参数子群</h4>
-紧致 Lie 群 $G$ 配双不变度量，单参数子群 $t\mapsto\exp(tX)$ 是<strong>闭测地线</strong>（通过单位元）。
+紧致 Lie 群 \(G\) 配双不变度量，单参数子群 \(t\mapsto\exp(tX)\) 是<strong>闭测地线</strong>（通过单位元）。
 
 <h4>第二步：Morse 理论的应用</h4>
-把 Morse 理论应用于 $G$ 的环路空间（或自由环路空间），能量泛函的临界点就是这些闭测地线。Morse 不等式给出闭测地线数量的下界估计：
+把 Morse 理论应用于 \(G\) 的环路空间（或自由环路空间），能量泛函的临界点就是这些闭测地线。Morse 不等式给出闭测地线数量的下界估计：
 
 <div class="keybox">$$\boxed{\#\{\text{闭测地线}\}\ge \text{环路空间的拓扑复杂性下界}}$$</div>
 
@@ -1201,52 +1201,52 @@ Lie 群的代数结构（单参数子群）与其几何（闭测地线）通过 
 
 <div class="memobox"><strong>关键词：</strong>Lie 群单参数子群 = 闭测地线，Morse 理论估计其数量与分布。</div>`,
     2: L`<h4>目标</h4>
-Bott 周期定理：把 Morse 理论应用于环路空间 $\Omega(S^n)$ 得到稳定同伦群的周期性。
+Bott 周期定理：把 Morse 理论应用于环路空间 \(\Omega(S^n)\) 得到稳定同伦群的周期性。
 
 <h4>第一步：Morse 理论用于环路空间</h4>
-Bott 把 Morse 理论应用到球面环路空间 $\Omega(S^n)$。能量泛函的临界点是球面测地线（大圆），指标可用共轭点精确算出（前面算过 $(n-1)k$）。
+Bott 把 Morse 理论应用到球面环路空间 \(\Omega(S^n)\)。能量泛函的临界点是球面测地线（大圆），指标可用共轭点精确算出（前面算过 \((n-1)k\)）。
 
 <h4>第二步：临界点拓扑 = 环路空间拓扑</h4>
-Morse 理论的核心：临界点的指标结构决定空间的胞腔分解。于是 $\Omega(S^n)$ 的同伦型可由测地线（临界点）的指标完全读出。
+Morse 理论的核心：临界点的指标结构决定空间的胞腔分解。于是 \(\Omega(S^n)\) 的同伦型可由测地线（临界点）的指标完全读出。
 
 <h4>第三步：Bott 周期性</h4>
 
 <div class="keybox">$$\boxed{\pi_{i+n}(S^n)\ \text{的稳定化 }=\ \Omega(S^n)\text{ 的同伦 }\ \Rightarrow\ \text{Bott 周期性}}$$</div>
 
-稳定同伦群 $\pi_{k+n}(S^n)$（$n$ 充分大）呈现周期性，周期为 8（实）或 2（复）——这是 Morse 理论最辉煌的应用。
+稳定同伦群 \(\pi_{k+n}(S^n)\)（\(n\) 充分大）呈现周期性，周期为 8（实）或 2（复）——这是 Morse 理论最辉煌的应用。
 
-<div class="memobox"><strong>关键词：</strong>Morse 理论 + 环路空间 $\Omega(S^n)$ ⟹ 稳定同伦群的 Bott 周期性。</div>`
+<div class="memobox"><strong>关键词：</strong>Morse 理论 + 环路空间 \(\Omega(S^n)\) ⟹ 稳定同伦群的 Bott 周期性。</div>`
   },
   "r48": {
     0: L`<h4>目标</h4>
-比较球面 $S^n(1)$ 与欧氏空间 $\mathbb R^n$ 的 Jacobi 场增长。
+比较球面 \(S^n(1)\) 与欧氏空间 \(\mathbb R^n\) 的 Jacobi 场增长。
 
 <h4>第一步：球面 Jacobi 场</h4>
-$S^n(1)$ 上 $J''+J=0$，解为
+\(S^n(1)\) 上 \(J''+J=0\)，解为
 
 <div class="eq">$$\lvert J(t)\rvert\le\lvert J(0)\rvert\cos t+\lvert J'(0)\rvert\sin t$$</div>
 
 <h4>第二步：欧氏 Jacobi 场</h4>
-$\mathbb R^n$ 上 $J''=0$，解为线性增长
+\(\mathbb R^n\) 上 \(J''=0\)，解为线性增长
 
 <div class="eq">$$\lvert J(t)\rvert=\lvert J(0)+tJ'(0)\rvert$$</div>
 
 <h4>第三步：比较</h4>
-球面曲率 $1>0$（欧氏曲率 $0$），由 Rauch 定理球面 Jacobi 场增长更慢：
+球面曲率 \(1>0\)（欧氏曲率 \(0\)），由 Rauch 定理球面 Jacobi 场增长更慢：
 
 <div class="keybox">$$\boxed{K=1>0\ \Longrightarrow\ \text{球面 Jacobi 场 }(\sin/\cos)\text{ 增长慢于欧氏 }(\text{线性})}$$</div>
 
 <div class="memobox"><strong>关键词：</strong>正曲率（球面）Jacobi 场振荡收缩，零曲率（欧氏）线性增长。</div>`,
     1: L`<h4>目标</h4>
-比较双曲空间 $H^n(-1)$ 与欧氏空间的 Jacobi 场。
+比较双曲空间 \(H^n(-1)\) 与欧氏空间的 Jacobi 场。
 
 <h4>第一步：双曲 Jacobi 场</h4>
-$H^n(-1)$ 上 $J''-J=0$，解为指数增长：
+\(H^n(-1)\) 上 \(J''-J=0\)，解为指数增长：
 
 <div class="eq">$$\lvert J(t)\rvert=\lvert\cosh t\cdot J(0)+\sinh t\cdot J'(0)\rvert$$</div>
 
 <h4>第二步：比较</h4>
-双曲曲率 $-1<0$（欧氏曲率 $0$），由 Rauch 定理，负曲率空间 Jacobi 场增长<strong>快于</strong>欧氏空间：
+双曲曲率 \(-1<0\)（欧氏曲率 \(0\)），由 Rauch 定理，负曲率空间 Jacobi 场增长<strong>快于</strong>欧氏空间：
 
 <div class="keybox">$$\boxed{K=-1<0\ \Longrightarrow\ \text{双曲 Jacobi 场 }(\sinh/\cosh)\text{ 指数增长，快于欧氏线性}}$$</div>
 
@@ -1262,25 +1262,25 @@ $H^n(-1)$ 上 $J''-J=0$，解为指数增长：
 
 <div class="eq">$$\frac14<K\le 1$$</div>
 
-<h4>第二步：下界 $1/4$ 的作用</h4>
-下界 $K>\frac14$ 通过 Rauch 定理与共轭点比较，保证直径有上界（比球面 $S^n$ 更早出现共轭点），从而流形紧致且拓扑与球面相近；上界 $1$ 排除「过大曲率」的奇异性。
+<h4>第二步：下界 \(1/4\) 的作用</h4>
+下界 \(K>\frac14\) 通过 Rauch 定理与共轭点比较，保证直径有上界（比球面 \(S^n\) 更早出现共轭点），从而流形紧致且拓扑与球面相近；上界 \(1\) 排除「过大曲率」的奇异性。
 
 <div class="keybox">$$\boxed{\tfrac14<K\le 1\ \Longrightarrow\ M\ \text{同胚于 }S^n}$$</div>
 
 <h4>几何含义</h4>
-曲率被「压」在 $(1/4,1]$ 之间时，流形拓扑上就是球面。这是比较几何最著名的应用——曲率条件决定拓扑类型。
+曲率被「压」在 \((1/4,1]\) 之间时，流形拓扑上就是球面。这是比较几何最著名的应用——曲率条件决定拓扑类型。
 
-<div class="memobox"><strong>关键词：</strong>球面定理：$\frac14<K\le1$ ⟹ 同胚于 $S^n$，下界用 Rauch 定理推出。</div>`
+<div class="memobox"><strong>关键词：</strong>球面定理：\(\frac14<K\le1\) ⟹ 同胚于 \(S^n\)，下界用 Rauch 定理推出。</div>`
   },
   "r49": {
     0: L`<h4>目标</h4>
 说明 Toponogov 定理在球面定理中的应用。
 
 <h4>第一步：球面定理的条件</h4>
-$\frac14<K\le 1$。Toponogov 定理用 $c=\frac14$ 比较：$M$ 中三角形角度 $\ge$ 曲率 $1/4$ 球面中同边三角形的角。
+\(\frac14<K\le 1\)。Toponogov 定理用 \(c=\frac14\) 比较：\(M\) 中三角形角度 \(\ge\) 曲率 \(1/4\) 球面中同边三角形的角。
 
 <h4>第二步：推出直径上界</h4>
-角度比较 ⟹ 边长比较 ⟹ 直径上界。曲率下界 $1/4$ 使所有测地线在有限距离内「收拢」，给出 $\mathrm{diam}(M)\le\pi$（与球面 $S^n$ 相当）。
+角度比较 ⟹ 边长比较 ⟹ 直径上界。曲率下界 \(1/4\) 使所有测地线在有限距离内「收拢」，给出 \(\mathrm{diam}(M)\le\pi\)（与球面 \(S^n\) 相当）。
 
 <div class="keybox">$$\boxed{\text{Toponogov 比较}\ \Longrightarrow\ \mathrm{diam}(M)\ \text{上界}\ \Longrightarrow\ M\text{ 紧致}}$$</div>
 
@@ -1292,10 +1292,10 @@ Toponogov 定理是球面定理证明里的关键几何工具——把曲率 pin
 说明 Toponogov 定理如何启发 Alexandrov 空间的定义。
 
 <h4>第一步：Alexandrov 空间的定义</h4>
-Alexandrov 空间（曲率下界 $c$）是满足「三角形比较」的度量空间：任意测地三角形，其顶角 $\ge$ 常曲率 $c$ 空间同边三角形的对应角。
+Alexandrov 空间（曲率下界 \(c\)）是满足「三角形比较」的度量空间：任意测地三角形，其顶角 \(\ge\) 常曲率 \(c\) 空间同边三角形的对应角。
 
 <h4>第二步：Toponogov 定理的意义</h4>
-Toponogov 定理正是说：光滑流形 $K\ge c$ ⟹ 满足 Alexandrov 的比较条件。所以 Alexandrov 空间是「曲率下界」概念在<strong>非光滑</strong>度量空间上的推广：
+Toponogov 定理正是说：光滑流形 \(K\ge c\) ⟹ 满足 Alexandrov 的比较条件。所以 Alexandrov 空间是「曲率下界」概念在<strong>非光滑</strong>度量空间上的推广：
 
 <div class="keybox">$$\boxed{\text{光滑 }K\ge c\ \subset\ \text{Alexandrov 曲率下界 }c}$$</div>
 
@@ -1307,12 +1307,12 @@ Alexandrov 空间允许奇点、崩塌极限等非光滑对象，是现代比较
 说明 Cheeger–Gromoll 分裂定理依赖 Toponogov 定理。
 
 <h4>第一步：分裂定理的陈述</h4>
-若 $\mathrm{Ric}\ge 0$ 且流形含一条<strong>直线</strong>（两端无限延伸的最短测地线），则流形分裂为乘积：
+若 \(\mathrm{Ric}\ge 0\) 且流形含一条<strong>直线</strong>（两端无限延伸的最短测地线），则流形分裂为乘积：
 
 <div class="eq">$$M\ \text{含直线}\ \Longrightarrow\ M=\mathbb R\times N$$</div>
 
 <h4>第二步：Toponogov 的作用</h4>
-直线对应的 Busemann 函数 $b$ 是「距离函数」，要证明 $b$ 是仿射的（$\nabla^2 b=0$）。这一步用 Toponogov 比较：$\mathrm{Ric}\ge0$（其实分裂定理只需这个 Ricci 条件，但比较工具来自 Toponogov 思想）把三角形角度关系转为 $b$ 的凸性，最终 $b$ 是线性函数。
+直线对应的 Busemann 函数 \(b\) 是「距离函数」，要证明 \(b\) 是仿射的（\(\nabla^2 b=0\)）。这一步用 Toponogov 比较：\(\mathrm{Ric}\ge0\)（其实分裂定理只需这个 Ricci 条件，但比较工具来自 Toponogov 思想）把三角形角度关系转为 \(b\) 的凸性，最终 \(b\) 是线性函数。
 
 <div class="keybox">$$\boxed{\mathrm{Ric}\ge 0+\text{直线}\ \Longrightarrow\ M=\mathbb R\times N}$$</div>
 
@@ -1320,10 +1320,10 @@ Alexandrov 空间允许奇点、崩塌极限等非光滑对象，是现代比较
   },
   "r50": {
     0: L`<h4>目标</h4>
-Ricci 平坦流形（$\mathrm{Ric}\ge0$）的体积增长。
+Ricci 平坦流形（\(\mathrm{Ric}\ge0\)）的体积增长。
 
-<h4>第一步：取 $c=0$</h4>
-$\mathrm{Ric}\ge0$ 对应 $c=0$，比较空间是欧氏空间 $V_0(r)=\omega_n r^n$。Bishop–Gromov 给出：
+<h4>第一步：取 \(c=0\)</h4>
+\(\mathrm{Ric}\ge0\) 对应 \(c=0\)，比较空间是欧氏空间 \(V_0(r)=\omega_n r^n\)。Bishop–Gromov 给出：
 
 <div class="eq">$$\frac{\mathrm{Vol}(B(p,r))}{r^n}\ \text{单调非增}$$</div>
 
@@ -1332,14 +1332,14 @@ $\mathrm{Ric}\ge0$ 对应 $c=0$，比较空间是欧氏空间 $V_0(r)=\omega_n r
 <div class="keybox">$$\boxed{\mathrm{Ric}\ge0\ \Longrightarrow\ \mathrm{Vol}(B(p,r))\le\omega_n r^n}$$</div>
 
 <h4>应用</h4>
-Calabi–Yau 流形是 Ricci 平坦的，其体积增长最多像欧氏空间一样快（体积 ≤ $\omega_n r^n$）。
+Calabi–Yau 流形是 Ricci 平坦的，其体积增长最多像欧氏空间一样快（体积 ≤ \(\omega_n r^n\)）。
 
-<div class="memobox"><strong>关键词：</strong>Ricci 平坦 ⟹ 体积 ≤ 欧氏体积 $\omega_n r^n$，体积比单调非增。</div>`,
+<div class="memobox"><strong>关键词：</strong>Ricci 平坦 ⟹ 体积 ≤ 欧氏体积 \(\omega_n r^n\)，体积比单调非增。</div>`,
     1: L`<h4>目标</h4>
-正 Ricci 曲率（$\mathrm{Ric}\ge n-1$，即球面）的体积上界。
+正 Ricci 曲率（\(\mathrm{Ric}\ge n-1\)，即球面）的体积上界。
 
-<h4>第一步：取 $c=1$</h4>
-$\mathrm{Ric}\ge n-1$ 对应 $c=1$，比较空间是球面 $S^n$。Bishop–Gromov 给出体积比 $\mathrm{Vol}(B(p,r))/V_{S^n}(r)$ 单调非增。
+<h4>第一步：取 \(c=1\)</h4>
+\(\mathrm{Ric}\ge n-1\) 对应 \(c=1\)，比较空间是球面 \(S^n\)。Bishop–Gromov 给出体积比 \(\mathrm{Vol}(B(p,r))/V_{S^n}(r)\) 单调非增。
 
 <h4>第二步：体积上界</h4>
 
@@ -1350,15 +1350,15 @@ $\mathrm{Ric}\ge n-1$ 对应 $c=1$，比较空间是球面 $S^n$。Bishop–Grom
 <h4>几何含义</h4>
 正 Ricci 下界（球面量级）钳住总体积，球面是体积上界的「饱和」模型。
 
-<div class="memobox"><strong>关键词：</strong>$\mathrm{Ric}\ge n-1$ ⟹ 体积 ≤ 球面体积，Bishop–Gromov 的球面版。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(\mathrm{Ric}\ge n-1\) ⟹ 体积 ≤ 球面体积，Bishop–Gromov 的球面版。</div>`,
     2: L`<h4>目标</h4>
 Gromov 紧致性定理：曲率、直径、体积有界的流形集合紧致。
 
 <h4>第一步：条件</h4>
-考虑满足 $\lvert K\rvert\le1$、$\mathrm{diam}\le D$、$\mathrm{vol}\ge v>0$ 的 $n$ 维闭流形族。
+考虑满足 \(\lvert K\rvert\le1\)、\(\mathrm{diam}\le D\)、\(\mathrm{vol}\ge v>0\) 的 \(n\) 维闭流形族。
 
 <h4>第二步：体积比较给出 ε-网</h4>
-由 Bishop–Gromov，体积下界 $v>0$ + 曲率有界给出统一的覆盖数上界（每个流形可被有限个 $\varepsilon$-球覆盖，个数一致有界）。
+由 Bishop–Gromov，体积下界 \(v>0\) + 曲率有界给出统一的覆盖数上界（每个流形可被有限个 \(\varepsilon\)-球覆盖，个数一致有界）。
 
 <h4>第三步：Gromov 紧致性</h4>
 
@@ -1371,44 +1371,44 @@ Gromov 紧致性定理：曲率、直径、体积有界的流形集合紧致。
   },
   "r51": {
     0: L`<h4>目标</h4>
-球面 $S^n(R)$ 达到 Bonnet–Myers 上界，是刚性情形。
+球面 \(S^n(R)\) 达到 Bonnet–Myers 上界，是刚性情形。
 
 <h4>计算</h4>
-$S^n(R)$ 的 Ricci $=\frac{n-1}{R^2}$（取等），直径 $=\pi R$：
+\(S^n(R)\) 的 Ricci \(=\frac{n-1}{R^2}\)（取等），直径 \(=\pi R\)：
 
 <div class="eq">$$\mathrm{Ric}=\frac{n-1}{R^2},\qquad \mathrm{diam}(S^n(R))=\pi R$$</div>
 
 <div class="keybox">$$\boxed{\mathrm{diam}(S^n(R))=\pi R\ \text{达到 Bonnet–Myers 上界}}$$</div>
 
 <h4>刚性</h4>
-球面是 Bonnet–Myers 直径界的「饱和」例子——取等号时流形等距于半径 $R$ 的球面。
+球面是 Bonnet–Myers 直径界的「饱和」例子——取等号时流形等距于半径 \(R\) 的球面。
 
-<div class="memobox"><strong>关键词：</strong>$S^n(R)$ 达到直径界 $\pi R$，是 Bonnet–Myers 的刚性情形。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(S^n(R)\) 达到直径界 \(\pi R\)，是 Bonnet–Myers 的刚性情形。</div>`,
     1: L`<h4>目标</h4>
-实射影空间 $\mathbb{RP}^n$ 验证 Bonnet–Myers 的有限基本群结论。
+实射影空间 \(\mathbb{RP}^n\) 验证 Bonnet–Myers 的有限基本群结论。
 
 <h4>第一步：Ricci 与球面相同</h4>
-$\mathbb{RP}^n$ 是 $S^n$ 的对径商，Ricci 曲率与 $S^n$ 相同：$\mathrm{Ric}=\frac{n-1}{R^2}$。
+\(\mathbb{RP}^n\) 是 \(S^n\) 的对径商，Ricci 曲率与 \(S^n\) 相同：\(\mathrm{Ric}=\frac{n-1}{R^2}\)。
 
 <h4>第二步：直径更小，基本群有限</h4>
-$\mathbb{RP}^n$ 直径 $=\frac{\pi R}{2}$（对径点被粘合，最大距离减半），基本群 $\pi_1(\mathbb{RP}^n)=\mathbb Z_2$：
+\(\mathbb{RP}^n\) 直径 \(=\frac{\pi R}{2}\)（对径点被粘合，最大距离减半），基本群 \(\pi_1(\mathbb{RP}^n)=\mathbb Z_2\)：
 
 <div class="keybox">$$\boxed{\mathrm{diam}(\mathbb{RP}^n)=\frac{\pi R}{2},\quad\pi_1(\mathbb{RP}^n)=\mathbb Z_2}$$</div>
 
 <h4>验证定理</h4>
-直径 $\frac{\pi R}{2}\le\pi R$ 满足上界；基本群 $\mathbb Z_2$ 有限，验证了 Bonnet–Myers 的「基本群有限」结论。
+直径 \(\frac{\pi R}{2}\le\pi R\) 满足上界；基本群 \(\mathbb Z_2\) 有限，验证了 Bonnet–Myers 的「基本群有限」结论。
 
-<div class="memobox"><strong>关键词：</strong>$\mathbb{RP}^n$ 直径 $\pi R/2$、$\pi_1=\mathbb Z_2$，验证 Bonnet–Myers 有限性。</div>`,
+<div class="memobox"><strong>关键词：</strong>\(\mathbb{RP}^n\) 直径 \(\pi R/2\)、\(\pi_1=\mathbb Z_2\)，验证 Bonnet–Myers 有限性。</div>`,
     2: L`<h4>目标</h4>
 说明「Ricci 正」≠「紧致」——需要一致下界。
 
 <h4>第一步：反例</h4>
-存在 Ricci 曲率为正但<strong>非紧致</strong>的流形，如 $\mathbb R^2$ 上的旋转抛物面（Ricci 处处 $>0$，但 Ricci 下界趋于 $0$）。
+存在 Ricci 曲率为正但<strong>非紧致</strong>的流形，如 \(\mathbb R^2\) 上的旋转抛物面（Ricci 处处 \(>0\)，但 Ricci 下界趋于 \(0\)）。
 
 <h4>第二步：关键区别</h4>
-Bonnet–Myers 需要的是<strong>一致</strong>正下界 $\mathrm{Ric}\ge\frac{n-1}{R^2}>0$，而不是「点点正」：
+Bonnet–Myers 需要的是<strong>一致</strong>正下界 \(\mathrm{Ric}\ge\frac{n-1}{R^2}>0\)，而不是「点点正」：
 
-<div class="warnbox">「$\mathrm{Ric}>0$ 点点正」⟹ 可以非紧致；「$\mathrm{Ric}\ge c>0$ 一致正」⟹ 紧致、直径有界。</div>
+<div class="warnbox">「\(\mathrm{Ric}>0\) 点点正」⟹ 可以非紧致；「\(\mathrm{Ric}\ge c>0\) 一致正」⟹ 紧致、直径有界。</div>
 
 <div class="keybox">$$\boxed{\mathrm{Ric}>0\ \nRightarrow\ \text{紧致};\quad \mathrm{Ric}\ge c>0\ \Rightarrow\ \text{紧致}}$$</div>
 
@@ -1419,7 +1419,7 @@ Bonnet–Myers 需要的是<strong>一致</strong>正下界 $\mathrm{Ric}\ge\fra
 平坦环面崩塌的 GH 极限。
 
 <h4>第一步：崩塌过程</h4>
-取平坦环面 $T^2(R,r)$（大半径 $R$ 固定，小半径 $r\to0$）。当 $r\to0$，环面「退化」成一个方向消失：
+取平坦环面 \(T^2(R,r)\)（大半径 \(R\) 固定，小半径 \(r\to0\)）。当 \(r\to0\)，环面「退化」成一个方向消失：
 
 <div class="eq">$$T^2(R,r)\ \xrightarrow{\text{GH}}\ S^1(R)$$</div>
 
@@ -1431,27 +1431,27 @@ Bonnet–Myers 需要的是<strong>一致</strong>正下界 $\mathrm{Ric}\ge\fra
 <h4>意义</h4>
 崩塌（collapse）现象说明 GH 极限不保持维数，这是理解 Ricci 流奇点和极限空间结构的核心困难。
 
-<div class="memobox"><strong>关键词：</strong>环面小半径 →0 ⟹ GH 极限是圆 $S^1$，维数从 2 崩塌到 1。</div>`,
+<div class="memobox"><strong>关键词：</strong>环面小半径 →0 ⟹ GH 极限是圆 \(S^1\)，维数从 2 崩塌到 1。</div>`,
     1: L`<h4>目标</h4>
-Perelman 的 $W$-泛函单调性在 Ricci 流 GH 极限分析中的作用。
+Perelman 的 \(W\)-泛函单调性在 Ricci 流 GH 极限分析中的作用。
 
-<h4>第一步：$W$-泛函</h4>
-Perelman 引入 $W$-泛函（熵），它沿 Ricci 流<strong>单调</strong>。单调性提供了 Ricci 流的「能量」，用于控制奇点形成。
+<h4>第一步：\(W\)-泛函</h4>
+Perelman 引入 \(W\)-泛函（熵），它沿 Ricci 流<strong>单调</strong>。单调性提供了 Ricci 流的「能量」，用于控制奇点形成。
 
 <h4>第二步：分析 GH 极限</h4>
-$W$-泛函单调性 ⟹ Ricci 流奇点可被「手术」（surgery）处理，手术后的流形序列的 GH 极限可分析。
+\(W\)-泛函单调性 ⟹ Ricci 流奇点可被「手术」（surgery）处理，手术后的流形序列的 GH 极限可分析。
 
 <div class="keybox">$$\boxed{W\text{-泛函单调性}\ \Longrightarrow\ \text{Ricci 流奇点可控}\ \Longrightarrow\ \text{分析 GH 极限}}$$</div>
 
 <h4>意义</h4>
 这是 Perelman 证明 Poincaré 猜想的关键工具之一——用单调量控制 Ricci 流的长期行为与极限。
 
-<div class="memobox"><strong>关键词：</strong>Perelman $W$-泛函单调性，控制 Ricci 流奇点与 GH 极限。</div>`,
+<div class="memobox"><strong>关键词：</strong>Perelman \(W\)-泛函单调性，控制 Ricci 流奇点与 GH 极限。</div>`,
     2: L`<h4>目标</h4>
 Cheeger–Colding 理论：Ricci 下界序列的 GH 极限结构。
 
 <h4>第一步：Ricci 下界序列的极限</h4>
-考虑 $\mathrm{Ric}\ge-(n-1)$ 的流形序列，其 GH 极限是<strong>度量空间</strong>（可能非光滑、带奇点）。
+考虑 \(\mathrm{Ric}\ge-(n-1)\) 的流形序列，其 GH 极限是<strong>度量空间</strong>（可能非光滑、带奇点）。
 
 <h4>第二步：几乎处处可微结构</h4>
 Cheeger–Colding 证明：这样的极限空间<strong>几乎处处</strong>有切锥，是（reifenberg 意义下的）Lipschitz 流形，具有可测的黎曼度量结构。
