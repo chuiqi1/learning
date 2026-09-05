@@ -166,6 +166,11 @@ function mathHTML(s) {
   return t;
 }
 
+// 判断内容是否为 LaTeX 富文本（含反斜杠命令），是则跳过 ^/_ 转换、按富文本渲染
+function isRich(s) {
+  return typeof s === 'string' && s.indexOf('\\') >= 0;
+}
+
 // 对节点与题目的数学字段做渲染转换（不动 svg，svg 需保持原始标签）
 function sanitizeData() {
   allNodes.forEach(function (n) {
@@ -175,13 +180,19 @@ function sanitizeData() {
     (n.examples || []).forEach(function (ex) {
       if (typeof ex.title === 'string') ex.title = mathHTML(ex.title);
       if (typeof ex.content === 'string') ex.content = mathHTML(ex.content);
-      if (typeof ex.detail === 'string') ex.detail = mathHTML(ex.detail);
+      if (typeof ex.detail === 'string') {
+        if (isRich(ex.detail)) ex._richDetail = true;
+        else ex.detail = mathHTML(ex.detail);
+      }
     });
     (n.theorems || []).forEach(function (th) {
       if (typeof th.name === 'string') th.name = mathHTML(th.name);
       if (typeof th.statement === 'string') th.statement = mathHTML(th.statement);
       if (typeof th.proof === 'string') th.proof = mathHTML(th.proof);
-      if (typeof th.detailProof === 'string') th.detailProof = mathHTML(th.detailProof);
+      if (typeof th.detailProof === 'string') {
+        if (isRich(th.detailProof)) th._richProof = true;
+        else th.detailProof = mathHTML(th.detailProof);
+      }
     });
   });
   allQuizzes.forEach(function (q) {
@@ -235,6 +246,7 @@ function buildHTML() {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>黎曼几何 & 代数拓扑 学习工作台</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="_shared/js/mathjax-tex-svg.js"></script>
 <style>
 /* ============================================================
    CSS Variables & Reset
@@ -1126,6 +1138,39 @@ sub { vertical-align: sub; }
 .modal-body .m-tag.warning { background: #fef3c7; color: #b45309; }
 .modal-body .m-tag.warning:hover { background: var(--warning); color: #fff; }
 
+/* 富文本 LaTeX 证明（ChatGPT 详细教学风格） */
+.modal-body .m-proof.rich-content {
+  background: #ffffff; border: 1px solid var(--border); color: var(--text);
+  white-space: pre-wrap; font-size: 14px; line-height: 1.9; padding: 14px 16px;
+}
+.modal-body .rich-content h4 {
+  font-size: 14px; font-weight: 700; margin: 16px 0 6px; color: var(--accent);
+}
+.modal-body .rich-content h4:first-child { margin-top: 0; }
+.modal-body .rich-content .keybox {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--accent);
+  border-radius: 6px; padding: 10px 12px; margin: 12px 0;
+}
+.modal-body .rich-content .memobox {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid var(--success);
+  border-radius: 6px; padding: 10px 12px; margin: 12px 0;
+}
+.modal-body .rich-content .warnbox {
+  background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid var(--warning);
+  border-radius: 6px; padding: 10px 12px; margin: 12px 0;
+}
+.modal-body .rich-content .eq {
+  text-align: center; margin: 10px 0; overflow-x: auto;
+}
+.modal-body .rich-content table {
+  border-collapse: collapse; margin: 12px 0; width: 100%; font-size: 13px;
+}
+.modal-body .rich-content th, .modal-body .rich-content td {
+  border: 1px solid var(--border); padding: 6px 10px; text-align: left; vertical-align: top;
+}
+.modal-body .rich-content th { background: var(--bg-sidebar); font-weight: 700; }
+.modal-body .rich-content .chain { text-align: center; margin: 10px 0; line-height: 2.2; font-size: 14px; }
+
 /* 思路 / 解答 */
 .idea-box {
   margin-bottom: 8px;
@@ -1831,6 +1876,9 @@ const LEARNING_PATH = ${pathJSON};
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-body').innerHTML = bodyHTML;
     document.getElementById('modal-overlay').classList.add('open');
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise([document.getElementById('modal-body')]).catch(function () {});
+    }
   }
   function closeModal() {
     document.getElementById('modal-overlay').classList.remove('open');
@@ -1912,29 +1960,34 @@ const LEARNING_PATH = ${pathJSON};
     var body = '';
     body += '<div class="m-section"><div class="m-title">例子</div><div class="m-text">' + (ex.content || '') + '</div></div>';
     if (node.desc) body += '<div class="m-section"><div class="m-title">依据的定义</div><div class="m-text">' + node.desc + '</div></div>';
-    // 详细“根据定义逐步计算”：优先用例子专属 detail，其次用节点完整内容
-    var detailSteps = ex.detail ? toNumberedSteps(ex.detail) : [];
-    if (detailSteps.length > 0) {
+    // 详细“根据定义逐步计算”：优先用例子专属 detail（支持 LaTeX 富文本），其次用节点完整内容
+    if (ex._richDetail) {
       body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div>';
-      body += '<div class="m-proof">';
-      detailSteps.forEach(function (s) {
-        var m = s.match(/^([①-⑩])\s*/);
-        var num = m ? m[1] : '';
-        var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
-        body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + renderStepBody(rest) + '</span></div>';
-      });
-      body += '</div></div>';
+      body += '<div class="m-proof rich-content">' + ex.detail + '</div></div>';
     } else {
-      var steps = toSteps(node.content);
-      if (steps.length > 1) {
+      var detailSteps = ex.detail ? toNumberedSteps(ex.detail) : [];
+      if (detailSteps.length > 0) {
         body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div>';
         body += '<div class="m-proof">';
-        steps.forEach(function (s, i) {
-          body += '<div class="proof-step"><span class="step-badge">' + (i + 1) + '</span><span>' + s + '</span></div>';
+        detailSteps.forEach(function (s) {
+          var m = s.match(/^([①-⑩])\s*/);
+          var num = m ? m[1] : '';
+          var rest = m ? s.replace(/^[①-⑩]\s*/, '') : s;
+          body += '<div class="proof-step">' + (num ? '<span class="step-badge">' + num + '</span>' : '') + '<span>' + renderStepBody(rest) + '</span></div>';
         });
         body += '</div></div>';
-      } else if (node.content) {
-        body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div><div class="m-text">' + node.content + '</div></div>';
+      } else {
+        var steps = toSteps(node.content);
+        if (steps.length > 1) {
+          body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div>';
+          body += '<div class="m-proof">';
+          steps.forEach(function (s, i) {
+            body += '<div class="proof-step"><span class="step-badge">' + (i + 1) + '</span><span>' + s + '</span></div>';
+          });
+          body += '</div></div>';
+        } else if (node.content) {
+          body += '<div class="m-section"><div class="m-title">根据定义逐步计算</div><div class="m-text">' + node.content + '</div></div>';
+        }
       }
     }
     if (node.theorems && node.theorems.length > 0) {
@@ -1960,8 +2013,10 @@ const LEARNING_PATH = ${pathJSON};
     var body = '';
     body += '<div class="m-section"><div class="m-title">定理陈述</div><div class="m-text" style="font-style:italic">' + (th.statement || '') + '</div></div>';
     body += '<div class="m-section"><div class="m-title">详细证明</div>';
-    // 优先展示定理专属的详细证明 detailProof（用①②③编号），其次把 proof 按句拆步
-    if (th.detailProof) {
+    // 优先展示定理专属的详细证明 detailProof（支持 LaTeX 富文本），其次把 proof 按句拆步
+    if (th._richProof) {
+      body += '<div class="m-proof rich-content">' + th.detailProof + '</div>';
+    } else if (th.detailProof) {
       var dSteps = toNumberedSteps(th.detailProof);
       body += '<div class="m-proof">';
       dSteps.forEach(function (s) {
