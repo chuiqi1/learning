@@ -106,14 +106,14 @@ module.exports = {
 我们现在把这一项一项写出来，并对 X,Y,Z 做循环轮换。
 
 <h4>第二步：写出三项之和</h4>
-对 $(X,Y,Z)$、$(Y,Z,X)$、$(Z,X,Y)$ 三个轮换分别写出定义式并相加。关键观察是：$\nabla_X\nabla_Y Z$ 这类「二阶协变导数」项在轮换求和时会两两抵消，剩下的只有 $\nabla_{[X,Y]}Z$ 这类「交换子项」。
+对 \((X,Y,Z)\)、\((Y,Z,X)\)、\((Z,X,Y)\) 三个轮换分别写出定义式并相加。关键观察是：\(\nabla_X\nabla_Y Z\) 这类「二阶协变导数」项在轮换求和时会两两抵消，剩下的只有 \(\nabla_{[X,Y]}Z\) 这类「交换子项」。
 
 <h4>第三步：用 Jacobi 恒等式消去交换子项</h4>
 剩下的交换子项恰好构成向量场的 Jacobi 恒等式：
 
 <div class="eq">$$[X,[Y,Z]]+[Y,[Z,X]]+[Z,[X,Y]]=0$$</div>
 
-由于 $\nabla$ 无挠，$\nabla_{[X,Y]}Z$ 与 $[X,Y]$ 的这些项也两两抵消。
+由于 \(\nabla\) 无挠，\(\nabla_{[X,Y]}Z\) 与 \([X,Y]\) 的这些项也两两抵消。
 
 <div class="keybox">$$\boxed{R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=0}$$</div>
 
@@ -121,22 +121,22 @@ module.exports = {
   },
   "r29": {
     0: L`<h4>这一定理在说什么</h4>
-截面曲率 $K(\sigma)$ 只是曲率张量在<strong>二维平面</strong>上取的一个标量值。乍看之下信息量比整个曲率张量少得多。但定理断言：只要知道<strong>所有</strong>二维平面的截面曲率，就能<strong>唯一还原</strong>整个曲率张量。
+截面曲率 \(K(\sigma)\) 只是曲率张量在<strong>二维平面</strong>上取的一个标量值。乍看之下信息量比整个曲率张量少得多。但定理断言：只要知道<strong>所有</strong>二维平面的截面曲率，就能<strong>唯一还原</strong>整个曲率张量。
 
 <h4>第一步：截面曲率定义</h4>
-对切空间里的二维平面 $\sigma=\mathrm{span}\{u,v\}$，
+对切空间里的二维平面 \(\sigma=\mathrm{span}\{u,v\}\)，
 
 <div class="eq">$$K(\sigma)=K(u,v)=\frac{\langle R(u,v)v,u\rangle}{|u|^2|v|^2-\langle u,v\rangle^2}$$</div>
 
 <h4>第二步：极化恒等式——从二次型反解双线性型</h4>
-核心是代数里的经典技巧：一个对称双线性型 $B(x,y)$ 可由它的对角值 $B(x,x)$ 通过极化还原：
+核心是代数里的经典技巧：一个对称双线性型 \(B(x,y)\) 可由它的对角值 \(B(x,x)\) 通过极化还原：
 
 <div class="eq">$$B(x,y)=\frac{B(x+y,x+y)-B(x-y,x-y)}{4}$$</div>
 
-截面曲率 $K(u,v)$ 是「平面上的值」，对它做类似的极化，就能逐项反解出 (0,4) 型曲率张量 $\langle R(X,Y)Z,W\rangle$ 的<strong>所有</strong>分量。
+截面曲率 \(K(u,v)\) 是「平面上的值」，对它做类似的极化，就能逐项反解出 (0,4) 型曲率张量 \(\langle R(X,Y)Z,W\rangle\) 的<strong>所有</strong>分量。
 
 <h4>第三步：结论</h4>
-因此所有截面的 $K$ 一起完全确定 $R$。
+因此所有截面的 \(K\) 一起完全确定 \(R\)。
 
 <div class="keybox">$$\boxed{\text{两个流形所有截面曲率相等 }\iff\text{ 曲率张量相等}}$$</div>
 
@@ -144,26 +144,26 @@ module.exports = {
   },
   "r30": {
     0: L`<h4>这一定理在说什么</h4>
-Schur 引理（$n\ge 3$）：如果截面曲率只依赖于<strong>点</strong> $p$、不依赖于<strong>方向</strong> $\sigma$（即每点都是「各向同性」的），那么它其实连点都不依赖——是个全局常数。这是一个关于「局部各向同性 ⟹ 全局均匀」的刚性结论。
+Schur 引理（\(n\ge 3\)）：如果截面曲率只依赖于<strong>点</strong> \(p\)、不依赖于<strong>方向</strong> \(\sigma\)（即每点都是「各向同性」的），那么它其实连点都不依赖——是个全局常数。这是一个关于「局部各向同性 ⟹ 全局均匀」的刚性结论。
 
 <h4>第一步：把条件翻译成曲率张量形式</h4>
-若 $K$ 与方向无关，则曲率张量在每点有规范形式：
+若 \(K\) 与方向无关，则曲率张量在每点有规范形式：
 
 <div class="eq">$$R(X,Y)Z=K(p)\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
 
-这里 $K(p)$ 是只依赖点的函数。
+这里 \(K(p)\) 是只依赖点的函数。
 
 <h4>第二步：取协变导数</h4>
-对两边求协变导数 $\nabla_W$，注意 $g$ 的协变导数为零，于是
+对两边求协变导数 \(\nabla_W\)，注意 \(g\) 的协变导数为零，于是
 
 <div class="eq">$$(\nabla_W R)(X,Y)Z=(\nabla_W K)\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
 
-<h4>第三步：用第二 Bianchi 恒等式推出 $\nabla K=0$</h4>
-第二 Bianchi 恒等式 $(\nabla_W R)(X,Y)Z+(\nabla_X R)(Y,W)Z+(\nabla_Y R)(W,X)Z=0$ 代入上式，得到关于 $\nabla K$ 的代数方程。当 $n\ge 3$ 时，这个方程的唯一解是：
+<h4>第三步：用第二 Bianchi 恒等式推出 \(\nabla K=0\)</h4>
+第二 Bianchi 恒等式 \((\nabla_W R)(X,Y)Z+(\nabla_X R)(Y,W)Z+(\nabla_Y R)(W,X)Z=0\) 代入上式，得到关于 \(\nabla K\) 的代数方程。当 \(n\ge 3\) 时，这个方程的唯一解是：
 
 <div class="keybox">$$\boxed{\nabla K=0\ \Longrightarrow\ K=\text{常数}}$$</div>
 
-<div class="memobox"><strong>一句话记忆：</strong>「每点各向同性」＋「Bianchi 恒等式」＝「全局常曲率」（$n\ge 3$）。$n=2$ 时失效，因为二维恒等截面曲率不足够约束。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>「每点各向同性」＋「Bianchi 恒等式」＝「全局常曲率」（\(n\ge 3\)）。\(n=2\) 时失效，因为二维恒等截面曲率不足够约束。</div>`
   },
   "r31": {
     0: L`<h4>我们要证明什么</h4>
@@ -174,16 +174,16 @@ Schur 引理（$n\ge 3$）：如果截面曲率只依赖于<strong>点</strong> 
 它是曲率张量的「微分恒等式」（区别于第一 Bianchi 的「代数恒等式」），是 Einstein 场方程自洽性与能量守恒的几何来源。
 
 <h4>第一步：法坐标简化</h4>
-由于这是张量恒等式，我们只需在一点 $p$ 验证。取 $p$ 处的<strong>法坐标</strong>（测地线坐标），使 Christoffel 符号在 $p$ 为零：$\Gamma^k_{ij}(p)=0$。于是在 $p$ 点协变导数退化为普通偏导：
+由于这是张量恒等式，我们只需在一点 \(p\) 验证。取 \(p\) 处的<strong>法坐标</strong>（测地线坐标），使 Christoffel 符号在 \(p\) 为零：\(\Gamma^k_{ij}(p)=0\)。于是在 \(p\) 点协变导数退化为普通偏导：
 
 <div class="eq">$$\nabla_m R^l{}_{ijk}\Big|_p=\partial_m R^l{}_{ijk}\Big|_p$$</div>
 
 <h4>第二步：代入曲率分量并求导</h4>
-回忆 $R^l{}_{ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}+\Gamma^l_{im}\Gamma^m_{jk}-\Gamma^l_{jm}\Gamma^m_{ik}$。在 $p$ 点 $\Gamma=0$，故
+回忆 \(R^l{}_{ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}+\Gamma^l_{im}\Gamma^m_{jk}-\Gamma^l_{jm}\Gamma^m_{ik}\)。在 \(p\) 点 \(\Gamma=0\)，故
 
 <div class="eq">$$R^l{}_{ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}\quad(\text{在 }p)$$</div>
 
-对 $m$ 求偏导并做轮换，$\partial_m\partial_i\Gamma^l_{jk}$ 这类项两两抵消，恰好得到零。
+对 \(m\) 求偏导并做轮换，\(\partial_m\partial_i\Gamma^l_{jk}\) 这类项两两抵消，恰好得到零。
 
 <div class="keybox">$$\boxed{\nabla_m R^l{}_{ijk}+\nabla_i R^l{}_{jmk}+\nabla_j R^l{}_{mik}=0}$$</div>
 
@@ -191,24 +191,24 @@ Schur 引理（$n\ge 3$）：如果截面曲率只依赖于<strong>点</strong> 
   },
   "r32": {
     0: L`<h4>这一定理在说什么</h4>
-Weyl 张量 $W$ 是曲率张量里「去掉 Ricci 信息后的纯共形部分」。定理给出它在共形变换下的变换规律，并刻画共形平坦。
+Weyl 张量 \(W\) 是曲率张量里「去掉 Ricci 信息后的纯共形部分」。定理给出它在共形变换下的变换规律，并刻画共形平坦。
 
 <h4>第一步：共形变换下 Christoffel 的变化</h4>
-设 $g'=e^{2f}g$，则 Christoffel 符号变换为：
+设 \(g'=e^{2f}g\)，则 Christoffel 符号变换为：
 
 <div class="eq">$$\Gamma'^k_{ij}=\Gamma^k_{ij}+\delta^k_i\partial_j f+\delta^k_j\partial_i f-g_{ij}g^{kl}\partial_l f$$</div>
 
 <h4>第二步：曲率张量的共形变换</h4>
-代入曲率公式，得到黎曼张量在共形变换下分「旧曲率 + Ricci 项 + Hessian 项」的复杂表达式。关键是：把这些项里「可被 Ricci 和标量曲率表达」的部分<strong>剥离</strong>后，剩下的部分 $W$ 满足最简单的变换律：
+代入曲率公式，得到黎曼张量在共形变换下分「旧曲率 + Ricci 项 + Hessian 项」的复杂表达式。关键是：把这些项里「可被 Ricci 和标量曲率表达」的部分<strong>剥离</strong>后，剩下的部分 \(W\) 满足最简单的变换律：
 
 <div class="keybox">$$\boxed{W'=e^{2f}W}$$</div>
 
 <h4>第三步：共形平坦的判据</h4>
-$W=0$ 意味着度量可以（局部）通过共形变换变平。$n\ge 4$ 时：
+\(W=0\) 意味着度量可以（局部）通过共形变换变平。\(n\ge 4\) 时：
 
-<div class="warnbox">$W=0\iff$ 度量<strong>共形平坦</strong>（局部共形于欧氏度量）。</div>
+<div class="warnbox">\(W=0\iff\) 度量<strong>共形平坦</strong>（局部共形于欧氏度量）。</div>
 
-<div class="memobox"><strong>一句话记忆：</strong>Weyl 张量是「共形不变的纯弯曲」，$W'=e^{2f}W$；$W=0$ 即共形平坦（$n\ge4$）。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>Weyl 张量是「共形不变的纯弯曲」，\(W'=e^{2f}W\)；\(W=0\) 即共形平坦（\(n\ge4\)）。</div>`
   },
   "r33": {
     0: L`<h4>我们要证明什么</h4>
@@ -216,19 +216,19 @@ Ricci 恒等式给出协变导数交换子与曲率张量的关系：
 
 <div class="eq">$$\nabla_i\nabla_j X^k-\nabla_j\nabla_i X^k=R^k{}_{lij}X^l$$</div>
 
-它其实是曲率张量的<strong>另一个等价定义</strong>——「协变导数不可交换的程度由 $R$ 度量」。
+它其实是曲率张量的<strong>另一个等价定义</strong>——「协变导数不可交换的程度由 \(R\) 度量」。
 
 <h4>第一步：写出一次协变导数</h4>
 
 <div class="eq">$$\nabla_i X^k=\partial_i X^k+\Gamma^k_{il}X^l$$</div>
 
 <h4>第二步：求二次协变导数</h4>
-注意 $\nabla_i X^k$ 是 (1,1) 型张量，再求 $\nabla_j$ 时上标、下标都要带联络项：
+注意 \(\nabla_i X^k\) 是 (1,1) 型张量，再求 \(\nabla_j\) 时上标、下标都要带联络项：
 
 <div class="eq">$$\nabla_j\nabla_i X^k=\partial_j(\partial_i X^k+\Gamma^k_{il}X^l)+\Gamma^k_{jm}(\partial_i X^m+\Gamma^m_{il}X^l)-\Gamma^m_{ji}(\partial_m X^k+\Gamma^k_{ml}X^l)$$</div>
 
-<h4>第三步：交换 $i,j$ 相减</h4>
-$\partial_j\partial_i X^k$ 与 $\partial_i\partial_j X^k$ 抵消（普通偏导可交换），剩下的项整理为 $(\partial_i\Gamma^k_{jl}-\partial_j\Gamma^k_{il}+\Gamma^k_{im}\Gamma^m_{jl}-\Gamma^k_{jm}\Gamma^m_{il})X^l$，正是曲率分量 $R^k{}_{lij}X^l$。
+<h4>第三步：交换 \(i,j\) 相减</h4>
+\(\partial_j\partial_i X^k\) 与 \(\partial_i\partial_j X^k\) 抵消（普通偏导可交换），剩下的项整理为 \((\partial_i\Gamma^k_{jl}-\partial_j\Gamma^k_{il}+\Gamma^k_{im}\Gamma^m_{jl}-\Gamma^k_{jm}\Gamma^m_{il})X^l\)，正是曲率分量 \(R^k{}_{lij}X^l\)。
 
 <div class="keybox">$$\boxed{\nabla_i\nabla_j X^k-\nabla_j\nabla_i X^k=R^k{}_{lij}X^l}$$</div>
 
@@ -241,71 +241,71 @@ Bonnet–Myers 定理是「曲率控制拓扑」的经典结果：正的下界 R
 <div class="eq">$$\mathrm{Ric}\ge\frac{n-1}{R^2}\,g\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R,\quad \pi_1(M)\text{ 有限}$$</div>
 
 <h4>第一步：沿最短测地线构造变分场</h4>
-设 $\gamma:[0,L]\to M$ 是最短测地线（弧长参数，$L=\mathrm{dist}(p,q)$）。取沿 $\gamma$ 平行的正交标架 $E_1,\dots,E_{n-1}$（$\nabla_{\dot\gamma}E_i=0$），构造变分场：
+设 \(\gamma:[0,L]\to M\) 是最短测地线（弧长参数，\(L=\mathrm{dist}(p,q)\)）。取沿 \(\gamma\) 平行的正交标架 \(E_1,\dots,E_{n-1}\)（\(\nabla_{\dot\gamma}E_i=0\)），构造变分场：
 
 <div class="eq">$$V_i(t)=\sin\frac{\pi t}{L}\,E_i(t)$$</div>
 
-它在端点为零（$V_i(0)=V_i(L)=0$）。
+它在端点为零（\(V_i(0)=V_i(L)=0\)）。
 
 <h4>第二步：第二变分公式</h4>
-对每个 $i$，能量泛函的第二变分：
+对每个 \(i\)，能量泛函的第二变分：
 
 <div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\Big(|\dot V_i|^2-\langle R(V_i,\dot\gamma)\dot\gamma,V_i\rangle\Big)dt$$</div>
 
-代入 $V_i=\sin(\pi t/L)E_i$，计算得
+代入 \(V_i=\sin(\pi t/L)E_i\)，计算得
 
 <div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{\pi^2}{L^2}-\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle\Big)dt$$</div>
 
-<h4>第三步：对所有 $i$ 求和，用 Ricci 下界</h4>
-$\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}$，故
+<h4>第三步：对所有 \(i\) 求和，用 Ricci 下界</h4>
+\(\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}\)，故
 
 <div class="eq">$$\sum_i\delta^2E(V_i,V_i)\le\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{n-1}{L^2}-\frac{n-1}{R^2}\Big)dt$$</div>
 
-若 $L>\pi R$，则括号内为负，$\sum_i\delta^2E<0$，与 $\gamma$ 最短矛盾。
+若 \(L>\pi R\)，则括号内为负，\(\sum_i\delta^2E<0\)，与 \(\gamma\) 最短矛盾。
 
 <div class="keybox">$$\boxed{L\le\pi R\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R}$$</div>
 
 <h4>第四步：基本群有限</h4>
-完备性 + 直径有界 ⟹ 紧致。对万有覆盖用同样的 Ricci 下界（覆盖映射保 Ricci），万有覆盖也紧致，故 $\pi_1(M)$ 有限。
+完备性 + 直径有界 ⟹ 紧致。对万有覆盖用同样的 Ricci 下界（覆盖映射保 Ricci），万有覆盖也紧致，故 \(\pi_1(M)\) 有限。
 
-<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧拉回，迫使测地线在 $\pi R$ 内重逢，流形被「箍」成一个有限紧致体。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧拉回，迫使测地线在 \(\pi R\) 内重逢，流形被「箍」成一个有限紧致体。</div>`
   },
   "r35": {
     0: L`<h4>我们要证明什么</h4>
-Gauss 公式把外围空间 $N$ 的联络沿子流形 $M$ 分解成「切向 + 法向」两部分：
+Gauss 公式把外围空间 \(N\) 的联络沿子流形 \(M\) 分解成「切向 + 法向」两部分：
 
 <div class="eq">$$\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$$</div>
 
-其中 $X,Y$ 切于 $M$。左边是 $N$ 里的协变导数，右边第一项是 $M$ 自己的联络，第二项是第二基本形式（法向部分）。
+其中 \(X,Y\) 切于 \(M\)。左边是 \(N\) 里的协变导数，右边第一项是 \(M\) 自己的联络，第二项是第二基本形式（法向部分）。
 
-<h4>第一步：把 $\nabla^N_X Y$ 按切/法分解</h4>
-$\nabla^N_X Y$ 是 $N$ 在 $p$ 的切向量，可以唯一分解为切向分量与法向分量：
+<h4>第一步：把 \(\nabla^N_X Y\) 按切/法分解</h4>
+\(\nabla^N_X Y\) 是 \(N\) 在 \(p\) 的切向量，可以唯一分解为切向分量与法向分量：
 
 <div class="eq">$$\nabla^N_X Y=(\nabla^N_X Y)^{\top}+(\nabla^N_X Y)^{\perp}$$</div>
 
-<h4>第二步：切向部分就是 $M$ 的联络</h4>
-切向分量 $(\nabla^N_X Y)^{\top}$ 满足 Levi-Civita 联络的全部性质（保持度量、无挠），因此它就是 $M$ 诱导的 Levi-Civita 联络 $\nabla^M_X Y$。
+<h4>第二步：切向部分就是 \(M\) 的联络</h4>
+切向分量 \((\nabla^N_X Y)^{\top}\) 满足 Levi-Civita 联络的全部性质（保持度量、无挠），因此它就是 \(M\) 诱导的 Levi-Civita 联络 \(\nabla^M_X Y\)。
 
 <h4>第三步：法向部分定义为第二基本形式</h4>
 法向分量记为第二基本形式：
 
 <div class="keybox">$$\boxed{\mathrm{II}(X,Y)=(\nabla^N_X Y)^{\perp}}$$</div>
 
-于是得到 Gauss 公式 $\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$。
+于是得到 Gauss 公式 \(\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)\)。
 
 <div class="memobox"><strong>一句话记忆：</strong>Gauss 公式 = 外围联络沿子流形切/法分解；法向部分就是第二基本形式。</div>`
   },
   "r36": {
     0: L`<h4>我们要证明什么</h4>
-Gauss 方程把子流形的<strong>内蕴</strong>曲率（$R^M$）与<strong>外蕴</strong>曲率（第二基本形式 $\mathrm{II}$）联系起来：
+Gauss 方程把子流形的<strong>内蕴</strong>曲率（\(R^M\)）与<strong>外蕴</strong>曲率（第二基本形式 \(\mathrm{II}\)）联系起来：
 
 <div class="eq">$$\langle R^M(X,Y)Z,W\rangle=\langle R^N(X,Y)Z,W\rangle+\langle \mathrm{II}(X,W),\mathrm{II}(Y,Z)\rangle-\langle \mathrm{II}(X,Z),\mathrm{II}(Y,W)\rangle$$</div>
 
 <h4>第一步：从 Gauss 公式出发算外围曲率</h4>
-代入 $\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$ 到 $R^N(X,Y)Z=\nabla^N_X\nabla^N_Y Z-\nabla^N_Y\nabla^N_X Z-\nabla^N_{[X,Y]}Z$，每一项展开。
+代入 \(\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)\) 到 \(R^N(X,Y)Z=\nabla^N_X\nabla^N_Y Z-\nabla^N_Y\nabla^N_X Z-\nabla^N_{[X,Y]}Z\)，每一项展开。
 
-<h4>第二步：与切向量 $W$ 取内积，分离切/法项</h4>
-与切向量 $W$ 做内积时，法向的 $\mathrm{II}$ 项通过「两个法向量的内积」留下 $\langle\mathrm{II},\mathrm{II}\rangle$ 项。整理后恰好得到上面三个部分。
+<h4>第二步：与切向量 \(W\) 取内积，分离切/法项</h4>
+与切向量 \(W\) 做内积时，法向的 \(\mathrm{II}\) 项通过「两个法向量的内积」留下 \(\langle\mathrm{II},\mathrm{II}\rangle\) 项。整理后恰好得到上面三个部分。
 
 <h4>第三步：得到 Gauss 方程</h4>
 
@@ -322,15 +322,15 @@ Codazzi 方程是第二基本形式<strong>协变导数</strong>的对称性：
 它与 Gauss 方程一起构成子流形几何的「基本方程」。
 
 <h4>第一步：算外围曲率的法向分量</h4>
-用 Gauss 公式展开 $R^N(X,Y)Z$，取其<strong>法向分量</strong> $(R^N(X,Y)Z)^{\perp}$。
+用 Gauss 公式展开 \(R^N(X,Y)Z\)，取其<strong>法向分量</strong> \((R^N(X,Y)Z)^{\perp}\)。
 
 <h4>第二步：切向联络与第二基本形式交叉项</h4>
-展开后，含 $\mathrm{II}$ 的项通过切向 $\nabla$ 作用。整理得到
+展开后，含 \(\mathrm{II}\) 的项通过切向 \(\nabla\) 作用。整理得到
 
 <div class="eq">$$(R^N(X,Y)Z)^{\perp}=(\nabla_X\mathrm{II})(Y,Z)-(\nabla_Y\mathrm{II})(X,Z)$$</div>
 
 <h4>第三步：令法向分量为零</h4>
-对欧氏空间（或当 $R^N$ 无切向-法向混合项时），法向分量 $(R^N(X,Y)Z)^{\perp}=0$，于是：
+对欧氏空间（或当 \(R^N\) 无切向-法向混合项时），法向分量 \((R^N(X,Y)Z)^{\perp}=0\)，于是：
 
 <div class="keybox">$$\boxed{(\nabla_X\mathrm{II})(Y,Z)=(\nabla_Y\mathrm{II})(X,Z)}$$</div>
 
@@ -338,16 +338,16 @@ Codazzi 方程是第二基本形式<strong>协变导数</strong>的对称性：
   },
   "r38": {
     0: L`<h4>这一定理在说什么</h4>
-Alexandrov 定理：$\mathbb R^3$ 中唯一的<strong>紧致无边</strong>常平均曲率（CMC）曲面是球面。
+Alexandrov 定理：\(\mathbb R^3\) 中唯一的<strong>紧致无边</strong>常平均曲率（CMC）曲面是球面。
 
 <h4>第一步：移动平面法（反射法）</h4>
-取任意单位方向 $\nu$。用垂直于 $\nu$ 的平面族 $\Pi_t=\{x:\langle x,\nu\rangle=t\}$ 从 $+\infty$ 方向逼近曲面 $M$。记 $t_0$ 为首次接触曲面的时刻。
+取任意单位方向 \(\nu\)。用垂直于 \(\nu\) 的平面族 \(\Pi_t=\{x:\langle x,\nu\rangle=t\}\) 从 \(+\infty\) 方向逼近曲面 \(M\)。记 \(t_0\) 为首次接触曲面的时刻。
 
 <h4>第二步：反射与相切</h4>
-对 $t$ 略小于 $t_0$，把 $M$ 在 $\Pi_t$ 之下的部分反射到上方。反射后的曲面与 $M$ 相切。关键用<strong>强极大值原理</strong>：两个 CMC 曲面在某点相切且法向一致时，若一方的平均曲率不小于另一方，则它们在局部重合。
+对 \(t\) 略小于 \(t_0\)，把 \(M\) 在 \(\Pi_t\) 之下的部分反射到上方。反射后的曲面与 \(M\) 相切。关键用<strong>强极大值原理</strong>：两个 CMC 曲面在某点相切且法向一致时，若一方的平均曲率不小于另一方，则它们在局部重合。
 
 <h4>第三步：逐点反射推进</h4>
-由相切点的唯一性，可把反射过程从 $t_0$ 一路推进到「对称点」。最终推出 $M$ 关于某个平面的反射等于自身——即 $M$ 关于<strong>任意方向</strong> $\nu$ 都有对称平面。
+由相切点的唯一性，可把反射过程从 \(t_0\) 一路推进到「对称点」。最终推出 \(M\) 关于某个平面的反射等于自身——即 \(M\) 关于<strong>任意方向</strong> \(\nu\) 都有对称平面。
 
 <h4>第四步：结论</h4>
 关于所有方向都有对称平面的紧致曲面只能是球面：
@@ -358,90 +358,90 @@ Alexandrov 定理：$\mathbb R^3$ 中唯一的<strong>紧致无边</strong>常�
   },
   "r39": {
     0: L`<h4>这一定理在说什么</h4>
-Simons 不等式是 $S^n$ 中<strong>极小子流形</strong>第二基本形式模平方 $\lvert\mathrm{II}\rvert^2$ 的次调和性不等式，是极小子流形刚性理论的基石。
+Simons 不等式是 \(S^n\) 中<strong>极小子流形</strong>第二基本形式模平方 \(\lvert\mathrm{II}\rvert^2\) 的次调和性不等式，是极小子流形刚性理论的基石。
 
 <h4>第一步：用 Bochner 技巧算 Laplacian</h4>
-对第二基本形式 $\mathrm{II}$ 这个法向张量场取迹 Laplacian：
+对第二基本形式 \(\mathrm{II}\) 这个法向张量场取迹 Laplacian：
 
 <div class="eq">$$\Delta\lvert\mathrm{II}\rvert^2=2\lvert\nabla\mathrm{II}\rvert^2+2\langle\mathrm{II},\Delta\mathrm{II}\rangle$$</div>
 
 <h4>第二步：用 Codazzi + Gauss 方程化简</h4>
-$\Delta\mathrm{II}$ 通过 Codazzi 方程（协变导数对称）与 Gauss 方程（曲率关系）化为 $\mathrm{II}$ 与外围曲率（球面曲率）的组合。对球面 $S^n$（曲率 $1$），整理得
+\(\Delta\mathrm{II}\) 通过 Codazzi 方程（协变导数对称）与 Gauss 方程（曲率关系）化为 \(\mathrm{II}\) 与外围曲率（球面曲率）的组合。对球面 \(S^n\)（曲率 \(1\)），整理得
 
 <div class="keybox">$$\boxed{\Delta\lvert\mathrm{II}\rvert^2\ge -2\lvert\mathrm{II}\rvert^2+\cdots}$$</div>
 
 <h4>第三步：刚性推论</h4>
-这个不等式加上积分技巧（$\lvert\mathrm{II}\rvert^2$ 有界、紧致），可推出 Simons 的刚性定理：$S^n$ 中极小超曲面若是紧致且 $\lvert\mathrm{II}\rvert^2$ 落在某范围，则只能是全测地（大球面）。
+这个不等式加上积分技巧（\(\lvert\mathrm{II}\rvert^2\) 有界、紧致），可推出 Simons 的刚性定理：\(S^n\) 中极小超曲面若是紧致且 \(\lvert\mathrm{II}\rvert^2\) 落在某范围，则只能是全测地（大球面）。
 
-<div class="memobox"><strong>一句话记忆：</strong>Simons 不等式 = Bochner 技巧 + Gauss–Codazzi 应用到极小子流形，控制 $\lvert\mathrm{II}\rvert^2$ 推出刚性。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>Simons 不等式 = Bochner 技巧 + Gauss–Codazzi 应用到极小子流形，控制 \(\lvert\mathrm{II}\rvert^2\) 推出刚性。</div>`
   },
   "r40": {
     0: L`<h4>我们要证明什么</h4>
-局部 Gauss–Bonnet 定理把曲面上区域 $\Omega$ 的总曲率、边界测地曲率积分、以及角盈（顶点外角之和）三者打包成一个拓扑量：
+局部 Gauss–Bonnet 定理把曲面上区域 \(\Omega\) 的总曲率、边界测地曲率积分、以及角盈（顶点外角之和）三者打包成一个拓扑量：
 
 <div class="eq">$$\int_\Omega K\,dA+\int_{\partial\Omega}\kappa_g\,ds+\sum_i(\pi-\alpha_i)=2\pi\chi(\Omega)$$</div>
 
 <h4>第一步：用活动标架与 Stokes 定理</h4>
-取正交活动标架 $\{e_1,e_2\}$，设联络 1-形式为 $\omega^1{}_2$。由结构方程：
+取正交活动标架 \(\{e_1,e_2\}\)，设联络 1-形式为 \(\omega^1{}_2\)。由结构方程：
 
 <div class="eq">$$d\omega^1{}_2=-K\,dA$$</div>
 
-<h4>第二步：对区域 $\Omega$ 用 Stokes 定理</h4>
+<h4>第二步：对区域 \(\Omega\) 用 Stokes 定理</h4>
 
 <div class="eq">$$\int_\Omega K\,dA=-\int_\Omega d\omega^1{}_2=-\int_{\partial\Omega}\omega^1{}_2$$</div>
 
 <h4>第三步：边界项 = 测地曲率 + 角盈</h4>
-边界 $\partial\Omega$ 分段光滑，在每个光滑弧段上 $\omega^1{}_2$ 沿边界的积分恰好是测地曲率 $\int\kappa_g\,ds$；在每个角点处，标架转过一个外角 $(\pi-\alpha_i)$。于是：
+边界 \(\partial\Omega\) 分段光滑，在每个光滑弧段上 \(\omega^1{}_2\) 沿边界的积分恰好是测地曲率 \(\int\kappa_g\,ds\)；在每个角点处，标架转过一个外角 \((\pi-\alpha_i)\)。于是：
 
 <div class="keybox">$$\boxed{\int_\Omega K\,dA+\int_{\partial\Omega}\kappa_g\,ds+\sum_i(\pi-\alpha_i)=2\pi\chi(\Omega)}$$</div>
 
-<div class="memobox"><strong>一句话记忆：</strong>局部 Gauss–Bonnet = 曲率积分 + 边界测地曲率 + 角盈 = 拓扑量 $2\pi\chi$，核心是 Stokes 定理。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>局部 Gauss–Bonnet = 曲率积分 + 边界测地曲率 + 角盈 = 拓扑量 \(2\pi\chi\)，核心是 Stokes 定理。</div>`
   },
   "r41": {
     0: L`<h4>我们要证明什么</h4>
-全局 Gauss–Bonnet 定理：紧致定向无边曲面 $M$ 的总曲率由拓扑决定：
+全局 Gauss–Bonnet 定理：紧致定向无边曲面 \(M\) 的总曲率由拓扑决定：
 
 <div class="eq">$$\int_M K\,dA=2\pi\chi(M)$$</div>
 
 <h4>第一步：三角剖分</h4>
-把 $M$ 三角剖分为测地三角形 $\Delta_i$（每条边都是测地线，故 $\kappa_g=0$）。对每个 $\Delta_i$ 用局部 Gauss–Bonnet：
+把 \(M\) 三角剖分为测地三角形 \(\Delta_i\)（每条边都是测地线，故 \(\kappa_g=0\)）。对每个 \(\Delta_i\) 用局部 Gauss–Bonnet：
 
 <div class="eq">$$\int_{\Delta_i}K\,dA+\sum_{\text{顶点}}(\pi-\alpha)=2\pi$$</div>
 
 <h4>第二步：对所有三角形求和</h4>
-曲率积分相加得 $\int_M K\,dA$。角盈项 $\sum(\pi-\alpha)$ 在内部顶点处凑成 $2\pi$、在边上的顶点两两抵消。整体上：
+曲率积分相加得 \(\int_M K\,dA\)。角盈项 \(\sum(\pi-\alpha)\) 在内部顶点处凑成 \(2\pi\)、在边上的顶点两两抵消。整体上：
 
 <div class="eq">$$\int_M K\,dA+2\pi V-\sum\alpha=2\pi F$$</div>
 
 <h4>第三步：用 Euler 公式</h4>
-每个顶点处内角之和 $=2\pi$，每条边属于两个三角形，每个三角形贡献 $\pi$。整理后恰好得到 $\chi(M)=V-E+F$：
+每个顶点处内角之和 \(=2\pi\)，每条边属于两个三角形，每个三角形贡献 \(\pi\)。整理后恰好得到 \(\chi(M)=V-E+F\)：
 
 <div class="keybox">$$\boxed{\int_M K\,dA=2\pi\chi(M)}$$</div>
 
-<div class="memobox"><strong>一句话记忆：</strong>把局部 Gauss–Bonnet 对三角剖分求和，角盈凑成 Euler 示性数，得全局公式 $\int K=2\pi\chi$。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>把局部 Gauss–Bonnet 对三角剖分求和，角盈凑成 Euler 示性数，得全局公式 \(\int K=2\pi\chi\)。</div>`
   },
   "r42": {
     0: L`<h4>这一定理在说什么</h4>
-Chern–Gauss–Bonnet 定理把 Gauss–Bonnet 推广到任意偶维 $2n$：
+Chern–Gauss–Bonnet 定理把 Gauss–Bonnet 推广到任意偶维 \(2n\)：
 
 <div class="eq">$$\int_M \mathrm{Pf}(\Omega)=(2\pi)^n\,\chi(M)$$</div>
 
-其中 $\mathrm{Pf}(\Omega)$ 是曲率 2-形式 $\Omega$ 的 Pfaffian——一个 $2n$-形式，是 Gauss 曲率在偶维的推广。
+其中 \(\mathrm{Pf}(\Omega)\) 是曲率 2-形式 \(\Omega\) 的 Pfaffian——一个 \(2n\)-形式，是 Gauss 曲率在偶维的推广。
 
 <h4>第一步：曲率形式的 Pfaffian</h4>
-在正交标架下，曲率 2-形式 $\Omega^i{}_j$ 是反对称矩阵值 2-形式。Pfaffian $\mathrm{Pf}(\Omega)$ 是它的一个「组合不变量」：
+在正交标架下，曲率 2-形式 \(\Omega^i{}_j\) 是反对称矩阵值 2-形式。Pfaffian \(\mathrm{Pf}(\Omega)\) 是它的一个「组合不变量」：
 
 <div class="eq">$$n=2:\ \mathrm{Pf}(\Omega)=\frac{1}{2\pi}K\,dA$$</div>
 
 <h4>第二步：Chern 的超渡构造</h4>
-Chern 在单位球丛 $SM$ 上构造了一个 $(2n-1)$-形式 $\Pi$，满足
+Chern 在单位球丛 \(SM\) 上构造了一个 \((2n-1)\)-形式 \(\Pi\)，满足
 
 <div class="eq">$$d\Pi=\pi^*\mathrm{Pf}(\Omega)$$</div>
 
-即 $\mathrm{Pf}(\Omega)$ 是 $\Pi$ 的「外微分」（拉回到球丛后）。这使积分 $\int_M\mathrm{Pf}(\Omega)$ 成为一个拓扑不变量。
+即 \(\mathrm{Pf}(\Omega)\) 是 \(\Pi\) 的「外微分」（拉回到球丛后）。这使积分 \(\int_M\mathrm{Pf}(\Omega)\) 成为一个拓扑不变量。
 
 <h4>第三步：Stokes 定理 + 球面纤维</h4>
-球丛纤维 $S^{2n-1}$ 的 Euler 类积分贡献 $(2\pi)^n$，最终：
+球丛纤维 \(S^{2n-1}\) 的 Euler 类积分贡献 \((2\pi)^n\)，最终：
 
 <div class="keybox">$$\boxed{\int_M\mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)}$$</div>
 
@@ -449,22 +449,22 @@ Chern 在单位球丛 $SM$ 上构造了一个 $(2n-1)$-形式 $\Pi$，满足
   },
   "r43": {
     0: L`<h4>这一定理在说什么</h4>
-Chern 把 Gauss–Bonnet 推广到高维偶维流形 $M^{2n}$：
+Chern 把 Gauss–Bonnet 推广到高维偶维流形 \(M^{2n}\)：
 
 <div class="eq">$$\int_M \mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)$$</div>
 
 <h4>第一步：方法的骨架（与二维一致）</h4>
-二维时用「联络形式 + Stokes」；高维时同样：在单位球丛 $SM$ 上构造 $(2n-1)$-形式 $\Pi$ 满足 $d\Pi=\pi^*\mathrm{Pf}(\Omega)$。
+二维时用「联络形式 + Stokes」；高维时同样：在单位球丛 \(SM\) 上构造 \((2n-1)\)-形式 \(\Pi\) 满足 \(d\Pi=\pi^*\mathrm{Pf}(\Omega)\)。
 
 <h4>第二步：Pfaffian 是 Gauss 曲率的推广</h4>
-$\mathrm{Pf}(\Omega)$ 是曲率形式的外积组合，$n=1$ 时退化为 $\frac{1}{2\pi}K\,dA$，$n=2$ 时涉及曲率张量的二次组合（含 Weyl 项）。
+\(\mathrm{Pf}(\Omega)\) 是曲率形式的外积组合，\(n=1\) 时退化为 \(\frac{1}{2\pi}K\,dA\)，\(n=2\) 时涉及曲率张量的二次组合（含 Weyl 项）。
 
 <h4>第三步：积分 = 拓扑量</h4>
-Stokes 定理把 $\int_M\mathrm{Pf}(\Omega)$ 化为球丛边界上的积分，球纤维的 Euler 类给出 $(2\pi)^n$：
+Stokes 定理把 \(\int_M\mathrm{Pf}(\Omega)\) 化为球丛边界上的积分，球纤维的 Euler 类给出 \((2\pi)^n\)：
 
 <div class="keybox">$$\boxed{\int_M\mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)}$$</div>
 
-<div class="memobox"><strong>一句话记忆：</strong>高维 Chern–Gauss–Bonnet：曲率形式的 Pfaffian 积分 = 拓扑量 $(2\pi)^n\chi$，是二维公式的偶维推广。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>高维 Chern–Gauss–Bonnet：曲率形式的 Pfaffian 积分 = 拓扑量 \((2\pi)^n\chi\)，是二维公式的偶维推广。</div>`
   },
   "r44": {
     0: L`<h4>我们要证明什么</h4>
@@ -563,42 +563,42 @@ J 是 Jacobi 场且满足边界条件 J(a)=J(b)=0。第二变分公式给出
 它是判断测地线是否为「能量极小」的基本工具。
 
 <h4>第一步：设变分，写能量</h4>
-设 $\Gamma(s,t)$ 是测地线 $\gamma$ 的变分，$V(t)=\left.\frac{\partial\Gamma}{\partial s}\right|_{s=0}$ 是变分场，记 $\nabla=\nabla_{\dot\gamma}$。能量：
+设 \(\Gamma(s,t)\) 是测地线 \(\gamma\) 的变分，\(V(t)=\left.\frac{\partial\Gamma}{\partial s}\right|_{s=0}\) 是变分场，记 \(\nabla=\nabla_{\dot\gamma}\)。能量：
 
 <div class="eq">$$E(\gamma_s)=\int_a^b\Big\langle\frac{\partial\Gamma}{\partial t},\frac{\partial\Gamma}{\partial t}\Big\rangle dt$$</div>
 
 <h4>第二步：一阶变分</h4>
-对 $s$ 求导一次，用无挠性与分部积分：
+对 \(s\) 求导一次，用无挠性与分部积分：
 
 <div class="eq">$$\frac{dE}{ds}=2\int_a^b\Big\langle\nabla_s\frac{\partial\Gamma}{\partial t},\frac{\partial\Gamma}{\partial t}\Big\rangle dt$$</div>
 
-$\gamma$ 是测地线 ⟹ 一阶变分为零（$\gamma$ 是临界点）。
+\(\gamma\) 是测地线 ⟹ 一阶变分为零（\(\gamma\) 是临界点）。
 
 <h4>第三步：二阶变分</h4>
-再对 $s$ 求导，交换协变导数（出现曲率项 $R$），并在 $s=0$ 处取值：
+再对 \(s\) 求导，交换协变导数（出现曲率项 \(R\)），并在 \(s=0\) 处取值：
 
 <div class="keybox">$$\boxed{\delta^2 E(V,V)=\int_a^b\Big(\lvert\nabla_{\dot\gamma}V\rvert^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\Big)dt}$$</div>
 
 <h4>第四步：共轭点 ⟹ 负特征方向</h4>
-若 $\gamma$ 上存在共轭点，则存在非零 Jacobi 场 $V$（两端为零）使 $\delta^2E(V,V)=0$；进一步可构造变分使 $\delta^2E<0$——测地线不再是极小。
+若 \(\gamma\) 上存在共轭点，则存在非零 Jacobi 场 \(V\)（两端为零）使 \(\delta^2E(V,V)=0\)；进一步可构造变分使 \(\delta^2E<0\)——测地线不再是极小。
 
-<div class="memobox"><strong>一句话记忆：</strong>第二变分 = $\int(|V'|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle)$，曲率项是「变负」的根源，共轭点带来负方向。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>第二变分 = \(\int(|V'|^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle)\)，曲率项是「变负」的根源，共轭点带来负方向。</div>`
   },
   "r47": {
     0: L`<h4>这一定理在说什么</h4>
-Morse 指标定理：能量泛函 $E$ 在测地线 $\gamma$ 上的 Morse 指标（负特征值个数）等于沿 $\gamma$ 的共轭点个数（计重数）：
+Morse 指标定理：能量泛函 \(E\) 在测地线 \(\gamma\) 上的 Morse 指标（负特征值个数）等于沿 \(\gamma\) 的共轭点个数（计重数）：
 
 <div class="eq">$$\mathrm{index}(\gamma)=\#\{\text{共轭点（计重数）}\}$$</div>
 
 <h4>第一步：第二变分与 Jacobi 算子</h4>
-第二变分 $\delta^2E(V,V)=\int_a^b\langle LV,V\rangle dt$，其中 Jacobi 算子
+第二变分 \(\delta^2E(V,V)=\int_a^b\langle LV,V\rangle dt\)，其中 Jacobi 算子
 
 <div class="eq">$$L=-\nabla_{\dot\gamma}^2-R(\cdot,\dot\gamma)\dot\gamma$$</div>
 
-是 Sturm–Liouville 型算子。Morse 指标就是 $L$ 的负特征值个数。
+是 Sturm–Liouville 型算子。Morse 指标就是 \(L\) 的负特征值个数。
 
 <h4>第二步：特征值与共轭点对应</h4>
-固定端点 $V(a)=V(b)=0$。$L$ 的特征值 $\lambda_1<\lambda_2<\cdots$ 单调依赖于区间 $[a,b]$。当 $b$ 增大经过一个共轭点时，就有一个特征值从正变负——因为共轭点对应 $LV=0$ 的非零解（零特征值）。
+固定端点 \(V(a)=V(b)=0\)。\(L\) 的特征值 \(\lambda_1<\lambda_2<\cdots\) 单调依赖于区间 \([a,b]\)。当 \(b\) 增大经过一个共轭点时，就有一个特征值从正变负——因为共轭点对应 \(LV=0\) 的非零解（零特征值）。
 
 <h4>第三步：结论</h4>
 
@@ -608,18 +608,18 @@ Morse 指标定理：能量泛函 $E$ 在测地线 $\gamma$ 上的 Morse 指标�
   },
   "r48": {
     0: L`<h4>这一定理在说什么</h4>
-Rauch 比较定理是比较几何的基石：<strong>曲率越大，Jacobi 场增长越慢</strong>。设截面曲率 $K_M\ge K_{\tilde M}$，两条等长单位速度测地线 $\gamma,\tilde\gamma$ 上的 Jacobi 场 $J,\tilde J$ 有相同初值，则
+Rauch 比较定理是比较几何的基石：<strong>曲率越大，Jacobi 场增长越慢</strong>。设截面曲率 \(K_M\ge K_{\tilde M}\)，两条等长单位速度测地线 \(\gamma,\tilde\gamma\) 上的 Jacobi 场 \(J,\tilde J\) 有相同初值，则
 
 <div class="eq">$$\lvert J(t)\rvert\le\lvert\tilde J(t)\rvert$$</div>
 
 <h4>第一步：Jacobi 方程的比较</h4>
-$J$ 满足 $J''+R(J,\dot\gamma)\dot\gamma=0$。曲率大 ⟹ $R$ 大 ⟹ 回复力强 ⟹ 振荡更快、模长更早收缩。
+\(J\) 满足 \(J''+R(J,\dot\gamma)\dot\gamma=0\)。曲率大 ⟹ \(R\) 大 ⟹ 回复力强 ⟹ 振荡更快、模长更早收缩。
 
 <h4>第二步：指标形式的单调性</h4>
-引入指标形式 $I_t(J,J)=\int_0^t(\lvert J'\rvert^2-\langle R(J,\dot\gamma)\dot\gamma,J\rangle)ds$。由于 $K_M\ge K_{\tilde M}$，被积函数里 $-R$ 更小，故指标形式之间有关系，进而推出模长比较。
+引入指标形式 \(I_t(J,J)=\int_0^t(\lvert J'\rvert^2-\langle R(J,\dot\gamma)\dot\gamma,J\rangle)ds\)。由于 \(K_M\ge K_{\tilde M}\)，被积函数里 \(-R\) 更小，故指标形式之间有关系，进而推出模长比较。
 
 <h4>第三步：积分比较</h4>
-对 $f(t)=\lvert J(t)\rvert^2$ 求二阶导，用 Jacobi 方程与初值相同，得到微分不等式，解得：
+对 \(f(t)=\lvert J(t)\rvert^2\) 求二阶导，用 Jacobi 方程与初值相同，得到微分不等式，解得：
 
 <div class="keybox">$$\boxed{K_M\ge K_{\tilde M}\ \Longrightarrow\ \lvert J(t)\rvert\le\lvert\tilde J(t)\rvert}$$</div>
 
@@ -632,10 +632,10 @@ Toponogov 定理把截面曲率下界转化为测地三角形的<strong>角度</
 <div class="eq">$$K\ge c\ \Longrightarrow\ \text{顶角 }\ge\text{ 常曲率 }c\text{ 空间中同边长三角形的对应角}$$</div>
 
 <h4>第一步：构造比较三角形</h4>
-设 $\Delta(p,q,r)$ 是 $M$ 中测地三角形。在常曲率 $c$ 空间 $\widetilde M$ 中构造「同边长」的比较三角形 $\tilde\Delta(\tilde p,\tilde q,\tilde r)$。
+设 \(\Delta(p,q,r)\) 是 \(M\) 中测地三角形。在常曲率 \(c\) 空间 \(\widetilde M\) 中构造「同边长」的比较三角形 \(\tilde\Delta(\tilde p,\tilde q,\tilde r)\)。
 
 <h4>第二步：固定一条边，用 Rauch 比较</h4>
-固定边 $pq$，沿它构造 Jacobi 场 $J$，比较 $M$ 与 $\widetilde M$ 中从同一顶点发出的 Jacobi 场。由 Rauch 定理（$K\ge c$），$M$ 中 Jacobi 场模长 $\le\widetilde M$ 中对应场。
+固定边 \(pq\)，沿它构造 Jacobi 场 \(J\)，比较 \(M\) 与 \(\widetilde M\) 中从同一顶点发出的 Jacobi 场。由 Rauch 定理（\(K\ge c\)），\(M\) 中 Jacobi 场模长 \(\le\widetilde M\) 中对应场。
 
 <h4>第三步：角度比较</h4>
 两边模长与夹角的关系（余弦定理的变分版本）把「模长比较」翻译成「角度比较」，得到：
@@ -646,22 +646,22 @@ Toponogov 定理把截面曲率下界转化为测地三角形的<strong>角度</
   },
   "r50": {
     0: L`<h4>这一定理在说什么</h4>
-Bishop–Gromov 体积比较：Ricci 下界控制测地球体积的增长。若 $\mathrm{Ric}\ge(n-1)c\,g$，则体积比
+Bishop–Gromov 体积比较：Ricci 下界控制测地球体积的增长。若 \(\mathrm{Ric}\ge(n-1)c\,g\)，则体积比
 
 <div class="eq">$$r\mapsto\frac{\mathrm{Vol}(B(p,r))}{V_c(r)}\quad\text{单调非增},\ \le 1,\ \lim_{r\to0}=1$$</div>
 
 <h4>第一步：法坐标下的体积元</h4>
-法坐标下体积元 $dV=A(t,\theta)\,dt\,d\theta$，其中 $A=\det(\text{沿径向测地线的 Jacobi 场行列式})$。
+法坐标下体积元 \(dV=A(t,\theta)\,dt\,d\theta\)，其中 \(A=\det(\text{沿径向测地线的 Jacobi 场行列式})\)。
 
-<h4>第二步：Ricci 下界 ⟹ $A$ 增长受控</h4>
-$A$ 满足的微分不等式由 Ricci 曲率下界控制。设 $A_c$ 是常曲率 $c$ 空间的对应量，则
+<h4>第二步：Ricci 下界 ⟹ \(A\) 增长受控</h4>
+\(A\) 满足的微分不等式由 Ricci 曲率下界控制。设 \(A_c\) 是常曲率 \(c\) 空间的对应量，则
 
 <div class="eq">$$\frac{A(t)}{A_c(t)}\ \text{单调非增}$$</div>
 
 这是核心的「相对体积元单调性」。
 
 <h4>第三步：积分得体积比较</h4>
-对 $\theta$ 积分得到体积比 $\mathrm{Vol}(B(p,r))/V_c(r)$ 单调非增；当 $r\to0$ 时两体积都趋于欧氏小球体积，比值为 $1$：
+对 \(\theta\) 积分得到体积比 \(\mathrm{Vol}(B(p,r))/V_c(r)\) 单调非增；当 \(r\to0\) 时两体积都趋于欧氏小球体积，比值为 \(1\)：
 
 <div class="keybox">$$\boxed{\mathrm{Ric}\ge(n-1)c\ \Longrightarrow\ \frac{\mathrm{Vol}(B(p,r))}{V_c(r)}\ \text{单调非增}\le 1}$$</div>
 
@@ -674,7 +674,7 @@ Bonnet–Myers 定理（直径界版本）：正 Ricci 下界 ⟹ 直径上界 +
 <div class="eq">$$\mathrm{Ric}\ge\frac{n-1}{R^2}g\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R,\quad\pi_1(M)\ \text{有限}$$</div>
 
 <h4>第一步：沿最长测地线构造变分</h4>
-设 $\gamma:[0,L]\to M$ 是最短测地线（$L=\mathrm{diam}$），取平行正交法向量场 $E_1,\dots,E_{n-1}$，构造固定端点的变分场：
+设 \(\gamma:[0,L]\to M\) 是最短测地线（\(L=\mathrm{diam}\)），取平行正交法向量场 \(E_1,\dots,E_{n-1}\)，构造固定端点的变分场：
 
 <div class="eq">$$V_i(t)=\sin\frac{\pi t}{L}E_i(t),\qquad V_i(0)=V_i(L)=0$$</div>
 
@@ -682,19 +682,19 @@ Bonnet–Myers 定理（直径界版本）：正 Ricci 下界 ⟹ 直径上界 +
 
 <div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\Big(\lvert\dot V_i\rvert^2-\langle R(V_i,\dot\gamma)\dot\gamma,V_i\rangle\Big)dt$$</div>
 
-代入并利用 $\sin^2$，得
+代入并利用 \(\sin^2\)，得
 
 <div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{\pi^2}{L^2}-\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle\Big)dt$$</div>
 
 <h4>第三步：求和 + Ricci 下界 ⟹ 直径界</h4>
-$\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}$。若 $L>\pi R$，则 $\sum_i\delta^2E<0$，与最短矛盾：
+\(\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}\)。若 \(L>\pi R\)，则 \(\sum_i\delta^2E<0\)，与最短矛盾：
 
 <div class="keybox">$$\boxed{\mathrm{diam}(M)\le\pi R}$$</div>
 
 <h4>第四步：基本群有限</h4>
-完备 + 直径有界 ⟹ 紧致；万有覆盖保留 Ricci 下界，也紧致 ⟹ $\pi_1(M)$ 有限。
+完备 + 直径有界 ⟹ 紧致；万有覆盖保留 Ricci 下界，也紧致 ⟹ \(\pi_1(M)\) 有限。
 
-<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧，测地线在 $\pi R$ 内被拉回重逢，流形紧致、基本群有限。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧，测地线在 \(\pi R\) 内被拉回重逢，流形紧致、基本群有限。</div>`
   },
   "r52": {
     0: L`<h4>这一定理在说什么</h4>
@@ -703,10 +703,10 @@ Gromov 紧致性定理：曲率、直径、体积有界的流形族在 Gromov–
 <div class="eq">$$\{\lvert K\rvert\le1,\ \mathrm{diam}\le D,\ \mathrm{vol}\ge v>0\}\ \text{GH 预紧}$$</div>
 
 <h4>第一步：构造一致的 ε-网</h4>
-由 Bishop–Gromov 体积比较，曲率有界 + 体积下界给出每个流形可被一致有界个数（$N(\varepsilon)$ 个）的 $\varepsilon$-球覆盖。
+由 Bishop–Gromov 体积比较，曲率有界 + 体积下界给出每个流形可被一致有界个数（\(N(\varepsilon)\) 个）的 \(\varepsilon\)-球覆盖。
 
 <h4>第二步：Gromov 的预紧判别</h4>
-Gromov 证明：一族紧致度量空间若（1）直径一致有界，（2）对任意 $\varepsilon$ 存在一致的 $\varepsilon$-网个数上界，则该族在 GH 拓扑下预紧。
+Gromov 证明：一族紧致度量空间若（1）直径一致有界，（2）对任意 \(\varepsilon\) 存在一致的 \(\varepsilon\)-网个数上界，则该族在 GH 拓扑下预紧。
 
 <h4>第三步：结论</h4>
 
