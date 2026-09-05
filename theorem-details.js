@@ -91,25 +91,184 @@ module.exports = {
     0: "①【思路】第一变分公式：测地线是长度（能量）泛函的临界点。设 Γ(s,t) 是 γ 的光滑变分，V(t)=∂Γ/∂s|_{s=0}。对能量 E(γ)=∫|γ′|²dt 的变分（长度类似，弧长参数下二者一致）计算一阶变分。【计算】δE=d/ds E(γ_s)|_{s=0}=2∫⟨∇_s ∂Γ/∂t, ∂Γ/∂t⟩|_{s=0} dt。②【思路】由无挠性 ∇_s ∂Γ/∂t=∇_t ∂Γ/∂s，交换协变导数，再做分部积分（固定端点 V(a)=V(b)=0）。【推导】δE=2∫⟨∇_t V, γ′⟩dt=2[⟨V,γ′⟩]_a^b−2∫⟨V,∇_t γ′⟩dt=−2∫⟨V,∇_{γ′}γ′⟩dt。③【思路】临界点要求 δE=0 对一切变分 V 成立。由 V 任意（端点为零），积分核必为零。【计算】−2∫⟨V,∇_{γ′}γ′⟩dt=0 ∀V ⟹ ∇_{γ′}γ′=0。④【结论】故能量/长度泛函的临界点正是测地线方程 ∇_{γ′}γ′=0 的解，第一变分公式 δL=−∫⟨V,∇_{γ′}γ′⟩dt（弧长参数）得证。"
   },
   "r28": {
-    0: "①【思路】第一 Bianchi 恒等式是曲率张量的循环对称性。从定义 R(X,Y)Z=∇_X∇_Y Z−∇_Y∇_X Z−∇_{[X,Y]}Z 出发，对三个向量场轮换求和。写出三项之和。【推导】R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=∇_X∇_Y Z−∇_Y∇_X Z−∇_{[X,Y]}Z + (轮换 Y,Z,X) + (轮换 Z,X,Y)。②【思路】把含二阶协变 π 导的六项两两结合：∇_X∇_Y Z−∇_Y∇_X Z=∇_{[X,Y]}Z+[∇_X,∇_Y]Z 中，用无挠性 ∇_X∇_Y Z−∇_Y∇_X Z=∇_{[X,Y]}Z + R(X,Y)Z 的形式累加时，一阶联络项与 −∇_{[X,Y]}Z 逐项消去。③【思路】整理后只剩 Lie 括号所在项，用 Jacobi 恒等式抵消。【计算】∑(R 三项)=∇_{[X,Y]}Z+∇_{[Y,Z]}X+∇_{[Z,X]}Y−∇_{[X,Y]}Z−∇_{[Y,Z]}X−∇_{[Z,X]}Y=0（各含 [·,·] 的项成对相消）。④【结论】R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=0，这是曲率张量关于指标循环的代数恒等式。"
+    0: L`<h4>我们要证明什么</h4>
+第一 Bianchi 恒等式是曲率张量的<strong>代数对称性</strong>——它说曲率张量关于三个向量场做循环求和后为零：
+
+<div class="eq">$$R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=0$$</div>
+
+它不涉及任何微分方程，纯粹是曲率张量定义的一个代数推论，但却是许多后续结论（如截面曲率决定曲率张量、Ricci 的对称性）的根基。
+
+<h4>第一步：写出曲率张量定义</h4>
+回忆曲率张量的定义是协变导数的交换子：
+
+<div class="eq">$$R(X,Y)Z=\nabla_X\nabla_Y Z-\nabla_Y\nabla_X Z-\nabla_{[X,Y]}Z$$</div>
+
+我们现在把这一项一项写出来，并对 X,Y,Z 做循环轮换。
+
+<h4>第二步：写出三项之和</h4>
+对 $(X,Y,Z)$、$(Y,Z,X)$、$(Z,X,Y)$ 三个轮换分别写出定义式并相加。关键观察是：$\nabla_X\nabla_Y Z$ 这类「二阶协变导数」项在轮换求和时会两两抵消，剩下的只有 $\nabla_{[X,Y]}Z$ 这类「交换子项」。
+
+<h4>第三步：用 Jacobi 恒等式消去交换子项</h4>
+剩下的交换子项恰好构成向量场的 Jacobi 恒等式：
+
+<div class="eq">$$[X,[Y,Z]]+[Y,[Z,X]]+[Z,[X,Y]]=0$$</div>
+
+由于 $\nabla$ 无挠，$\nabla_{[X,Y]}Z$ 与 $[X,Y]$ 的这些项也两两抵消。
+
+<div class="keybox">$$\boxed{R(X,Y)Z+R(Y,Z)X+R(Z,X)Y=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>第一 Bianchi 恒等式 = 曲率张量在三个槽位上「轮换求和为零」，本质是交换子的 Jacobi 恒等式。</div>`
   },
   "r29": {
-    0: "①【思路】截面曲率决定曲率张量：K(σ) 是曲率双线性型在二维平面上的“值”，可通过极化恒等式反解出整个 (0,4) 曲率张量。截面曲率定义 K(u,v)=⟨R(u,v)v,u⟩/(|u|²|v|²−⟨u,v⟩²)。【推导】令 g_4(X,Y,Z,W)=⟨R(X,Y)Z,W⟩。②【思路】标准极化技巧：对多重线性型 P，取 P(X+tY) 关于 t 的导数可分离出交叉项。对四元型 g_4，从 K 可恢复全部对称化组合。【计算】⟨R(X,Y)Z,W⟩=(1/6)∂²/∂s∂t|_{s=t=0}[K(X+sZ, Y+tW)(|X+sZ|²|Y+tW|²−⟨X+sZ,Y+tW⟩²) − 类似正负项]。③【思路】R 作为 (0,4) 型张量满足对称性与第一 Bianchi（代数）恒等式；后者的数目恰好使“从二次型 K 恢复张量”可行，即 K 携带的信息无冗余。【结论】故两边截面曲率处处相等 ⟹ 两边曲率张量 g_4 相等 ⟹ 曲率张量相等。"
+    0: L`<h4>这一定理在说什么</h4>
+截面曲率 $K(\sigma)$ 只是曲率张量在<strong>二维平面</strong>上取的一个标量值。乍看之下信息量比整个曲率张量少得多。但定理断言：只要知道<strong>所有</strong>二维平面的截面曲率，就能<strong>唯一还原</strong>整个曲率张量。
+
+<h4>第一步：截面曲率定义</h4>
+对切空间里的二维平面 $\sigma=\mathrm{span}\{u,v\}$，
+
+<div class="eq">$$K(\sigma)=K(u,v)=\frac{\langle R(u,v)v,u\rangle}{|u|^2|v|^2-\langle u,v\rangle^2}$$</div>
+
+<h4>第二步：极化恒等式——从二次型反解双线性型</h4>
+核心是代数里的经典技巧：一个对称双线性型 $B(x,y)$ 可由它的对角值 $B(x,x)$ 通过极化还原：
+
+<div class="eq">$$B(x,y)=\frac{B(x+y,x+y)-B(x-y,x-y)}{4}$$</div>
+
+截面曲率 $K(u,v)$ 是「平面上的值」，对它做类似的极化，就能逐项反解出 (0,4) 型曲率张量 $\langle R(X,Y)Z,W\rangle$ 的<strong>所有</strong>分量。
+
+<h4>第三步：结论</h4>
+因此所有截面的 $K$ 一起完全确定 $R$。
+
+<div class="keybox">$$\boxed{\text{两个流形所有截面曲率相等 }\iff\text{ 曲率张量相等}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>截面曲率是曲率张量的「完全指纹」——知道每个平面的曲率，就知道整个张量。</div>`
   },
   "r30": {
-    0: "①【思路】Schur 引理（n≥3）：截面曲率只依赖点不依赖方向 ⟹ 它是常数。设每点 K(p) 与 σ 无关，则曲率张量有标准形式 R(X,Y)Z=K(p)(⟨Y,Z⟩X−⟨X,Z⟩Y)。【推导】这是“线性空间上满足 Bianchi 的代数曲率张量必为正比例型”的结论。②【思路】对此式取协变导数，用第二 Bianchi 恒等式推出 ∇K=0。记号上 (∇_W R)(X,Y)Z 代入展开。【计算】由第二 Bianchi：(∇_W R)(X,Y)Z+(∇_X R)(Y,W)Z+(∇_Y R)(W,X)Z=0；代入 R=K(⟨Y,Z⟩X−⟨X,Z⟩Y) 并利用度量相容 ∇g=0，得到含 (∇K) 的线性组合。③【思路】n≥3 时这三个方程对 (W,X,Y,Z) 的线性无关性，可解出 ∇_W K=0 对所有 W 成立（关键：需 n≥3 才能选出足够独立的方向）。【计算】具体取三向量两两正交可把系数矩阵化为主对角非零，解得 (W K)·(n−2)=0 ⟹ W K=0。④【结论】∇K=0 + 流形连通 ⟹ K 是常数，故是常曲率空间。n=2 时曲率张量只有 1 个自由度，条件自动满足而 K 不必常数，Schur 引理不成立。"
+    0: L`<h4>这一定理在说什么</h4>
+Schur 引理（$n\ge 3$）：如果截面曲率只依赖于<strong>点</strong> $p$、不依赖于<strong>方向</strong> $\sigma$（即每点都是「各向同性」的），那么它其实连点都不依赖——是个全局常数。这是一个关于「局部各向同性 ⟹ 全局均匀」的刚性结论。
+
+<h4>第一步：把条件翻译成曲率张量形式</h4>
+若 $K$ 与方向无关，则曲率张量在每点有规范形式：
+
+<div class="eq">$$R(X,Y)Z=K(p)\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
+
+这里 $K(p)$ 是只依赖点的函数。
+
+<h4>第二步：取协变导数</h4>
+对两边求协变导数 $\nabla_W$，注意 $g$ 的协变导数为零，于是
+
+<div class="eq">$$(\nabla_W R)(X,Y)Z=(\nabla_W K)\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
+
+<h4>第三步：用第二 Bianchi 恒等式推出 $\nabla K=0$</h4>
+第二 Bianchi 恒等式 $(\nabla_W R)(X,Y)Z+(\nabla_X R)(Y,W)Z+(\nabla_Y R)(W,X)Z=0$ 代入上式，得到关于 $\nabla K$ 的代数方程。当 $n\ge 3$ 时，这个方程的唯一解是：
+
+<div class="keybox">$$\boxed{\nabla K=0\ \Longrightarrow\ K=\text{常数}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>「每点各向同性」＋「Bianchi 恒等式」＝「全局常曲率」（$n\ge 3$）。$n=2$ 时失效，因为二维恒等截面曲率不足够约束。</div>`
   },
   "r31": {
-    0: "①【思路】第二 Bianchi 恒等式是曲率张量协变导数的循环恒等式。写成 ∇_m R^l_ijk+∇_i R^l_jmk+∇_j R^l_mik=0。证明技巧：在法坐标下取某点使 Christoffel 符号在该点为 0，从而协变导数化为普通偏导。（因恒等式是张量的，在一点证明即可）。【推导】在 p 点 Γ=0，∇_m R^l_ijk=∂_m R^l_ijk（p 处）。②【思路】在 Γ=0 点，R^l_ijk=∂_i Γ^l_jk−∂_j Γ^l_ik（ΓΓ 项为零），代入并轮换 m,i,j 求偏导。∂_m R^l_ijk+∂_i R^l_jmk+∂_j R^l_mik，三项中每个 ∂∂Γ 项都成对出现且符号相反。【计算】展开后所有二阶偏导项（如 ∂_m∂_i Γ^l_jk 与 −∂_i∂_m Γ^l_jk）相互抵消，恒为零。③【思路】缩并得收缩的 Bianchi 恒等式：第一类迹 l=k 后对指标 j=m 缩并。【计算】∇^j R_ij=(1/2)∇_i S，即 div(Ric)=(1/2)∇(S)。④【结论】第二 Bianchi 恒等式及其收缩恒等式是曲率张量作为联络曲率（外微分意义）的 Bianchi 恒等式的体现，在 Einstein 方程推导中至关重要。"
+    0: L`<h4>我们要证明什么</h4>
+第二 Bianchi 恒等式是曲率张量<strong>协变导数</strong>的循环恒等式：
+
+<div class="eq">$$\nabla_m R^l{}_{ijk}+\nabla_i R^l{}_{jmk}+\nabla_j R^l{}_{mik}=0$$</div>
+
+它是曲率张量的「微分恒等式」（区别于第一 Bianchi 的「代数恒等式」），是 Einstein 场方程自洽性与能量守恒的几何来源。
+
+<h4>第一步：法坐标简化</h4>
+由于这是张量恒等式，我们只需在一点 $p$ 验证。取 $p$ 处的<strong>法坐标</strong>（测地线坐标），使 Christoffel 符号在 $p$ 为零：$\Gamma^k_{ij}(p)=0$。于是在 $p$ 点协变导数退化为普通偏导：
+
+<div class="eq">$$\nabla_m R^l{}_{ijk}\Big|_p=\partial_m R^l{}_{ijk}\Big|_p$$</div>
+
+<h4>第二步：代入曲率分量并求导</h4>
+回忆 $R^l{}_{ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}+\Gamma^l_{im}\Gamma^m_{jk}-\Gamma^l_{jm}\Gamma^m_{ik}$。在 $p$ 点 $\Gamma=0$，故
+
+<div class="eq">$$R^l{}_{ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}\quad(\text{在 }p)$$</div>
+
+对 $m$ 求偏导并做轮换，$\partial_m\partial_i\Gamma^l_{jk}$ 这类项两两抵消，恰好得到零。
+
+<div class="keybox">$$\boxed{\nabla_m R^l{}_{ijk}+\nabla_i R^l{}_{jmk}+\nabla_j R^l{}_{mik}=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>第二 Bianchi = 曲率的「协变导数轮换求和为零」，在法坐标下退化为偏导轮换抵消。</div>`
   },
   "r32": {
-    0: "①【思路】Weyl 张量在共形变换下“按尺度协变”：g′=e^{2f}g 时 W′=e^{2f}W（无指标契约版本 W 的各分量乘 e^{2f}）。先写出共形变换下 Christoffel 符号的变换。【计算】Γ′^k_ij=Γ^k_ij+δ^k_i ∂_j f+δ^k_j ∂_i f−g_ij g^{kl} ∂_l f。②【思路】代入曲率张量公式，Ricci 与标量曲率的变换会很复杂（含 ∇f、∇²f、|∇f|² 项）。Weyl 的构造是：把这些量的组合设计成“使所有含 f 的项抵消”。【推导】W^l_ijk=R^l_ijk−{1/(n−2)}(δ^l_i R_jk−δ^l_j R_ik+g_jk R^l_i−g_ik R^l_j)+{S/(n−1)(n−2)}(δ^l_i g_jk−δ^l_j g_ik)。③【思路】验证 W′=e^{2f}W（另一形式），关键是 n≥4 时组合项恰好抵消 ∇f 类项；n=3 时 Weyl 张量恒为零（曲率由 Ricci 全决定），n=2 时 Weyl 不定义。【结论】W=0 当且仅当度量局部共形平坦（n≥4），Weyl 是共形几何的核心不变量。"
+    0: L`<h4>这一定理在说什么</h4>
+Weyl 张量 $W$ 是曲率张量里「去掉 Ricci 信息后的纯共形部分」。定理给出它在共形变换下的变换规律，并刻画共形平坦。
+
+<h4>第一步：共形变换下 Christoffel 的变化</h4>
+设 $g'=e^{2f}g$，则 Christoffel 符号变换为：
+
+<div class="eq">$$\Gamma'^k_{ij}=\Gamma^k_{ij}+\delta^k_i\partial_j f+\delta^k_j\partial_i f-g_{ij}g^{kl}\partial_l f$$</div>
+
+<h4>第二步：曲率张量的共形变换</h4>
+代入曲率公式，得到黎曼张量在共形变换下分「旧曲率 + Ricci 项 + Hessian 项」的复杂表达式。关键是：把这些项里「可被 Ricci 和标量曲率表达」的部分<strong>剥离</strong>后，剩下的部分 $W$ 满足最简单的变换律：
+
+<div class="keybox">$$\boxed{W'=e^{2f}W}$$</div>
+
+<h4>第三步：共形平坦的判据</h4>
+$W=0$ 意味着度量可以（局部）通过共形变换变平。$n\ge 4$ 时：
+
+<div class="warnbox">$W=0\iff$ 度量<strong>共形平坦</strong>（局部共形于欧氏度量）。</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Weyl 张量是「共形不变的纯弯曲」，$W'=e^{2f}W$；$W=0$ 即共形平坦（$n\ge4$）。</div>`
   },
   "r33": {
-    0: "①【思路】Ricci 恒等式是曲率张量的等价定义：协变导数的不可交换性由 R 度量。对向量场 X^k 计算 ∇_i∇_j X^k−∇_j∇_i X^k。【计算】∇_i X^k=∂_i X^k+Γ^k_il X^l。再求 ∇_j（注意是 (1,1) 张量，含上标联络与下标联络两项），得 ∇_j∇_i X^k=∂_j∂_i X^k+∂_j(Γ^k_il X^l)+Γ^k_jm ∂_i X^m+Γ^k_jm Γ^m_il X^l−Γ^m_ji ∂_m X^k−Γ^m_ji Γ^k_ml X^l。②【思路】交换 i,j 相减。∂_j∂_i X^k 与 ∂_i∂_j X^k 相消；一阶项 ∂_j(Γ^k_il X^l) 与 ∂_i(Γ^k_jl X^l) 之差留在 ∂Γ 导数项里；Γ∂X 项由下标对称性（Γ^m_ji=Γ^m_ij 无挠）抵消。③【思路】整理剩余的 ∂Γ 和 ΓΓ 项，恰好就是曲率张量分量。【计算】∇_i∇_j X^k−∇_j∇_i X^k=(∂_i Γ^k_jl−∂_j Γ^k_il+Γ^m_jl Γ^k_im−Γ^m_il Γ^k_jm)X^l=R^k_lij X^l。④【结论】R^k_lij=∂_i Γ^k_jl−∂_j Γ^k_il+Γ^m_jl Γ^k_im−Γ^m_il Γ^k_jm，曲率张量刻画协变导数交换子，是其第二种等价定义。"
+    0: L`<h4>我们要证明什么</h4>
+Ricci 恒等式给出协变导数交换子与曲率张量的关系：
+
+<div class="eq">$$\nabla_i\nabla_j X^k-\nabla_j\nabla_i X^k=R^k{}_{lij}X^l$$</div>
+
+它其实是曲率张量的<strong>另一个等价定义</strong>——「协变导数不可交换的程度由 $R$ 度量」。
+
+<h4>第一步：写出一次协变导数</h4>
+
+<div class="eq">$$\nabla_i X^k=\partial_i X^k+\Gamma^k_{il}X^l$$</div>
+
+<h4>第二步：求二次协变导数</h4>
+注意 $\nabla_i X^k$ 是 (1,1) 型张量，再求 $\nabla_j$ 时上标、下标都要带联络项：
+
+<div class="eq">$$\nabla_j\nabla_i X^k=\partial_j(\partial_i X^k+\Gamma^k_{il}X^l)+\Gamma^k_{jm}(\partial_i X^m+\Gamma^m_{il}X^l)-\Gamma^m_{ji}(\partial_m X^k+\Gamma^k_{ml}X^l)$$</div>
+
+<h4>第三步：交换 $i,j$ 相减</h4>
+$\partial_j\partial_i X^k$ 与 $\partial_i\partial_j X^k$ 抵消（普通偏导可交换），剩下的项整理为 $(\partial_i\Gamma^k_{jl}-\partial_j\Gamma^k_{il}+\Gamma^k_{im}\Gamma^m_{jl}-\Gamma^k_{jm}\Gamma^m_{il})X^l$，正是曲率分量 $R^k{}_{lij}X^l$。
+
+<div class="keybox">$$\boxed{\nabla_i\nabla_j X^k-\nabla_j\nabla_i X^k=R^k{}_{lij}X^l}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Ricci 恒等式 = 协变导数交换子 = 曲率张量作用在向量上。</div>`
   },
   "r34": {
-    0: "①【思路】Bonnet–Myers：Ric≥(n−1)/R²·g ⟹ diam≤πR 且基本群有限。设 γ:[0,L]→M 是最短测地线（弧长参数），沿 γ 取平行标准正交法向量场 E_1,…,E_{n−1}。【推导】E_i 满足 ∇_{γ′}E_i=0、⟨E_i,γ′⟩=0、⟨E_i,E_j⟩=δ_ij。②【思路】构造变分向量场 V_i(t)=sin(πt/L)E_i(t)，端点 V_i(0)=V_i(L)=0，故是合法的固定端点变分。代入第二变分公式 δ²E(V,V)=∫₀^L (|∇_{γ′}V|²−⟨R(V,γ′)γ′,V⟩)dt。【计算】对 V_i：|∇_{γ′}V_i|²=|(π/L)cos(πt/L)E_i|²=(π²/L²)cos²(πt/L)，⟨R(V_i,γ′)γ′,V_i⟩=sin²(πt/L)⟨R(E_i,γ′)γ′,E_i⟩。③【思路】对 i=1,…,n−1 求和：Σ⟨R(E_i,γ′)γ′,E_i⟩=Ric(γ′,γ′)≥(n−1)/R²（Ricci 下界，利用 γ′ 单位、E_i 完备正交）。【计算】Σ_i δ²E(V_i,V_i)=∫₀^L [(n−1)(π²/L²)cos²(πt/L)−sin²(πt/L)Ric(γ′,γ′)]dt ≤∫₀^L sin²(πt/L)·[(n−1)(π²/L²)·cot²…] 化简：=(n−1)[π²/L² − 1/R²]·(L/2)。④【思路】γ 最短 ⟹ 对一切变分 Σδ²E(V_i,V_i)≥0（二阶条件）。故需 (n−1)(π²/L²−1/R²)·(L/2)≥0 ⟹ π²/L²≥1/R² ⟹ L≤πR。【结论】直径≤πR；万有覆盖带上 Ric 下界同样成立且紧致，基本群（有限群作用）有限。"
+    0: L`<h4>这一定理在说什么</h4>
+Bonnet–Myers 定理是「曲率控制拓扑」的经典结果：正的下界 Ricci 曲率 ⟹ 流形有界、紧致，且基本群有限。
+
+<div class="eq">$$\mathrm{Ric}\ge\frac{n-1}{R^2}\,g\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R,\quad \pi_1(M)\text{ 有限}$$</div>
+
+<h4>第一步：沿最短测地线构造变分场</h4>
+设 $\gamma:[0,L]\to M$ 是最短测地线（弧长参数，$L=\mathrm{dist}(p,q)$）。取沿 $\gamma$ 平行的正交标架 $E_1,\dots,E_{n-1}$（$\nabla_{\dot\gamma}E_i=0$），构造变分场：
+
+<div class="eq">$$V_i(t)=\sin\frac{\pi t}{L}\,E_i(t)$$</div>
+
+它在端点为零（$V_i(0)=V_i(L)=0$）。
+
+<h4>第二步：第二变分公式</h4>
+对每个 $i$，能量泛函的第二变分：
+
+<div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\Big(|\dot V_i|^2-\langle R(V_i,\dot\gamma)\dot\gamma,V_i\rangle\Big)dt$$</div>
+
+代入 $V_i=\sin(\pi t/L)E_i$，计算得
+
+<div class="eq">$$\delta^2E(V_i,V_i)=\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{\pi^2}{L^2}-\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle\Big)dt$$</div>
+
+<h4>第三步：对所有 $i$ 求和，用 Ricci 下界</h4>
+$\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\dot\gamma)\ge\frac{n-1}{R^2}$，故
+
+<div class="eq">$$\sum_i\delta^2E(V_i,V_i)\le\int_0^L\sin^2\frac{\pi t}{L}\Big(\frac{n-1}{L^2}-\frac{n-1}{R^2}\Big)dt$$</div>
+
+若 $L>\pi R$，则括号内为负，$\sum_i\delta^2E<0$，与 $\gamma$ 最短矛盾。
+
+<div class="keybox">$$\boxed{L\le\pi R\ \Longrightarrow\ \mathrm{diam}(M)\le\pi R}$$</div>
+
+<h4>第四步：基本群有限</h4>
+完备性 + 直径有界 ⟹ 紧致。对万有覆盖用同样的 Ricci 下界（覆盖映射保 Ricci），万有覆盖也紧致，故 $\pi_1(M)$ 有限。
+
+<div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧拉回，迫使测地线在 $\pi R$ 内重逢，流形被「箍」成一个有限紧致体。</div>`
   },
   "r35": {
     0: "①【思路】Gauss 公式把外围联络沿子流形分解为“切向 + 法向”。设 M^n⊂N 为子流形，X,Y 切于 M。取 N 的 Levi-Civita 联络 ∇^N，把它在 M 上的作用按切/法分解。【推导】∇^N_X Y=(∇^N_X Y)^⊤+(∇^N_X Y)^⊥，分别记为 ∇^M_X Y 与 II(X,Y)。②【思路】证切向分量就是 M 的 Levi-Civita 联络：验证其无挠、度量相容。无挠：无挠性 ∇^N_X Y−∇^N_Y X=[X,Y]，而 [X,Y] 切于 M，故切向分量之差=[X,Y]，即 ∇^M 无挠。度量相容：X⟨Y,Z⟩=⟨∇^N_X Y,Z⟩+⟨Y,∇^N_X Z⟩，Z 切于 M 时 ⟨·,Z⟩ 只取切分量，故 X⟨Y,Z⟩=⟨∇^M_X Y,Z⟩+⟨Y,∇^M_X Z⟩。【推导】由 Levi-Civita 唯一性，切向分量正是 ∇^M。③【思路】法向分量 II(X,Y)=(∇^N_X Y)^⊥ 称为第二基本形式，证其对称。【计算】II(X,Y)−II(Y,X)=(∇^N_X Y−∇^N_Y X)^⊥=[X,Y]^⊥=0（因 X,Y 切于 M ⟹ [X,Y] 切于 M）。④【结论】Gauss 公式 ∇^N_X Y=∇^M_X Y+II(X,Y) 成立，II 是对称的法向张量。"
