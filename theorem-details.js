@@ -376,16 +376,95 @@ $\Delta\mathrm{II}$ 通过 Codazzi 方程（协变导数对称）与 Gauss 方�
 <div class="memobox"><strong>一句话记忆：</strong>Simons 不等式 = Bochner 技巧 + Gauss–Codazzi 应用到极小子流形，控制 $\lvert\mathrm{II}\rvert^2$ 推出刚性。</div>`
   },
   "r40": {
-    0: "①【思路】局部 Gauss–Bonnet：曲面区域 Ω（边界 ∂Ω 分段光滑，内角 α_i）上 ∫_Ω K dA+∫_{∂Ω} κ_g ds+Σ(π−α_i)=2πχ(Ω)。用活动标架与 Stokes 定理。取正交活动标架 {e₁,e₂}，联络 1-形式 ω¹₂ 满足结构方程 【推导】dω¹₂=−K dA。②【思路】由 Stokes 定理把面积分化为边界积分。【计算】∫_Ω K dA=−∫_Ω dω¹₂=−∫_{∂Ω} ω¹₂。③【思路】在边界上，ω¹₂ 与测地曲率 κ_g 的关系：沿 ∂Ω 的弧长参数，ω¹₂(e₃)=κ_g（e₃ 为切向），故 −∫_{∂Ω} ω¹₂=∫_{∂Ω} κ_g ds 加上“角点处方向跳变”的贡献。【计算】角点 α_i 处标架旋转 π−α_i，贡献 Σ(π−α_i)。④【结论】整理得 ∫_Ω K dA+∫_{∂Ω} κ_g ds+Σ(π−α_i)=2πχ(Ω)，这是局部（带边）的 Gauss–Bonnet。"
+    0: L`<h4>我们要证明什么</h4>
+局部 Gauss–Bonnet 定理把曲面上区域 $\Omega$ 的总曲率、边界测地曲率积分、以及角盈（顶点外角之和）三者打包成一个拓扑量：
+
+<div class="eq">$$\int_\Omega K\,dA+\int_{\partial\Omega}\kappa_g\,ds+\sum_i(\pi-\alpha_i)=2\pi\chi(\Omega)$$</div>
+
+<h4>第一步：用活动标架与 Stokes 定理</h4>
+取正交活动标架 $\{e_1,e_2\}$，设联络 1-形式为 $\omega^1{}_2$。由结构方程：
+
+<div class="eq">$$d\omega^1{}_2=-K\,dA$$</div>
+
+<h4>第二步：对区域 $\Omega$ 用 Stokes 定理</h4>
+
+<div class="eq">$$\int_\Omega K\,dA=-\int_\Omega d\omega^1{}_2=-\int_{\partial\Omega}\omega^1{}_2$$</div>
+
+<h4>第三步：边界项 = 测地曲率 + 角盈</h4>
+边界 $\partial\Omega$ 分段光滑，在每个光滑弧段上 $\omega^1{}_2$ 沿边界的积分恰好是测地曲率 $\int\kappa_g\,ds$；在每个角点处，标架转过一个外角 $(\pi-\alpha_i)$。于是：
+
+<div class="keybox">$$\boxed{\int_\Omega K\,dA+\int_{\partial\Omega}\kappa_g\,ds+\sum_i(\pi-\alpha_i)=2\pi\chi(\Omega)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>局部 Gauss–Bonnet = 曲率积分 + 边界测地曲率 + 角盈 = 拓扑量 $2\pi\chi$，核心是 Stokes 定理。</div>`
   },
   "r41": {
-    0: "①【思路】全局 Gauss–Bonnet（M 紧致定向无边）是局部公式对整个 M 求和。把 M 三角剖分为测地三角形 Δ_i（每条边为测地线，κ_g=0）。【推导】对每个 Δ_i 用局部公式：∫_{Δ_i} K dA+Σ_{顶点}(π−α)=2π（测地边无边界项，χ(Δ)=1）。②【思路】对所有三角形求和。内部边被两三角形以相反方向共享，测地曲率贡献相消（κ_g=0 本无贡献，方向函数项相消）；顶点角度：每个顶点周围内角之和=2π。【计算】∫_M K dA=Σ[2π−Σ_{顶点}(π−α_ij)]=2πF−πV−Σ(π−α) 整理：每个顶点贡献 Σ内角=2π，故 Σ_{i,j}(π−α_ij)=πV−2πV=−πV。③【思路】组合关系：每条边属于两个面、每个面三条边，3F=2E。代入 Euler 示性数。【计算】∫_M K dA=2πF−πV=2π(F−V/2)；因 3F=2E ⟹ F=2E/3，且 χ=V−E+F=V−E+2E/3=V−E/3。验证 V−E/3=V−E+F=χ（因 F=2E/3 ⟹ 3F=2E），故 ∫_M K dA=2π(F−V/2)=2π(F+E−V)=2πχ。④【结论】∫_M K dA=2πχ(M)，总曲率是拓扑不变量。"
+    0: L`<h4>我们要证明什么</h4>
+全局 Gauss–Bonnet 定理：紧致定向无边曲面 $M$ 的总曲率由拓扑决定：
+
+<div class="eq">$$\int_M K\,dA=2\pi\chi(M)$$</div>
+
+<h4>第一步：三角剖分</h4>
+把 $M$ 三角剖分为测地三角形 $\Delta_i$（每条边都是测地线，故 $\kappa_g=0$）。对每个 $\Delta_i$ 用局部 Gauss–Bonnet：
+
+<div class="eq">$$\int_{\Delta_i}K\,dA+\sum_{\text{顶点}}(\pi-\alpha)=2\pi$$</div>
+
+<h4>第二步：对所有三角形求和</h4>
+曲率积分相加得 $\int_M K\,dA$。角盈项 $\sum(\pi-\alpha)$ 在内部顶点处凑成 $2\pi$、在边上的顶点两两抵消。整体上：
+
+<div class="eq">$$\int_M K\,dA+2\pi V-\sum\alpha=2\pi F$$</div>
+
+<h4>第三步：用 Euler 公式</h4>
+每个顶点处内角之和 $=2\pi$，每条边属于两个三角形，每个三角形贡献 $\pi$。整理后恰好得到 $\chi(M)=V-E+F$：
+
+<div class="keybox">$$\boxed{\int_M K\,dA=2\pi\chi(M)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>把局部 Gauss–Bonnet 对三角剖分求和，角盈凑成 Euler 示性数，得全局公式 $\int K=2\pi\chi$。</div>`
   },
   "r42": {
-    0: "①【思路】Chern–Gauss–Bonnet（二维即经典 GB）：紧致可定向偶维流形 M^{2n} 上 ∫_M Pf(Ω)=(2π)^n χ(M)。核心是 Chern 的“超渡构造”。在 M 的单位球丛 SM 上构造 (2n−1)-形式 Π。【推导】Π 是曲率形式 Ω 在球丛上的某种组合，满足 dΠ=π*Pf(Ω)，其中 π:SM→M 是投影。②【思路】用 Stokes 定理把 M 上积分升到球丛再回落到边界。【计算】∫_M Pf(Ω)=∫_{SM} dΠ。此处用“取一个处处横截的单位向量场 e 使 e(M) 成为 SM 的截面，其补集的边界对应奇点集”。③【思路】在二维，Pfaffian 退化为 Pf(Ω)=K dA/(2π)，从而 ∫ Pf(Ω)=∫K dA/2π=χ(M) 即经典 GB。高维 Pf(Ω) 是曲率形式的组合，dΠ=Pf 的可积性由 Bianchi 恒等式保证。【推导】切断面（零点集对应向量场奇点），∫_{SM}dΠ 化为奇点指标之和=Euler 数。④【结论】∫_M Pf(Ω)=(2π)^n χ(M)，把 Gauss–Bonnet 推广到任意偶维。"
+    0: L`<h4>这一定理在说什么</h4>
+Chern–Gauss–Bonnet 定理把 Gauss–Bonnet 推广到任意偶维 $2n$：
+
+<div class="eq">$$\int_M \mathrm{Pf}(\Omega)=(2\pi)^n\,\chi(M)$$</div>
+
+其中 $\mathrm{Pf}(\Omega)$ 是曲率 2-形式 $\Omega$ 的 Pfaffian——一个 $2n$-形式，是 Gauss 曲率在偶维的推广。
+
+<h4>第一步：曲率形式的 Pfaffian</h4>
+在正交标架下，曲率 2-形式 $\Omega^i{}_j$ 是反对称矩阵值 2-形式。Pfaffian $\mathrm{Pf}(\Omega)$ 是它的一个「组合不变量」：
+
+<div class="eq">$$n=2:\ \mathrm{Pf}(\Omega)=\frac{1}{2\pi}K\,dA$$</div>
+
+<h4>第二步：Chern 的超渡构造</h4>
+Chern 在单位球丛 $SM$ 上构造了一个 $(2n-1)$-形式 $\Pi$，满足
+
+<div class="eq">$$d\Pi=\pi^*\mathrm{Pf}(\Omega)$$</div>
+
+即 $\mathrm{Pf}(\Omega)$ 是 $\Pi$ 的「外微分」（拉回到球丛后）。这使积分 $\int_M\mathrm{Pf}(\Omega)$ 成为一个拓扑不变量。
+
+<h4>第三步：Stokes 定理 + 球面纤维</h4>
+球丛纤维 $S^{2n-1}$ 的 Euler 类积分贡献 $(2\pi)^n$，最终：
+
+<div class="keybox">$$\boxed{\int_M\mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Chern 用「超渡形式 + 球丛」把 Gauss 曲率推广成 Pfaffian，积分恒等于 Euler 示性数。</div>`
   },
   "r43": {
-    0: "①【思路】高维 Chern–Gauss–Bonnet 定理陈述：对紧致可定向偶维 Riem(m) 流形 M^{2n}，∫_M Pf(Ω)=(2π)^n χ(M)。方法的骨架与二维一致：球丛上的超渡形式 + Stokes。【推导】在单位球丛 SM 上构造 (2n−1)-形式 Π 使 dΠ=π*Pf(Ω)。②【思路】二维：Pf(Ω)=K dA/(2π)（Pfaffian=R_{12}/(2π)）。四维显式：由曲率 2-形式 Ω^a_b、Ω^b_a 反对称。【计算】Pf(Ω)=(1/32π²) ε^{abcd} R^ab∧R^cd（四维），其中 R^ab 是曲率 2-形式。③【思路】验证 Pf 是闭形式（由 Bianchi 恒等式 d^∇Ω=0 ⟹ ε^{abcd} 组合下 d(Pf)=0），故定义上同调类，且恰等于 Euler 类。【推导】Euler 类 e(M) 与 χ(M) 的关系由障碍理论给出：e(M)⌢[M]=χ(M)。④【结论】∫_M Pf(Ω)=(2π)^n χ(M)，二维退化为 ∫K dA=2πχ，四维为 ∫Pf=4π²χ 的相应形式。"
+    0: L`<h4>这一定理在说什么</h4>
+Chern 把 Gauss–Bonnet 推广到高维偶维流形 $M^{2n}$：
+
+<div class="eq">$$\int_M \mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)$$</div>
+
+<h4>第一步：方法的骨架（与二维一致）</h4>
+二维时用「联络形式 + Stokes」；高维时同样：在单位球丛 $SM$ 上构造 $(2n-1)$-形式 $\Pi$ 满足 $d\Pi=\pi^*\mathrm{Pf}(\Omega)$。
+
+<h4>第二步：Pfaffian 是 Gauss 曲率的推广</h4>
+$\mathrm{Pf}(\Omega)$ 是曲率形式的外积组合，$n=1$ 时退化为 $\frac{1}{2\pi}K\,dA$，$n=2$ 时涉及曲率张量的二次组合（含 Weyl 项）。
+
+<h4>第三步：积分 = 拓扑量</h4>
+Stokes 定理把 $\int_M\mathrm{Pf}(\Omega)$ 化为球丛边界上的积分，球纤维的 Euler 类给出 $(2\pi)^n$：
+
+<div class="keybox">$$\boxed{\int_M\mathrm{Pf}(\Omega)=(2\pi)^n\chi(M)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>高维 Chern–Gauss–Bonnet：曲率形式的 Pfaffian 积分 = 拓扑量 $(2\pi)^n\chi$，是二维公式的偶维推广。</div>`
   },
   "r44": {
     0: L`<h4>我们要证明什么</h4>
