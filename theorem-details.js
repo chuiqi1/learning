@@ -6,6 +6,8 @@
 // 数学用 ^ / _ 记法，构建时自动转成上下标（张量指标自动上下堆叠）。
 // ============================================================
 
+const L = String.raw;
+
 module.exports = {
   "r1": {
     0: "①【思路】目标是证唯一性：给定曲率 κ(s)，曲线由 Frenet 标架唯一确定。弧长参数下单位切向量 T=γ′，法向量 N 由 T 逆时针转 90° 得到。先写出完备的 Frenet 方程组。【推导】dT/ds=κ N，dN/ds=−κ T。②【思路】把 (T,N) 拼成一个 2×2 矩阵函数 A(s)，上面两个方程等价于一个线性常微分系统，系数由 κ(s) 完全决定。【推导】令 A=[T N]（T、N 各为一列），则 dA/ds=A·M(s)，其中 M(s)=[[0,−κ],[κ,0]]。③【思路】这类线性系统 dA/ds=A·M 满足 Picard–Lindelöf 存在唯一性定理：给定初值 A(0)（即初始切向与法向），解唯一。【结论】故给定 κ 与初始位置 γ(0)、初始标架，切向量 T 唯一，再由 γ(s)=γ(0)+∫₀^s T(u)du 恢复曲线。初始位置的差异即平移、初始标架的差异即旋转——恰为刚体运动，故曲线差刚体运动唯一。"
@@ -137,10 +139,92 @@ module.exports = {
     0: "①【思路】高维 Chern–Gauss–Bonnet 定理陈述：对紧致可定向偶维 Riem(m) 流形 M^{2n}，∫_M Pf(Ω)=(2π)^n χ(M)。方法的骨架与二维一致：球丛上的超渡形式 + Stokes。【推导】在单位球丛 SM 上构造 (2n−1)-形式 Π 使 dΠ=π*Pf(Ω)。②【思路】二维：Pf(Ω)=K dA/(2π)（Pfaffian=R_{12}/(2π)）。四维显式：由曲率 2-形式 Ω^a_b、Ω^b_a 反对称。【计算】Pf(Ω)=(1/32π²) ε^{abcd} R^ab∧R^cd（四维），其中 R^ab 是曲率 2-形式。③【思路】验证 Pf 是闭形式（由 Bianchi 恒等式 d^∇Ω=0 ⟹ ε^{abcd} 组合下 d(Pf)=0），故定义上同调类，且恰等于 Euler 类。【推导】Euler 类 e(M) 与 χ(M) 的关系由障碍理论给出：e(M)⌢[M]=χ(M)。④【结论】∫_M Pf(Ω)=(2π)^n χ(M)，二维退化为 ∫K dA=2πχ，四维为 ∫Pf=4π²χ 的相应形式。"
   },
   "r44": {
-    0: "①【思路】Jacobi 方程描述“相邻测地线的偏离”。设 Γ(s,t) 是测地线变分（每个 s 的 Γ(s,·) 都是测地线），记 ∂Γ/∂t=横截场、∂Γ/∂s=变分场 J。核心从测地线条件 ∇_t ∂Γ/∂t=0 出发，对 s 求导。【推导】0=∇_s∇_t ∂Γ/∂t。②【思路】用无挠性交换协变导数：∇_s∇_t X−∇_t∇_s X=R(∂Γ/∂s,∂Γ/∂t)X。取 X=∂Γ/∂t。【计算】∇_s∇_t ∂Γ/∂t=∇_t∇_s ∂Γ/∂t+R(∂Γ/∂s,∂Γ/∂t)∂Γ/∂t。③【思路】再次用无挠性 ∇_s∂Γ/∂t=∇_t∂Γ/∂s，故 ∇_s∇_t ∂Γ/∂t=∇_t∇_t ∂Γ/∂s+R(∂Γ/∂s,∂Γ/∂t)∂Γ/∂t。带回原式。【计算】0=∇_t∇_t ∂Γ/∂s+R(∂Γ/∂s,∂Γ/∂t)∂Γ/∂t。④【思路】在 s=0 处，∂Γ/∂s=J、∂Γ/∂t=γ′，得 Jacobi 方程。【结论】∇_{γ′}∇_{γ′}J+R(J,γ′)γ′=0，即 J″+R(J,γ′)γ′=0。"
+    0: L`<h4>我们要证明什么</h4>
+Jacobi 方程刻画的是<strong>相邻测地线的一阶分离</strong>。设 γ 是一条测地线，考虑一族测地线 Γ(s,t)：对每个固定的 s，曲线 t↦Γ(s,t) 都是测地线，且 Γ(0,t)=γ(t)。这一族测地线相对 γ 的“分离速度”就是变分场
+
+<div class="eq">$$J(t)=\left.\frac{\partial\Gamma}{\partial s}\right|_{s=0}$$</div>
+
+下面从“测地线”这一个条件出发，推导 J 必须满足的二阶方程。
+
+<h4>第一步：测地线条件</h4>
+对每个 s，Γ(s,·) 是测地线，意味着横截场 ∂Γ/∂t 沿 t 方向平行：
+
+<div class="eq">$$\nabla_t\frac{\partial\Gamma}{\partial t}=0$$</div>
+
+<strong>关键想法：</strong>把这个恒等式对 s 求导，把“测地线”这一几何条件翻译成关于 J 的方程。
+
+<h4>第二步：对 s 求导，交换协变导数</h4>
+对 s 求协变导数得
+
+<div class="eq">$$0=\nabla_s\nabla_t\frac{\partial\Gamma}{\partial t}$$</div>
+
+协变导数交换的“代价”是曲率张量（这就是曲率第一次进入推导的地方）：
+
+<div class="eq">$$\nabla_s\nabla_t X-\nabla_t\nabla_s X=R\left(\frac{\partial\Gamma}{\partial s},\frac{\partial\Gamma}{\partial t}\right)X$$</div>
+
+取 \(X=\partial\Gamma/\partial t\)，得到
+
+<div class="eq">$$\nabla_s\nabla_t\frac{\partial\Gamma}{\partial t}=\nabla_t\nabla_s\frac{\partial\Gamma}{\partial t}+R\left(\frac{\partial\Gamma}{\partial s},\frac{\partial\Gamma}{\partial t}\right)\frac{\partial\Gamma}{\partial t}$$</div>
+
+<h4>第三步：再用一次无挠性</h4>
+Levi-Civita 联络无挠，所以偏导可交换：
+
+<div class="eq">$$\nabla_s\frac{\partial\Gamma}{\partial t}=\nabla_t\frac{\partial\Gamma}{\partial s}$$</div>
+
+代回上一式，并利用第一步的 0：
+
+<div class="eq">$$0=\nabla_t\nabla_t\frac{\partial\Gamma}{\partial s}+R\left(\frac{\partial\Gamma}{\partial s},\frac{\partial\Gamma}{\partial t}\right)\frac{\partial\Gamma}{\partial t}$$</div>
+
+<h4>第四步：令 s=0</h4>
+在 s=0 处，\(\partial\Gamma/\partial s=J\)、\(\partial\Gamma/\partial t=\dot\gamma\)，于是得到
+
+<div class="keybox">$$\boxed{\;\nabla_{\dot\gamma}\nabla_{\dot\gamma}J+R(J,\dot\gamma)\dot\gamma=0\;}$$</div>
+
+这就是 <strong>Jacobi 方程</strong>。在平行标架下，它写成二阶线性常微分方程
+
+<div class="eq">$$J''+R(J,\dot\gamma)\dot\gamma=0$$</div>
+
+其中 \(J'=\nabla_{\dot\gamma}J\)。
+
+<div class="memobox"><strong>一句话记忆：</strong>测地线族的一阶分离，被“曲率项 \(R(J,\dot\gamma)\dot\gamma\)”这个线性回复力所控制——曲率通过 Jacobi 方程决定测地线是会聚还是发散。</div>`
   },
   "r45": {
-    0: "①【思路】共轭点定理：第一个共轭点之后测地线不再最短。若 γ(b) 是 γ(a) 的第一个共轭点，则存在非零 Jacobi 场 J，J(a)=J(b)=0。【推导】由共轭点定义，存在这样的 J（首次出现共轭时该 J 唯一到比例）。②【思路】把 J 沿整条 γ 扩展成变分场：在 [a,b] 上取 J，在 (b,b+ε] 上接一段光滑截断（端点仍固定），构造使第二变分变负的变分。先看在 [a,b] 上第二变分。【计算】J 是 Jacobi 场且 J(a)=J(b)=0 ⟹ δ²E_{[a,b]}(J,J)=0（Jacobi 场的第二变分恒为零，因满足 Euler 方程）。③【思路】在 (b,b+ε] 上，任取平行移动并乘光滑截断函数 η，得到 V_ε 使在 [b,b+ε] 上 δ²E<0（因为 J 在 b 处导数非零，可构造负贡献）。【计算】把 [a,b] 与 [b,b+ε] 的两段变分拼接，端点 a、b+ε 固定，整体 δ²E=0+δ²E_{[b,b+ε]}(负)<0。④【结论】存在比 γ 更短的从 γ(a) 到 γ(b+ε) 的道路，故 γ 在过第一个共轭点后不再最短；在第一个共轭点之前仍最短。"
+    0: L`<h4>这一定理在说什么</h4>
+共轭点是“测地线丧失最短性”的第一个信号：在第一个共轭点 <strong>之前</strong>，测地线仍是连接两端的最短路径；一旦 <strong>越过</strong> 第一个共轭点，就存在更短的路径。证明分“之前仍最短”和“之后不再最短”两步。
+
+<h4>先回顾共轭点的定义</h4>
+点 \(q=\gamma(b)\) 是 \(p=\gamma(a)\) 沿 γ 的共轭点，当且仅当存在<strong>非零</strong> Jacobi 场 J 满足
+
+<div class="eq">$$J(a)=J(b)=0$$</div>
+
+这种“两端为零的非零 Jacobi 场”正是共轭点的代数本质。
+
+<h4>第一步：把 J 延拓成变分场</h4>
+设 γ(b) 是第一个共轭点，取相应的非零 Jacobi 场 \(J(a)=J(b)=0\)。在 [a,b] 上取变分场为 J；在 b 之后 (b,b+ε] 接上一段光滑截断（端点 γ(a)、γ(b+ε) 固定），得到一族曲线。
+
+<h4>第二步：[a,b] 上的第二变分为零</h4>
+J 是 Jacobi 场且满足边界条件 J(a)=J(b)=0。第二变分公式给出
+
+<div class="eq">$$\delta^2E_{[a,b]}(J,J)=0$$</div>
+
+<strong>为什么是零？</strong>因为 J 满足 Jacobi 方程（即第二变分的 Euler–Lagrange 方程），所以在这一段 J 是能量泛函的“临界方向”，二阶变分为零。
+
+<h4>第三步：在 b 之后制造负贡献</h4>
+因为 J 是第一个共轭点处的非零场，它在 b 处的导数 \(J'(b)\neq 0\)。在 (b,b+ε] 上取平行移动并乘一个光滑截断函数，可构造变分 \(V_\varepsilon\)，使得
+
+<div class="eq">$$\delta^2E_{[b,b+\varepsilon]}(V_\varepsilon,V_\varepsilon)<0$$</div>
+
+把两段拼接（端点固定），总第二变分
+
+<div class="eq">$$\delta^2E=0+\delta^2E_{[b,b+\varepsilon]}<0$$</div>
+
+<div class="keybox">$$\boxed{\text{存在比 }\gamma\text{ 更短的 }\gamma(a)\to\gamma(b+\varepsilon)\text{ 的道路}}$$</div>
+
+<h4>结论</h4>
+
+<div class="warnbox">在第一个共轭点 <strong>之前</strong>（[a,b] 上）测地线仍最短；<strong>一旦越过</strong>第一个共轭点就不再最短。共轭点 = 最短性失效的前兆。</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>第一个共轭点是“最短性”的生命线——越过它，测地线就“输了”。</div>`
   },
   "r46": {
     0: "①【思路】第二变分公式给出能量泛函的二阶导，用于判定临界点（测地线）的极小性。设 Γ(s,t) 是测地线 γ 的变分，V(t)=∂Γ/∂s|_{s=0}，沿 γ 记 ∇=∇_{γ′}。【计算】E(γ_s)=∫_a^b ⟨∂Γ/∂t,∂Γ/∂t⟩dt，对 s 求二阶导。②【思路】第一次求导得 dE/ds=2∫⟨∇_s∂Γ/∂t,∂Γ/∂t⟩dt。再求导用 Leibniz 与无挠性。【推导】d²E/ds²=2∫(⟨∇_s∇_s∂Γ/∂t,∂Γ/∂t⟩+⟨∇_s∂Γ/∂t,∇_s∂Γ/∂t⟩)dt。③【思路】用无挠性 ∇_s∂Γ/∂t=∇_t∂Γ/∂s=∇_t V，并把 ∇_s∇_s∂Γ/∂t 换为含 V 的式。【计算】∇_s∇_s∂Γ/∂t=∇_s∇_t V=∇_t∇_s V+R(∂Γ/∂s,∂Γ/∂t)V=∇_t∇_s V+R(V,γ′)V（s=0 处）。④【思路】代入并分部积分（固定端点）。【计算】d²E/ds²|_{s=0}=2∫_a^b(⟨∇_t V,∇_t V⟩+⟨∇_t∇_s V,γ′⟩+⟨R(V,γ′)V,γ′⟩)dt=2∫_a^b(|∇ V|²−⟨R(V,γ′)γ′,V⟩)dt（∇_s V 项分部积分消失）。⑤【结论】δ²E(V,V)=∫_a^b(|∇V|²−⟨R(V,γ′)γ′,V⟩)dt，右端是 Morse 二次型，其负特征值个数对应共轭点。"
