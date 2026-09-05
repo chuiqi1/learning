@@ -10,85 +10,572 @@ const L = String.raw;
 
 module.exports = {
   "r1": {
-    0: "①【思路】目标是证唯一性：给定曲率 κ(s)，曲线由 Frenet 标架唯一确定。弧长参数下单位切向量 T=γ′，法向量 N 由 T 逆时针转 90° 得到。先写出完备的 Frenet 方程组。【推导】dT/ds=κ N，dN/ds=−κ T。②【思路】把 (T,N) 拼成一个 2×2 矩阵函数 A(s)，上面两个方程等价于一个线性常微分系统，系数由 κ(s) 完全决定。【推导】令 A=[T N]（T、N 各为一列），则 dA/ds=A·M(s)，其中 M(s)=[[0,−κ],[κ,0]]。③【思路】这类线性系统 dA/ds=A·M 满足 Picard–Lindelöf 存在唯一性定理：给定初值 A(0)（即初始切向与法向），解唯一。【结论】故给定 κ 与初始位置 γ(0)、初始标架，切向量 T 唯一，再由 γ(s)=γ(0)+∫₀^s T(u)du 恢复曲线。初始位置的差异即平移、初始标架的差异即旋转——恰为刚体运动，故曲线差刚体运动唯一。"
+    0: L`<h4>我们要证明什么</h4>
+平面曲线基本定理说：曲率函数 \(\kappa(s)>0\) <strong>完全决定</strong>一条平面曲线的形状——只要给定 \(\kappa\)，曲线就唯一（差一个刚体运动）。这告诉我们，曲率不是曲线的附属信息，而是<strong>刻画形状的完整不变量</strong>。
+
+<h4>第一步：弧长参数化，切线用角度表示</h4>
+用弧长 \(s\) 参数化，单位切向量 \(T(s)=\gamma'(s)\) 落在单位圆上，故可写成角度形式 \(T(s)=(\cos\theta(s),\ \sin\theta(s))\)。曲率正是切线方向随弧长转动的速率，因此有核心关系式
+
+<div class="eq">$$\frac{d\theta}{ds}=\kappa(s)$$</div>
+
+<h4>第二步：由曲率积分还原角度，再还原位置</h4>
+对上一式积分立即得到角度函数
+
+<div class="eq">$$\theta(s)=\theta(0)+\int_0^s \kappa(u)\,du$$</div>
+
+再用 \(T(s)=(\cos\theta(s),\sin\theta(s))\) 积分一次，曲线被完整恢复为
+
+<div class="eq">$$\gamma(s)=\gamma(0)+\int_0^s T(u)\,du$$</div>
+
+<h4>第三步：唯一性——两个初始条件对应刚体运动</h4>
+上述两步里，唯一待定的只有两个「初值」：起始位置 \(\gamma(0)\) 和起始方向 \(\theta(0)\)。改变 \(\gamma(0)\) 相当于把曲线<strong>平移</strong>，改变 \(\theta(0)\) 相当于把曲线<strong>旋转</strong>——平移加旋转恰好就是平面上的刚体运动。因此任意两条曲率同为 \(\kappa\) 的曲线，必然通过某个刚体运动彼此重合。
+
+<div class="keybox">$$\boxed{\kappa(s)\ \text{完全决定平面曲线（差刚体运动）}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率是「方向转动的速率」，积分两次（先得方向、再得位置）就还原整条曲线，两个积分常数正是平移与旋转。</div>`
   },
   "r2": {
-    0: "①【思路】空间曲线相比之下多一个挠率 τ，标架从 (T,N) 变为 (T,N,B)，其中副法向量 B=T×N。写出完的 Frenet–Serret 方程组（用弧长参数 s，T=γ′）。【推导】dT/ds=κ N，dN/ds=−κ T+τ B，dB/ds=−τ N。②【思路】把三列向量拼成正交矩阵 A(s)=[T N B]，上述三个方程合成一个线性系统 dA/ds=A·M，M 是反对称矩阵（由 κ、τ 组成）。【推导】M(s)=[[0,−κ,0],[κ,0,−τ],[0,τ,0]]，故 dA/ds=A·M(s)。③【思路】与平面情形同理，这是关于 A 的线性常微分系统，系数 κ(s)、τ(s) 光滑，由 Picard–Lindelöf 定理给定初值 A(0) 解存在唯一。【推导】M 反对称保证解 A(s) 始终是正交矩阵，即 (T,N,B) 始终是标准正交标架。④【思路】曲线由 T 积分恢复，故 κ、τ 加初值完全确定曲线。【计算】γ(s)=γ(0)+∫₀^s T(u)du。⑤【结论】曲率 κ 与挠率 τ 构成空间曲线的两个完整内蕴不变量：任意给定 κ>0、τ 及初始标架都存在唯一曲线，初始条件差异对应刚体运动。"
+    0: L`<h4>我们要证明什么</h4>
+空间曲线基本定理：给定 \(\kappa(s)>0\) 与 \(\tau(s)\)，存在唯一（差刚体运动）空间曲线以它们为曲率与挠率。换言之，<strong>曲率 + 挠率</strong> 这对函数是空间曲线的完整形状不变量。
+
+<h4>第一步：建立 Frenet–Serret 标架</h4>
+对弧长参数曲线，定义单位切向量 \(T=\gamma'\)、主法向量 \(N=T'/|T'|\)（即 \(T'=\kappa N\)）、副法向量 \(B=T\times N\)。三者构成右手正交标架 \(\{T,N,B\}\)，其变化率满足
+
+<div class="eq">$$\frac{dT}{ds}=\kappa N,\qquad \frac{dN}{ds}=-\kappa T+\tau B,\qquad \frac{dB}{ds}=-\tau N$$</div>
+
+<h4>第二步：写成线性常微分方程组</h4>
+把九个分量看作未知函数，这是一个<strong>线性</strong> ODE 组，系数完全由 \(\kappa(s),\tau(s)\) 决定。由常微分方程的 Picard–Lindelöf 存在唯一性定理：给定初始标架 \(\{T(0),N(0),B(0)\}\)，解<strong>唯一存在</strong>。
+
+<h4>第三步：积分恢复曲线</h4>
+标架一旦确定，曲线由 \(T=\gamma'\) 积分恢复：
+
+<div class="eq">$$\gamma(s)=\gamma(0)+\int_0^s T(u)\,du$$</div>
+
+<h4>第四步：初始条件 = 刚体运动自由度</h4>
+初值 \(\gamma(0)\) 决定空间位置（平移），初始标架 \(\{T(0),N(0),B(0)\}\) 决定空间取向（旋转）。平移加旋转正是 \(\mathbb R^3\) 的刚体运动，故曲线差刚体运动唯一。
+
+<div class="keybox">$$\boxed{(\kappa,\tau)\ \text{完全决定空间曲线（差刚体运动）}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率管「平面内怎么弯」，挠率管「平面怎么转」，两者一起锁死空间曲线的形状。</div>`
   },
   "r3": {
-    0: "①【思路】Gauss 绝妙定理断言 K 由第一基本形式 g_ij 及其导数决定，与第二基本形式（外蕴）无关。先回顾曲率张量的代数定义，它用度量与 Christoffel 符号表示。【推导】R^l_ijk=∂_i Γ^l_jk−∂_j Γ^l_ik+Γ^m_jk Γ^l_im−Γ^m_ik Γ^l_jm。②【思路】Christoffel 符号本就不是外蕴量：Levi-Civita 联络由度量唯一决定，可用 g_ij 及其一阶导显式写出。【计算】Γ^k_ij=(1/2)g^{kl}(∂_i g_jl+∂_j g_il−∂_l g_ij)。③【思路】把上式代入曲率张量公式：右边出现 g_ij 的一阶、二阶导，不含任何“法向量”或“第二基本形式”这类外蕴量。【推导】R^l_ijk 完全由 g_ij、∂g、∂²g 组合而成。④【思路】二维曲面的 Gauss 曲率可由曲率张量的一个独立分量表出。【计算】K=R^1_212/det(g)=R^1_212/(g_11 g_22−g_12²)。⑤【结论】故 K 只依赖第一基本形式及其导数，是内蕴量；等距（保 g）必保 K，这是“Gauss 绝妙定理”的完整内容。"
+    0: L`<h4>我们要证明什么</h4>
+Gauss 绝妙定理（Theorema Egregium）断言：Gauss 曲率 \(K\) 虽然<strong>定义时</strong>用到了曲面在 \(\mathbb R^3\) 中的嵌入（第二基本形式），但<strong>最终结果</strong>只依赖第一基本形式 \(g_{ij}\) 及其导数，因而是<strong>内蕴量</strong>——曲面上的二维居民不离开曲面就能测出 \(K\)。
+
+<h4>第一步：认清「外蕴」的起点</h4>
+曲率最自然的定义用形状算子 \(S\)（Weingarten 映射），其特征值 \(\kappa_1,\kappa_2\) 是主曲率，\(K=\kappa_1\kappa_2=\det S\)。而 \(S\) 由第二基本形式与第一基本形式共同决定，看起来是外蕴的。
+
+<h4>第二步：把曲率用 Christoffel 符号写出</h4>
+关键一步：第二基本形式可由「法向量方向的二阶变化」表出，而 Christoffel 符号 \(\Gamma^k_{ij}\) 完全由度量 \(g_{ij}\) 决定。将曲率张量 \(R^l_{\ ijk}\) 用 Christoffel 符号及其导数表示后，可证明在二维情形
+
+<div class="eq">$$K=\frac{R^1_{\ 212}}{\det g}$$</div>
+
+<h4>第三步：断言内蕴性</h4>
+右边只含 \(g_{ij}\) 及其一、二阶导数，与嵌入方式无关。因此若两个曲面等距（度量相同），它们必然有相同的 \(K\)。
+
+<div class="keybox">$$\boxed{K\ \text{仅由第一基本形式决定，是等距不变量}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>「Gauss 绝妙定理」= 曲率看起来是外蕴的，算出来却全是内蕴的。</div>`
   },
   "r4": {
-    0: "①【思路】等距映射 F:(M,g)→(N,h) 满足拉回 F*h=g，即在每点 dF_p 是内积保持的线性等距。目标是证所有曲率型量在 F 下一致。先说明“由度量决定”的量自动被保持。【推导】因 F*h=g，即 g_p(v,w)=h_{F(p)}(dF_p v, dF_p w)。②【思路】Christoffel 符号由度量及其导数定义，故等距把 M 的 Γ 映为 N 的 Γ（在 F 相关坐标下数值相同）。【计算】ξ 为 F 相关坐标，则 Γ^M 与 Γ^N 在对应点数值相等。③【思路】曲率张量由 Christoffel 符号及其一阶导组成，故 R^M 与 R^N 对应相等；更一般地，(1,3) 型曲率张量按张量变换律在 F 下不变。【推导】R^N(dF X,dF Y,dF Z)=dF∘R^M(X,Y)Z。④【思路】截面曲率、Ricci、标量曲率都是曲率张量的缩并或商，缩并是张量运算，等距保持。【计算】K(σ)、Ric(X,Y)=tr(Z↦R(Z,X)Y)、S=tr(Ric)。⑤【结论】综上等距保持曲率张量、截面曲率、Ricci 曲率与标量曲率，故这些都是内蕴几何不变量。"
+    0: L`<h4>我们要证明什么</h4>
+等距不变性定理：若两个黎曼流形等距，则它们的曲率张量、截面曲率、Ricci 曲率、标量曲率<strong>一一对应相等</strong>。核心思想是——曲率是「度量张量的二阶导数信息」，等距保度量，故必保曲率。
+
+<h4>第一步：等距保度量</h4>
+等距映射 \(F\) 满足拉回度量等于原度量：\(F^*h=g\)，即在坐标下 \(h_{ij}\circ F=g_{ij}\)。度量的所有信息在等距下不变。
+
+<h4>第二步：曲率由度量逐级构造</h4>
+Christoffel 符号 \(\Gamma^k_{ij}=\tfrac12 g^{kl}(\partial_i g_{jl}+\partial_j g_{il}-\partial_l g_{ij})\) 完全由度量及其一阶导决定；曲率张量
+
+<div class="eq">$$R^l_{\ ijk}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}+\Gamma^m_{jk}\Gamma^l_{im}-\Gamma^m_{ik}\Gamma^l_{jm}$$</div>
+
+由 Christoffel 符号及其一阶导决定，即由度量的<strong>二阶导</strong>决定。
+
+<h4>第三步：等距下逐级保持</h4>
+因为度量在等距下不变，其导数也不变，故 \(\Gamma\)、\(R\) 均不变；缩并得到的 Ricci 曲率、标量曲率，以及截面曲率，也都在等距下不变。
+
+<div class="keybox">$$\boxed{F^*h=g\ \Longrightarrow\ \text{所有曲率量对应相等}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>等距保度量 ⟹ 保度量的一切导数 ⟹ 保曲率。</div>`
   },
   "r5": {
-    0: "①【思路】全局 Gauss–Bonnet 把积分 ∫M K dA 化为组合计数 χ(M)。先把 M 三角剖分为测地三角形（每条边是测地线段），设顶点数 V、边数 E、面数 F。【推导】M=∪ Δ_i，∂Δ_i 由测地线构成。②【思路】对每个测地三角形 Δ（内角 α₁,α₂,α₃）用局部 Gauss–Bonnet：测地边无测地曲率项。【计算】∫_Δ K dA=α₁+α₂+α₃−π=Σα_i−π。③【思路】对所有三角形求和：每个内部边被两个三角形共享且方向相反，测地曲率贡献抵消；顶点处每个面贡献一个角，同一点所有内角和为 2π。【计算】Σ_i ∫_{Δ_i} K dA=Σ_ij α_ij−πF=2π V−π F。④【思路】再用组合恒等式消去 F 与 V 的关系：每条边属于两个面、每个面三条边，故 3F=2E，即 E=3F/2。代入 Euler 示性数 χ=V−E+F。【计算】∫_M K dA=2π V−π F=2π(V−F/2)=2π(V−E+E−F/2)。由 3F=2E 得 V−F/2=V−E+F=χ，故 ∫_M K dA=2πχ(M)。⑤【结论】总曲率被拓扑完全锁定为 2πχ(M)，与具体度量无关。"
+    0: L`<h4>我们要证明什么</h4>
+全局 Gauss–Bonnet 定理：紧致定向闭曲面 \(M\) 上，Gauss 曲率的总积分等于 \(2\pi\) 乘以 Euler 示性数。它把<strong>局部微分几何量</strong>（曲率积分）与<strong>全局拓扑不变量</strong>（Euler 示性数）绑在一起。
+
+<h4>第一步：三角剖分，用局部公式</h4>
+把 \(M\) 剖成若干测地三角形 \(\Delta\)。对每个三角形，局部 Gauss–Bonnet 公式给出
+
+<div class="eq">$$\int_{\Delta}K\,dA+\sum_{\text{顶点}}(\pi-\alpha_i)-\pi=0$$</div>
+
+其中 \(\alpha_i\) 是内角（此处用了测地三角形内角和 = \(\pi+\int_\Delta K\)）。
+
+<h4>第二步：全部求和，内部边抵消</h4>
+把所有三角形求和。曲率积分之和即总曲率 \(\int_M K\,dA\)；每条内部边被两个三角形共享，其贡献相消；边界项在闭曲面（无边）上自动消失。角度贡献合计后利用 Euler 公式 \(\chi=V-E+F\) 以及 \(3F=2E\)（每个面三条边、每条边被两面共享）化简。
+
+<h4>第三步：化为 Euler 示性数</h4>
+代数整理后得到
+
+<div class="keybox">$$\boxed{\int_M K\,dA = 2\pi\,\chi(M)}$$</div>
+
+其中 \(\chi(M)=V-E+F\) 是 Euler 示性数。左端随曲率连续变化，右端是纯拓扑整数，二者相等意味着曲率的<strong>总</strong>行为被拓扑锁定。
+
+<div class="memobox"><strong>一句话记忆：</strong>Gauss–Bonnet = 「总曲率 ÷ \(2\pi\) = Euler 示性数」，局部弯曲的总和被拓扑刚性约束。</div>`
   },
   "r6": {
-    0: "①【思路】任意光滑流形都承载黎曼度量：用局部欧氏度量粘起来。取局部坐标图构成的覆盖 {U_α}（流形仿紧保证可局域有限细化）。【推导】在每个 U_α 上取坐标自然度量 g_α，其分量为 δ_ij。②【思路】取从属于 {U_α} 的单位分解 {ρ_α}：ρ_α≥0、Supp ρ_α⊂U_α、且 Σ_α ρ_α=1（每点只有有限个非零）。【推导】定义全局张量 g=Σ_α ρ_α g_α。③【思路】验证 g 是黎曼度量：在每点它是正定对称双线性型的凸组合。因每个 g_α 正定、系数 ρ_α≥0 且至少一个 ρ_α(p)>0，凸组合保持正定。【计算】对任意非零切向量 v，g_p(v,v)=Σ_α ρ_α(p)·g_α(v,v)≥ρ_β(p)·|v|²_β>0（取某 β 使 ρ_β(p)>0）。④【结论】故 g 处处正定、光滑对称，是整体黎曼度量，证明“度量存在性”。"
+    0: L`<h4>我们要证明什么</h4>
+黎曼度量存在性定理：<strong>任何</strong>光滑流形上都存在黎曼度量。初看令人惊讶——流形可能千奇百怪，凭什么总能量出「内积」？答案是单位分解这个拓扑工具让我们能把局部的平坦度量「黏」成全局度量。
+
+<h4>第一步：局部总有的度量</h4>
+取流形的一个局部坐标覆盖 \(\{U_\alpha\}\)。在每个坐标卡 \(U_\alpha\) 上，可以定义「坐标欧氏度量」\(g_\alpha\)，其在坐标下就是 \(g_{ij}=\delta_{ij}\)——局部上总能用平坦度量。
+
+<h4>第二步：单位分解加权拼接</h4>
+取从属于 \(\{U_\alpha\}\) 的单位分解 \(\{\rho_\alpha\}\)（光滑、\(\rho_\alpha\ge 0\)、支撑在 \(U_\alpha\) 内、且每点附近只有有限个非零、处处 \(\sum_\alpha\rho_\alpha=1\)）。定义全局度量
+
+<div class="eq">$$g=\sum_{\alpha}\rho_\alpha\, g_\alpha$$</div>
+
+<h4>第三步：验证正定性</h4>
+对任意非零切向量 \(v\neq 0\)，\(g_\alpha(v,v)>0\) 恒成立，且每点至少有一个 \(\rho_\alpha>0\)，故凸组合 \(g(v,v)=\sum_\alpha\rho_\alpha\, g_\alpha(v,v)>0\)。正定性、对称性、光滑性全部由 \(g_\alpha\) 与 \(\rho_\alpha\) 继承。
+
+<div class="keybox">$$\boxed{\text{任何光滑流形上总存在黎曼度量}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>局部拿平坦度量，用单位分解加权求和，正定性被凸组合保留。</div>`
   },
   "r7": {
-    0: "①【思路】降调同构 ♭ 把切向量 v 变成余切向量：用度量与 v 做内积。对每个 v∈T_pM 定义 v^♭(w)=g_p(v,w)。【推导】v^♭:T_pM→ℝ 是线性泛函，故 v^♭∈T*_pM；坐标下 v^♭_i=g_ij v^j。②【思路】证明 ♭ 是线性同构：先证单射。若 v^♭=0，则对所有 w 有 g_p(v,w)=0，特别取 w=v 得 g_p(v,v)=0。【计算】由 g 正定（非退化），g_p(v,v)=0 ⟹ v=0，故 ker(♭)=0，♭ 单射。③【思路】T_pM 与 T*_pM 维数同为 n，单射即同构。逆映射 ♯ 由逆矩阵 g^{ij}（g_{ij} 的逆）给出升调。【计算】α^♯=g^{ij} α_i ∂_j，验证 (α^♯)^♭=α：因 g_{ik} g^{kj}=δ_i^j。④【结论】♭:TM→T*M、♯:T*M→TM 是互逆的丛同构，称为音乐同构，是黎曼几何中升降指标的标准工具。"
+    0: L`<h4>我们要证明什么</h4>
+音乐同构定理：黎曼度量 \(g\) 在切丛 \(TM\) 与余切丛 \(T^*M\) 之间建立<strong>自然的线性同构</strong>，即「降调」\(\flat:TM\to T^*M\) 与「升调」\(\sharp:T^*M\to TM\)。
+
+<h4>第一步：定义降调映射</h4>
+对每个切向量 \(v\in T_pM\)，定义余切向量 \(v^\flat\in T^*_pM\) 为
+
+<div class="eq">$$v^\flat(w)=g_p(v,w),\qquad \forall w\in T_pM$$</div>
+
+即把 \(v\) 和任意 \(w\) 做内积。坐标下这读作 \(v^\flat_i=g_{ij}v^j\)——正是「降指标」。
+
+<h4>第二步：证明是同构</h4>
+\(\flat\) 是线性的；又因 \(g\) 正定（非退化），若 \(v^\flat=0\) 则 \(g(v,v)=v^\flat(v)=0\)，推出 \(v=0\)，故 \(\flat\) 单射。切空间与余切空间同维，单射即同构。
+
+<h4>第三步：升调是逆映射</h4>
+逆映射 \(\sharp\) 用逆度量张量 \(g^{ij}\)（满足 \(g^{ik}g_{kj}=\delta^i_j\)）升指标：
+
+<div class="keybox">$$\boxed{\alpha^\sharp = g^{ij}\alpha_j\,\partial_i}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>度量把「向量 ↔ 余向量」打通，降调用 \(g_{ij}\)、升调用 \(g^{ij}\)。</div>`
   },
   "r8": {
-    0: "①【思路】等距映射 F 由它在一点 p 的值 F(p) 和微分 dF_p 完全决定。因为等距保持测地线与度量，给定基点与其正交标架，F 沿测地线的行为被唯一确定。【推导】F(p) 有 n 个自由度，dF_p 是保持内积的线性等距，即正交变换，属于 O(n)，有 n(n−1)/2 个自由度。②【思路】故等距群可看作“位置 n + 旋转 n(n−1)/2”的参数族，总维数上界 n+n(n−1)/2=n(n+1)/2。为严格化，把等距群嵌入正交标架丛。【推导】等距群同构地嵌入 M 的所有正交标架构成的丛 O(M)，其维数恰为 n+n(n−1)/2。③【思路】再证等距群是 Lie 群：Myers–Steenrod 定理证明等距群（带紧开拓扑）是 O(M) 的闭子流形，光滑结构自然。【结论】故等距群是 dim≤n(n+1)/2 的 Lie 群；达到上界 n(n+1)/2 当且仅当 M 有常曲率（局部齐性最大）。"
+    0: L`<h4>我们要证明什么</h4>
+Myers–Steenrod 定理：黎曼流形的等距群是有限维 Lie 群，且维数不超过 \(\frac{n(n+1)}{2}\)。直觉是——一个等距映射被「它在一点的行为」完全锁定。
+
+<h4>第一步：等距由一点的值与微分决定</h4>
+等距映射 \(F\) 保持度量与测地线。若已知 \(F(p)\) 与微分 \(dF_p\)，则沿任意测地线 \(\gamma\) 从 \(p\) 出发，\(F(\gamma)\) 被唯一确定（测地线被初值唯一决定且等距保测地线）。故等距映射「被 \(p\) 处的 1-射影（1-jet）决定」。
+
+<h4>第二步：数自由度</h4>
+在点 \(p\)：位置 \(F(p)\) 有 \(n\) 个自由度；微分 \(dF_p\) 是保内积的正交变换，属于正交群 \(O(n)\)，有 \(\frac{n(n-1)}{2}\) 个自由度。合计
+
+<div class="eq">$$n+\frac{n(n-1)}{2}=\frac{n(n+1)}{2}$$</div>
+
+<h4>第三步：Lie 群结构</h4>
+把等距群嵌入正交标架丛（其维数恰为 \(\frac{n(n+1)}{2}\)），可证它是闭子流形，因而成为 Lie 群。
+
+<div class="keybox">$$\boxed{\dim\operatorname{Isom}(M,g)\le \frac{n(n+1)}{2}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>等距由「位置 + 正交标架」决定，自由度 \(n+\frac{n(n-1)}{2}\)。</div>`
   },
   "r9": {
-    0: "①【思路】设 F:M→N 是光滑浸入（dF_p 单射），h 是 N 的黎曼度量。定义拉回 (F*h)_p(v,w)=h_{F(p)}(dF_p v, dF_p w)。先证对称双线性。【推导】h 双线性对称 ⟹ F*h 双线性对称。②【思路】证正定性：对 v≠0，需要 (F*h)_p(v,v)>0。因 F 是浸入，dF_p 单射，故 dF_p v≠0。【计算】(F*h)_p(v,v)=h(dF_p v, dF_p v)>0（h 正定、dF_p v≠0）。③【思路】光滑性：F、h 光滑，故逐点内积关于 p 光滑。故 F*h 是 M 上的对称正定二阶协变张量场。【结论】F*h 是黎曼度量，且其几何意义是“把 N 的长度内积沿 F 拉到 M 上量度”。若 F 不是浸入，dF_p 有非零核，则 F*h 仅半正定，不能作为黎曼度量。"
+    0: L`<h4>我们要证明什么</h4>
+诱导度量定理：若 \(F:M\to N\) 是<strong>浸入</strong>（微分处处单射），\(h\) 是 \(N\) 上黎曼度量，则拉回 \(F^*h\) 是 \(M\) 上的黎曼度量。
+
+<h4>第一步：定义拉回度量</h4>
+对 \(v,w\in T_pM\)，定义
+
+<div class="eq">$$(F^*h)_p(v,w)=h_{F(p)}\big(dF_p(v),\,dF_p(w)\big)$$</div>
+
+即「先推到外围空间再做内积」。
+
+<h4>第二步：对称性、双线性、光滑性</h4>
+这些都是 \(h\) 与 \(dF\) 的相应性质直接遗传：\(h\) 对称双线性，\(dF\) 线性光滑，故 \(F^*h\) 对称双线性且光滑。
+
+<h4>第三步：正定性依赖浸入条件</h4>
+若 \(dF_p\) 单射（浸入），则 \(v\neq 0\Rightarrow dF_p(v)\neq 0\)，再由 \(h\) 正定得 \((F^*h)(v,v)=h(dF_p v,dF_p v)>0\)。若 \(F\) 不是浸入，存在 \(v\neq 0\) 使 \(dF_p v=0\)，此时 \((F^*h)(v,v)=0\)，只能得到半正定，不再是黎曼度量。
+
+<div class="keybox">$$\boxed{F\ \text{浸入}\ \Longrightarrow\ F^*h\ \text{是黎曼度量}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>浸入保证微分单射，单射保住正定性，于是拉回度量是黎曼度量。</div>`
   },
   "r10": {
-    0: "①【思路】体积比较定理：Ric 下界 ⟹ 测地球体积被常曲率空间同半径球体积控制。核心工具是法坐标下体积元用 Jacobi 场行列式表示。【推导】取 p 处法坐标 (t,θ)（t 为径向距离），体积元 dV=A(t,θ) dt dθ，其中 A(t,θ)=det(J_1,…,J_{n−1})，J_i 是沿径向测地线、初值 J_i(0)=0 的 Jacobi 场。②【思路】Bishop 的关键比较：Ric≥(n−1)c·g 时，比较函数 A(t,θ)/A_c(t) 单调不增（A_c 是常曲率 c 空间的体积元系数），极限为 1。【推导】对 A 求对数导得 u=A′/A 满足 Riccati 不等式 u′+u² ≤ −(n−1)c，与等号情形的解 u_c=A_c′/A_c 比较得 A≤A_c。③【思路】对金属体球体积积分：Vol(B(p,r))=∫₀^r∫_{S^{n−1}} A(t,θ) dθ dt ≤ ∫₀^r∫ A_c(t) dθ dt=V_c(r)。【结论】得 Vol(B(p,r))≤V_c(r)，且比值单调非增；这就是体积比较定理。"
+    0: L`<h4>我们要证明什么</h4>
+体积比较定理（Bishop–Gromov 型）：截面曲率有下界 \(K\ge c\) 时，测地球的体积<strong>不超过</strong>常曲率 \(c\) 空间中同半径球的体积。
+
+<h4>第一步：法坐标下的体积元</h4>
+在指数映射给出的法坐标（极坐标）下，体积元由 Jacobi 场的行列式表出。沿测地线，体积密度函数对应 Jacobi 场沿径向的展开。
+
+<h4>第二步：Rauch 比较控制 Jacobi 场</h4>
+Rauch 比较定理断言：曲率越大，Jacobi 场（反映测地线分离快慢）增长越慢。若 \(K\ge c\)，则 \(M\) 中的 Jacobi 场范数不超过常曲率 \(c\) 空间中的对应量：
+
+<div class="eq">$$|J(t)|\le |J_c(t)|$$</div>
+
+<h4>第三步：积分得体积比较</h4>
+体积元 ≤ 常曲率体积元，积分得
+
+<div class="keybox">$$\boxed{\operatorname{Vol}\big(B(p,r)\big)\le V_c(r)}$$</div>
+
+其中 \(V_c(r)\) 是常曲率 \(c\) 空间半径为 \(r\) 的球体积。
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率越大 ⟹ 测地线「聚拢」越慢 ⟹ 体积越小，被常曲率空间上界控制。</div>`
   },
   "r11": {
-    0: "①【思路】二维时任何黎曼度量局部共形平坦：要找坐标 (x,y) 使 ds²=e^{2λ}(dx²+dy²)。先把一般度量写开。【计算】ds²=E dx²+2F dx dy+G dy²，E,G>0，EG−F²>0。②【思路】写成复坐标 z=x+iy，度量等价于 g=e^{2λ}dz dz̄。共形坐标存在性等价于解一阶 Beltrami 方程。【推导】令 w(z) 为新的复坐标，则 |dw|=|w_z dz+w_z̄ dz̄|；等温条件 F′=0 化为 Beltrami 方程 ∂_z̄ w=μ ∂_z w，其中 μ 由 E,F,G 确定且 |μ|<1。③【思路】二维特殊性：任何度量诱导一个复结构，其与度量的共形类一一对应；由可测 Riemann 映射定理（或经典等温坐标定理），|μ|<1 的 Beltrami 方程有解。【结论】故二维局部存在等温坐标，度量共形平坦。n≥3 时 Weyl 张量一般非零，此性质不再成立，凸显“二维是特殊维数”。"
+    0: L`<h4>我们要证明什么</h4>
+等温坐标存在性：二维黎曼流形<strong>局部</strong>总存在坐标使度量呈共形平坦形式 \(ds^2=e^{2\lambda}(dx^2+dy^2)\)。这是二维独有的奇迹。
+
+<h4>第一步：把问题化为复方程</h4>
+设一般度量 \(ds^2=E\,dx^2+2F\,dx\,dy+G\,dy^2\)。要找等温坐标 \(w\)，即要求存在 \(\lambda\) 使 \(E=G=e^{2\lambda},\ F=0\)。这一条件等价于解 Beltrami 方程
+
+<div class="eq">$$\partial_{\bar w}=\mu\,\partial w$$</div>
+
+其中 \(\mu\) 由 \(E,F,G\) 决定。
+
+<h4>第二步：二维度量的复结构</h4>
+关键点：二维时，度量与复结构一一对应（保角类 = 复结构）。任何二维定向流形局部都有复坐标。
+
+<h4>第三步：可测 Riemann 映射定理</h4>
+由可测 Riemann 映射定理（Beltrami 方程的可测系数版本）保证等温坐标的局部存在性。
+
+<div class="keybox">$$\boxed{\text{二维：任何度量局部共形平坦}\ ds^2=e^{2\lambda}(dx^2+dy^2)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>二维的特殊性：Weyl 张量退化，度量局部总能「共形拉平」。</div>`
   },
   "r12": {
-    0: "①【思路】Cartan–Hadamard：K≤0 的完备单连通流形微分同胚 Rⁿ。关键证 exp_p 是整体微分同胚。先证 exp_p 无共轭点。【推导】沿测地线 γ 的 Jacobi 场 J 满足 J″+R(J,γ′)γ′=0，取内积得 ⟨J″,J⟩=−K(J,γ′)|J|²≥0（K≤0）。②【思路】考虑 f(t)=|J(t)|²，其二阶导。【计算】f″=(2⟨J″,J⟩+2|J′|²)≥2|J′|²≥0… 更精确：由 ⟨J″,J⟩=−K|J|²≥0 得 f″=2⟨J′,J′⟩+2⟨J″,J⟩≥0，f 是凸函数。③【思路】凸函数若在 t=0 与 t=b>0 处都取 0，则整段为 0。但 J≠0 的 Jacobi 场只能有孤立零点（否则 J≡0）。【推导】故 J(0)=0 的非零 Jacobi 场在 t>0 不再为零，即无共轭点。④【思路】exp_p 无共轭点 ⟹ d(exp_p) 处处非退化 ⟹ exp_p 是局部微分同胚；完备性（Hopf–Rinow）又保证 exp_p 定义在整个 T_pM≅Rⁿ 上。【结论】非零曲率保证 exp_p 是整体覆盖映射，而 T_pM 单连通、M 单连通，故 exp_p 是全局微分同胚，M≅Rⁿ。"
+    0: L`<h4>我们要证明什么</h4>
+Cartan–Hadamard 定理：完备黎曼流形若截面曲率处处非正（\(K\le 0\)），则其<strong>万有覆盖</strong>微分同胚于 \(\mathbb R^n\)。这是「负曲率 ⟹ 拓扑简单」的最强表达。
+
+<h4>第一步：曲率非正 ⟹ 无共轭点</h4>
+沿测地线的 Jacobi 场满足 Jacobi 方程
+
+<div class="eq">$$J''+R(J,\dot\gamma)\dot\gamma=0$$</div>
+
+当 \(K\le 0\) 时，曲率项使方程成为「凸」的：Jacobi 场范数 \(|J(t)|\) 是凸函数，且从 \(0\) 出发的 Jacobi 场在 \(t>0\) 处不再回到 \(0\)——即<strong>没有共轭点</strong>。
+
+<h4>第二步：指数映射无临界点</h4>
+共轭点正是指数映射 \(\exp_p\) 的临界点所对应之处。无共轭点 ⟹ \(d\exp_p\) 处处非退化 ⟹ \(\exp_p\) 是<strong>局部微分同胚</strong>。
+
+<h4>第三步：完备性推出整体性</h4>
+Hopf–Rinow 定理：完备 ⟹ \(\exp_p\) 定义在整个 \(T_pM\cong\mathbb R^n\) 上。于是 \(\exp_p:\mathbb R^n\to M\) 是覆盖映射；单连通的万有覆盖与之微分同胚。
+
+<div class="keybox">$$\boxed{K\le 0\ \text{且完备}\ \Longrightarrow\ \widetilde M\cong\mathbb R^n}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>负曲率让测地线「发散」、永不重新聚焦，指数映射就成了覆盖。</div>`
   },
   "r13": {
-    0: "①【思路】球面定理（Sphere Theorem）：曲率严格介于 (1/4,1) 之间的紧致单连通流形同胚 Sⁿ。证明构造一个仅在两点有临界点的 Morse 函数。先处理直径上界。【推导】K≤1 时由 Bonnet–Myers（或直接 Rauch 比较）得直径 diam(M)≤π；K≥1/4 时由 Rauch 比较得共轭点距离≥π。②【思路】取相距最远的两点 p,q（d(p,q)=diam），构造距离函数 f(x)=d(p,x)。Toponogov 比较定理的关键应用：用两个曲率 ≥1/4 的下界来控制 f 的临界点。【推导】若 f 在 x≠p,q 处有临界点，则存在从 p、q 到 x 的测地线以“过大”角度相交，Toponogov 定理给出 d(p,q) 的上界 <diam，矛盾。③【思路】故 f 的唯一临界点是 p（极小）和 q（极大）。Morse 理论：只有一个 0-胞腔和一个 n-胞腔，故 H_0=H_n=ℤ、其余为零。【计算】M≃Sⁿ 的同调型，再由单连通与 Hurewicz 定理（或直接 Reeb 定理：临界点为两个的紧致流形是球面）得 M 同胚 Sⁿ。④【结论】这就是 Rauch–Klingenberg–Berger–Toponogov 逐步完善的球面定理。"
+    0: L`<h4>我们要证明什么</h4>
+球面定理（Sphere Theorem）：若紧致单连通黎曼流形的截面曲率严格夹在 \(1/4\) 与 \(1\) 之间，则它<strong>同胚</strong>于球面。这是用曲率钳制推出拓扑的经典结果。
+
+<h4>第一步：下界 \(1/4\) 控制共轭点</h4>
+由 Rauch 比较定理，\(K\ge 1/4\) 时，从一点出发的测地线要经历至少 \(\pi\) 的距离才可能相遇（共轭点距离 \(\ge\pi\)），这保证指数映射在半径 \(\pi\) 内是单射。
+
+<h4>第二步：上界 \(1\) 控制直径</h4>
+Bonnet–Myers 定理：\(K\ge 1/4>0\) 时流形紧致且直径 \(\le\pi\)（实际用到 \(K\ge 1/4\) 更强的结论，上界 \(K\le 1\) 配合 Toponogov 定理给出直径恰好约束）。
+
+<h4>第三步：距离函数无临界点 ⟹ 可收缩</h4>
+取相距最远的两点 \(p,q\)，令 \(f(x)=d(p,x)\)。用 Toponogov 定理比较三角形可证 \(f\) 在 \(M\setminus\{p,q\}\) 上无临界点。于是 \(M\) 可通过「梯度流」收缩到 \(p\)，从而同胚于球面。
+
+<div class="keybox">$$\boxed{1/4<K<1\ \text{且单连通紧致}\ \Longrightarrow\ M\cong S^n}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率被「夹」在球面附近 ⟹ 拓扑也被「夹」成球面。</div>`
   },
   "r14": {
-    0: "①【思路】常负曲率空间唯一性：同维数同曲率 c<0 的完备单连通流形彼此等距。关键是常曲率下曲率张量有标准代数形式。【推导】截面曲率 ≡c 时，R(X,Y)Z=c(⟨Y,Z⟩X−⟨X,Z⟩Y)。②【思路】取基点 p、正交标架 e_1,…,e_n，构造到双曲空间模型（双曲面模型 Hⁿ）的映射：把 T_pM 的点经指数映射对应到模型的指数映射。【推导】等距性的判定归结为：Jacobi 场在两边满足完全相同的 Jacobi 方程（因曲率张量代数形式相同），故 |J|、内积等几何量逐点一致。③【思路】两边 Jacobi 方程相同 ⟹ 两边的度量在法坐标下系数相同 ⟹ exp 保持度量。【计算】⟨d exp_p(u), d exp_p(w)⟩_M=⟨d exp_{p̃}(u), d exp_{p̃}(w)⟩_H。④【思路】完备单连通保证两边 exp 都是整体微分同胚，故映射是整体等距。【结论】常负曲率、同维数的完备单连通流形必等距于标准双曲空间（差常数缩放）。"
+    0: L`<h4>我们要证明什么</h4>
+双曲空间的唯一性：同维数、同常负曲率的两个<strong>完备单连通</strong>黎曼流形必定等距。常曲率空间被曲率常数与维数完全决定。
+
+<h4>第一步：常曲率的曲率张量标准形</h4>
+截面曲率为常数 \(c\) 时，曲率张量有固定形式
+
+<div class="eq">$$R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
+
+这意味着曲率张量处处「一样」，没有位置信息。
+
+<h4>第二步：局部等距</h4>
+取 \(p\in M\) 与正交标架，与标准双曲空间模型在对应点、对应标架处对齐。因曲率张量形式一致，指数映射保持度量，给出局部等距。
+
+<h4>第三步：单连通完备 ⟹ 整体等距</h4>
+完备性使指数映射全局定义，单连通性排除「缠绕」，局部等距提升为整体等距。
+
+<div class="keybox">$$\boxed{\text{完备单连通常负曲率空间 ⟹ 等距于唯一双曲空间}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>常曲率 ⟹ 曲率张量被锁死 ⟹ 单连通完备 ⟹ 空间被唯一确定。</div>`
   },
   "r15": {
-    0: "①【思路】Killing–Hopf：完备单连通常曲率空间是 Sⁿ、ℝⁿ 或 Hⁿ（差缩放）之一。按符号分三种情况，方法统一：常曲率 ⟹ 曲率张量标准形式。【推导】设 sec≡c，则 R(X,Y)Z=c(⟨Y,Z⟩X−⟨X,Z⟩Y)。②【思路】取 p∈M 与正交标架 {e_i}。构造到模型空间的映射 Φ：把 T_pM 的向量经 exp 映到模型空间相应点（以单位球 / 欧氏 / 双曲面为模型）。先证 Φ 是局部等距。【推导】两边曲率张量代数形式相同 ⟹ 法坐标下 Jacobi 场同解 ⟹ 度量系数相同 ⟹ Φ 保内积。③【思路】再证 Φ 是整体等距：完备 + 单连通 ⟹ exp_p 是整体微分同胚（Cartan–Hadamard 处理 c≤0；c>0 时 Sⁿ 上 exp 在半径 <π 内是微分同胚，球面模型用对径图配合覆盖）。【计算】c>0 取半径 1/√c 的球；c=0 取 ℝⁿ；c<0 取曲率 −|c| 的双曲空间。④【结论】故 M 等距于对应模型空间，常曲率空间被曲率符号 + 维数 + 缩放完全分类。"
+    0: L`<h4>我们要证明什么</h4>
+Killing–Hopf 定理：完备单连通的常曲率流形，等距于三类标准模型之一——球面、欧氏空间、双曲空间（差缩放）。这是「空间形式」分类的基石。
+
+<h4>第一步：常曲率的曲率张量标准形</h4>
+设截面曲率为常数 \(c\)，曲率张量必为
+
+<div class="eq">$$R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
+
+<h4>第二步：构造到模型空间的等距</h4>
+取 \(p\in M\) 与正交标架，按 \(c\) 的符号映射到对应模型：
+
+<div class="eq">$$c>0\to S^n(1/\sqrt c),\quad c=0\to \mathbb R^n,\quad c<0\to H^n(1/\sqrt{|c|})$$</div>
+
+曲率张量形式一致 ⟹ 指数映射保度量。
+
+<h4>第三步：整体性</h4>
+完备单连通 ⟹ 指数映射是整体微分同胚 ⟹ 得到整体等距。
+
+<div class="keybox">$$\boxed{\text{完备单连通常曲率空间}\ \cong\ S^n,\ \mathbb R^n,\ \text{或}\ H^n}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>常曲率空间只有三种「原形」：正、零、负。</div>`
   },
   "r16": {
-    0: "①【思路】紧致 Lie 群配双不变度量（左右平移都不变）。要先算出 Levi-Civita 联络：对左不变向量场 X,Y，双不变性导出 ∇_X Y=(1/2)[X,Y]。【推导】由度量相容与无挠，Koszul 公式对左不变场化简得 2⟨∇_X Y,Z⟩=⟨[X,Y],Z⟩−⟨[Y,Z],X⟩+⟨[Z,X],Y⟩；双不变性使 ⟨[X,Y],Z⟩=−⟨Y,[X,Z]⟩ 等,最终 ⟨∇_X Y,Z⟩=(1/2)⟨[X,Y],Z⟩ 对一切 Z，故 ∇_X Y=(1/2)[X,Y]。②【思路】代入曲率张量定义。注意 ∇_X(∇_Y Z)=(1/4)[X,[Y,Z]]，∇_{[X,Y]} Z=(1/2)[[X,Y],Z]，X↔Y 项相减。【推导】R(X,Y)Z=∇_X∇_Y Z−∇_Y∇_X Z−∇_{[X,Y]}Z=(1/4)[X,[Y,Z]]−(1/4)[Y,[X,Z]]−(1/2)[[X,Y],Z]=(1/4)[[X,Y],Z]（用 Jacobi 恒等式 [X,[Y,Z]]−[Y,[X,Z]]=[[X,Y],Z]）。③【思路】算截面曲率：取正交单位 X,Y，K(X,Y)=⟨R(X,Y)Y,X⟩。【计算】K(X,Y)=⟨(1/4)[[X,Y],Y],X⟩=(1/4)⟨[X,Y],[X,Y]⟩=(1/4)|[X,Y]|²（用双不变性 ⟨[Z,Y],X⟩=−⟨Z,[X,Y]⟩ 移项）。④【结论】K(X,Y)=(1/4)|[X,Y]|²≥0，且为零当且仅当 X,Y 生成一个交换子代数；曲率完全由 Lie 代数结构（对偶括号）决定。"
+    0: L`<h4>我们要证明什么</h4>
+紧致 Lie 群曲率公式：配备双不变度量的紧致 Lie 群上，截面曲率由 Lie 括号长度给出
+
+<div class="eq">$$K(X,Y)=\frac14\big|[X,Y]\big|^2\ge 0$$</div>
+
+其中 \(X,Y\) 是正交单位 Lie 代数元素。曲率完全由 Lie 代数结构决定。
+
+<h4>第一步：双不变度量的 Levi-Civita 联络</h4>
+对左不变向量场 \(X,Y\)，双不变度量下联络有简洁形式
+
+<div class="eq">$$\nabla_X Y=\frac12[X,Y]$$</div>
+
+<h4>第二步：计算曲率张量</h4>
+代入曲率张量定义，利用 Lie 括号的 Jacobi 恒等式与双不变性（\(\langle[X,Y],Z\rangle=\langle X,[Y,Z]\rangle\)），得到
+
+<div class="eq">$$R(X,Y)Z=\frac14\big[[X,Y],Z\big]$$</div>
+
+<h4>第三步：取截面曲率</h4>
+截面曲率 \(K(X,Y)=\langle R(X,Y)Y,X\rangle\)。当 \(|X|=|Y|=1\) 且 \(\langle X,Y\rangle=0\)，配合双不变性化简：
+
+<div class="keybox">$$\boxed{K(X,Y)=\frac14|[X,Y]|^2\ge 0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>双不变度量的曲率 = Lie 括号长度的平方，天然非负。</div>`
   },
   "r17": {
-    0: "①【思路】任意光滑流形存在仿射联络：仿射联络构成仿射空间，可局部定义再用单位分解拼接。每个坐标图 U_α 上定义平凡联络 ∇^α（Christoffel 符号取零）。【推导】∇^α_{∂_i} ∂_j=0，即 Γ^{α,k}_{ij}=0。②【思路】取从属 {U_α} 的单位分解 {ρ_α}，定义 ∇=Σ_α ρ_α ∇^α。需验证 ∇ 是联络：证明它满足 C^∞-线性与 Leibniz 法则。【计算】∇_{fX} Y=Σ_α ρ_α ∇^α_{fX} Y=Σ_α ρ_α f ∇^α_X Y=f Σ_α ρ_α ∇^α_X Y=f ∇_X Y；∇_X(fY)=Σ_α ρ_α (X(f)Y+f∇^α_X Y)=X(f)(Σρ_α)Y+f∇_X Y=X(f)Y+f∇_X Y（用 Σρ_α=1）。③【思路】每点只有有限个 ρ_α 非零，故和局部有限、良定义且光滑。④【结论】故 ∇ 是整体仿射联络，且不依赖度量，属纯微分拓扑的存在性结果。"
+    0: L`<h4>我们要证明什么</h4>
+联络存在性定理：<strong>任何</strong>光滑流形上都存在仿射联络。与黎曼度量存在性类似，这里同样用单位分解把局部联络「黏」成全局联络，且不依赖度量。
+
+<h4>第一步：局部总有联络</h4>
+在每个坐标卡 \(U_\alpha\) 上，可定义「平凡联络」\(\nabla^\alpha\)（取 Christoffel 符号 \(\Gamma^k_{ij}=0\)），局部上总存在联络。
+
+<h4>第二步：单位分解加权拼接</h4>
+取从属于 \(\{U_\alpha\}\) 的单位分解 \(\{\rho_\alpha\}\)，定义全局联络
+
+<div class="eq">$$\nabla=\sum_\alpha \rho_\alpha\,\nabla^\alpha$$</div>
+
+<h4>第三步：验证联络公理</h4>
+需验证 \(C^\infty\)-线性与 Leibniz 法则。这两个公理对凸组合封闭：\(\nabla_X Y\) 关于 \(X\) 线性、关于 \(Y\) 满足 Leibniz 法则，逐项成立则加权和也成立。
+
+<div class="keybox">$$\boxed{\text{任何光滑流形上总存在仿射联络}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>联络的构造不依赖度量，单位分解把局部平凡联络拼成全局联络。</div>`
   },
   "r18": {
-    0: "①【思路】黎曼几何基本定理：存在唯一无挠、度量相容的联络（Levi-Civita）。用 Koszul 公式唯一确定 ∇_X Y。先写两个要求：无挠 ∇_X Y−∇_Y X=[X,Y]；度量相容 X⟨Y,Z⟩=⟨∇_X Y,Z⟩+⟨Y,∇_X Z⟩。【推导】对 X,Y,Z 三个向量场轮换度量相容条件，得三个方程。②【思路】三式组合（+第一式−第二式+第三式）消去未知项，解出 ⟨∇_X Y,Z⟩ 的显式表达式。【计算】2⟨∇_X Y,Z⟩=X⟨Y,Z⟩+Y⟨Z,X⟩−Z⟨X,Y⟩−⟨[Y,Z],X⟩+⟨[Z,X],Y⟩+⟨[X,Y],Z⟩（Koszul 公式）。③【思路】该式对任意 Z 成立且 ⟨·,·⟩ 非退化，唯一确定 ∇_X Y；同时它自动满足无挠与相容性，故既存在又唯一。④【思路】在坐标基上取 X=∂_i、Y=∂_j、Z=∂_l（此时 Lie 括号为零），得 Christoffel 符号显式。【计算】Γ^k_ij=(1/2)g^{kl}(∂_i g_jl+∂_j g_il−∂_l g_ij)。⑤【结论】Levi-Civita 联络存在且唯一，由度量完全决定。"
+    0: L`<h4>我们要证明什么</h4>
+黎曼几何基本定理：任何黎曼流形上存在<strong>唯一</strong>的无挠、度量相容联络，称为 Levi-Civita 联络。它完全由度量决定，是黎曼几何的「心脏」。
+
+<h4>第一步：两条公理</h4>
+无挠性 \(T(X,Y)=\nabla_X Y-\nabla_Y X-[X,Y]=0\)；度量相容性 \(\nabla g=0\)，即
+
+<div class="eq">$$X\langle Y,Z\rangle=\langle\nabla_X Y,Z\rangle+\langle Y,\nabla_X Z\rangle$$</div>
+
+<h4>第二步：轮换指标得 Koszul 公式</h4>
+把度量相容式对 \(X,Y,Z\) 轮换写出三个方程，配合无挠性消去未知量，解得
+
+<div class="eq">$$2\langle\nabla_X Y,Z\rangle=X\langle Y,Z\rangle+Y\langle Z,X\rangle-Z\langle X,Y\rangle-\langle X,[Y,Z]\rangle+\langle Y,[Z,X]\rangle+\langle Z,[X,Y]\rangle$$</div>
+
+右端全部由度量与 Lie 括号决定，故 \(\nabla_X Y\) 被唯一确定。
+
+<h4>第三步：坐标下的 Christoffel 符号</h4>
+取坐标基，得
+
+<div class="keybox">$$\boxed{\Gamma^k_{ij}=\frac12 g^{kl}\big(\partial_i g_{jl}+\partial_j g_{il}-\partial_l g_{ij}\big)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>无挠 + 度量相容 ⟹ Koszul 公式 ⟹ Christoffel 符号由度量唯一给出。</div>`
   },
   "r19": {
-    0: "①【思路】平行移动存在唯一性：联络给出沿曲线的平行向量场，归结为一阶线性 ODE。设 γ 是曲线，向量场 V(t)=V^k(t)∂_k 沿 γ。平行条件 ∇_{γ′}V=0 写成分量。【计算】0=∇_{γ′}V=dV^k/dt+Γ^k_ij(γ(t))·(dγ^i/dt)·V^j，即 dV^k/dt=−Γ^k_ij(γ(t)) γ′^i V^j。②【思路】这是关于未知函数 V^k(t) 的一阶线性常微分方程组，系数 Γ、γ′ 都光滑（连续即可）。【推导】闭式 y′=A(t)y 型，A 的各分量连续，由 Picard–Lindelöf（线性系统存在唯一性）定理，给定初值 V(0)=V_0，存在唯一解定义在整个区间。③【思路】线性 ⟹ 解对初值线性，且唯一性给出“平移是同构”并满足复合律。【计算】P_γ:V_0↦V(1) 线性；取逆路径得逆映射，故 P_γ 是线性同构。④【结论】平行移动 T_{γ(0)}M→T_{γ(1)}M 良定义且为线性同构。"
+    0: L`<h4>我们要证明什么</h4>
+平行移动的存在唯一性：给定联络与曲线 \(\gamma\)，对任意初始向量 \(V_0\)，存在<strong>唯一</strong>的沿 \(\gamma\) 平行向量场，从而定义平行移动同构 \(P_\gamma\)。
+
+<h4>第一步：平行条件写成 ODE</h4>
+平行性 \(\nabla_{\gamma'}V=0\) 在坐标下展开为
+
+<div class="eq">$$\frac{dV^k}{dt}+\Gamma^k_{ij}\big(\gamma(t)\big)\,\dot\gamma^i(t)\,V^j(t)=0$$</div>
+
+<h4>第二步：线性 ODE 的存在唯一性</h4>
+这是关于 \(V^k\) 的<strong>一阶线性</strong>常微分方程组，系数由 \(\gamma,\Gamma\) 给定。由 Picard–Lindelöf 定理，给定初值 \(V(0)=V_0\)，存在唯一整体解。
+
+<h4>第三步：平行移动是同构</h4>
+解对初值的线性依赖给出线性映射 \(P_\gamma:T_{\gamma(0)}M\to T_{\gamma(1)}M\)；可逆性来自沿反向曲线解同一 ODE，故是线性同构。
+
+<div class="keybox">$$\boxed{P_\gamma:T_{\gamma(0)}M\xrightarrow{\ \cong\ }T_{\gamma(1)}M}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>平行移动 = 解一个线性 ODE，存在唯一 ⟹ 它是切空间的同构。</div>`
   },
   "r20": {
-    0: "①【思路】Ricci 恒等式：二阶协变导数的交换子由曲率张量表出。以 (1,0) 张量（向量场）X^k 为例逐步展开 ∇_i∇_j X^k。【计算】∇_j X^k=∂_j X^k+Γ^k_jl X^l；再取 ∇_i（注意结果是指标 (1,0) 张量，含联络项）：∇_i∇_j X^k=∂_i(∂_j X^k+Γ^k_jl X^l)+Γ^k_im(∂_j X^m+Γ^m_jl X^l)−Γ^m_ij(∂_m X^k+Γ^k_ml X^l)。②【思路】交换 i、j 后相减。偏导交叉项 ∂_i∂_j X^k−∂_j∂_i X^k=0（光滑）自动抵消。【推导】∇_i∇_j X^k−∇_j∇_i X^k，整理含 ∂Γ 与 ΓΓ 的项。③【思路】结果辨认出曲率张量分量。【计算】∇_i∇_j X^k−∇_j∇_i X^k=(∂_i Γ^k_jl−∂_j Γ^k_il+Γ^m_jl Γ^k_im−Γ^m_il Γ^k_jm)X^l=R^k_lij X^l。④【结论】一般张量每个上标贡献 +R·T、每个下标贡献 −R·T 项；这就是 Ricci 恒等式，说明曲率度量“协变导数的不可交换性”。"
+    0: L`<h4>我们要证明什么</h4>
+Ricci 恒等式：二阶协变导数的交换子由曲率张量度量
+
+<div class="eq">$$(\nabla_i\nabla_j-\nabla_j\nabla_i)T=R_{ij}\cdot T$$</div>
+
+这揭示了曲率张量的本质——它正是「协变导数不可交换」的度量。
+
+<h4>第一步：以向量场为例展开</h4>
+写 \(\nabla_i\nabla_j X^k\) 的完整表达式（含两次 Christoffel 符号项），交换 \(i,j\) 后相减。
+
+<h4>第二步：偏导数项抵消</h4>
+交换后，对称项 \(\partial_i\partial_j X^k\) 相互抵消，剩下含 Christoffel 符号及其导数的项。
+
+<h4>第三步：整理出曲率张量</h4>
+剩下的项恰好组成
+
+<div class="eq">$$R^k_{\ lij}=\partial_i\Gamma^k_{jl}-\partial_j\Gamma^k_{il}+\Gamma^m_{jl}\Gamma^k_{im}-\Gamma^m_{il}\Gamma^k_{jm}$$</div>
+
+于是交换子等于 \(R^k_{\ lij}X^l\)。对一般张量，每个指标贡献一个曲率项。
+
+<div class="keybox">$$\boxed{[\nabla_i,\nabla_j]X^k=R^k_{\ lij}X^l}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>曲率张量 = 「协变导数交换子的系数」，度量了平行移动的路径依赖性。</div>`
   },
   "r21": {
-    0: "①【思路】联络分解：任给仿射联络 ∇，与同流形上的 Levi-Civita 联络 ∇^{LC} 之差是张量。定义 A(X,Y)=∇_X Y−∇^{LC}_X Y。【推导】两个联络之差关于 X 是 C^∞-线性、关于 Y 也是（张量性质），故 A 是 (1,2) 型张量，坐标下 A^k_ij。②【思路】把 A 按下标 (i,j) 分解为反对称与对称两部分。无挠性要求恰好由反对称部分控制。【计算】S^k_ij=(1/2)(A^k_ij−A^k_ji)，D^k_ij=(1/2)(A^k_ij+A^k_ji)，则 A=S+D、∇=∇^{LC}+S+D。③【思路】解释几何意义：反对称部分 S 对应挠率 T^k_ij=Γ^k_ij−Γ^k_ji=2S^k_ij；对称部分 D 对应非度量相容性（∇_X g 的值）。【推导】∇ 无挠 ⟺ S=0；∇ 度量相容 ⟺ D=0。④【结论】故任意联络唯一分解为“LC + 挠率项 S + 非度量相容项 D”，是 Cartan 联络理论的起点。"
+    0: L`<h4>我们要证明什么</h4>
+联络的分解定理：任何仿射联络 \(\nabla\) 可唯一分解为 Levi-Civita 联络加上一个 \((1,2)\)-张量的对称与反对称部分，其中反对称部分对应挠率。
+
+<h4>第一步：联络之差是张量</h4>
+两个联络之差 \(A=\nabla-\nabla^{LC}\) 是 \((1,2)\)-张量（虽然联络本身不是张量，但差是）。
+
+<h4>第二步：分解为对称与反对称部分</h4>
+把 \(A^k_{ij}\) 关于下标 \(i,j\) 分解：
+
+<div class="eq">$$A^k_{ij}=S^k_{ij}+D^k_{ij},\qquad S^k_{ij}=\frac12\big(A^k_{ij}-A^k_{ji}\big)$$</div>
+
+<h4>第三步：反对称部分对应挠率</h4>
+挠率 \(T^k_{ij}=\Gamma^k_{ij}-\Gamma^k_{ji}\)。因 \(\nabla^{LC}\) 无挠，反对称部分 \(S\) 正是挠率的贡献，对称部分 \(D\) 对应非度量相容性。
+
+<div class="keybox">$$\boxed{\nabla=\nabla^{LC}+S+D,\quad S\ \text{对应挠率},\ D\ \text{对应非度量相容}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>联络 = Levi-Civita + 挠率部分 + 非度量相容部分。</div>`
   },
   "r22": {
-    0: "①【思路】Berger 分类：不可约、非对称、非局部齐性的黎曼流形，其限制和乐群仅有七种。证明骨架分两步：先由 de Rham 分解归约为不可约因子，再对不可约和乐 Lie 代数做代数分类。【推导】de Rham 定理：单连通完备黎曼流形等距分解为不可约因子的乘积，和乐群也分解为各因子的和乐群之积。②【思路】限制和乐的 Lie 代数由曲率张量及其协变导数“作用生成”，且曲率算子满足 Bianchi 恒等式，落在和乐代数的某种表示里。关键代数事实：曲率张量空间 + Bianchi 恒等式 + 度量相容，把可能的 Lie 代数限制为少数几族。【推导】Berger 逐一排除不可能的 Lie 代数（由曲率代数的生成性质），得到候选清单。③【思路】七个候选对应七类几何：一般黎曼 SO(n)、Kähler U(n)、Calabi–Yau SU(n)、四元数-Kähler Sp(n)Sp(1)、超 Kähler Sp(n)、G₂、Spin(7)。前三者后四者分别对应特殊和乐。【结论】对称空间由 Cartan 分类另行处理；综上得到完整的和乐群分类定理。"
+    0: L`<h4>我们要证明什么</h4>
+Berger 分类定理：不可约非对称黎曼流形的<strong>限制和乐群</strong>只有七种可能。它把黎曼流形按「平行移动能产生哪些变换」分成了有限的七类。
+
+<h4>第一步：和乐群的 Lie 代数由曲率生成</h4>
+限制和乐群 \(\mathrm{Hol}^0(p)\) 的 Lie 代数由曲率张量 \(R\) 及其协变导数在 \(p\) 点的值<strong>生成</strong>。因此和乐群被曲率的代数性质约束，必须满足 Bianchi 恒等式。
+
+<h4>第二步：逐个排除</h4>
+通过分析曲率张量算子的代数结构与 Bianchi 恒等式，Berger 排除了所有不可能的李代数，只剩七种。
+
+<h4>第三步：七类和乐群</h4>
+
+<div class="keybox">$$\boxed{SO(n),\ U(n),\ SU(n),\ Sp(n)Sp(1),\ Sp(n),\ G_2,\ Spin(7)}$$</div>
+
+分别对应一般黎曼、Kähler、Calabi–Yau、四元 Kähler、超 Kähler，以及两种例外几何。
+
+<div class="memobox"><strong>一句话记忆：</strong>和乐群被曲率「锁死」，不可约非对称情形只有七种。</div>`
   },
   "r23": {
-    0: "①【思路】测地线存在唯一性来自 ODE 理论。测地线方程 d²x^k/dt²+Γ^k_ij x′^i x′^j=0 是二阶非线性（对未知曲线是二次的）常微分方程。先化成一阶系统。【推导】令 y=(x^1,…,x^n, v^1,…,v^n)=(x,x′)，则 y′=F(y)，其中 F 分量为 (v, −Γ^k_ij v^i v^j)。②【思路】F 关于 y 光滑（Γ 光滑、二次项光滑），由 Picard–Lindelöf 存在唯一性：给定初值 y(0)=(p,v)，存在唯一局部解。【推导】即给定 γ(0)=p、γ′(0)=v，存在唯一的局域测地线。③【思路】局部解可延伸到极大定义区间。取所有延伸的并得极大解 γ_v，定义域是含 0 的开区间，唯一性保证极大测地线唯一。【结论】从而对任意 (p,v) 存在唯一极大测地线 γ_v，且初始位置与初速决定整条线。"
+    0: L`<h4>我们要证明什么</h4>
+测地线存在唯一性：对任意点 \(p\in M\) 与切向量 \(v\in T_pM\)，存在<strong>唯一</strong>的极大测地线 \(\gamma_v\) 满足 \(\gamma_v(0)=p,\ \dot\gamma_v(0)=v\)。
+
+<h4>第一步：测地线方程</h4>
+测地线由 \(\nabla_{\dot\gamma}\dot\gamma=0\) 定义，坐标下是
+
+<div class="eq">$$\frac{d^2x^k}{dt^2}+\Gamma^k_{ij}\,\frac{dx^i}{dt}\frac{dx^j}{dt}=0$$</div>
+
+<h4>第二步：化为一阶系统</h4>
+令 \(y=(x,\dot x)\)，方程化为 \(dy/dt=F(y)\)，其中 \(F\) 由光滑的 \(\Gamma^k_{ij}\) 组成，也是光滑的。
+
+<h4>第三步：Picard–Lindelöf 定理</h4>
+这是光滑的一阶 ODE，由存在唯一性定理，对任意初值 \((p,v)\) 存在唯一局部解；再通过解的延伸得到包含 \(0\) 的最大开区间上的极大解。
+
+<div class="keybox">$$\boxed{\gamma_v(0)=p,\ \dot\gamma_v(0)=v\ \Longrightarrow\ \gamma_v\ \text{唯一存在}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>测地线方程是二阶 ODE，初值 \((p,v)\) 唯一决定一条测地线。</div>`
   },
   "r24": {
-    0: "①【思路】Gauss 引理：exp_p 的微分保持径向分量且径向与切向正交。设 v 是径向向量，w⊥v。取测地线变分 Γ(s,t)=exp_p(t(v+sw))，其变分场 J(t)=∂Γ/∂s|_{s=0} 是沿 γ_v 的 Jacobi 场。【推导】J 满足 Jacobi 方程，且 J(0)=0、J′(0)=∂/∂t∂Γ/∂s|_{t=0}=w（初始速度即 w）。②【思路】径向方向对应 ∂Γ/∂t=γ′_v(t)=基测地线的速度。要证 ⟨J(t),γ′_v(t)⟩ 恒为 0。【计算】d/dt⟨J,γ′⟩=⟨J′,γ′⟩+⟨J,γ″⟩=⟨J′,γ′⟩+⟨J,0⟩=⟨J′,γ′⟩，因 γ 是测地线 ∇_{γ′}γ′=0。③【思路】再证 ⟨J′,γ′⟩ 恒为 0：计算 d/dt⟨J′,γ′⟩=⟨J″,γ′⟩=⟨−R(J,γ′)γ′,γ′⟩=0（曲率算子的反对称性 ⟨R(J,γ′)γ′,γ′⟩=0）。【计算】故 ⟨J′,γ′⟩ 在 t=0 处取值 ⟨J′(0),γ′(0)⟩=⟨w,v⟩=0（w⊥v）且导数为 0，恒为 0；进而 ⟨J,γ′⟩ 亦恒为 0。④【结论】t=1 时 ⟨d(exp_p)_v(w), d(exp_p)_v(v)⟩=⟨J(1),γ′_v(1)⟩=0，且径向分量 ⟨J,v⟩ 方向保持，Gauss 引理得证。"
+    0: L`<h4>我们要证明什么</h4>
+Gauss 引理：指数映射的微分<strong>保持径向与切向的正交性</strong>。这是指数映射最重要性质，直接推出「测地线局部最短」。
+
+<h4>第一步：构造测地线变分</h4>
+设 \(v,w\in T_pM\) 且 \(w\perp v\)。构造变分
+
+<div class="eq">$$\Gamma(s,t)=\exp_p\big(t(v+sw)\big)$$</div>
+
+变分向量场 \(J(t)=\partial_s\Gamma|_{s=0}\) 是沿 \(\gamma_v\) 的 Jacobi 场，满足 \(J(0)=0,\ J'(0)=w\)。
+
+<h4>第二步：证明内积恒定</h4>
+计算
+
+<div class="eq">$$\frac{d}{dt}\langle J(t),\dot\gamma_v(t)\rangle=\langle J',\dot\gamma_v\rangle+\langle J,\nabla_{\dot\gamma_v}\dot\gamma_v\rangle=0$$</div>
+
+（第二项因 \(\nabla_{\dot\gamma_v}\dot\gamma_v=0\)）。初值 \(\langle J'(0),\dot\gamma_v(0)\rangle=\langle w,v\rangle=0\)，故 \(\langle J(t),\dot\gamma_v(t)\rangle\equiv 0\)。
+
+<h4>第三步：结论</h4>
+在 \(t=1\) 处：
+
+<div class="keybox">$$\boxed{\langle d(\exp_p)_v(v),\ d(\exp_p)_v(w)\rangle=\langle v,w\rangle=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>指数映射保「径向 ⊥ 切向」，所以测地线是局部最短。</div>`
   },
   "r25": {
-    0: "①【思路】Hopf–Rinow 连通黎曼流形上四条件等价：(1) 度量完备 (2) 测地完备 (3) 有界闭集紧致 (4) 任意两点可被最短测地线连接。按环 (1)⇒(2)⇒(3)⇒(4)。(1)⇒(2)：若某测地线 γ 极大区间 [0,T) 不能延伸，取 t_n→T 得 γ(t_n) 是 Cauchy 列，由完备性收敛到 q，在 q 处用局部测地线与唯一性延伸 γ 越过 T，矛盾。【推导】故 (1)⟹(2)。②【思路】(2)⇒(3)：证任意两点 p,q 可达最短测地线。取 r=d(p,q)，考虑沿 p 的测地球，定义连续函数求极小。【推导】由测地完备，exp_p 定义在 T_pM 全体；在 ∂B(p,r) 上取使 d(q,·) 最小的点，即 γ(r)=x₀，由 Gauss 引理 γ 是到 q 的最短测地线。③【思路】(3)⇒(4)：有界闭集紧致 ⟹ 度量空间完备（Cauchy 列收敛），Heine–Borel 性质给出 (1)。【结论】四条件等价，特别地紧致流形必测地完备。"
+    0: L`<h4>我们要证明什么</h4>
+Hopf–Rinow 定理：连通黎曼流形上，以下四条<strong>等价</strong>——度量完备、测地完备、任意两点由最短测地线相连、有界闭集紧致。
+
+<h4>第一步：证明链条</h4>
+证明按 \((1)\Rightarrow(2)\Rightarrow(3)\Rightarrow(4)\Rightarrow(1)\) 进行。最关键的是 \((2)\Rightarrow(3)\)。
+
+<h4>第二步：(2)⇒(3) 的核心</h4>
+测地完备保证 \(\exp_p\) 定义在整个 \(T_pM\) 上。对任意 \(q\)，取 \(T_pM\) 中以 \(p\) 为中心、\(d(p,q)\) 为半径的球面上的点，由紧致性找使距离最小的切向量 \(v\)。由 Gauss 引理，\(\gamma_v\) 是连接 \(p,q\) 的最短测地线。
+
+<h4>第三步：等价性</h4>
+其余方向由距离连续性、Heine–Borel 性质等完成，闭环成立。
+
+<div class="keybox">$$\boxed{\text{完备}\ \Longleftrightarrow\ \text{测地完备}\ \Longleftrightarrow\ \text{最短测地线存在}\ \Longleftrightarrow\ \text{有界闭集紧致}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Hopf–Rinow = 「完备」有四种等价说法，核心是测地完备 ⟹ 最短线存在。</div>`
   },
   "r26": {
-    0: "①【思路】割迹结构定理：把 exp_p 的单值区域与割迹分开。定义切集 TCL(p)={v∈T_pM : exp_p 在 v 非退化且 γ_v|[0,1] 最短}。则 M∖Cut(p)=exp_p(TCL(p))。【推导】p 不在割迹里的点 q，恰好在某条到 q 最短测地线的内部，故 q∈exp_p(TCL(p))。②【思路】证 exp_p 在 TCL(p) 上是整体微分同胚（单射 + 局部微分同胚）。单射：两点同像则存在两条等长最短测地线，必使中间点为割点，矛盾于 TCL 定义。【推导】由 Gauss 引理，exp_p 沿径向保持径向分量且与角向正交，故在 TCL(p) 上 d(exp_p) 非退化 ⟹ 局部微分同胚；再配合单射得整体微分同胚。③【思路】边界 ∂TCL(p) 是 Lipschitz 边界的星形域，其像就是 Cut(p)，测度为零。【计算】Cut(p)=exp_p(∂TCL(p))，因 ∂TCL(p) 是 (n−1) 维 Lipschitz 边界，n 维 Lebesgue 测度为零。④【结论】M∖Cut(p) 微分同胚于星形开集 TCL(p)，Cut(p) 零测，M∖Cut(p) 在 M 中稠密。"
+    0: L`<h4>我们要证明什么</h4>
+割迹结构定理：\(M\setminus\mathrm{Cut}(p)\) 通过 \(\exp_p\) 微分同胚于 \(T_pM\) 中的<strong>星形开集</strong>，且割迹 \(\mathrm{Cut}(p)\) 是零测集、其补集稠密。
+
+<h4>第一步：定义切集</h4>
+在切空间定义
+
+<div class="eq">$$\mathrm{TCL}(p)=\{v\in T_pM:\ \exp_p\ \text{在}\ v\ \text{非退化且}\ \gamma_v|_{[0,1]}\ \text{最短}\}$$</div>
+
+<h4>第二步：整体微分同胚</h4>
+\(M\setminus\mathrm{Cut}(p)=\exp_p(\mathrm{TCL}(p))\)。由 Gauss 引理，\(\exp_p\) 在 \(\mathrm{TCL}(p)\) 上是单射且局部微分同胚，故为<strong>整体</strong>微分同胚。
+
+<h4>第三步：割迹的零测与稠密补</h4>
+\(\mathrm{Cut}(p)=\exp_p(\partial\,\mathrm{TCL}(p))\)，边界是 \((n-1)\) 维 Lipschitz 面，故零测度；\(\mathrm{TCL}(p)\) 星形开 ⟹ 其补集稠密。
+
+<div class="keybox">$$\boxed{M\setminus\mathrm{Cut}(p)\cong\text{星形开集},\quad \mathrm{Cut}(p)\ \text{零测、补稠密}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>去掉割迹后，指数映射是「单射微分同胚」，割迹本身可忽略（零测）。</div>`
   },
   "r27": {
-    0: "①【思路】第一变分公式：测地线是长度（能量）泛函的临界点。设 Γ(s,t) 是 γ 的光滑变分，V(t)=∂Γ/∂s|_{s=0}。对能量 E(γ)=∫|γ′|²dt 的变分（长度类似，弧长参数下二者一致）计算一阶变分。【计算】δE=d/ds E(γ_s)|_{s=0}=2∫⟨∇_s ∂Γ/∂t, ∂Γ/∂t⟩|_{s=0} dt。②【思路】由无挠性 ∇_s ∂Γ/∂t=∇_t ∂Γ/∂s，交换协变导数，再做分部积分（固定端点 V(a)=V(b)=0）。【推导】δE=2∫⟨∇_t V, γ′⟩dt=2[⟨V,γ′⟩]_a^b−2∫⟨V,∇_t γ′⟩dt=−2∫⟨V,∇_{γ′}γ′⟩dt。③【思路】临界点要求 δE=0 对一切变分 V 成立。由 V 任意（端点为零），积分核必为零。【计算】−2∫⟨V,∇_{γ′}γ′⟩dt=0 ∀V ⟹ ∇_{γ′}γ′=0。④【结论】故能量/长度泛函的临界点正是测地线方程 ∇_{γ′}γ′=0 的解，第一变分公式 δL=−∫⟨V,∇_{γ′}γ′⟩dt（弧长参数）得证。"
+    0: L`<h4>我们要证明什么</h4>
+第一变分公式：长度泛函对固定端点变分的变分为
+
+<div class="eq">$$\delta L(\gamma)[V]=-\int\langle\nabla_{\dot\gamma}\dot\gamma,\ V\rangle\,dt$$</div>
+
+从而测地线正是长度泛函的临界点。
+
+<h4>第一步：变分与变分向量场</h4>
+设 \(\Gamma(s,t)\) 是 \(\gamma\) 的变分，\(V(t)=\partial_s\Gamma|_{s=0}\)。对长度 \(L(\gamma_s)=\int|\partial_t\Gamma|\,dt\) 求导。
+
+<h4>第二步：求导与交换协变导数</h4>
+
+<div class="eq">$$\frac{d}{ds}L\Big|_{s=0}=\int\frac{1}{|\dot\gamma|}\langle\nabla_s\partial_t\Gamma,\ \partial_t\Gamma\rangle\,dt$$</div>
+
+由无挠性 \(\nabla_s\partial_t\Gamma=\nabla_t\partial_s\Gamma\)，分部积分（弧长参数 \(|\dot\gamma|=1\)）得 \(\delta L=-\int\langle\nabla_{\dot\gamma}\dot\gamma,V\rangle\,dt\)。
+
+<h4>第三步：临界点条件</h4>
+\(\delta L=0\) 对一切 \(V\) 成立，当且仅当 \(\nabla_{\dot\gamma}\dot\gamma=0\)，即测地线方程。
+
+<div class="keybox">$$\boxed{\delta L=-\int\langle\nabla_{\dot\gamma}\dot\gamma,V\rangle\,dt\ \Longrightarrow\ \text{测地线}=\text{长度临界点}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>长度变分为零 ⟺ 加速度（协变）为零 ⟺ 测地线。</div>`
   },
   "r28": {
     0: L`<h4>我们要证明什么</h4>
