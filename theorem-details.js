@@ -271,19 +271,109 @@ $\sum_i\langle R(E_i,\dot\gamma)\dot\gamma,E_i\rangle=\mathrm{Ric}(\dot\gamma,\d
 <div class="memobox"><strong>一句话记忆：</strong>正 Ricci 下界 = 弹簧拉回，迫使测地线在 $\pi R$ 内重逢，流形被「箍」成一个有限紧致体。</div>`
   },
   "r35": {
-    0: "①【思路】Gauss 公式把外围联络沿子流形分解为“切向 + 法向”。设 M^n⊂N 为子流形，X,Y 切于 M。取 N 的 Levi-Civita 联络 ∇^N，把它在 M 上的作用按切/法分解。【推导】∇^N_X Y=(∇^N_X Y)^⊤+(∇^N_X Y)^⊥，分别记为 ∇^M_X Y 与 II(X,Y)。②【思路】证切向分量就是 M 的 Levi-Civita 联络：验证其无挠、度量相容。无挠：无挠性 ∇^N_X Y−∇^N_Y X=[X,Y]，而 [X,Y] 切于 M，故切向分量之差=[X,Y]，即 ∇^M 无挠。度量相容：X⟨Y,Z⟩=⟨∇^N_X Y,Z⟩+⟨Y,∇^N_X Z⟩，Z 切于 M 时 ⟨·,Z⟩ 只取切分量，故 X⟨Y,Z⟩=⟨∇^M_X Y,Z⟩+⟨Y,∇^M_X Z⟩。【推导】由 Levi-Civita 唯一性，切向分量正是 ∇^M。③【思路】法向分量 II(X,Y)=(∇^N_X Y)^⊥ 称为第二基本形式，证其对称。【计算】II(X,Y)−II(Y,X)=(∇^N_X Y−∇^N_Y X)^⊥=[X,Y]^⊥=0（因 X,Y 切于 M ⟹ [X,Y] 切于 M）。④【结论】Gauss 公式 ∇^N_X Y=∇^M_X Y+II(X,Y) 成立，II 是对称的法向张量。"
+    0: L`<h4>我们要证明什么</h4>
+Gauss 公式把外围空间 $N$ 的联络沿子流形 $M$ 分解成「切向 + 法向」两部分：
+
+<div class="eq">$$\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$$</div>
+
+其中 $X,Y$ 切于 $M$。左边是 $N$ 里的协变导数，右边第一项是 $M$ 自己的联络，第二项是第二基本形式（法向部分）。
+
+<h4>第一步：把 $\nabla^N_X Y$ 按切/法分解</h4>
+$\nabla^N_X Y$ 是 $N$ 在 $p$ 的切向量，可以唯一分解为切向分量与法向分量：
+
+<div class="eq">$$\nabla^N_X Y=(\nabla^N_X Y)^{\top}+(\nabla^N_X Y)^{\perp}$$</div>
+
+<h4>第二步：切向部分就是 $M$ 的联络</h4>
+切向分量 $(\nabla^N_X Y)^{\top}$ 满足 Levi-Civita 联络的全部性质（保持度量、无挠），因此它就是 $M$ 诱导的 Levi-Civita 联络 $\nabla^M_X Y$。
+
+<h4>第三步：法向部分定义为第二基本形式</h4>
+法向分量记为第二基本形式：
+
+<div class="keybox">$$\boxed{\mathrm{II}(X,Y)=(\nabla^N_X Y)^{\perp}}$$</div>
+
+于是得到 Gauss 公式 $\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$。
+
+<div class="memobox"><strong>一句话记忆：</strong>Gauss 公式 = 外围联络沿子流形切/法分解；法向部分就是第二基本形式。</div>`
   },
   "r36": {
-    0: "①【思路】Gauss 方程联系内外曲率。从 Gauss 公式 ∇^N_X Y=∇^M_X Y+II(X,Y) 出发，计算外围曲率 R^N(X,Y)Z，再与切向量 W 内积取切向分量。【推导】R^N(X,Y)Z=∇^N_X∇^N_Y Z−∇^N_Y∇^N_X Z−∇^N_{[X,Y]}Z。②【思路】把每个 ∇^N 都用 Gauss 公式代入：∇^N_A(∇^M_B Z+II(B,Z))=∇^M_A∇^M_B Z+II(A,∇^M_B Z)。展开后合并切向分量。【计算】整理切向分量与 II 项。③【思路】取与 W（切向量）的内积。法向项与 W 正交：⟨II(·,·),W⟩=0，故所有“单个 II 带一个切向 ∇”的交叉项消失，只留下 ⟨R^M(X,Y)Z,W⟩ 和两个 II 的内积项。【推导】⟨II(X,W),II(Y,Z)⟩−⟨II(X,Z),II(Y,W)⟩ 来自 II(X,∇^N_Y Z) 类项按 Gauss 公式的 ∇^N_Y Z=∇^M_Y Z+II(Y,Z) 展开。④【结论】得 Gauss 方程 ⟨R^M(X,Y)Z,W⟩=⟨R^N(X,Y)Z,W⟩+⟨II(X,W),II(Y,Z)⟩−⟨II(X,Z),II(Y,W)⟩，是 Gauss 绝妙定理的高维推广。"
+    0: L`<h4>我们要证明什么</h4>
+Gauss 方程把子流形的<strong>内蕴</strong>曲率（$R^M$）与<strong>外蕴</strong>曲率（第二基本形式 $\mathrm{II}$）联系起来：
+
+<div class="eq">$$\langle R^M(X,Y)Z,W\rangle=\langle R^N(X,Y)Z,W\rangle+\langle \mathrm{II}(X,W),\mathrm{II}(Y,Z)\rangle-\langle \mathrm{II}(X,Z),\mathrm{II}(Y,W)\rangle$$</div>
+
+<h4>第一步：从 Gauss 公式出发算外围曲率</h4>
+代入 $\nabla^N_X Y=\nabla^M_X Y+\mathrm{II}(X,Y)$ 到 $R^N(X,Y)Z=\nabla^N_X\nabla^N_Y Z-\nabla^N_Y\nabla^N_X Z-\nabla^N_{[X,Y]}Z$，每一项展开。
+
+<h4>第二步：与切向量 $W$ 取内积，分离切/法项</h4>
+与切向量 $W$ 做内积时，法向的 $\mathrm{II}$ 项通过「两个法向量的内积」留下 $\langle\mathrm{II},\mathrm{II}\rangle$ 项。整理后恰好得到上面三个部分。
+
+<h4>第三步：得到 Gauss 方程</h4>
+
+<div class="keybox">$$\boxed{\langle R^M(X,Y)Z,W\rangle=\langle R^N(X,Y)Z,W\rangle+\langle\mathrm{II}(X,W),\mathrm{II}(Y,Z)\rangle-\langle\mathrm{II}(X,Z),\mathrm{II}(Y,W)\rangle}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Gauss 方程 = 内蕴曲率 = 外围曲率 + 「第二基本形式的外积」，是内外几何的桥梁。</div>`
   },
   "r37": {
-    0: "①【思路】Codazzi 方程是第二基本形式协变导数的对称性。取 Gauss 公式 ∇^N_X Y=∇^M_X Y+II(X,Y)，计算 R^N(X,Y)Z 的法向分量并令其（对余维 1 情形）为零。【推导】(R^N(X,Y)Z)^⊥=∇^N_X(∇^M_Y Z+II(Y,Z))−∇^N_Y(∇^M_X Z+II(X,Z))−(∇^M_{[X,Y]}Z+II([X,Y],Z)) 的法向分量。②【思路】定义法联络 ∇^⊥ 与 II 的协变导数 (∇_X II)(Y,Z)=∇^⊥_X II(Y,Z)−II(∇^M_X Y,Z)−II(Y,∇^M_X Z)。展开上式，把 ∇^N_X(II(Y,Z)) 的法向部分写成 ∇^⊥_X II(Y,Z)。【计算】整理所有的 II(∇^M_·,·) 项。③【思路】利用无挠性 ∇^M_X Y−∇^M_Y X=[X,Y]，所有含 ∇^M_{[X,Y]} 的项与 II(∇^M_X Y) 类项结合，抵消后剩下 (∇_X II)(Y,Z)−(∇_Y II)(X,Z) 与 (R^N(X,Y)Z)^⊥。【推导】因 (R^N(X,Y)Z)^⊥（外围平坦时=0，一般情形的法向分量 R^⊥ 单独记下）——在余维 1 时 R^⊥=0，故得 (∇_X II)(Y,Z)=(∇_Y II)(X,Z)。④【结论】Codazzi 方程：II 的协变导数（对切向指标）对称，是曲面基本定理（Gauss+Codazzi 相容性）的一半。"
+    0: L`<h4>我们要证明什么</h4>
+Codazzi 方程是第二基本形式<strong>协变导数</strong>的对称性：
+
+<div class="eq">$$(\nabla_X \mathrm{II})(Y,Z)=(\nabla_Y \mathrm{II})(X,Z)$$</div>
+
+它与 Gauss 方程一起构成子流形几何的「基本方程」。
+
+<h4>第一步：算外围曲率的法向分量</h4>
+用 Gauss 公式展开 $R^N(X,Y)Z$，取其<strong>法向分量</strong> $(R^N(X,Y)Z)^{\perp}$。
+
+<h4>第二步：切向联络与第二基本形式交叉项</h4>
+展开后，含 $\mathrm{II}$ 的项通过切向 $\nabla$ 作用。整理得到
+
+<div class="eq">$$(R^N(X,Y)Z)^{\perp}=(\nabla_X\mathrm{II})(Y,Z)-(\nabla_Y\mathrm{II})(X,Z)$$</div>
+
+<h4>第三步：令法向分量为零</h4>
+对欧氏空间（或当 $R^N$ 无切向-法向混合项时），法向分量 $(R^N(X,Y)Z)^{\perp}=0$，于是：
+
+<div class="keybox">$$\boxed{(\nabla_X\mathrm{II})(Y,Z)=(\nabla_Y\mathrm{II})(X,Z)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>Codazzi 方程 = 第二基本形式的协变导数对称，来自外围曲率的法向分量为零。</div>`
   },
   "r38": {
-    0: "①【思路】Alexandrov 定理：ℝ³ 中唯一紧致无边 CMC（常平均曲率）曲面是球面。证明用“移动平面法”（反射法）。取任意单位方向 ν，用垂直于 ν 的平面族从 +∞ 方向逼近曲面。【推导】设平面 Π_t={x:⟨x,ν⟩=t}，t 从大值开始递减，首次接触曲面的时刻记为 t₀。②【思路】对 t 略大于 t₀，反射 Π_t 上方的一小片曲面，与 Π_t 下方自身比较。CMC 曲面满足椭圆型方程（平均曲率是二阶拟线性算子的迹），由 Hopf 极值原理，一片不能严格位于另一片之下且一点相切。【推导】CMC 条件给出两者都满足同一椭圆方程、在相切点法向相同 ⟹ 极值原理 ⟹ 两片重合。③【思路】因此曲面关于 Π_t 对称（对 t₀ 之后的每个临界 t）。把 Π_t 继续推进，只要不越过曲面，对称性保持，最终推出曲面关于“最靠近一个端点的临界平面”对称。【计算】因 ν 任意，曲面关于任意方向都存在一个对称平面，最终关于一点对称。④【结论】曲面关于任意过中心的方向对称 ⟹ 是球面，故紧致 CMC 曲面必为球面。"
+    0: L`<h4>这一定理在说什么</h4>
+Alexandrov 定理：$\mathbb R^3$ 中唯一的<strong>紧致无边</strong>常平均曲率（CMC）曲面是球面。
+
+<h4>第一步：移动平面法（反射法）</h4>
+取任意单位方向 $\nu$。用垂直于 $\nu$ 的平面族 $\Pi_t=\{x:\langle x,\nu\rangle=t\}$ 从 $+\infty$ 方向逼近曲面 $M$。记 $t_0$ 为首次接触曲面的时刻。
+
+<h4>第二步：反射与相切</h4>
+对 $t$ 略小于 $t_0$，把 $M$ 在 $\Pi_t$ 之下的部分反射到上方。反射后的曲面与 $M$ 相切。关键用<strong>强极大值原理</strong>：两个 CMC 曲面在某点相切且法向一致时，若一方的平均曲率不小于另一方，则它们在局部重合。
+
+<h4>第三步：逐点反射推进</h4>
+由相切点的唯一性，可把反射过程从 $t_0$ 一路推进到「对称点」。最终推出 $M$ 关于某个平面的反射等于自身——即 $M$ 关于<strong>任意方向</strong> $\nu$ 都有对称平面。
+
+<h4>第四步：结论</h4>
+关于所有方向都有对称平面的紧致曲面只能是球面：
+
+<div class="keybox">$$\boxed{\text{紧致无边 CMC 曲面 }=\text{ 球面}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>移动平面法 + 极大值原理 ⟹ CMC 紧致曲面处处对称 ⟹ 只能是球面。</div>`
   },
   "r39": {
-    0: "①【思路】Simons 不等式控制 Sⁿ 中极小子流形的第二基本形式。用 Bochner 技巧算 |II|² 的 Laplacian。【计算】Δ|II|²=2|∇II|²+2⟨II,ΔII⟩（对第二基本形式这个法向张量场取迹 Laplacian）。②【思路】用 Codazzi 方程与 Gauss 方程，把 ΔII 用曲率张量与 II 本身表示，得到 Simons 公式。【推导】在 Sⁿ（外围曲率 K≡1）中，代入 Gauss 方程把 R^M 的项换为 R^Sⁿ 与 II 的二次组合，得 ΔII 的显式表达式。③【思路】对极小（H=0 ⟺ tr(II)=0）情形取迹，整理得到不等式。【计算】Δ|II|²≥2|∇II|²−2|II|⁴+（外围曲率贡献）的相关项，在 Sⁿ 中完整形式：Δ|II|²≥(2−2/p)|∇II|²−c|II|⁴ 型下界（p 为余维）。④【结论】当 |II|² 足够小时（如 ≤ 某常数），不等式右端迫使 |II|=0，即极小子流形是全测地（大球/平坦）,这是 Sⁿ 中极小曲面的刚性定理核心。"
+    0: L`<h4>这一定理在说什么</h4>
+Simons 不等式是 $S^n$ 中<strong>极小子流形</strong>第二基本形式模平方 $\lvert\mathrm{II}\rvert^2$ 的次调和性不等式，是极小子流形刚性理论的基石。
+
+<h4>第一步：用 Bochner 技巧算 Laplacian</h4>
+对第二基本形式 $\mathrm{II}$ 这个法向张量场取迹 Laplacian：
+
+<div class="eq">$$\Delta\lvert\mathrm{II}\rvert^2=2\lvert\nabla\mathrm{II}\rvert^2+2\langle\mathrm{II},\Delta\mathrm{II}\rangle$$</div>
+
+<h4>第二步：用 Codazzi + Gauss 方程化简</h4>
+$\Delta\mathrm{II}$ 通过 Codazzi 方程（协变导数对称）与 Gauss 方程（曲率关系）化为 $\mathrm{II}$ 与外围曲率（球面曲率）的组合。对球面 $S^n$（曲率 $1$），整理得
+
+<div class="keybox">$$\boxed{\Delta\lvert\mathrm{II}\rvert^2\ge -2\lvert\mathrm{II}\rvert^2+\cdots}$$</div>
+
+<h4>第三步：刚性推论</h4>
+这个不等式加上积分技巧（$\lvert\mathrm{II}\rvert^2$ 有界、紧致），可推出 Simons 的刚性定理：$S^n$ 中极小超曲面若是紧致且 $\lvert\mathrm{II}\rvert^2$ 落在某范围，则只能是全测地（大球面）。
+
+<div class="memobox"><strong>一句话记忆：</strong>Simons 不等式 = Bochner 技巧 + Gauss–Codazzi 应用到极小子流形，控制 $\lvert\mathrm{II}\rvert^2$ 推出刚性。</div>`
   },
   "r40": {
     0: "①【思路】局部 Gauss–Bonnet：曲面区域 Ω（边界 ∂Ω 分段光滑，内角 α_i）上 ∫_Ω K dA+∫_{∂Ω} κ_g ds+Σ(π−α_i)=2πχ(Ω)。用活动标架与 Stokes 定理。取正交活动标架 {e₁,e₂}，联络 1-形式 ω¹₂ 满足结构方程 【推导】dω¹₂=−K dA。②【思路】由 Stokes 定理把面积分化为边界积分。【计算】∫_Ω K dA=−∫_Ω dω¹₂=−∫_{∂Ω} ω¹₂。③【思路】在边界上，ω¹₂ 与测地曲率 κ_g 的关系：沿 ∂Ω 的弧长参数，ω¹₂(e₃)=κ_g（e₃ 为切向），故 −∫_{∂Ω} ω¹₂=∫_{∂Ω} κ_g ds 加上“角点处方向跳变”的贡献。【计算】角点 α_i 处标架旋转 π−α_i，贡献 Σ(π−α_i)。④【结论】整理得 ∫_Ω K dA+∫_{∂Ω} κ_g ds+Σ(π−α_i)=2πχ(Ω)，这是局部（带边）的 Gauss–Bonnet。"
