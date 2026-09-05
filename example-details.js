@@ -1108,14 +1108,114 @@ $\mathbb{CP}^2$ 是四维紧致流形里 $\chi=3$ 的典型例子，其 Fubini�
 <div class="memobox"><strong>关键词：</strong>共轭点 = 曲率聚焦（Jacobi 场归零）；割点 = 最短性失效（可来自拓扑）。两者在球面重合，在环面分离。</div>`
   },
   "r46": {
-    0: "①【思路】第二变分公式给能量泛函的 Hesse 型：对测地线 γ 的变分场 V，δ²E=(1/2)∫(|J′|²−⟨R(J,γ′)γ′,J⟩)dt。【计算】I(V,V)=∫_a^b (|V′|²−⟨R(V,γ′)γ′,V⟩)dt。②【思路】对球面大圆 V 取法向正弦场 V(t)=sin t·E（E 平行），代入。【计算】I(V,V)=∫_0^π (cos²t−sin²t)dt=[sin t cos t/2−t/2+…]|… =−π/2<0。③【思路】负指标说明大圆在越过共轭点后不再是极大/极小。【结论】第二变分决定测地线稳定性，负指标对应共轭点。",
-    1: "①【思路】Morse 指标定理：p,q 间测地线的 Morse 指标（I 的负特征值个数）= p,q 之间共轭点的个数（含重数）。【计算】index(γ)=Σ_{t∈(a,b)} m(γ(t))，m 为共轭点重数。②【思路】对小弧（无内部共轭点）指标为 0，即局部最短。【结论】Morse 指标定理把变分指标化为共轭点计数，是测地线 Morse 理论基石。",
-    2: "①【思路】极小曲面的第二变分面积泛函 δ²A=∫(|∇u|²−(|h|²+外围曲率项)u²)dA，其正定性刻画极小曲面稳定性。【计算】δ²A(u)=∫(|∇u|²−(Ric(N,N)+|II|²)u²)dA。②【思路】若 δ²A≥0 恒成立则为稳定极小曲面，否则不稳定（可分裂为更小面积）。【结论】第二变分给出极小曲面稳定性判据，是极小曲面理论核心。"
+    0: L`<h4>目标</h4>
+用球面大圆验证第二变分的正定性与共轭点处的退化。
+
+<h4>第一步：指数形式的第二变分</h4>
+对测地线 $\gamma$ 的变分场 $V$，指标形式（第二变分的两倍）：
+
+<div class="eq">$$I(V,V)=\int_a^b\Big(\lvert V'\rvert^2-\langle R(V,\dot\gamma)\dot\gamma,V\rangle\Big)dt$$</div>
+
+<h4>第二步：球面大圆，取法向正弦场</h4>
+$S^2$ 上取 $V(t)=\sin t\cdot E$（$E$ 平行法向场）。球面曲率 $R(V,\dot\gamma)\dot\gamma=V$，于是
+
+<div class="eq">$$I(V,V)=\int_0^L(\cos^2 t-\sin^2 t)dt=\int_0^L\cos 2t\,dt$$</div>
+
+<h4>第三步：分情况</h4>
+
+<div class="warnbox">$L<\pi$：$I>0$，大圆弧是<strong>极小值</strong>。<br>$L=\pi$：$I=0$，半圆有零特征值（$V$ 是对径点处的 Jacobi 场，即共轭点）。</div>
+
+<div class="keybox">$$\boxed{L<\pi:\ \delta^2E>0;\quad L=\pi:\ \delta^2E=0\ (\text{共轭点})}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>大圆弧 $<\pi$ 极小；$=\pi$ 时零特征值 = 共轭点。</div>`,
+    1: L`<h4>目标</h4>
+Morse 指标定理：能量泛函在测地线上的 Morse 指标等于共轭点个数（计重数）。
+
+<h4>第一步：Morse 指标的定义</h4>
+Morse 指标 = 第二变分 $\delta^2E$ 的<strong>负特征值个数</strong>。而 $\delta^2E(V,V)=\int\langle LV,V\rangle dt$，其中
+
+<div class="eq">$$L=-\nabla_{\dot\gamma}^2-R(\cdot,\dot\gamma)\dot\gamma$$</div>
+
+是 Jacobi 算子（Sturm–Liouville 型二阶算子）。
+
+<h4>第二步：Sturm–Liouville 理论</h4>
+Jacobi 算子 $L$ 的特征值关于边界条件单调。随着区间长度增长，每当穿过一个共轭点（对应一个零特征值的 Jacobi 场），就多一个负特征值。
+
+<div class="keybox">$$\boxed{\text{Morse 指标}=\text{共轭点个数（计重数）}}$$</div>
+
+<h4>意义</h4>
+这把「能量泛函的临界点退化程度」（分析量）与「共轭点」（几何量）精确对应，是变分理论与 Jacobi 场理论之间的桥梁。
+
+<div class="memobox"><strong>关键词：</strong>Morse 指标 = 负特征值个数 = 共轭点个数（计重数）。</div>`,
+    2: L`<h4>目标</h4>
+极小曲面的第二变分公式，研究极小曲面稳定性。
+
+<h4>第一步：极小曲面的 Jacobi 算子</h4>
+极小曲面的第二变分涉及算子：
+
+<div class="eq">$$\Delta+\lvert\mathrm{II}\rvert^2+\mathrm{Ric}(\nu,\nu)$$</div>
+
+其中 $\nu$ 是法向量，$\mathrm{II}$ 是第二基本形式，$\mathrm{Ric}(\nu,\nu)$ 是外围 Ricci 曲率在法向的值。
+
+<h4>第二步：稳定性条件</h4>
+极小曲面<strong>稳定</strong> ⟺ 这个算子的特征值全部非负：
+
+<div class="keybox">$$\boxed{\Delta+\lvert\mathrm{II}\rvert^2+\mathrm{Ric}(\nu,\nu)\ge 0\ \Longrightarrow\ \text{稳定}}$$</div>
+
+<h4>几何含义</h4>
+第二基本形式（$\lvert\mathrm{II}\rvert^2$）与外围曲率（$\mathrm{Ric}(\nu,\nu)$）共同决定极小曲面的稳定性。肥皂膜稳定 ⟺ 扰动面积不减。
+
+<div class="memobox"><strong>关键词：</strong>极小曲面稳定性由 Jacobi 算子 $\Delta+|\mathrm{II}|^2+\mathrm{Ric}(\nu,\nu)$ 的谱决定。</div>`
   },
   "r47": {
-    0: "①【思路】球面 Sⁿ 上 p,q 间的测地线是连接两点的大圆弧，Morse 指标由经过的共轭点数决定。【计算】大弧过 k 个共轭点（间隔 π）⟹ index=(n−1)k。②【思路】不同“绕数”的大圆给出不同指标的非退化临界点。【结论】球面测地线族是 Morse 理论在环路空间上的最标准例子。",
-    1: "①【思路】紧致李群（双不变度量）上的闭测地线对应单参数子群（指数映射）。【计算】闭测地线=极大环面的环（跟子群的周期轨道）。②【思路】Bott 用 Morse 理论证明紧致李群上存在无穷多条闭测地线，并算其指标。【结论】李群闭测地线与 Morse-Bott 理论结合，是经典 Morse 理论最漂亮的推广。",
-    2: "①【思路】Bott 周期定理：稳定同伦群 π_{n+k}(O(N)) 对充分大 N 关于 n 以 8 为周期。【计算】π_k(O)=π_{k+8}(O)（稳定），周期表 Z, Z/2, Z/2, 0, Z, 0,0,0。②【思路】Bott 用 Morse 理论（对称空间上的测地线指标）证明周期。【结论】Bott 周期定理是 Morse 理论在拓扑 K-理论中的顶峰应用。"
+    0: L`<h4>目标</h4>
+用 Morse 理论解释球面 $S^n$ 上连接对径点的测地线的退化性。
+
+<h4>第一步：大圆弧与共轭点</h4>
+$S^n$ 上大圆弧每隔 $\pi$ 经过一个共轭点（对径点），每个共轭点重数 $n-1$（法向 Jacobi 场维数）。过 $k$ 个共轭点的大弧：
+
+<div class="eq">$$\mathrm{index}=(n-1)k$$</div>
+
+<h4>第二步：临界点的退化</h4>
+连接对径点 $p,-p$ 的测地线有<strong>无穷多条</strong>（所有大圆）。Morse 理论解释：这些是能量泛函在环路空间 $\Omega(S^n)$ 上的退化临界点，其指标随「绕数」递增。
+
+<div class="keybox">$$\boxed{\text{绕 }k\text{ 圈的大圆：}\mathrm{index}=(n-1)k}$$</div>
+
+<h4>意义</h4>
+球面测地线族是 Morse 理论在环路空间上最标准的例子，也是 Bott 周期定理的起点。
+
+<div class="memobox"><strong>关键词：</strong>球面对径点间无穷多条测地线 = 不同绕数的退化临界点，指标 $(n-1)k$。</div>`,
+    1: L`<h4>目标</h4>
+紧致 Lie 群上的闭测地线，与 Morse 理论的估计。
+
+<h4>第一步：双不变度量与单参数子群</h4>
+紧致 Lie 群 $G$ 配双不变度量，单参数子群 $t\mapsto\exp(tX)$ 是<strong>闭测地线</strong>（通过单位元）。
+
+<h4>第二步：Morse 理论的应用</h4>
+把 Morse 理论应用于 $G$ 的环路空间（或自由环路空间），能量泛函的临界点就是这些闭测地线。Morse 不等式给出闭测地线数量的下界估计：
+
+<div class="keybox">$$\boxed{\#\{\text{闭测地线}\}\ge \text{环路空间的拓扑复杂性下界}}$$</div>
+
+<h4>意义</h4>
+Lie 群的代数结构（单参数子群）与其几何（闭测地线）通过 Morse 理论联系起来，可用于估计闭测地线的分布。
+
+<div class="memobox"><strong>关键词：</strong>Lie 群单参数子群 = 闭测地线，Morse 理论估计其数量与分布。</div>`,
+    2: L`<h4>目标</h4>
+Bott 周期定理：把 Morse 理论应用于环路空间 $\Omega(S^n)$ 得到稳定同伦群的周期性。
+
+<h4>第一步：Morse 理论用于环路空间</h4>
+Bott 把 Morse 理论应用到球面环路空间 $\Omega(S^n)$。能量泛函的临界点是球面测地线（大圆），指标可用共轭点精确算出（前面算过 $(n-1)k$）。
+
+<h4>第二步：临界点拓扑 = 环路空间拓扑</h4>
+Morse 理论的核心：临界点的指标结构决定空间的胞腔分解。于是 $\Omega(S^n)$ 的同伦型可由测地线（临界点）的指标完全读出。
+
+<h4>第三步：Bott 周期性</h4>
+
+<div class="keybox">$$\boxed{\pi_{i+n}(S^n)\ \text{的稳定化 }=\ \Omega(S^n)\text{ 的同伦 }\ \Rightarrow\ \text{Bott 周期性}}$$</div>
+
+稳定同伦群 $\pi_{k+n}(S^n)$（$n$ 充分大）呈现周期性，周期为 8（实）或 2（复）——这是 Morse 理论最辉煌的应用。
+
+<div class="memobox"><strong>关键词：</strong>Morse 理论 + 环路空间 $\Omega(S^n)$ ⟹ 稳定同伦群的 Bott 周期性。</div>`
   },
   "r48": {
     0: "①【思路】Rauch 比较定理：截面曲率较大的空间，Jacobi 场（从同一点出发）的模长较小。设 K_M≤K̃_M̃，则对应的 |J(t)|≥|J̃(t)|。【计算】K 上界/下界推出 Jacobi 场模长的上下界比较。②【思路】球面（K=1）与欧氏（K=0）：球面 Jacobi 场 |J|=sin t 收缩，欧氏 |J|=t 线性。【计算】sin t≤t，球面 Jacobi 场比欧氏小。③【结论】正曲率使测地线“聚焦”（Jacobi 场收缩），Rauch 定理是曲率比较的基石。",
