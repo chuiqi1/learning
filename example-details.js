@@ -1218,29 +1218,250 @@ Morse 理论的核心：临界点的指标结构决定空间的胞腔分解。�
 <div class="memobox"><strong>关键词：</strong>Morse 理论 + 环路空间 $\Omega(S^n)$ ⟹ 稳定同伦群的 Bott 周期性。</div>`
   },
   "r48": {
-    0: "①【思路】Rauch 比较定理：截面曲率较大的空间，Jacobi 场（从同一点出发）的模长较小。设 K_M≤K̃_M̃，则对应的 |J(t)|≥|J̃(t)|。【计算】K 上界/下界推出 Jacobi 场模长的上下界比较。②【思路】球面（K=1）与欧氏（K=0）：球面 Jacobi 场 |J|=sin t 收缩，欧氏 |J|=t 线性。【计算】sin t≤t，球面 Jacobi 场比欧氏小。③【结论】正曲率使测地线“聚焦”（Jacobi 场收缩），Rauch 定理是曲率比较的基石。",
-    1: "①【思路】双曲空间 K=−1 与欧氏 K=0 比较：双曲 Jacobi 场 |J|=sinh t≥t 指数膨胀。【计算】sinh t≥t，双曲 Jacobi 场比欧氏大。②【思路】负曲率使测地线“发散”。【结论】Rauch 定理在负曲率方向给出 Jacobi 场下界。",
-    2: "①【思路】球面定理（1/4-pinching）用 Rauch 定理证明紧致单连通流形若 1/4<K≤1 则同胚球面。【计算】Rauch 给出指数映射的单射半径下界 ≥π，再用 Klingenberg 引理。②【结论】Rauch 比较定理是球面定理这一拓扑结论的几何引擎。"
+    0: L`<h4>目标</h4>
+比较球面 $S^n(1)$ 与欧氏空间 $\mathbb R^n$ 的 Jacobi 场增长。
+
+<h4>第一步：球面 Jacobi 场</h4>
+$S^n(1)$ 上 $J''+J=0$，解为
+
+<div class="eq">$$\lvert J(t)\rvert\le\lvert J(0)\rvert\cos t+\lvert J'(0)\rvert\sin t$$</div>
+
+<h4>第二步：欧氏 Jacobi 场</h4>
+$\mathbb R^n$ 上 $J''=0$，解为线性增长
+
+<div class="eq">$$\lvert J(t)\rvert=\lvert J(0)+tJ'(0)\rvert$$</div>
+
+<h4>第三步：比较</h4>
+球面曲率 $1>0$（欧氏曲率 $0$），由 Rauch 定理球面 Jacobi 场增长更慢：
+
+<div class="keybox">$$\boxed{K=1>0\ \Longrightarrow\ \text{球面 Jacobi 场 }(\sin/\cos)\text{ 增长慢于欧氏 }(\text{线性})}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>正曲率（球面）Jacobi 场振荡收缩，零曲率（欧氏）线性增长。</div>`,
+    1: L`<h4>目标</h4>
+比较双曲空间 $H^n(-1)$ 与欧氏空间的 Jacobi 场。
+
+<h4>第一步：双曲 Jacobi 场</h4>
+$H^n(-1)$ 上 $J''-J=0$，解为指数增长：
+
+<div class="eq">$$\lvert J(t)\rvert=\lvert\cosh t\cdot J(0)+\sinh t\cdot J'(0)\rvert$$</div>
+
+<h4>第二步：比较</h4>
+双曲曲率 $-1<0$（欧氏曲率 $0$），由 Rauch 定理，负曲率空间 Jacobi 场增长<strong>快于</strong>欧氏空间：
+
+<div class="keybox">$$\boxed{K=-1<0\ \Longrightarrow\ \text{双曲 Jacobi 场 }(\sinh/\cosh)\text{ 指数增长，快于欧氏线性}}$$</div>
+
+<h4>几何含义</h4>
+负曲率是「排斥力」，相邻测地线指数发散。Rauch 定理把这个直观现象推广到任意曲率下界。
+
+<div class="memobox"><strong>关键词：</strong>负曲率（双曲）Jacobi 场指数发散，快于欧氏线性增长。</div>`,
+    2: L`<h4>目标</h4>
+说明 Rauch 定理如何用于球面定理（pinching 定理）。
+
+<h4>第一步：球面定理的条件</h4>
+若截面曲率满足
+
+<div class="eq">$$\frac14<K\le 1$$</div>
+
+<h4>第二步：下界 $1/4$ 的作用</h4>
+下界 $K>\frac14$ 通过 Rauch 定理与共轭点比较，保证直径有上界（比球面 $S^n$ 更早出现共轭点），从而流形紧致且拓扑与球面相近；上界 $1$ 排除「过大曲率」的奇异性。
+
+<div class="keybox">$$\boxed{\tfrac14<K\le 1\ \Longrightarrow\ M\ \text{同胚于 }S^n}$$</div>
+
+<h4>几何含义</h4>
+曲率被「压」在 $(1/4,1]$ 之间时，流形拓扑上就是球面。这是比较几何最著名的应用——曲率条件决定拓扑类型。
+
+<div class="memobox"><strong>关键词：</strong>球面定理：$\frac14<K\le1$ ⟹ 同胚于 $S^n$，下界用 Rauch 定理推出。</div>`
   },
   "r49": {
-    0: "①【思路】Toponogov 比较定理：截面曲率 ≥c 的流形中，测地三角形比常曲率 c 空间的“比较三角形”更“胖”（逐边/角度比较）。【计算】若 K≥c，则三角形的两边夹角 ≥ 比较三角形对应角。②【思路】用于球面定理与拓扑结论。【结论】Toponogov 定理把曲率下界转化为三角形/距离的下界控制，是全局曲率比较核心。",
-    1: "①【思路】Alexandrov 空间是曲率 ≥c（或 ≤c）的“度量比较”空间，由 Toponogov 型条件刻画。【计算】曲率下界由三角形比较条件定义（无需光滑结构）。②【思路】这允许研究奇异的极限空间（Gromov-Hausdorff 极限）。【结论】Toponogov 条件推广到非光滑空间，引出 Alexandrov 几何。",
-    2: "①【思路】分裂定理（Cheeger-Gromoll）：Ric≥0 的完备流形若含一条直线（双向最短测地线），则流形分裂为 R×N 的等距积。【计算】Ric≥0 且含直线 ⟹ M=R×N。②【思路】证明用 Busemann 函数与 Toponogov/比较技术。【结论】分裂定理是 Ricci 非负流形结构的核心结论。"
+    0: L`<h4>目标</h4>
+说明 Toponogov 定理在球面定理中的应用。
+
+<h4>第一步：球面定理的条件</h4>
+$\frac14<K\le 1$。Toponogov 定理用 $c=\frac14$ 比较：$M$ 中三角形角度 $\ge$ 曲率 $1/4$ 球面中同边三角形的角。
+
+<h4>第二步：推出直径上界</h4>
+角度比较 ⟹ 边长比较 ⟹ 直径上界。曲率下界 $1/4$ 使所有测地线在有限距离内「收拢」，给出 $\mathrm{diam}(M)\le\pi$（与球面 $S^n$ 相当）。
+
+<div class="keybox">$$\boxed{\text{Toponogov 比较}\ \Longrightarrow\ \mathrm{diam}(M)\ \text{上界}\ \Longrightarrow\ M\text{ 紧致}}$$</div>
+
+<h4>意义</h4>
+Toponogov 定理是球面定理证明里的关键几何工具——把曲率 pinching 翻译成三角形/距离的全局控制。
+
+<div class="memobox"><strong>关键词：</strong>Toponogov 定理把曲率下界转成角度/直径控制，是球面定理的关键。</div>`,
+    1: L`<h4>目标</h4>
+说明 Toponogov 定理如何启发 Alexandrov 空间的定义。
+
+<h4>第一步：Alexandrov 空间的定义</h4>
+Alexandrov 空间（曲率下界 $c$）是满足「三角形比较」的度量空间：任意测地三角形，其顶角 $\ge$ 常曲率 $c$ 空间同边三角形的对应角。
+
+<h4>第二步：Toponogov 定理的意义</h4>
+Toponogov 定理正是说：光滑流形 $K\ge c$ ⟹ 满足 Alexandrov 的比较条件。所以 Alexandrov 空间是「曲率下界」概念在<strong>非光滑</strong>度量空间上的推广：
+
+<div class="keybox">$$\boxed{\text{光滑 }K\ge c\ \subset\ \text{Alexandrov 曲率下界 }c}$$</div>
+
+<h4>意义</h4>
+Alexandrov 空间允许奇点、崩塌极限等非光滑对象，是现代比较几何（Perelman、Cheeger–Colding 的工作）的舞台。
+
+<div class="memobox"><strong>关键词：</strong>Alexandrov 空间 = 用「三角形比较」定义曲率下界的非光滑度量空间。</div>`,
+    2: L`<h4>目标</h4>
+说明 Cheeger–Gromoll 分裂定理依赖 Toponogov 定理。
+
+<h4>第一步：分裂定理的陈述</h4>
+若 $\mathrm{Ric}\ge 0$ 且流形含一条<strong>直线</strong>（两端无限延伸的最短测地线），则流形分裂为乘积：
+
+<div class="eq">$$M\ \text{含直线}\ \Longrightarrow\ M=\mathbb R\times N$$</div>
+
+<h4>第二步：Toponogov 的作用</h4>
+直线对应的 Busemann 函数 $b$ 是「距离函数」，要证明 $b$ 是仿射的（$\nabla^2 b=0$）。这一步用 Toponogov 比较：$\mathrm{Ric}\ge0$（其实分裂定理只需这个 Ricci 条件，但比较工具来自 Toponogov 思想）把三角形角度关系转为 $b$ 的凸性，最终 $b$ 是线性函数。
+
+<div class="keybox">$$\boxed{\mathrm{Ric}\ge 0+\text{直线}\ \Longrightarrow\ M=\mathbb R\times N}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>分裂定理：非负 Ricci + 直线 ⟹ 乘积结构，依赖比较几何（Toponogov 思想）。</div>`
   },
   "r50": {
-    0: "①【思路】Bishop-Gromov 体积比较：Ric≥(n−1)c 的流形中，测地球体积 V(p,r) 与常曲率空间比较有界。【计算】r↦V(p,r)/V_c(r) 单调不减，且 V(p,r)≤V_c(r)（c>0 或 =0 情形）。②【思路】Ricci 平坦流形 V(p,r)≤ω_n rⁿ（欧氏体积）。【计算】Ric≥0 ⟹ V(p,r)≤ω_n rⁿ。③【结论】体积比较给出体积增长率的严格上界，且等号刻画常曲率空间。",
-    1: "①【思路】正 Ricci 曲率 Ric≥(n−1)c>0 的流形，体积不超过球面体积，且由 Bonnet-Myers 体积有限。【计算】V(M)≤V(Sⁿ(1/√c))。②【思路】等号成立 ⟺ M 等距于球面（刚性）。【结论】体积比较 + 刚性定理刻画球面为最大体积情形。",
-    2: "①【思路】Gromov 紧致性：Ric≥−(n−1)、diam≤D 的流形族关于 Gromov-Hausdorff 距离预紧。【计算】体积比较给出覆盖数界，配合 Gromov 预紧性判别。②【思路】这是 Ricci 流/Cheeger-Colding 理论的起点。【结论】体积比较是 Ricci 曲率下界 ⟹ 紧致性的核心机制。"
+    0: L`<h4>目标</h4>
+Ricci 平坦流形（$\mathrm{Ric}\ge0$）的体积增长。
+
+<h4>第一步：取 $c=0$</h4>
+$\mathrm{Ric}\ge0$ 对应 $c=0$，比较空间是欧氏空间 $V_0(r)=\omega_n r^n$。Bishop–Gromov 给出：
+
+<div class="eq">$$\frac{\mathrm{Vol}(B(p,r))}{r^n}\ \text{单调非增}$$</div>
+
+<h4>第二步：体积上界</h4>
+
+<div class="keybox">$$\boxed{\mathrm{Ric}\ge0\ \Longrightarrow\ \mathrm{Vol}(B(p,r))\le\omega_n r^n}$$</div>
+
+<h4>应用</h4>
+Calabi–Yau 流形是 Ricci 平坦的，其体积增长最多像欧氏空间一样快（体积 ≤ $\omega_n r^n$）。
+
+<div class="memobox"><strong>关键词：</strong>Ricci 平坦 ⟹ 体积 ≤ 欧氏体积 $\omega_n r^n$，体积比单调非增。</div>`,
+    1: L`<h4>目标</h4>
+正 Ricci 曲率（$\mathrm{Ric}\ge n-1$，即球面）的体积上界。
+
+<h4>第一步：取 $c=1$</h4>
+$\mathrm{Ric}\ge n-1$ 对应 $c=1$，比较空间是球面 $S^n$。Bishop–Gromov 给出体积比 $\mathrm{Vol}(B(p,r))/V_{S^n}(r)$ 单调非增。
+
+<h4>第二步：体积上界</h4>
+
+<div class="eq">$$\mathrm{Vol}(B(p,r))\le V_{S^n}(r),\qquad \mathrm{Vol}(M)\le\mathrm{Vol}(S^n)$$</div>
+
+<div class="keybox">$$\boxed{\mathrm{Ric}\ge n-1\ \Longrightarrow\ \mathrm{Vol}(M)\le\mathrm{Vol}(S^n)=\frac{2\pi^{(n+1)/2}}{\Gamma((n+1)/2)}}$$</div>
+
+<h4>几何含义</h4>
+正 Ricci 下界（球面量级）钳住总体积，球面是体积上界的「饱和」模型。
+
+<div class="memobox"><strong>关键词：</strong>$\mathrm{Ric}\ge n-1$ ⟹ 体积 ≤ 球面体积，Bishop–Gromov 的球面版。</div>`,
+    2: L`<h4>目标</h4>
+Gromov 紧致性定理：曲率、直径、体积有界的流形集合紧致。
+
+<h4>第一步：条件</h4>
+考虑满足 $\lvert K\rvert\le1$、$\mathrm{diam}\le D$、$\mathrm{vol}\ge v>0$ 的 $n$ 维闭流形族。
+
+<h4>第二步：体积比较给出 ε-网</h4>
+由 Bishop–Gromov，体积下界 $v>0$ + 曲率有界给出统一的覆盖数上界（每个流形可被有限个 $\varepsilon$-球覆盖，个数一致有界）。
+
+<h4>第三步：Gromov 紧致性</h4>
+
+<div class="keybox">$$\boxed{\{\lvert K\rvert\le1,\ \mathrm{diam}\le D,\ \mathrm{vol}\ge v\}\ \text{在 Gromov–Hausdorff 拓扑下紧致}}$$</div>
+
+<h4>意义</h4>
+这是「几何有界 ⟹ 紧致」的模空间结果：满足这些界的流形只有「有限种形状」（模紧致），是当代几何分析（Ricci 流、极限空间）的基础。
+
+<div class="memobox"><strong>关键词：</strong>曲率/直径/体积有界 ⟹ 流形族 GH 紧致（Gromov 紧致性定理）。</div>`
   },
   "r51": {
-    0: "①【思路】Bonnet-Myers：Ric≥(n−1)/R²>0 ⟹ diam≤πR 且 M 紧致。对球面 Sⁿ(R)，Ric=(n−1)/R²，直径恰 πR，达到界。【计算】diam(Sⁿ(R))=πR 达到 Bonnet-Myers 上界。②【思路】球面是等号情形的实现。【结论】Sⁿ(R) 是 Bonnet-Myers 直径界的“饱和”例子。",
-    1: "①【思路】RPⁿ 继承 Sⁿ 度量的常正曲率，Ric=(n−1)/R²，直径 πR/2。【计算】diam(RPⁿ)=πR/2（对径点粘合后最远距离减半）。②【思路】由 Bonnet-Myers，RPⁿ 紧致且有界直径。【结论】RPⁿ 展示非单连通常正曲率空间的直径行为。",
-    2: "①【思路】非紧致但 Ric>0 的流形（如抛物型 z=x²+y² 图，半径为 |x| 增长但 Ric 有正分量）需注意 Ric>0 逐点≠Ric≥c>0 一致。【计算】旋转抛物面的 Ricci 有下界但不一致正，故可非紧致。②【思路】Bonnet-Myers 要求 Ric≥(n−1)c>0 的一致下界。【结论】“逐点正曲率”不足以紧致化，一致正下界才是关键（反例：抛物面）。"
+    0: L`<h4>目标</h4>
+球面 $S^n(R)$ 达到 Bonnet–Myers 上界，是刚性情形。
+
+<h4>计算</h4>
+$S^n(R)$ 的 Ricci $=\frac{n-1}{R^2}$（取等），直径 $=\pi R$：
+
+<div class="eq">$$\mathrm{Ric}=\frac{n-1}{R^2},\qquad \mathrm{diam}(S^n(R))=\pi R$$</div>
+
+<div class="keybox">$$\boxed{\mathrm{diam}(S^n(R))=\pi R\ \text{达到 Bonnet–Myers 上界}}$$</div>
+
+<h4>刚性</h4>
+球面是 Bonnet–Myers 直径界的「饱和」例子——取等号时流形等距于半径 $R$ 的球面。
+
+<div class="memobox"><strong>关键词：</strong>$S^n(R)$ 达到直径界 $\pi R$，是 Bonnet–Myers 的刚性情形。</div>`,
+    1: L`<h4>目标</h4>
+实射影空间 $\mathbb{RP}^n$ 验证 Bonnet–Myers 的有限基本群结论。
+
+<h4>第一步：Ricci 与球面相同</h4>
+$\mathbb{RP}^n$ 是 $S^n$ 的对径商，Ricci 曲率与 $S^n$ 相同：$\mathrm{Ric}=\frac{n-1}{R^2}$。
+
+<h4>第二步：直径更小，基本群有限</h4>
+$\mathbb{RP}^n$ 直径 $=\frac{\pi R}{2}$（对径点被粘合，最大距离减半），基本群 $\pi_1(\mathbb{RP}^n)=\mathbb Z_2$：
+
+<div class="keybox">$$\boxed{\mathrm{diam}(\mathbb{RP}^n)=\frac{\pi R}{2},\quad\pi_1(\mathbb{RP}^n)=\mathbb Z_2}$$</div>
+
+<h4>验证定理</h4>
+直径 $\frac{\pi R}{2}\le\pi R$ 满足上界；基本群 $\mathbb Z_2$ 有限，验证了 Bonnet–Myers 的「基本群有限」结论。
+
+<div class="memobox"><strong>关键词：</strong>$\mathbb{RP}^n$ 直径 $\pi R/2$、$\pi_1=\mathbb Z_2$，验证 Bonnet–Myers 有限性。</div>`,
+    2: L`<h4>目标</h4>
+说明「Ricci 正」≠「紧致」——需要一致下界。
+
+<h4>第一步：反例</h4>
+存在 Ricci 曲率为正但<strong>非紧致</strong>的流形，如 $\mathbb R^2$ 上的旋转抛物面（Ricci 处处 $>0$，但 Ricci 下界趋于 $0$）。
+
+<h4>第二步：关键区别</h4>
+Bonnet–Myers 需要的是<strong>一致</strong>正下界 $\mathrm{Ric}\ge\frac{n-1}{R^2}>0$，而不是「点点正」：
+
+<div class="warnbox">「$\mathrm{Ric}>0$ 点点正」⟹ 可以非紧致；「$\mathrm{Ric}\ge c>0$ 一致正」⟹ 紧致、直径有界。</div>
+
+<div class="keybox">$$\boxed{\mathrm{Ric}>0\ \nRightarrow\ \text{紧致};\quad \mathrm{Ric}\ge c>0\ \Rightarrow\ \text{紧致}}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>Ricci 一致正下界才保证紧致；点点正（如抛物面）可以非紧致。</div>`
   },
   "r52": {
-    0: "①【思路】环面崩塌（collapse）：把平坦环面 T² 的某一方向长度 →0，度量族在 Gromov-Hausdorff 意义下收敛到一维圆 S¹。【计算】T²(长度 ε×1) → S¹（Gromov-Hausdorff）。②【思路】崩塌时直径保持有界但体积 →0，展示 Gromov-Hausdorff 极限可降低维数。【结论】崩塌现象是 G-H 收敛与几何极限理论的核心例子。",
-    1: "①【思路】Perelman 的 W-泛函（entropy）：Ricci 流下的单调量，用于证明非崩溃与奇异结构定理。【计算】W(g,f,τ)=∫[τ(S+|∇f|²)+f−n](4πτ)^{-n/2}e^{-f}dV，沿 Ricci 流单调。②【思路】W-泛函控制体积非坍塌。【结论】W-泛函是 Perelman 解决 Poincaré/几何化猜想的分析核心。",
-    2: "①【思路】Cheeger-Colding 理论研究 Ric≥−(n−1) 且体积非坍塌时的 G-H 极限空间结构。【计算】极限空间是度量空间，具有“几乎处处”的切锥结构与正则性。②【思路】分裂定理、体积收敛、测度收敛等都在这框架下。【结论】Cheeger-Colding 建立了 Ricci 曲率下界流形极限的完整理论。"
+    0: L`<h4>目标</h4>
+平坦环面崩塌的 GH 极限。
+
+<h4>第一步：崩塌过程</h4>
+取平坦环面 $T^2(R,r)$（大半径 $R$ 固定，小半径 $r\to0$）。当 $r\to0$，环面「退化」成一个方向消失：
+
+<div class="eq">$$T^2(R,r)\ \xrightarrow{\text{GH}}\ S^1(R)$$</div>
+
+<h4>第二步：维数崩塌</h4>
+极限从二维崩塌到一维。这是 GH 收敛区别于光滑收敛的关键——极限空间可以降维：
+
+<div class="keybox">$$\boxed{\dim\ \text{从 }2\ \text{崩塌到 }1}$$</div>
+
+<h4>意义</h4>
+崩塌（collapse）现象说明 GH 极限不保持维数，这是理解 Ricci 流奇点和极限空间结构的核心困难。
+
+<div class="memobox"><strong>关键词：</strong>环面小半径 →0 ⟹ GH 极限是圆 $S^1$，维数从 2 崩塌到 1。</div>`,
+    1: L`<h4>目标</h4>
+Perelman 的 $W$-泛函单调性在 Ricci 流 GH 极限分析中的作用。
+
+<h4>第一步：$W$-泛函</h4>
+Perelman 引入 $W$-泛函（熵），它沿 Ricci 流<strong>单调</strong>。单调性提供了 Ricci 流的「能量」，用于控制奇点形成。
+
+<h4>第二步：分析 GH 极限</h4>
+$W$-泛函单调性 ⟹ Ricci 流奇点可被「手术」（surgery）处理，手术后的流形序列的 GH 极限可分析。
+
+<div class="keybox">$$\boxed{W\text{-泛函单调性}\ \Longrightarrow\ \text{Ricci 流奇点可控}\ \Longrightarrow\ \text{分析 GH 极限}}$$</div>
+
+<h4>意义</h4>
+这是 Perelman 证明 Poincaré 猜想的关键工具之一——用单调量控制 Ricci 流的长期行为与极限。
+
+<div class="memobox"><strong>关键词：</strong>Perelman $W$-泛函单调性，控制 Ricci 流奇点与 GH 极限。</div>`,
+    2: L`<h4>目标</h4>
+Cheeger–Colding 理论：Ricci 下界序列的 GH 极限结构。
+
+<h4>第一步：Ricci 下界序列的极限</h4>
+考虑 $\mathrm{Ric}\ge-(n-1)$ 的流形序列，其 GH 极限是<strong>度量空间</strong>（可能非光滑、带奇点）。
+
+<h4>第二步：几乎处处可微结构</h4>
+Cheeger–Colding 证明：这样的极限空间<strong>几乎处处</strong>有切锥，是（reifenberg 意义下的）Lipschitz 流形，具有可测的黎曼度量结构。
+
+<div class="keybox">$$\boxed{\mathrm{Ric}\text{ 下界序列的 GH 极限}=\text{几乎处处可微的 Lipschitz 流形}}$$</div>
+
+<h4>意义</h4>
+这把经典黎曼几何推广到奇异空间，是 Ricci 曲率下界极限空间理论（Cheeger–Colding 理论）的核心，支撑了后来对 Ricci 极限的深入研究。
+
+<div class="memobox"><strong>关键词：</strong>Ricci 下界 GH 极限 = 几乎处处可微的 Lipschitz 流形（Cheeger–Colding）。</div>`
   },
   "t1": {
     0: "①【思路】Rⁿ 可缩：构造同伦 F(x,t)=(1−t)x 从恒等映射缩到常值映射。【计算】F(x,0)=x（id），F(x,1)=0（常值）。②【思路】故 Rⁿ 与单点同伦等价，π₁=0、H_n=0（n>0）。【结论】Rⁿ 是标准可缩空间，H_n(Rⁿ)=Z（n=0）余为 0。",
