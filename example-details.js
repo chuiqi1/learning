@@ -528,29 +528,262 @@ Betti 数是拓扑量，本可任意大（如拼接许多环柄）。Gromov 的�
 <div class="memobox"><strong>关键词：</strong>曲率有界 + 直径有界 ⟹ Betti 数有界——几何钳制拓扑复杂度。</div>`
   },
   "r35": {
-    0: "①【思路】R³ 中曲面 M 的第二基本形式 II(X,Y)=⟨∇_X N, Y⟩=−⟨∇_X Y,N⟩（外法向项目）。【计算】h_ij=⟨∂_{ij} r, N⟩。②【思路】形状算子 S(X)=−∇_X N，其矩阵 = 主曲率对角化。【计算】S 的特征值 κ₁,κ₂ 为主曲率。③【结论】第二基本形式刻画曲面如何弯曲（外蕴），与 Gauss 曲率 K=det S=κ₁κ₂ 联系。",
-    1: "①【思路】超曲面（余维 1 子流形）有单位法向 N，形状算子 S 是自伴的。【计算】⟨SX,Y⟩=⟨X,SY⟩（Weingarten 自伴）。②【思路】主曲率是 S 的特征值，可对角化。【计算】S(e_i)=κ_i e_i。③【结论】超曲面几何完全由第二基本形式（等价于形状算子）决定，是子流形理论的特殊情形。",
-    2: "①【思路】全测地子流形指第二基本形式恒为零（h=0），即测地线在子流形中也是全空间的测地线。【计算】II≡0。②【思路】等价于 ∇^M_X Y=∇^全空间_X Y（切向分量不缺失），诱导联络=限制联络。【计算】h=0 ⟺ 子流形测地线=大流形测地线。③【结论】全测地子流形（如球面中的大圆、欧氏空间中的仿射子空间）是最“直”的子流形。"
+    0: L`<h4>目标</h4>
+写出 $\mathbb R^3$ 中曲面的第二基本形式的经典表示，并联系主曲率。
+
+<h4>第一步：第二基本形式的坐标表示</h4>
+$\mathbb R^3$ 中曲面 $M$ 的第二基本形式写作
+
+<div class="eq">$$\mathrm{II}=L\,du^2+2M\,dudv+N\,dv^2$$</div>
+
+其中 $L=\langle r_{uu},N\rangle,\ M=\langle r_{uv},N\rangle,\ N=\langle r_{vv},N\rangle$，$N$ 是单位法向量。
+
+<h4>第二步：形状算子（Weingarten 映射）</h4>
+形状算子 $S(X)=-\nabla_X N$ 满足 $\langle S(X),Y\rangle=\mathrm{II}(X,Y)$。它的特征值就是主曲率 $\kappa_1,\kappa_2$：
+
+<div class="keybox">$$\boxed{S\ \text{的特征值}=\text{主曲率 }\kappa_1,\kappa_2}$$</div>
+
+<h4>第三步：Gauss 曲率与平均曲率</h4>
+
+<div class="eq">$$K=\kappa_1\kappa_2=\frac{LN-M^2}{EG-F^2},\qquad H=\frac{\kappa_1+\kappa_2}{2}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>第二基本形式 $Ldu^2+2Mdudv+Ndv^2$，主曲率 = 形状算子特征值。</div>`,
+    1: L`<h4>目标</h4>
+余维 1 的超曲面的第二基本形式可写成 $h\cdot g$ 的简化形式，并给出平均曲率。
+
+<h4>第一步：超曲面的第二基本形式</h4>
+超曲面（余维数 1）的法空间是一维的，所以第二基本形式（法向值）等价于一个对称 $(0,2)$ 张量 $h$：
+
+<div class="eq">$$\mathrm{II}(X,Y)=h(X,Y)\,N$$</div>
+
+<h4>第二步：平均曲率</h4>
+平均曲率是 $h$ 的迹（再除维数）：
+
+<div class="keybox">$$\boxed{H=\frac{1}{n}\mathrm{tr}(h)=\frac{\kappa_1+\cdots+\kappa_n}{n}}$$</div>
+
+<h4>几何含义</h4>
+$H=0$ 就是极小超曲面（平均曲率为零），这类曲面是变分问题（面积泛函的临界点）的解。
+
+<div class="memobox"><strong>关键词：</strong>超曲面的第二基本形式 = 对称张量 $h$，平均曲率 $H=\frac1n\mathrm{tr}(h)$。</div>`,
+    2: L`<h4>目标</h4>
+说明全测地子流形（$\mathrm{II}\equiv 0$）的概念，并举球面中赤道 vs 纬线的例子。
+
+<h4>第一步：全测地的定义</h4>
+若第二基本形式恒为零，则子流形是<strong>全测地</strong>的：
+
+<div class="eq">$$\mathrm{II}\equiv 0\ \Longrightarrow\ \nabla^N_X Y=\nabla^M_X Y$$</div>
+
+此时 $M$ 的测地线也是 $N$ 的测地线——沿 $M$ 走「最直」的线，在整个外围空间里也是最直的。
+
+<h4>第二步：球面中的例子</h4>
+
+<div class="warnbox"><strong>赤道 $S^{n-1}\subset S^n$</strong>：全测地（大圆是球面测地线）。<br><strong>一般纬线</strong>：不是全测地，因为沿纬线走会「向外弯」，$\mathrm{II}\neq 0$。</div>
+
+<div class="keybox">$$\boxed{\text{全测地 }\iff \mathrm{II}\equiv 0\iff\text{ 子流形测地线}=外围测地线}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>全测地 = 第二基本形式为零 = 大球面（赤道）是，纬线不是。</div>`
   },
   "r36": {
-    0: "①【思路】Gauss 方程把子流形曲率张量与外围曲率张量、第二基本形式联系起来。【计算】R^M(X,Y,Z,W)=R^外围(X,Y,Z,W)+⟨II(X,W),II(Y,Z)⟩−⟨II(X,Z),II(Y,W)⟩。②【思路】对 R³ 中曲面（外围平坦），二维 Gauss 曲率 K=det(II)/det(I)（即 κ₁κ₂）。【计算】K=(h_11h_22−h_12²)/(g_11g_22−g_12²)。③【结论】Gauss 绝妙定理的现代形式：外围平坦时 K 由第一、二基本形式组合表达。",
-    1: "①【思路】常曲率 c 空间中的子流形，Gauss 方程给出截面曲率与外围 c 及第二基本形式的差。【计算】K^M(σ)=c+⟨II(X,X),II(Y,Y)⟩−|II(X,Y)|²（单位正交 X,Y）。②【思路】故子流形曲率 ≥（或 ≤）外围曲率取决于弦切向。【结论】Gauss 方程是子流形曲率比较的出发点（如 Simons 公式的输入）。",
-    2: "①【思路】平坦子流形（K≡0）嵌入欧氏空间：由 Gauss 方程，II 的“行列式”为零。【计算】K=0 ⟺ h_11h_22−h_12²=0。②【思路】例如圆柱面（可展面）K=0，第二基本形式退化（一个主曲率为 0）。【计算】圆柱 h 矩阵秩 1。③【结论】可展面 K=0 是可“展平”到平面的曲面，Gauss 方程刻画这一退化。"
+    0: L`<h4>目标</h4>
+推导 $\mathbb R^3$ 中曲面的 Gauss 曲率公式，说明「绝妙定理」。
+
+<h4>第一步：Gauss 方程用于 $\mathbb R^3$ 中曲面</h4>
+外围 $\mathbb R^3$ 平坦（$R^N=0$），Gauss 方程给出
+
+<div class="eq">$$R^M(X,Y,Z,W)=\mathrm{II}(X,W)\mathrm{II}(Y,Z)-\mathrm{II}(X,Z)\mathrm{II}(Y,W)$$</div>
+
+<h4>第二步：二维时化为行列式</h4>
+二维曲率张量只有一个分量，代入得
+
+<div class="keybox">$$\boxed{K=\frac{LN-M^2}{EG-F^2}}$$</div>
+
+<h4>第三步：绝妙定理</h4>
+左边 $K$ 是内蕴量（只依赖度量 $E,F,G$），右边看似依赖 $L,M,N$（外蕴的第二基本形式），但等式说右边结果只由 $E,F,G$ 决定。Gauss 称此为「绝妙定理」——$K$ 是内蕴的。
+
+<div class="memobox"><strong>关键词：</strong>$K=\frac{LN-M^2}{EG-F^2}$ 只依赖第一基本形式 ⟹ 绝妙定理。</div>`,
+    1: L`<h4>目标</h4>
+写出常曲率空间 $c$ 中子流形的 Gauss 方程。
+
+<h4>第一步：外围曲率的贡献</h4>
+若外围是常曲率 $c$ 空间，则 $R^N(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$。代入 Gauss 方程：
+
+<div class="eq">$$R^M(X,Y,Z,W)=c(\langle Y,Z\rangle\langle X,W\rangle-\langle X,Z\rangle\langle Y,W\rangle)+\langle\mathrm{II}(X,W),\mathrm{II}(Y,Z)\rangle-\langle\mathrm{II}(X,Z),\mathrm{II}(Y,W)\rangle$$</div>
+
+<h4>第二步：二维情形的标量形式</h4>
+对二维曲面：
+
+<div class="keybox">$$\boxed{K^M=c+\frac{\det(\mathrm{II})}{\det(\mathrm I)}}$$</div>
+
+<h4>几何含义</h4>
+外围曲率 $c$ 是「基底」，第二基本形式的行列式是「外蕴弯曲的附加项」。球面 $c>0$ 里的曲面，即使 $\mathrm{II}$ 退化也有正的内蕴曲率。
+
+<div class="memobox"><strong>关键词：</strong>常曲率 $c$ 外围 ⟹ $K^M=c+\det(\mathrm{II})/\det(\mathrm I)$。</div>`,
+    2: L`<h4>目标</h4>
+说明 $\mathbb R^3$ 中 Gauss 曲率为零的曲面是可展曲面。
+
+<h4>第一步：平坦曲面 ⟹ 第二基本形式退化</h4>
+$\mathbb R^3$ 中曲面 $K=0$ 代入 $K=\frac{LN-M^2}{EG-F^2}$，得
+
+<div class="eq">$$K=0\ \Longrightarrow\ LN-M^2=0\ \Longrightarrow\ \det(\mathrm{II})=0$$</div>
+
+<div class="keybox">$$\boxed{\mathbb R^3\text{ 中 }K=0\iff\det(\mathrm{II})=0}$$</div>
+
+<h4>第二步：可展曲面</h4>
+$\det(\mathrm{II})=0$ 意味着两个主曲率至少一个为零，曲面沿某个方向「不弯」。这类曲面叫<strong>可展曲面</strong>——可以摊平到平面而不拉伸（如圆柱面、锥面）。
+
+<div class="memobox"><strong>关键词：</strong>平坦曲面（$K=0$）⟹ $\det(\mathrm{II})=0$ ⟹ 可展曲面。</div>`
   },
   "r37": {
-    0: "①【思路】Codazzi 方程是子流形第二基本形式的可积性条件之一，配合 Gauss 方程刻画子流形（基本定理）。【计算】(∇_X II)(Y,Z)=(∇_Y II)(X,Z)（无挠形式）。②【思路】R³ 中曲面分量形式：∇_i h_jk=∇_j h_ik。【计算】∂_1 h_22−∂_2 h_12=Γ 项修正，这是 Codazzi 方程。③【结论】Codazzi 方程保证第二基本形式满足的可积条件，与 Gauss 方程共同由曲率张量分解决定。",
-    1: "①【思路】常平均曲率（CMC）曲面 H=const，Codazzi 方程约束其第二基本形式的无迹部分满足特定散度方程。【计算】令 Φ=h−H g（无迹部分），Codazzi+常 H 得 div Φ=0。②【思路】即 Φ 是自由发散（traceless Codazzi）张量。【结论】CMC 曲面（如 Delaunay 曲面）的研究大量使用 Codazzi 方程与散度形式。",
-    2: "①【思路】等距嵌入问题：给定黎曼流形能否等距嵌入欧氏空间，需要解 Gauss-Codazzi 方程求第二基本形式。【计算】Gauss-Codazzi 是关于 h_ij 的非线性 PDE，其可解性决定嵌入存在性（Nash 定理）。②【思路】Nash 嵌入定理保证光滑流形总可等距嵌入到 Rⁿ（维数足够高）。【结论】Gauss-Codazzi 是等距嵌入理论的核心方程。"
+    0: L`<h4>目标</h4>
+写出 $\mathbb R^3$ 中曲面 Codazzi 方程的 Christoffel 符号形式。
+
+<h4>第一步：分量形式</h4>
+Codazzi 方程 $\nabla_i h_{jk}=\nabla_j h_{ik}$ 展开（协变导数用 Christoffel 符号表示）：
+
+<div class="eq">$$\partial_1 h_{22}-\partial_2 h_{12}=h_{1j}\Gamma^j_{22}-h_{2j}\Gamma^j_{12}$$</div>
+
+<h4>第二步：用 $L,M,N$ 写出</h4>
+记 $h_{11}=L,\ h_{12}=M,\ h_{22}=N$，则 Codazzi 方程化为
+
+<div class="keybox">$$\boxed{L_v-M_u=L\Gamma^1_{12}+M(\Gamma^2_{12}-\Gamma^1_{11})-N\Gamma^2_{11}}$$</div>
+
+（及关于 $M_v-N_u$ 的对称式。）
+
+<h4>几何含义</h4>
+Codazzi 方程是 $L,M,N$ 必须满足的微分关系——它们是子流形可嵌入的<strong>可积性条件</strong>之一。
+
+<div class="memobox"><strong>关键词：</strong>Codazzi 方程用 Christoffel 符号给出 $L,M,N$ 的可积性约束。</div>`,
+    1: L`<h4>目标</h4>
+说明常平均曲率（CMC）曲面中 Gauss–Codazzi 方程构成可积系统。
+
+<h4>第一步：CMC 条件</h4>
+常平均曲率曲面 $H=\mathrm{const}$（肥皂膜是物理实现）。
+
+<h4>第二步：Gauss + Codazzi = 可积系统</h4>
+Gauss 方程给出 $K$ 与 $\mathrm{II}$ 的关系，Codazzi 方程给出 $\mathrm{II}$ 的协变导数对称性。二者合起来是 $h_{ij}$ 的<strong>非线性偏微分方程组</strong>：
+
+<div class="eq">$$K=\frac{LN-M^2}{EG-F^2}\ (\text{Gauss}),\qquad \nabla_i h_{jk}=\nabla_j h_{ik}\ (\text{Codazzi})$$</div>
+
+<div class="keybox">$$\boxed{\text{Gauss--Codazzi 方程组 }=\text{ CMC 曲面的可积系统}}$$</div>
+
+<h4>意义</h4>
+CMC 曲面理论（如 Delaunay 曲面、泡泡）本质就是研究这个可积系统的解。
+
+<div class="memobox"><strong>关键词：</strong>CMC 曲面 = Gauss–Codazzi 可积系统的解。</div>`,
+    2: L`<h4>目标</h4>
+说明 Gauss–Codazzi 方程是等距嵌入的局部可积性条件，联系 Nash 嵌入定理。
+
+<h4>第一步：基本定理</h4>
+子流形几何的基本定理：给定第一、第二基本形式满足 Gauss–Codazzi 方程，则存在（局部唯一的）等距嵌入。
+
+<div class="eq">$$\text{Gauss + Codazzi 满足}\ \Longrightarrow\ \text{局部可嵌入}$$</div>
+
+<h4>第二步：Nash 嵌入定理</h4>
+Nash 定理断言任何黎曼流形都能等距嵌入到足够高维的欧氏空间：
+
+<div class="keybox">$$\boxed{\text{任何 }(M^n,g)\ \text{可等距嵌入 }\mathbb R^N\ (N\gg n)}$$</div>
+
+<h4>联系</h4>
+Gauss–Codazzi 方程就是这个嵌入的<strong>局部障碍</strong>——它们必须满足才能局部等距嵌入；Nash 定理说全局上总能找到足够大的 $N$ 使一切光滑嵌入。
+
+<div class="memobox"><strong>关键词：</strong>Gauss–Codazzi = 局部可积条件；Nash = 全局嵌入总存在（高维）。</div>`
   },
   "r38": {
-    0: "①【思路】悬链面（catenoid）是极小曲面 H=0，是拽物线绕其渐近线旋转所得（也是极小旋转面）。【计算】旋转极小曲面满足方程，解为悬链线 y=a cosh(x/a)。②【思路】验证 H=κ₁+κ₂=0：主曲率等值反号。【计算】κ₁=−κ₂。③【结论】悬链面与螺旋面是一对（共轭）极小曲面，都满足 H=0。",
-    1: "①【思路】螺旋面是直纹极小曲面，参数化 (u cos v, u sin v, v)（或含参数 a）。【计算】r(u,v)=(u cos v, u sin v, av)。②【思路】验证极小：主曲率 κ₁=a/(u²+a²)、κ₂=−a/(u²+a²)，和为零。【计算】H=(κ₁+κ₂)/2=0。③【结论】螺旋面是直纹极小曲面，与悬链面通过共轭族联系（同属 helicoid-catenoid 族）。",
-    2: "①【思路】球面有常平均曲率但不是极小（H=1/R≠0），是 CMC 曲面。【计算】κ₁=κ₂=1/R，H=1/R，K=1/R²。②【思路】Alexandrov 定理断言：R³ 中紧致嵌入的 CMC 曲面必是球面。【计算】H=const 且嵌入紧致 ⟹ 球面。③【结论】球面是唯一紧致嵌入 CMC 曲面，是等周问题（面积给定体积最大）的解。"
+    0: L`<h4>目标</h4>
+介绍悬链面（catenoid）——唯一的极小旋转曲面（除平面外）。
+
+<h4>第一步：旋转极小曲面的方程</h4>
+旋转曲面 $y=y(x)$ 绕轴旋转，极小条件 $H=0$ 化为 ODE，解为悬链线：
+
+<div class="eq">$$y=a\cosh\frac{x}{a}$$</div>
+
+<h4>第二步：验证极小</h4>
+悬链面两个主曲率等值反号：
+
+<div class="keybox">$$\boxed{\kappa_1=-\kappa_2\ \Longrightarrow\ H=\frac{\kappa_1+\kappa_2}{2}=0}$$</div>
+
+<h4>第三步：Gauss 曲率</h4>
+$K=\kappa_1\kappa_2=-\kappa_1^2<0$，悬链面处处负曲率。它与螺旋面是「共轭极小曲面对」。
+
+<div class="memobox"><strong>关键词：</strong>悬链面 = 悬链线旋转 = 唯一极小旋转面，$H=0$、$K<0$。</div>`,
+    1: L`<h4>目标</h4>
+介绍螺旋面（helicoid）——直纹极小曲面，与悬链面共形等价。
+
+<h4>第一步：螺旋面的构造</h4>
+螺旋面由一条直线沿轴旋转并同时上升生成，是<strong>直纹面</strong>（由直线族织成）。
+
+<h4>第二步：极小性</h4>
+螺旋面满足 $H=0$，是极小曲面。它与悬链面通过 Weierstrass 表示联系，是<strong>共形等价</strong>的一对：
+
+<div class="keybox">$$\boxed{\text{螺旋面}\ \xleftrightarrow{\text{共形}}\ \text{悬链面}}$$</div>
+
+<h4>应用</h4>
+螺旋面出现在 DNA 双螺旋、纳米螺旋结构等自然界里——因为极小曲面是「面积最小、最省材料」的形状。
+
+<div class="memobox"><strong>关键词：</strong>螺旋面 = 直纹极小曲面，与悬链面共形，是自然界的「最省材料」形状。</div>`,
+    2: L`<h4>目标</h4>
+说明球面是唯一紧致无边 CMC 曲面，并联系等周问题。
+
+<h4>第一步：Alexandrov 定理</h4>
+$\mathbb R^3$ 中紧致无边 CMC 曲面 = 球面。球面的平均曲率：
+
+<div class="eq">$$H=\frac{1}{R}$$</div>
+
+<h4>第二步：等周问题</h4>
+等周问题：给定面积，求体积最大的曲面。解是球面——因为体积变分的一阶条件正是 $H=\mathrm{const}$（常数平均曲率），而球面是唯一紧致解。
+
+<div class="keybox">$$\boxed{\text{等周问题（定面积最大体积）的解}=\text{球面}}$$</div>
+
+<div class="memobox"><strong>关键词：</strong>球面 = 唯一紧致 CMC 曲面 = 等周问题最优解，$H=1/R$。</div>`
   },
   "r39": {
-    0: "①【思路】S³ 中的极小曲面，如 Clifford 环面 T²⊂S³，是极小（平均曲率零）的嵌入环面。【计算】S³={(z,w):|z|²+|w|²=1}，Clifford 环面 |z|=|w|=1/√2，极小。②【思路】其 Gauss 曲率可正可负（在 S³ 中 K=0 于某些点）。【计算】极小 ⟹ 主曲率 κ₁+κ₂=0，K=κ₁κ₂≤0。③【结论】Clifford 环面是 S³ 中重要的极小曲面，用于研究嵌入极小曲面的存在性。",
-    1: "①【思路】球面 Sⁿ 中的极小子流形满足平均曲率向量为零，由 Simons 不等式控制其第二基本形式模方。【计算】|II|² 满足二阶椭圆不等式（Simons）。②【思路】Simons 不等式：极小子流形上 Δ|II|²≥(n−(2−1/m)|II|²)|II|² 型估计。【计算】用于证明大球面中极小超曲面只能是大球面。③【结论】Simons 型估计是球面极小子流形刚性的关键工具。",
-    2: "①【思路】曲率 pinching 定理：截面曲率满足 1/4<K≤1 的紧致单连通流形必同胚于球面（球面定理，Berger-Klingenberg）。【计算】1/4-pinching ⟹ M≅Sⁿ（同胚）。②【思路】CPⁿ 的 K∈[1,4]（即 1/4-pinching 边界）说明常数 1/4 是最优的。【结论】这是曲率下界/上界控制拓扑的里程碑结果（Rawnsley、Gromoll-Meyer 等）。"
+    0: L`<h4>目标</h4>
+说明 $S^3$ 中极小曲面的 Gauss 曲率 $K\le 1$，并提 Lawson 构造。
+
+<h4>第一步：$S^3$ 中曲面的 Gauss 方程</h4>
+外围 $S^3$ 曲率 $c=1$，Gauss 方程 $K^M=1+\det(\mathrm{II})/\det(\mathrm I)$。极小曲面 $H=0$ 意味着 $\kappa_1=-\kappa_2$，故 $\det(\mathrm{II})=\kappa_1\kappa_2=-\kappa_1^2\le 0$：
+
+<div class="eq">$$K=1-\frac{\kappa_1^2}{EG-F^2}\le 1$$</div>
+
+<div class="keybox">$$\boxed{S^3\text{ 中极小曲面：}K\le 1}$$</div>
+
+<h4>第二步：Lawson 构造</h4>
+Lawson 构造了 $S^3$ 中任意亏格的紧致极小曲面——说明 $S^3$ 中极小曲面极其丰富。
+
+<div class="memobox"><strong>关键词：</strong>$S^3$ 中极小曲面 $K\le 1$，Lawson 构造任意亏格紧致极小曲面。</div>`,
+    1: L`<h4>目标</h4>
+说明 $S^n$ 中极小子流形满足 $\Delta x=-nx$，这是 Simons 刚性研究的出发点。
+
+<h4>第一步：位置向量与第二基本形式</h4>
+$S^n\subset\mathbb R^{n+1}$ 的位置向量 $x$ 即单位法向量。对 $S^n$ 中的极小子流形 $M^k$，平均曲率向量 $H=0$，而 $H=\frac1k\Delta x$（子流形 Laplacian 作用于位置向量 = 平均曲率向量）。
+
+<h4>第二步：极小 ⟹ 特征方程</h4>
+
+<div class="keybox">$$\boxed{\Delta x=-k\,x}$$</div>
+
+（其中 $-k$ 来自 $S^n$ 的曲率。）
+
+<h4>几何含义</h4>
+位置向量 $x$ 是 $M$ 上 Laplace 算子的<strong>特征函数</strong>（特征值 $-k$）。这使极小子流形可以用谱理论工具研究，是 Simons 刚性定理的起点。
+
+<div class="memobox"><strong>关键词：</strong>极小 ⟹ $\Delta x=-kx$，位置向量是 Laplace 的特征函数。</div>`,
+    2: L`<h4>目标</h4>
+陈述球面中子流形的曲率 pinching 定理。
+
+<h4>第一步：pinching 条件</h4>
+若 $S^n$ 中子流形的截面曲率满足
+
+<div class="eq">$$K>\frac{n-2}{2n-3}$$</div>
+
+<h4>第二步：结论</h4>
+则子流形必为<strong>全测地</strong>的——即 $S^n$ 的大球面 $S^k$。
+
+<div class="keybox">$$\boxed{K>\frac{n-2}{2n-3}\ \Longrightarrow\ \text{全测地（大球面）}}$$</div>
+
+<h4>几何含义</h4>
+「曲率被压得很紧（接近 $1$）⟹ 子流形就是最标准的大球面」。这是球面曲率 pinching 的经典结果，说明高曲率钳制住了子流形的形状。
+
+<div class="memobox"><strong>关键词：</strong>截面曲率 pinching $>\frac{n-2}{2n-3}$ ⟹ 全测地大球面。</div>`
   },
   "r40": {
     0: "①【思路】球面三角形的局部 Gauss-Bonnet：∫_T K dA=α+β+γ−π（内角和减 π）。【计算】对半径 R 球面，面积=R²(α+β+γ−π)，即内角和 =π+Area/R²。②【思路】这是球面三角形面积公式（Girard 定理）。【计算】Area=R²(内角和−π)。③【结论】正曲率 ⟹ 三角形内角和大于 π，是 Gauss-Bonnet 局部形式的直接体现。",
