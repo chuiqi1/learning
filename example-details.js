@@ -9,439 +9,722 @@ const L = String.raw;
 
 module.exports = {
   "r1": {
-    0: L`<h4>目标</h4>
-用曲率公式验证：半径为 \(R\) 的圆在每一点的曲率恒等于 \(1/R\)。
+    0: L`<h4>我们要算什么</h4>
+用一般参数下的曲率公式，验证半径为 \(R\) 的圆在每一点的曲率恒等于 \(1/R\)。圆是曲率处处相同的"等曲率"曲线，也是后面研究所有曲率的基准。
 
-<h4>第一步：写出圆的参数化并求导</h4>
-取参数化 \(\gamma(t)=(R\cos t,\ R\sin t)\)。逐分量求导（用到 \((\cos t)'=-\sin t,\ (\sin t)'=\cos t\)）：
+<h4>第一步：回忆一般参数的曲率公式</h4>
+回忆：对平面曲线 \((x(t),y(t))\)，曲率公式是
+<div class="eq">$$\kappa(t)=\frac{|x'(t)y''(t)-y'(t)x''(t)|}{\big(x'(t)^2+y'(t)^2\big)^{3/2}}$$</div>
+分子是"十字相减"的绝对值，分母是切向量长度平方的二分之三次方。下面一步步代入。
 
-<div class="eq">$$\gamma'(t)=(-R\sin t,\ R\cos t),\qquad \gamma''(t)=(-R\cos t,\ -R\sin t)$$</div>
+<h4>第二步：写出圆的参数化</h4>
+半径为 \(R\)、圆心在原点的圆，取参数
+<div class="eq">$$\gamma(t)=(x(t),y(t))=(R\cos t,\ R\sin t)$$</div>
+\(t\) 从 \(0\) 到 \(2\pi\) 走一整圈。
 
-<h4>第二步：代入一般参数曲率公式</h4>
-曲率公式为 \(\kappa=\dfrac{|x'y''-y'x''|}{(x'^2+y'^2)^{3/2}}\)。先算分子（十字相减）：
+<h4>第三步：求一阶导 \(\gamma'(t)\)</h4>
+回忆 \((\cos t)'=-\sin t\)、\((\sin t)'=\cos t\)，逐分量求导：
+<div class="eq">$$x'(t)=-R\sin t,\qquad y'(t)=R\cos t$$</div>
+所以 \(\gamma'(t)=(-R\sin t,\ R\cos t)\)。
 
-<div class="eq">$$|x'y''-y'x''|=|(-R\sin t)(-R\sin t)-(R\cos t)(-R\cos t)|=R^2(\sin^2 t+\cos^2 t)=R^2$$</div>
+<h4>第四步：求二阶导 \(\gamma''(t)\)</h4>
+再求一次导（\((-R\sin t)'=-R\cos t\)，\((R\cos t)'=-R\sin t\)）：
+<div class="eq">$$x''(t)=-R\cos t,\qquad y''(t)=-R\sin t$$</div>
+所以 \(\gamma''(t)=(-R\cos t,\ -R\sin t)\)。
 
-<h4>第三步：算分母并化简</h4>
-分母 \(x'^2+y'^2=R^2\sin^2 t+R^2\cos^2 t=R^2\)，故
+<h4>第五步：算分子——十字相减</h4>
+把 \(x',y',x'',y''\) 代入分子 \(x'y''-y'x''\)：
+<div class="eq">$$x'y''-y'x''=(-R\sin t)(-R\sin t)-(R\cos t)(-R\cos t)=R^2\sin^2 t+R^2\cos^2 t$$</div>
+提取公因子 \(R^2\)，再用恒等式 \(\sin^2 t+\cos^2 t=1\)：
+<div class="eq">$$=R^2(\sin^2 t+\cos^2 t)=R^2$$</div>
+取绝对值，因 \(R>0\)，所以分子 \(|x'y''-y'x''|=R^2\)。
 
-<div class="keybox">$$\boxed{\kappa=\frac{R^2}{(R^2)^{3/2}}=\frac{R^2}{R^3}=\frac1R}$$</div>
+<h4>第六步：算分母</h4>
+分母是 \((x'^2+y'^2)^{3/2}\)，先算括号里：
+<div class="eq">$$x'^2+y'^2=(-R\sin t)^2+(R\cos t)^2=R^2\sin^2 t+R^2\cos^2 t=R^2(\sin^2 t+\cos^2 t)=R^2$$</div>
+所以分母 \(=(R^2)^{3/2}=R^3\)（这里用了幂的运算法则 \((R^2)^{3/2}=R^{2\cdot 3/2}=R^3\)）。
 
-<div class="memobox"><strong>关键词：</strong>圆的曲率处处相同，且与半径成反比——半径越小、弯得越急。</div>`,
-    1: L`<h4>目标</h4>
-计算抛物线 \(y=x^2\) 在顶点处的曲率，说明顶点处弯曲最厉害。
+<h4>第七步：代入公式得到曲率</h4>
+把第五、六步的结果代入第一步的公式：
+<div class="eq">$$\kappa(t)=\frac{R^2}{R^3}=\frac{1}{R}$$</div>
+结果与 \(t\) 无关，说明圆上每一点的曲率都一样。
 
-<h4>第一步：写成参数形式并求导</h4>
-取 \(\gamma(x)=(x,\ x^2)\)，则
+<div class="keybox">$$\boxed{\kappa=\frac{1}{R}}$$</div>
 
-<div class="eq">$$\gamma'(x)=(1,\ 2x),\qquad \gamma''(x)=(0,\ 2)$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>圆的曲率处处等于 \(1/R\)，与半径成反比——半径越小、圆弯得越急；半径越大、越接近直线。</div>`,
+    1: L`<h4>我们要算什么</h4>
+计算抛物线 \(y=x^2\) 的曲率函数 \(\kappa(x)\)，验证它在顶点 \(x=0\) 处取到最大值 \(\kappa=2\)，而远离顶点（\(|x|\to\infty\)）时曲率趋于 \(0\)——这正是"越远越平"的直观。
 
-<h4>第二步：代入曲率公式</h4>
-分子 \(|x'y''-y'x''|=|1\cdot 2-2x\cdot 0|=2\)；分母 \((x'^2+y'^2)^{3/2}=(1+4x^2)^{3/2}\)。故
+<h4>第一步：回忆一般参数的曲率公式</h4>
+回忆平面曲线 \((x(t),y(t))\) 的曲率公式：
+<div class="eq">$$\kappa(t)=\frac{|x'(t)y''(t)-y'(t)x''(t)|}{\big(x'(t)^2+y'(t)^2\big)^{3/2}}$$</div>
+对抛物线，直接用 \(x\) 本身当参数最方便。
 
+<h4>第二步：写出抛物线的参数化</h4>
+取 \(x\) 为参数，抛物线上每点写成
+<div class="eq">$$\gamma(x)=(x,\ x^2)$$</div>
+也就是 \(x(t)=t\)、\(y(t)=t^2\)，为了直观下面把参数仍记作 \(x\)。
+
+<h4>第三步：求一阶导</h4>
+逐分量求导：
+<div class="eq">$$x'(x)=1,\qquad y'(x)=2x$$</div>
+所以 \(\gamma'(x)=(1,\ 2x)\)。
+
+<h4>第四步：求二阶导</h4>
+再求一次导（常数 \(1\) 的导数是 \(0\)，\(2x\) 的导数是 \(2\)）：
+<div class="eq">$$x''(x)=0,\qquad y''(x)=2$$</div>
+所以 \(\gamma''(x)=(0,\ 2)\)。
+
+<h4>第五步：算分子——十字相减</h4>
+代入 \(x'y''-y'x''\)：
+<div class="eq">$$x'y''-y'x''=1\cdot 2-(2x)\cdot 0=2-0=2$$</div>
+分子取绝对值仍为 \(2\)。
+
+<h4>第六步：算分母</h4>
+分母是 \((x'^2+y'^2)^{3/2}\)，先算括号里：
+<div class="eq">$$x'^2+y'^2=1^2+(2x)^2=1+4x^2$$</div>
+所以分母 \(=(1+4x^2)^{3/2}\)。
+
+<h4>第七步：代入公式得到曲率函数</h4>
+把第五、六步代入：
 <div class="eq">$$\kappa(x)=\frac{2}{(1+4x^2)^{3/2}}$$</div>
 
-<h4>第三步：在顶点取值</h4>
-顶点在 \(x=0\)，此时分母最小（等于 \(1\)），曲率达到最大值
+<h4>第八步：在顶点 \(x=0\) 处取值</h4>
+顶点就是 \(x=0\)。代入上式：
+<div class="eq">$$\kappa(0)=\frac{2}{(1+4\cdot 0)^{3/2}}=\frac{2}{1^{3/2}}=2$$</div>
 
-<div class="keybox">$$\boxed{\kappa(0)=2}$$</div>
+<h4>第九步：说明为什么顶点处最大</h4>
+观察 \(\kappa(x)=\dfrac{2}{(1+4x^2)^{3/2}}\)：分子是常数 \(2\)，分母 \((1+4x^2)^{3/2}\) 在 \(x=0\) 时取最小值 \(1\)（因为 \(4x^2\ge 0\)，平方项最小是 \(0\)），分母越小分数越大，所以在顶点处分母最小、曲率最大。
 
-当 \(|x|\to\infty\) 时分母趋于无穷，\(\kappa\to 0\)，反映抛物线「越远越平」。
+<h4>第十步：看远离顶点时的趋势</h4>
+当 \(|x|\to\infty\) 时，\(4x^2\to\infty\)，分母 \((1+4x^2)^{3/2}\to\infty\)，分子仍是常数 \(2\)，所以
+<div class="eq">$$\lim_{|x|\to\infty}\kappa(x)=0$$</div>
+曲率趋于零，说明远离顶点抛物线越来越"平"。
 
-<div class="memobox"><strong>关键词：</strong>顶点处曲率最大 \(\kappa=2\)，远离顶点曲率衰减为零。</div>`,
-    2: L`<h4>目标</h4>
-理解回旋曲线（Clothoid）：曲率随弧长<strong>线性增长</strong>的曲线。
+<div class="keybox">$$\boxed{\kappa(x)=\frac{2}{(1+4x^2)^{3/2}},\qquad \kappa(0)=2,\qquad \lim_{|x|\to\infty}\kappa(x)=0}$$</div>
 
-<h4>第一步：曲率线性增长意味着什么</h4>
-设 \(\kappa(s)=s/a^2\)（比例常数记为 \(1/a^2\)）。由平面曲线基本定理，切线角满足 \(d\theta/ds=\kappa=s/a^2\)，积分得
+<div class="memobox"><strong>一句话记忆：</strong>抛物线顶点处弯得最厉害（\(\kappa=2\)），越往两边越平（\(\kappa\to 0\)）。</div>`,
+    2: L`<h4>我们要理解什么</h4>
+回旋曲线（Clothoid）是一条"曲率随弧长线性增长"的曲线。它常被用在公路、铁路的过渡段设计里，让车辆从直线平滑地进入弯道。下面从曲率函数出发，一步步还原这条曲线的形状。
 
-<div class="eq">$$\theta(s)=\theta_0+\frac{s^2}{2a^2}$$</div>
+<h4>第一步：回忆平面曲线基本定理</h4>
+回忆上一节的定理：平面曲线的曲率 \(\kappa(s)\) 与切向量方向角 \(\theta(s)\) 满足
+<div class="eq">$$\frac{d\theta}{ds}=\kappa(s)$$</div>
+给定了 \(\kappa(s)\)，先积分出 \(\theta\)，再积分出曲线本身。这是下面所有步骤的工具。
 
-<h4>第二步：还原曲线——Fresnel 积分</h4>
-切线方向 \(T(s)=(\cos\theta,\sin\theta)\)，曲线为
+<h4>第二步：写出"曲率随弧长线性增长"</h4>
+"线性增长"的意思是曲率正比于弧长。设比例常数为 \(1/a^2\)（写成平方的形式是为了后面积分整齐），即
+<div class="eq">$$\kappa(s)=\frac{s}{a^2}$$</div>
+在起点 \(s=0\) 处曲率为 \(0\)（对应直线），随 \(s\) 增大曲率均匀变大。
 
-<div class="eq">$$\gamma(s)=\gamma_0+\int_0^s\Big(\cos\frac{u^2}{2a^2},\ \sin\frac{u^2}{2a^2}\Big)\,du$$</div>
+<h4>第三步：积分得到方向角 \(\theta(s)\)</h4>
+把 \(\kappa(s)=s/a^2\) 代入第一步的方程 \(\theta'=s/a^2\)，积分（回忆 \(\int s\,ds=s^2/2\)）：
+<div class="eq">$$\theta(s)=\theta(0)+\int_0^s \frac{u}{a^2}\,du=\theta(0)+\frac{1}{a^2}\cdot\frac{s^2}{2}=\theta(0)+\frac{s^2}{2a^2}$$</div>
+方向角随弧长的平方增长。
 
-这类积分正是著名的 <strong>Fresnel 积分</strong>，其图像呈螺旋状盘旋，且曲率沿弧长均匀增大。
+<h4>第四步：把起点摆正，简化记号</h4>
+为了方便看清形状，取初始方向角 \(\theta(0)=0\)（这只是把整条曲线旋转一下，不改变形状）：
+<div class="eq">$$\theta(s)=\frac{s^2}{2a^2}$$</div>
 
-<h4>第三步：为什么用它设计公路</h4>
-车辆转弯时方向盘转动角度与曲率成正比。若曲率从 \(0\)（直线）突然跳到常数（圆弧），司机需要瞬间打满方向，产生横向冲击；而回旋曲线让曲率从 \(0\) <strong>连续、匀速</strong>增大，转向平顺。
+<h4>第五步：写出切向量</h4>
+回忆切向量 \(T(s)=(\cos\theta(s),\sin\theta(s))\)，代入第四步：
+<div class="eq">$$T(s)=\Big(\cos\frac{s^2}{2a^2},\ \sin\frac{s^2}{2a^2}\Big)$$</div>
+
+<h4>第六步：积分还原曲线</h4>
+回忆 \(\gamma'(s)=T(s)\)，从起点 \(\gamma(0)\) 积分：
+<div class="eq">$$\gamma(s)=\gamma(0)+\int_0^s \Big(\cos\frac{u^2}{2a^2},\ \sin\frac{u^2}{2a^2}\Big)\,du$$</div>
+取 \(\gamma(0)=0\)（只是平移），就得到回旋曲线的参数方程。
+
+<h4>第七步：认识 Fresnel 积分</h4>
+第六步里的积分 \(\int\cos(u^2)\,du\)、\(\int\sin(u^2)\,du\) 就是著名的 <strong>Fresnel 积分</strong>。它没有初等函数表达式，但可以数值计算。用换元 \(v=u/(\sqrt{2}a)\) 可以化成标准形式 \(C(t)=\int_0^t\cos(\pi v^2/2)dv\) 与 \(S(t)=\int_0^t\sin(\pi v^2/2)dv\)。所以回旋曲线本质上是 Fresnel 积分给出的曲线。
+
+<h4>第八步：看它的图像——螺旋盘旋</h4>
+Fresnel 积分的图像是著名的"回旋"：从原点出发，方向角 \(\theta=s^2/(2a^2)\) 随 \(s\) 不断增大，切向越转越快，曲线呈螺旋状向一个极限点盘旋（那一点正是 Fresnel 积分的极限值）。曲率沿弧长均匀增大，正是它得名"回旋曲线"的原因。
+
+<h4>第九步：为什么用它设计公路铁路过渡段</h4>
+直观：汽车转弯时，方向盘的转角与曲率成正比。如果从直线（\(\kappa=0\)）突然跳到一段圆弧（\(\kappa\) 为常数），司机必须在瞬间把方向盘打到固定角度，乘客会感到横向冲击；而回旋曲线让曲率从 \(0\) 开始<strong>连续、匀速</strong>增大，司机匀速打方向，转弯就平滑了。所以直线与圆弧之间用一段回旋曲线过渡。
 
 <div class="keybox">$$\boxed{\kappa(s)=\frac{s}{a^2}\ \Longrightarrow\ \theta(s)=\frac{s^2}{2a^2}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>回旋曲线 = 曲率随弧长线性变化，让转弯「无突变」。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>回旋曲线 = 曲率随弧长线性变化，让转弯"无突变"；它的形状由 Fresnel 积分给出。</div>`
   },
   "r2": {
-    0: L`<h4>目标</h4>
-计算圆柱螺旋线 \(r(t)=(\cos t,\ \sin t,\ at)\) 的曲率与挠率，验证它们都是常数。
+    0: L`<h4>我们要算什么</h4>
+计算圆柱螺旋线 \(r(t)=(\cos t,\ \sin t,\ a t)\) 的曲率与挠率，验证它们都是常数：\(\kappa=1/(1+a^2)\)、\(\tau=a/(1+a^2)\)。它是最简单、最"均匀"的空间曲线。
 
-<h4>第一步：求导并算弧长参数</h4>
-\(r'(t)=(-\sin t,\ \cos t,\ a)\)，其模长 \(|r'|=\sqrt{\sin^2 t+\cos^2 t+a^2}=\sqrt{1+a^2}\) 为常数，故 \(s=\sqrt{1+a^2}\,t\)。
+<h4>第一步：回忆空间曲线的曲率、挠率公式</h4>
+回忆：对一般参数的空间曲线 \(r(t)\)，
+<div class="eq">$$\kappa=\frac{|r'\times r''|}{|r'|^3},\qquad \tau=\frac{(r'\times r'')\cdot r'''}{|r'\times r''|^2}$$</div>
+曲率用叉积的长度，挠率用三阶导的混合积。下面逐步计算。
 
-<h4>第二步：计算曲率</h4>
-一般参数下 \(\kappa=\dfrac{|r'\times r''|}{|r'|^3}\)。先算 \(r''(t)=(-\cos t,-\sin t,0)\)，叉积
+<h4>第二步：求一阶导 \(r'(t)\)</h4>
+对 \(r(t)=(\cos t,\sin t,at)\) 逐分量求导（\((\cos t)'=-\sin t\)，\((\sin t)'=\cos t\)，\((at)'=a\)）：
+<div class="eq">$$r'(t)=(-\sin t,\ \cos t,\ a)$$</div>
 
-<div class="eq">$$r'\times r''=(a\sin t,\ -a\cos t,\ 1),\qquad |r'\times r''|=\sqrt{a^2+1}$$</div>
+<h4>第三步：求二阶导 \(r''(t)\)</h4>
+再求一次导：
+<div class="eq">$$r''(t)=(-\cos t,\ -\sin t,\ 0)$$</div>
 
-故曲率
+<h4>第四步：求三阶导 \(r'''(t)\)</h4>
+再求一次导：
+<div class="eq">$$r'''(t)=(\sin t,\ -\cos t,\ 0)$$</div>
 
+<h4>第五步：算切向量的模 \(|r'|\)</h4>
+回忆向量模长公式 \(|(x,y,z)|=\sqrt{x^2+y^2+z^2}\)：
+<div class="eq">$$|r'(t)|=\sqrt{(-\sin t)^2+(\cos t)^2+a^2}=\sqrt{\sin^2 t+\cos^2 t+a^2}=\sqrt{1+a^2}$$</div>
+这里用了 \(\sin^2 t+\cos^2 t=1\)。结果是常数。
+
+<h4>第六步：算叉积 \(r'\times r''\)</h4>
+回忆叉积公式：\((x_1,y_1,z_1)\times(x_2,y_2,z_2)=(y_1z_2-z_1y_2,\ z_1x_2-x_1z_2,\ x_1y_2-y_1x_2)\)。代入 \(r'=(-\sin t,\cos t,a)\)、\(r''=(-\cos t,-\sin t,0)\)：
+<div class="eq">$$r'\times r''=\big(\cos t\cdot 0-a\cdot(-\sin t),\ a\cdot(-\cos t)-(-\sin t)\cdot 0,\ (-\sin t)(-\sin t)-(\cos t)(-\cos t)\big)$$</div>
+逐项化简：第一分量 \(a\sin t\)；第二分量 \(-a\cos t\)；第三分量 \(\sin^2 t+\cos^2 t=1\)。所以
+<div class="eq">$$r'\times r''=(a\sin t,\ -a\cos t,\ 1)$$</div>
+
+<h4>第七步：算叉积的模 \(|r'\times r''|\)</h4>
+<div class="eq">$$|r'\times r''|=\sqrt{(a\sin t)^2+(-a\cos t)^2+1^2}=\sqrt{a^2(\sin^2 t+\cos^2 t)+1}=\sqrt{a^2+1}$$</div>
+
+<h4>第八步：代入曲率公式</h4>
+把第五步 \(|r'|=\sqrt{1+a^2}\) 与第七步 \(|r'\times r''|=\sqrt{1+a^2}\) 代入 \(\kappa=|r'\times r''|/|r'|^3\)：
 <div class="eq">$$\kappa=\frac{\sqrt{1+a^2}}{(1+a^2)^{3/2}}=\frac{1}{1+a^2}$$</div>
+（因为 \((1+a^2)^{3/2}=(1+a^2)\sqrt{1+a^2}\)，约去 \(\sqrt{1+a^2}\)。）曲率是常数。
 
-<h4>第三步：计算挠率</h4>
-挠率公式 \(\tau=\dfrac{(r'\times r'')\cdot r'''}{|r'\times r''|^2}\)。因 \(r'''=(\sin t,-\cos t,0)\)，混合积 \((r'\times r'')\cdot r'''=a\sin^2 t+a\cos^2 t=a\)，故
+<h4>第九步：算混合积 \((r'\times r'')\cdot r'''\)</h4>
+用第六步的叉积与第四步的 \(r'''\) 做点积：
+<div class="eq">$$(r'\times r'')\cdot r'''=(a\sin t,\ -a\cos t,\ 1)\cdot(\sin t,\ -\cos t,\ 0)=a\sin^2 t+a\cos^2 t+0$$</div>
+提取公因子 \(a\)：\(a(\sin^2 t+\cos^2 t)=a\)。所以混合积 \(=a\)。
+
+<h4>第十步：代入挠率公式</h4>
+把第七步 \(|r'\times r''|^2=1+a^2\) 与第九步混合积 \(a\) 代入 \(\tau=\dfrac{(r'\times r'')\cdot r'''}{|r'\times r''|^2}\)：
+<div class="eq">$$\tau=\frac{a}{1+a^2}$$</div>
+挠率也是常数。
 
 <div class="keybox">$$\boxed{\kappa=\frac{1}{1+a^2},\qquad \tau=\frac{a}{1+a^2}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>螺旋线的曲率、挠率均为常数，是三维中「最均匀」的曲线。</div>`,
-    1: L`<h4>目标</h4>
-理解挠率在真实世界（DNA 双螺旋）中的物理意义。
+<div class="memobox"><strong>一句话记忆：</strong>圆柱螺旋线的曲率、挠率都是常数，是三维空间里"最均匀"的曲线；\(a\) 越大螺距越大、越接近直线。</div>`,
+    1: L`<h4>我们要理解什么</h4>
+理解挠率在真实世界——DNA 双螺旋——里的物理意义：DNA 的曲率与挠率共同决定了它的超螺旋构型，而挠率的变化与拓扑异构酶的活性直接相关。
 
-<h4>第一步：DNA 的几何图像</h4>
-DNA 双螺旋可看成两条互相缠绕的空间曲线，其局部弯曲由曲率 \(\kappa\) 描述，扭转与缠绕程度由挠率 \(\tau\) 描述。螺旋的「松紧」与「超螺旋」程度正对应着这两个几何量。
+<h4>第一步：回忆曲率与挠率各管什么</h4>
+回忆：曲率 \(\kappa\) 衡量曲线"弯得急不急"（在一个平面内的弯曲），挠率 \(\tau\) 衡量曲线"离开平面扭转得快不快"。一条完全躺在平面内的曲线，挠率恒为 \(0\)；一旦曲线开始三维地盘旋、扭转，挠率就非零了。
 
-<h4>第二步：挠率的物理角色</h4>
-平面曲线挠率恒为零；一旦 DNA 离开平面、开始三维盘旋，\(\tau\neq 0\)。超螺旋构型（DNA 再自身缠绕一圈）意味着挠率的积分在全局上贡献了额外的「链接数」，这与拓扑量 \(Lk=Tw+Wr\)（链接数 = 扭转数 + 缠绕数）直接相关。
+<h4>第二步：DNA 双螺旋的几何图像</h4>
+DNA 是两条互相缠绕的螺旋链。把每条链看成一条空间曲线，它的局部弯曲由曲率 \(\kappa\) 描述，而两条链互相缠绕、以及单条链自身扭转的程度，则由挠率 \(\tau\) 描述。螺旋的"松紧"正对应这两个几何量。
 
-<div class="eq">$$Lk = Tw + Wr$$</div>
+<h4>第三步：超螺旋是更高一层的缠绕</h4>
+双螺旋本身已经是两条曲线缠绕；当这条双螺旋<strong>再</strong>绕自身盘一圈，就形成"超螺旋"。从几何看，超螺旋意味着挠率（以及曲率）沿整条链的积累，在全局上贡献了额外的"链接数"。
 
-<h4>第三步：与生物功能挂钩</h4>
-拓扑异构酶通过切断并重接 DNA 链来改变 \(Lk\)，从而调控 \(Tw\) 与 \(Wr\) 的分配——也就是改变局部的曲率、挠率分布，最终影响基因表达。
+<h4>第四步：回忆链接数的分解公式</h4>
+在 DNA 拓扑学里有一条核心公式（Călugăreanu–White–Fuller 定理）：链接数 \(Lk\) 等于扭转数 \(Tw\) 加缠绕数 \(Wr\)：
+<div class="eq">$$Lk=Tw+Wr$$</div>
+其中 \(Tw\)（扭转数）与两条链互相绕的次数相关，\(Wr\)（缠绕数）与整条链中轴线在空间里自我缠绕的程度相关。
 
-<div class="keybox">$$\boxed{\text{DNA 的 } \kappa,\tau\ \text{编码其三维拓扑结构}}$$</div>
+<h4>第五步：把挠率与扭转数联系起来</h4>
+挠率 \(\tau\) 正是"局部的扭转"；把它沿整条 DNA 中轴线积分，就给出扭转角的总变化量，与扭转数 \(Tw\) 密切相关。所以 \(Tw\)、\(Wr\) 的分配，本质上就是曲率、挠率在整条链上的分布方式。
 
-<div class="memobox"><strong>关键词：</strong>挠率衡量「离开平面的扭转」，是 DNA 超螺旋的几何语言。</div>`
+<h4>第六步：拓扑异构酶的作用</h4>
+细胞里有一类酶叫<strong>拓扑异构酶</strong>：它们把 DNA 链切断、再重新连接，从而改变链接数 \(Lk\)。因为 \(Lk=Tw+Wr\) 被约束，改变 \(Lk\) 就迫使 \(Tw\) 与 \(Wr\) 重新分配——也就是改变局部的曲率、挠率分布。
+
+<h4>第七步：与基因表达挂钩</h4>
+DNA 要转录、复制，必须先局部解旋（把螺旋松开）。这个过程需要改变挠率、改变超螺旋程度，而这一步正是由拓扑异构酶完成的。所以挠率的变化直接关系到基因能否被读取——这就是几何量进入生物学的通道。
+
+<div class="keybox">$$\boxed{\text{DNA 的 } \kappa,\tau\ \text{编码其三维拓扑结构；}\ Lk=Tw+Wr}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>挠率衡量"离开平面的扭转"，是 DNA 超螺旋的几何语言；拓扑异构酶通过改变链接数、重新分配扭转与缠绕，来调控基因表达。</div>`
   },
   "r3": {
-    0: L`<h4>目标</h4>
-验证半径为 \(R\) 的球面的 Gauss 曲率处处为 \(1/R^2\)。
+    0: L`<h4>我们要算什么</h4>
+验证半径为 \(R\) 的球面上每一点的主曲率都是 \(1/R\)，从而 Gauss 曲率恒为 \(K=1/R^2>0\)。球面是最对称的常正曲率曲面。
 
-<h4>第一步：主曲率</h4>
-球面在每一点沿任意切方向的法曲率都等于 \(1/R\)（大圆的主曲率），故两个主曲率相同：
+<h4>第一步：回忆主曲率与 Gauss 曲率的定义</h4>
+回忆：曲面上一点沿一个切方向的法曲率，是曲面沿该方向的弯曲程度；<strong>主曲率</strong> \(\kappa_1,\kappa_2\) 是法曲率的最大值与最小值。而 Gauss 曲率定义为主曲率之积：
+<div class="eq">$$K=\kappa_1\kappa_2$$</div>
 
-<div class="eq">$$\kappa_1=\kappa_2=\frac1R$$</div>
+<h4>第二步：回忆"脐点"的含义</h4>
+如果曲面上一点沿<strong>所有</strong>切方向的法曲率都相等，这一点就叫脐点。脐点处两个主曲率相等，曲面沿任何方向弯得一样。
 
-<h4>第二步：Gauss 曲率 = 主曲率之积</h4>
+<h4>第三步：球面是处处脐点</h4>
+球面具有高度对称性：过球心任意旋转都把球面搬到自身，任一点、任一方向都没有区别。因此球面上每一点沿任意切方向的法曲率都相同——球面处处是脐点。
+
+<h4>第四步：算这个共同的法曲率值</h4>
+过球面一点、沿任意切方向，都有一条大圆（球面与过球心的平面的交线）与之相切。大圆是半径为 \(R\) 的圆，其曲率是 \(1/R\)，而它在该点的法方向恰好指向球心，所以该方向的法曲率就是 \(1/R\)。由于每个方向都一样，两个主曲率都为
+<div class="eq">$$\kappa_1=\kappa_2=\frac{1}{R}$$</div>
+
+<h4>第五步：等价地，用第二基本形式说明</h4>
+也可以用公式看：取外向单位法向量，球面的第二基本形式恰好是第一基本形式的 \(1/R\) 倍，即 \(II=\frac1R\,I\)。回忆形状算子 \(S\) 满足 \(II(v,v)=\langle Sv,v\rangle\)，这里 \(S\) 就是恒等算子的 \(1/R\) 倍，它的两个特征值（主曲率）都是 \(1/R\)。两种看法得到同一个结论。
+
+<h4>第六步：算出 Gauss 曲率</h4>
+把两个主曲率相乘：
+<div class="eq">$$K=\kappa_1\kappa_2=\frac{1}{R}\cdot\frac{1}{R}=\frac{1}{R^2}$$</div>
+
+<h4>第七步：观察——常正曲率</h4>
+结果与球面上的位置无关，恒等于 \(1/R^2>0\)。所以球面是"常正曲率"曲面的标准模型：每一点弯曲程度完全相同，且处处为正。
 
 <div class="keybox">$$\boxed{K=\kappa_1\kappa_2=\frac{1}{R^2}}$$</div>
 
-球面是「常正曲率」曲面的标准模型：每一点的弯曲程度完全一样，且处处为正。
+<div class="memobox"><strong>一句话记忆：</strong>球面是处处脐点，主曲率都是 \(1/R\)，所以 \(K=1/R^2>0\) 恒定，是最对称的常正曲率曲面。</div>`,
+    1: L`<h4>问题与范围</h4>
+伪球面是曳物线绕其渐近轴旋转得到的一片曲面。我们要<strong>实际算出</strong>它的第一基本形式和 Gauss 曲率，并说明它与双曲平面的关系究竟是局部的还是全局的。令曳物线的尺度 \(a>0\)。
 
-<div class="memobox"><strong>关键词：</strong>球面 \(K=1/R^2>0\) 恒定，是最对称的常正曲率曲面。</div>`,
-    1: L`<h4>目标</h4>
-认识伪球面（tractroid）——一个 Gauss 曲率恒为 \(-1\) 的常负曲率曲面。
+<h4>第一步：写出一片可计算的参数曲面</h4>
+取 \(0<u<\pi/2,\ 0\le v<2\pi\)，定义
+<div class="eq">$$X(u,v)=\left(a\sin u\cos v,\ a\sin u\sin v,\ a\cos u+a\log\tan\frac u2\right).$$</div>
+\(v\) 绕轴转一圈；距旋转轴的半径是 \(a\sin u\)。暂不包括 \(u=0\) 的无限细端和 \(u=\pi/2\) 的边缘。
 
-<h4>第一步：伪球面的构造</h4>
-伪球面由曳物线（tractrix）绕其渐近线旋转得到。曳物线的局部形状使其两个主曲率一正一负，且乘积恒为常数。
+<h4>第二步：先算 \(z\) 分量的导数</h4>
+用 \(\frac d{du}\log\tan(u/2)=1/\sin u\)，得到
+<div class="eq">$$\frac d{du}\left(a\cos u+a\log\tan\frac u2\right)
+=-a\sin u+\frac a{\sin u}
+=a\frac{1-\sin^2u}{\sin u}
+=a\frac{\cos^2u}{\sin u}.$$</div>
+中间用了 \(1-\sin^2u=\cos^2u\)。
 
-<h4>第二步：曲率恒为 -1</h4>
-直接计算两个主曲率 \(\kappa_1,\kappa_2\)，其乘积给出
+<h4>第三步：求经线方向切向量</h4>
+对 \(X\) 逐分量求 \(u\) 导数，结合第二步：
+<div class="eq">$$X_u=\left(a\cos u\cos v,\ a\cos u\sin v,\ a\frac{\cos^2u}{\sin u}\right).$$</div>
+这是沿母线走的方向。
 
-<div class="keybox">$$\boxed{K=\kappa_1\kappa_2=-1}$$</div>
+<h4>第四步：求纬线方向切向量</h4>
+对 \(v\) 求导时 \(u\) 固定，第三个坐标不变，所以
+<div class="eq">$$X_v=(-a\sin u\sin v,\ a\sin u\cos v,\ 0).$$</div>
+这是绕轴走圆周的方向。
 
-<h4>第三步：与双曲几何的联系</h4>
-早在黎曼之前，人们就发现伪球面的内蕴几何满足双曲几何的公理——三角形内角和小于 \(180^\circ\)。这首次给出常负曲率曲面的具体模型，为后来黎曼提出 n 维流形埋下伏笔。
+<h4>第五步：计算第一基本形式的 \(E\)</h4>
+按定义 \(E=g_{uu}=X_u\cdot X_u\)。把第三步平方逐项相加：
+<div class="eq">$$E=a^2\cos^2u(\cos^2v+\sin^2v)+a^2\frac{\cos^4u}{\sin^2u}
+=a^2\cos^2u\frac{\sin^2u+\cos^2u}{\sin^2u}
+=a^2\cot^2u.$$</div>
 
-<div class="memobox"><strong>关键词：</strong>伪球面 \(K=-1\) 恒定，是常负曲率曲面，其上内蕴几何即双曲几何。</div>`,
-    2: L`<h4>目标</h4>
-观察环面上 Gauss 曲率如何随位置变号。
+<h4>第六步：计算交叉项与 \(G\)</h4>
+\(F=X_u\cdot X_v=-a^2\cos u\sin u\cos v\sin v+a^2\cos u\sin u\sin v\cos v=0\)。再算
+<div class="eq">$$G=X_v\cdot X_v=a^2\sin^2u(\sin^2v+\cos^2v)=a^2\sin^2u.$$</div>
+所以两个参数方向正交。
 
-<h4>第一步：环面的三个区域</h4>
-环面（甜甜圈面）可分为：外侧「赤道」区域、内侧「咽喉」区域，以及顶部/底部的两条过渡圆周。
+<h4>第七步：把度量完整写出</h4>
+由第五、六步，
+<div class="eq">$$g=E\,du^2+2F\,du\,dv+G\,dv^2
+=a^2\cot^2u\,du^2+a^2\sin^2u\,dv^2.$$</div>
+接下来只用这份<strong>内蕴</strong>度量算曲率，不必再算单位法向或第二基本形式。
 
-<h4>第二步：逐区判断曲率符号</h4>
-在外侧区域，两个主曲率同号（曲面向同方向弯曲），故 \(K>0\)（椭圆点）；在内侧区域，两个主曲率异号（一个向外弯、一个向内弯），故 \(K<0\)（双曲点）；在顶部与底部圆周上，有一个主曲率为零，故
+<h4>第八步：改用经线弧长 \(s\)</h4>
+沿 \(v=\text{常数}\) 走，弧长满足 \(ds=\sqrt E\,du=a\cot u\,du\)，因为 \(0<u<\pi/2\) 时 \(\cot u>0\)。令纬线半径 \(f(s)=a\sin u(s)\)，度量便成为
+<div class="eq">$$g=ds^2+f(s)^2dv^2.$$</div>
+这是一种旋转对称的“经线弧长 + 纬线半径”写法。
 
-<div class="eq">$$K=\kappa_1\kappa_2=0$$</div>
+<h4>第九步：对 \(f\) 求第一次弧长导数</h4>
+链式法则给 \(df/ds=(df/du)/(ds/du)\)。分子 \(df/du=a\cos u\)，分母 \(ds/du=a\cot u=a\cos u/\sin u\)，约去 \(a\cos u>0\)，得到
+<div class="eq">$$f'(s)=\sin u.$$</div>
 
-<h4>第三步：总曲率的抵消</h4>
-正曲率区域与负曲率区域各占一部分，整体上环面的总曲率积分恰好为零——这与 Gauss–Bonnet 定理（环面 Euler 示性数 \(\chi=0\)）完全一致。
+<h4>第十步：对 \(f\) 再求一次弧长导数</h4>
+再用同一链式法则：
+<div class="eq">$$f''(s)=\frac{d(\sin u)/du}{ds/du}
+=\frac{\cos u}{a\cot u}
+=\frac{\sin u}{a}.$$</div>
+这里没有把 \(u\) 误当成弧长，分母 \(ds/du\) 必须保留。
 
-<div class="keybox">$$\boxed{\text{环面：外侧 } K>0,\ \text{内侧 } K<0,\ \text{过渡线 } K=0}$$</div>
+<h4>第十一步：回忆此类度量的曲率公式</h4>
+对 \(g=ds^2+f(s)^2dv^2\)，先从度量求得 \(\Gamma^s_{vv}=-ff'\) 与 \(\Gamma^v_{sv}=\Gamma^v_{vs}=f'/f\)。代入曲率定义，\(\langle R(\partial_s,\partial_v)\partial_v,\partial_s\rangle=-ff''\)；除以 \(g_{ss}g_{vv}-g_{sv}^2=f^2\)，得到
+<div class="eq">$$K=-\frac{f''(s)}{f(s)}.$$</div>
+这与工作台“旋转球面挑战题”里逐项求 Christoffel 的算法一致。
 
-<div class="memobox"><strong>关键词：</strong>环面同时具有正、负、零曲率区域，是展示曲率变化的天然「标本」。</div>`
+<h4>第十二步：代入 \(f\) 与 \(f''\) 算出曲率</h4>
+第八步 \(f=a\sin u\)，第十步 \(f''=\sin u/a\)，所以
+<div class="eq">$$K=-\frac{\sin u/a}{a\sin u}=-\frac1{a^2}.$$</div>
+当 \(a=1\) 时 \(K=-1\)。乘积化简时 \(\sin u>0\)，除法合法。
+
+<h4>第十三步：检查是否能代表整个双曲平面</h4>
+从任意 \(u_0>0\) 沿经线到边缘 \(u=\pi/2\) 的长度是
+<div class="eq">$$\int_{u_0}^{\pi/2}a\cot u\,du
+=a[\log\sin u]_{u_0}^{\pi/2}
+=-a\log\sin u_0<\infty.$$</div>
+因此这片伪球面在有限路程处就碰到边缘，作为无边界曲面它<strong>不完备</strong>；完整双曲平面则是完备的，所以二者不可能全局等距。
+
+<h4>第十四步：说明正确的几何关系</h4>
+两者同为常曲率 \(-1/a^2\) 的二维空间；在足够小的邻域中可取局部等距坐标，因此伪球面给出<strong>局部</strong>双曲几何的具体嵌入模型。我们刚才的度量计算证明了曲率相同，第十三步解释了为什么“整个内蕴几何完全一致”的说法过强。
+
+<div class="keybox">$$\boxed{g=a^2\cot^2u\,du^2+a^2\sin^2u\,dv^2,\qquad K=-1/a^2;\quad\text{与双曲平面局部等距，但并非全局等距。}}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>先算 \(E,F,G\)，把经线改成弧长 \(s\)，再用 \(K=-f''/f\)；曲率恒负只说明局部双曲性，边缘有限远说明模型不完备。</div>`,
+    2: L`<h4>我们要算什么</h4>
+考察环面（甜甜圈面）上 Gauss 曲率如何随位置变号：外侧区域 \(K>0\)（椭圆点），内侧区域 \(K<0\)（双曲点），顶部和底部两条圆周上 \(K=0\)。下面用参数化具体算出来。
+
+<h4>第一步：写出环面的参数化</h4>
+设大圆半径（环心到管心的距离）为 \(R\)，小圆半径（管的粗细）为 \(r\)，且 \(R>r>0\)。环面的参数化是
+<div class="eq">$$x(u,v)=\big((R+r\cos u)\cos v,\ (R+r\cos u)\sin v,\ r\sin u\big)$$</div>
+其中 \(v\) 是绕主轴的角，\(u\) 是绕小管截面的角。
+
+<h4>第二步：识别环面上的三个区域</h4>
+按 \(u\) 的位置把环面分成三带：\(u=0\) 对应离中心轴最远的那一圈（最外侧），\(u=\pi\) 对应离中心轴最近的那一圈（最内侧），而 \(u=\pm\pi/2\) 对应顶部与底部。其余部分介于其间。
+
+<h4>第三步：回忆旋转曲面主曲率的求法</h4>
+回忆：对旋转曲面，一个主曲率方向是经线（固定 \(v\)、动 \(u\)），另一个是纬线（固定 \(u\)、动 \(v\)）。经线是半径为 \(r\) 的小圆，其主曲率大小为 \(1/r\)；纬线是半径为 \(R+r\cos u\) 的圆，其法曲率要乘上法向的投影因子 \(\cos u\)。
+
+<h4>第四步：写出两个主曲率</h4>
+按标准取向外法向，直接写出两个主曲率：
+<div class="eq">$$\kappa_1=\frac{1}{r},\qquad \kappa_2=\frac{\cos u}{R+r\cos u}$$</div>
+第一个是经线方向（恒正，因为小圆始终朝外弯），第二个是纬线方向（其符号完全由 \(\cos u\) 决定）。
+
+<h4>第五步：算出 Gauss 曲率</h4>
+两个主曲率相乘：
+<div class="eq">$$K=\kappa_1\kappa_2=\frac{1}{r}\cdot\frac{\cos u}{R+r\cos u}=\frac{\cos u}{r(R+r\cos u)}$$</div>
+分母 \(r(R+r\cos u)\) 恒正（因为 \(R>r\)，\(R+r\cos u\ge R-r>0\)），所以 \(K\) 的符号完全由分子 \(\cos u\) 决定。
+
+<h4>第六步：外侧区域 \(K>0\)</h4>
+外侧对应 \(-\pi/2<u<\pi/2\)，此时 \(\cos u>0\)，所以 \(K>0\)。这两个主曲率同号，曲面像球一样朝同一侧弯，这样的点叫<strong>椭圆点</strong>。
+
+<h4>第七步：内侧区域 \(K<0\)</h4>
+内侧对应 \(\pi/2<u<3\pi/2\)，此时 \(\cos u<0\)，所以 \(K<0\)。两个主曲率异号（一个朝外弯、一个朝内弯），曲面像马鞍，这样的点叫<strong>双曲点</strong>。
+
+<h4>第八步：顶部与底部 \(K=0\)</h4>
+顶部与底部对应 \(u=\pm\pi/2\)，此时 \(\cos u=0\)，所以
+<div class="eq">$$K=\frac{0}{r(R+r\cos u)}=0$$</div>
+这里纬线方向的主曲率 \(\kappa_2=0\)，曲面沿该方向"不弯"，是抛物点。
+
+<h4>第九步：总曲率的抵消</h4>
+外侧的正曲率与内侧的负曲率各占一部分，它们的贡献在整体上恰好一正一负、完全抵消，使环面的总曲率积分为零。这正好与 Gauss–Bonnet 定理呼应：环面的 Euler 示性数 \(\chi=0\)，所以 \(\int K\,dA=2\pi\chi=0\)。
+
+<div class="keybox">$$\boxed{\text{环面：外侧 } K>0,\ \text{内侧 } K<0,\ \text{顶部底部 } K=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>环面同时有正、负、零曲率区域，是展示曲率随位置变化的天然"标本"；\(K\) 的符号由 \(\cos u\) 决定。</div>`
   },
   "r4": {
-    0: L`<h4>目标</h4>
-理解平面与圆柱面为何「内蕴上完全相同」。
+    0: L`<h4>我们要理解什么</h4>
+理解为什么平面与圆柱面在"内蕴"意义下完全相同：把平面卷成圆柱不改变任何内蕴几何量，所以两者 Gauss 曲率都是零，平面上的三角形内角和 \(180^\circ\)，圆柱面上也是如此。
 
-<h4>第一步：卷成圆柱不拉伸</h4>
-把一张纸（平面）卷成圆柱，只做弯曲、不拉伸也不压缩，因此两点间的<strong>内蕴距离</strong>（沿曲面量测）完全不变——这就是一个等距映射。
+<h4>第一步：回忆"内蕴几何"的含义</h4>
+内蕴几何只关心曲面<strong>自己</strong>上面的测量：两点间沿曲面的最短距离、曲面上三角形的内角、曲面上曲线的长度。它不关心曲面如何摆在三维空间里。
 
-<h4>第二步：曲率都为零</h4>
-平面的 Gauss 曲率 \(K=0\)，等距下曲率不变，故圆柱面的 Gauss 曲率也为零
+<h4>第二步：把平面卷成圆柱是"不拉伸"的操作</h4>
+想象一张纸：把它卷成圆柱，纸面上任意两点之间的<strong>沿曲面距离</strong>（用尺子贴着纸量）完全不变——因为卷纸只做了弯曲，没有拉伸、没有压缩。所以"卷纸"这个操作保持了一切内蕴测量。
 
-<div class="eq">$$K_{\text{平面}}=K_{\text{圆柱}}=0$$</div>
+<h4>第三步：这就是一个等距映射</h4>
+回忆：保持两点间距离（等价地保持度量）的映射叫<strong>等距映射</strong>。卷纸正好是一个从平面（局部地）到圆柱面的等距映射。因此平面与圆柱面<strong>局部等距</strong>。
 
-<h4>第三步：三角形内角和不变</h4>
-内蕴几何中，三角形内角和与曲率相关（Gauss–Bonnet 局部版）。既然两者曲率都为零，其上的（测地）三角形内角和都是 \(180^\circ\)。
+<h4>第四步：回忆 Gauss 曲率是等距不变量</h4>
+由 Gauss 绝妙定理，Gauss 曲率只由第一基本形式（内蕴度量）决定，等距映射保度量、因而保曲率。所以等距的两个曲面必有相同的 Gauss 曲率。
 
-<div class="keybox">$$\boxed{\text{平面与圆柱面等距}\ \Longrightarrow\ K\equiv 0}$$</div>
+<h4>第五步：平面的 Gauss 曲率是零</h4>
+平面完全不弯，两个主曲率都是 \(0\)，所以
+<div class="eq">$$K_{\text{平面}}=0$$</div>
 
-<div class="memobox"><strong>关键词：</strong>卷纸不改变内蕴几何，所以平面与圆柱面「内蕴不可区分」。</div>`,
-    1: L`<h4>目标</h4>
-说明为何任何平面地图都无法同时保角又保面积。
+<h4>第六步：由等距推出圆柱面曲率也是零</h4>
+因为平面与圆柱面等距，且等距保曲率，所以
+<div class="eq">$$K_{\text{圆柱}}=K_{\text{平面}}=0$$</div>
+圆柱面看起来"弯"，但那只是外蕴的弯曲；内蕴地看它和平面一样平。这也说明圆柱面是"可展曲面"。
 
-<h4>第一步：地图投影是「展平」</h4>
-把球面画到平面，相当于求一个球面到平面的映射。若能同时保持角度与面积，则它必须是等距映射（保长度 ⟹ 保角度与面积，且反之在二维光滑情形也基本成立）。
+<h4>第七步：三角形内角和为什么不变</h4>
+回忆局部 Gauss–Bonnet：曲面上测地三角形的内角和满足"内角和 \(=\pi+\int_\Delta K\,dA\)"（曲率积分为零时内角和回到 \(\pi\)）。既然平面与圆柱面处处 \(K=0\)，两者上的（测地）三角形内角和都是 \(\pi\)，即
+<div class="eq">$$\text{内角和}=180^\circ$$</div>
 
-<h4>第二步：等距会保曲率</h4>
-由等距不变性，若球面与平面等距，则两者的 Gauss 曲率必须相等。但
+<div class="keybox">$$\boxed{\text{平面与圆柱面局部等距}\ \Longrightarrow\ K\equiv 0}$$</div>
 
-<div class="eq">$$K_{\text{球面}}=\frac1{R^2}>0,\qquad K_{\text{平面}}=0$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>卷纸不改变内蕴几何，所以平面与圆柱面"内蕴不可区分"，曲率都是零、三角形内角和都是 \(180^\circ\)。</div>`,
+    1: L`<h4>我们要理解什么</h4>
+说明为什么任何平面地图都无法同时保持角度和面积：地图投影要把球面"展平"到平面，但球面（\(K>0\)）与平面（\(K=0\)）不等距，所以畸变不可避免。
 
-矛盾！
+<h4>第一步：地图投影是一个球面到平面的映射</h4>
+把地球表面画到纸上，就是找一个从球面到平面的映射 \(F\)。画图时我们总希望它尽量"不走样"，最好能同时保持角度（形状）和面积（大小）。
 
-<h4>第三步：结论</h4>
-球面（正曲率）与平面（零曲率）<strong>不等距</strong>，故任何平面地图必有畸变——要么角度失真（如等积投影），要么面积失真（如保角投影）。
+<h4>第二步：回忆保角映射的作用</h4>
+回忆：一个映射若<strong>保角</strong>，则它把球面的度量拉回后，等于原度量乘一个正函数 \(\lambda\)（各方向按相同比例缩放）。写成
+<div class="eq">$$F^{*}g_{\text{平面}}=\lambda\,g_{\text{球面}}$$</div>
+\(\lambda\) 可以随点变化。
+
+<h4>第三步：再加"保面积"会怎样</h4>
+在二维情形，保角映射把一小块面积放大约 \(\lambda^2\) 倍（两个方向都放大 \(\lambda\) 倍，面积放大 \(\lambda^2\)）。若还要求<strong>保面积</strong>，面积放大倍数必须是 \(1\)，即 \(\lambda^2=1\)，于是 \(\lambda=1\)。
+
+<h4>第四步：两者都保 ⟹ 是等距</h4>
+把 \(\lambda=1\) 代回第二步，得到
+<div class="eq">$$F^{*}g_{\text{平面}}=g_{\text{球面}}$$</div>
+这正是等距映射的定义。所以"同时保角又保面积"的地图投影，等价于一个球面到平面的<strong>等距映射</strong>。
+
+<h4>第五步：回忆等距保 Gauss 曲率</h4>
+由 Gauss 绝妙定理（等距不变性），若球面与平面等距，则两者的 Gauss 曲率必须处处相等。
+
+<h4>第六步：但两者的曲率并不相等</h4>
+半径为 \(R\) 的球面 \(K=1/R^2>0\)，而平面 \(K=0\)：
+<div class="eq">$$K_{\text{球面}}=\frac{1}{R^2}>0,\qquad K_{\text{平面}}=0$$</div>
+两者不相等。若存在等距映射，第五步要求它们相等，这与第六步矛盾。
+
+<h4>第七步：结论——不存在这样的投影</h4>
+这个矛盾说明：球面与平面<strong>不可能等距</strong>，因此不存在"同时保角又保面积"的地图投影。任何平面地图必然在某一方面失真。
+
+<h4>第八步：两类折中的地图</h4>
+所以实际地图只能二选一：<strong>保角投影</strong>（如 Mercator 投影）保形状但面积失真（高纬度地区被放得很大）；<strong>等积投影</strong>保面积但角度失真（形状被扭曲）。没有哪种地图能两全。
 
 <div class="keybox">$$\boxed{K>0\ \text{与}\ K=0\ \text{不等距}\ \Longrightarrow\ \text{地图必有畸变}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>地图必然畸变，根源是球面与平面曲率不同、无法等距。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>地图必然畸变，根源是球面与平面曲率不同、无法等距；保角与保面积不可兼得。</div>`
   },
   "r5": {
-    0: L`<h4>目标</h4>
-用球面验证全局 Gauss–Bonnet 定理。
+    0: L`<h4>我们要算什么</h4>
+用半径为 \(R\) 的球面验证全局 Gauss–Bonnet 定理：总曲率 \(\int K\,dA=4\pi\)，恰好等于 \(2\pi\) 乘以球面的 Euler 示性数 \(\chi(S^2)=2\)。
 
-<h4>第一步：球面的曲率与面积</h4>
-半径 \(R\) 的球面处处 \(K=1/R^2\)，总面积 \(A=4\pi R^2\)。
+<h4>第一步：回忆球面的 Gauss 曲率</h4>
+前面已经算过：半径为 \(R\) 的球面处处有
+<div class="eq">$$K=\frac{1}{R^2}$$</div>
+曲率是常数，与位置无关。
 
-<h4>第二步：总曲率积分</h4>
+<h4>第二步：回忆球面的面积</h4>
+半径为 \(R\) 的球面面积公式是
+<div class="eq">$$A=4\pi R^2$$</div>
 
-<div class="eq">$$\int_{S^2} K\,dA=\frac1{R^2}\cdot 4\pi R^2=4\pi$$</div>
+<h4>第三步：把常数曲率提出积分号</h4>
+回忆积分的性质：若被积函数是常数 \(c\)，则 \(\int c\,dA=c\int dA=c\cdot(\text{面积})\)。这里 \(K=1/R^2\) 是常数，所以
+<div class="eq">$$\int_{S^2}K\,dA=\int_{S^2}\frac{1}{R^2}\,dA=\frac{1}{R^2}\int_{S^2}dA$$</div>
 
-<h4>第三步：对照 Euler 示性数</h4>
-球面的 Euler 示性数 \(\chi(S^2)=2\)，故 \(2\pi\chi=4\pi\)，与积分完全一致。
+<h4>第四步：代入面积算出总曲率</h4>
+\(\int_{S^2}dA\) 就是球面总面积 \(4\pi R^2\)，代入：
+<div class="eq">$$\int_{S^2}K\,dA=\frac{1}{R^2}\cdot 4\pi R^2=4\pi$$</div>
+总曲率等于 \(4\pi\)。
+
+<h4>第五步：回忆球面的 Euler 示性数</h4>
+球面 \(S^2\) 的 Euler 示性数是
+<div class="eq">$$\chi(S^2)=2$$</div>
+（例如用三角剖分：球面可剖成四面体的表面，顶点 \(V=4\)、边 \(E=6\)、面 \(F=4\)，所以 \(\chi=4-6+4=2\)。）
+
+<h4>第六步：算 Gauss–Bonnet 右边</h4>
+<div class="eq">$$2\pi\,\chi(S^2)=2\pi\cdot 2=4\pi$$</div>
+
+<h4>第七步：对照两边</h4>
+第四步算出的总曲率是 \(4\pi\)，第六步算出的 \(2\pi\chi\) 也是 \(4\pi\)，两边完全一致，Gauss–Bonnet 定理在球面上得到验证。
 
 <div class="keybox">$$\boxed{\int_{S^2}K\,dA=4\pi=2\pi\,\chi(S^2)}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>球面总曲率恒为 \(4\pi\)，与半径无关——这是拓扑刚性。</div>`,
-    1: L`<h4>目标</h4>
-验证环面的总曲率为零。
+<div class="memobox"><strong>一句话记忆：</strong>球面总曲率恒为 \(4\pi\)，与半径无关——半径越大曲率越小但面积越大，二者乘积永远不变，这是拓扑刚性。</div>`,
+    1: L`<h4>我们要算什么</h4>
+验证环面的总曲率为零：环面的 Euler 示性数 \(\chi=0\)，由 Gauss–Bonnet 定理，总曲率 \(\int K\,dA=0\)；这与前面"外侧正曲率、内侧负曲率恰好抵消"的判断一致。
 
-<h4>第一步：环面的 Euler 示性数</h4>
-环面可视为把圆柱两端粘合，其 Euler 示性数 \(\chi=0\)。
+<h4>第一步：回忆环面是怎么得到的</h4>
+环面（甜甜圈面）可以这样得到：取一个圆柱面，把它的上下两个圆口对在一起粘合，让柱体弯成一个圈。也可以想成把平面上的一个正方形两对对边分别粘合。这两种看法都得到环面。
 
-<h4>第二步：Gauss–Bonnet 给出的约束</h4>
+<h4>第二步：用正方形粘合算出 Euler 示性数</h4>
+回忆 Euler 示性数 \(\chi=V-E+F\)。用正方形剖分环面：正方形的四个角粘成同一个点，所以顶点 \(V=1\)；四条边两两粘合，剩两条边，所以 \(E=2\)；一个面 \(F=1\)。于是
+<div class="eq">$$\chi=V-E+F=1-2+1=0$$</div>
+环面的 Euler 示性数是零。
 
-<div class="eq">$$\int_M K\,dA=2\pi\cdot 0=0$$</div>
+<h4>第三步：回忆全局 Gauss–Bonnet 定理</h4>
+对紧致定向闭曲面 \(M\)：
+<div class="eq">$$\int_M K\,dA=2\pi\,\chi(M)$$</div>
+它把总曲率积分与 Euler 示性数绑在一起。
 
-<h4>第三步：正负曲率相互抵消</h4>
-环面外侧区域 \(K>0\)，内侧区域 \(K<0\)，这两个区域对积分的贡献恰好一正一负、完全抵消，使得总曲率为零。这与前面的分区判断吻合。
+<h4>第四步：代入 \(\chi=0\)</h4>
+把环面的 \(\chi=0\) 代入第三步：
+<div class="eq">$$\int_{\text{环面}}K\,dA=2\pi\cdot 0=0$$</div>
+Gauss–Bonnet 直接断言：环面的总曲率必须为零。
+
+<h4>第五步：回忆前面环面曲率的符号分布</h4>
+前面算过环面 \(K=\cos u/(r(R+r\cos u))\)。它分三带：外侧区域 \(K>0\)（正曲率），内侧区域 \(K<0\)（负曲率），顶部与底部两条圆周上 \(K=0\)（这两条线对积分没有贡献）。
+
+<h4>第六步：把积分拆成正、负两部分</h4>
+把整个积分按符号拆开：
+<div class="eq">$$\int_{\text{环面}}K\,dA=\int_{\text{外侧}}K\,dA+\int_{\text{内侧}}K\,dA$$</div>
+外侧这一项是正的（\(K>0\) 的积分），内侧这一项是负的（\(K<0\) 的积分）。
+
+<h4>第七步：正负恰好抵消</h4>
+第四步说总积分为零，第六步把总积分拆成一正一负两项。两者结合，说明外侧的正贡献与内侧的负贡献<strong>恰好</strong>相互抵消。这不是数值巧合，而是拓扑（\(\chi=0\)）通过 Gauss–Bonnet 强加的约束。
+
+<h4>第八步：与前面的分区判断吻合</h4>
+在前面"环面"那一条例子里，我们定性地看到外侧 \(K>0\)、内侧 \(K<0\)、过渡线 \(K=0\)；这里 Gauss–Bonnet 定量地确认：这些正负区域对总积分的贡献一正一负、加起来恰好为零。
 
 <div class="keybox">$$\boxed{\int_{\text{环面}}K\,dA=0}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>环面正负曲率「收支平衡」，总曲率恰为零。</div>`,
-    2: L`<h4>目标</h4>
-计算亏格 \(2\) 闭曲面的总曲率。
+<div class="memobox"><strong>一句话记忆：</strong>环面正负曲率"收支平衡"，总曲率恰为零；这是 \(\chi=0\) 这个拓扑事实通过 Gauss–Bonnet 强加的结果。</div>`,
+    2: L`<h4>我们要算什么</h4>
+计算亏格为 \(2\) 的闭曲面（双环面）的总曲率：其 Euler 示性数 \(\chi=-2\)，由 Gauss–Bonnet 定理，总曲率必为 \(-4\pi\)。无论曲面怎样变形，这个总量都不变。
 
-<h4>第一步：亏格与 Euler 示性数</h4>
-亏格 \(g=2\) 的闭曲面（双环面）满足 \(\chi=2-2g=2-4=-2\)。
+<h4>第一步：回忆亏格 \(g\) 的含义</h4>
+回忆：亏格 \(g\) 是曲面"洞"的个数。球面没有洞，\(g=0\)；环面（甜甜圈）有一个洞，\(g=1\)；双环面有两个洞，\(g=2\)。
 
-<h4>第二步：Gauss–Bonnet 直接给出</h4>
+<h4>第二步：回忆亏格与 Euler 示性数的关系</h4>
+闭曲面的 Euler 示性数满足
+<div class="eq">$$\chi=2-2g$$</div>
+这是拓扑学的标准结论：每多打一个洞，\(\chi\) 就减 \(2\)。
+
+<h4>第三步：用已知例子核对这个公式</h4>
+先核对一下：球面 \(g=0\)，公式给 \(\chi=2-0=2\)，而球面 \(\chi=2\)，一致；环面 \(g=1\)，公式给 \(\chi=2-2=0\)，环面 \(\chi=0\)，也一致。公式可信。
+
+<h4>第四步：代入亏格 \(g=2\)</h4>
+亏格 \(2\) 的闭曲面就是"两个洞的甜甜圈"（双环面）。代入公式：
+<div class="eq">$$\chi=2-2\cdot 2=2-4=-2$$</div>
+
+<h4>第五步：回忆 Gauss–Bonnet 定理</h4>
+<div class="eq">$$\int_M K\,dA=2\pi\,\chi(M)$$</div>
+
+<h4>第六步：算出总曲率</h4>
+代入 \(\chi=-2\)：
+<div class="eq">$$\int_M K\,dA=2\pi\cdot(-2)=-4\pi$$</div>
+总曲率为 \(-4\pi\)。
+
+<h4>第七步：理解"变形不变"的含义</h4>
+回忆：Gauss 曲率 \(K\) 本身随曲面的弯曲会逐点改变，但它的<strong>总积分</strong>被拓扑锁死。无论把这个双环面怎样拉伸、压扁、扭曲（只要不撕裂、不粘合新洞），曲率可以"流动"，但总曲率始终是 \(-4\pi\)。
+
+<h4>第八步：三种曲面的对照</h4>
+把前面几条放在一起看：球面 \(\chi=2\)，总曲率 \(4\pi\)；环面 \(\chi=0\)，总曲率 \(0\)；双环面 \(\chi=-2\)，总曲率 \(-4\pi\)。洞越多，Euler 示性数越小，总曲率越负。
 
 <div class="keybox">$$\boxed{\int_M K\,dA=2\pi\chi=2\pi\cdot(-2)=-4\pi}$$</div>
 
-<h4>第三步：含义</h4>
-无论这个曲面被怎样拉伸、变形，只要不撕裂不粘合，它的总曲率始终锁定为 \(-4\pi\)。这说明曲率分布可以「流动」，但总量受拓扑控制。
-
-<div class="memobox"><strong>关键词：</strong>亏格 \(2\) ⟹ 总曲率恒为 \(-4\pi\)，变形无法改变它。</div>`
+<div class="memobox"><strong>一句话记忆：</strong>亏格 \(2\) 的闭曲面 ⟹ 总曲率恒为 \(-4\pi\)；曲率分布可以流动，但总量被拓扑刚性锁死。</div>`
   },
   "r6": {
-    0: L`<h4>目标</h4>
-写出 \(\mathbb R^n\) 上最标准的黎曼度量——欧氏度量。
-
-<h4>第一步：度量张量是 Kronecker delta</h4>
-在直角坐标下，欧氏度量分量就是单位矩阵
-
-<div class="eq">$$g_{ij}=\delta_{ij}=\begin{cases}1,&i=j\\0,&i\neq j\end{cases}$$</div>
-
-<h4>第二步：线元表达式</h4>
-因而线元（无穷小距离平方）为
-
-<div class="keybox">$$\boxed{ds^2=\sum_{i=1}^n (dx^i)^2}$$</div>
-
-这是平坦空间的标准度量，其曲率恒为零。
-
-<div class="memobox"><strong>关键词：</strong>欧氏度量 = 分量全为 \(\delta_{ij}\)，是「最平」的度量。</div>`,
-    1: L`<h4>目标</h4>
-说明 Minkowski 度量为何不是黎曼度量。
-
-<h4>第一步：符号差 (3,1)</h4>
-狭义相对论的时空线元为
-
-<div class="eq">$$ds^2=-c^2dt^2+dx^2+dy^2+dz^2$$</div>
-
-度量矩阵符号为 \((-,+,+,+)\)。
-
-<h4>第二步：破坏正定性</h4>
-黎曼度量要求对一切非零切向量 \(g(v,v)>0\)。但类时向量（如纯时间方向）满足 \(g(v,v)<0\)，类光向量满足 \(g(v,v)=0\)。正定性被破坏。
-
-<div class="keybox">$$\boxed{\text{Minkowski 度量符号 }(-,+,+,+)\ \Longrightarrow\ \text{伪黎曼（Lorentz）度量}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>含负号 ⟹ 非正定 ⟹ 是 Lorentz 度量而非黎曼度量。</div>`,
-    2: L`<h4>目标</h4>
-认识曲面的第一基本形式——它是 \(\mathbb R^3\) 欧氏度量在曲面上的诱导度量。
-
-<h4>第一步：曲面参数化</h4>
-设曲面局部参数化为 \(X(u,v)\)，其切向量 \(X_u,X_v\)。\(\mathbb R^3\) 的内积限制到切平面，给出度量系数
-
-<div class="eq">$$E=\langle X_u,X_u\rangle,\quad F=\langle X_u,X_v\rangle,\quad G=\langle X_v,X_v\rangle$$</div>
-
-<h4>第二步：第一基本形式</h4>
-
-<div class="keybox">$$\boxed{I=E\,du^2+2F\,du\,dv+G\,dv^2}$$</div>
-
-它完全描述了曲面上的弧长与角度，正是诱导度量 \(g=X^*(\delta)\)。
-
-<div class="memobox"><strong>关键词：</strong>第一基本形式 \(E,F,G\) = 欧氏内积在曲面上的限制。</div>`
+    0: L`<h4>第1步：写出欧氏内积的定义</h4>回忆：在 \(\mathbb R^n\) 中取直角坐标 \(x^1,\ldots,x^n\)，标准内积按分量相乘再求和。<div class="eq">$$\langle v,w\rangle=\sum_{i=1}^{n}v^iw^i$$</div>这就是把每个切空间识别成 \(\mathbb R^n\) 后使用的内积。
+<h4>第2步：计算坐标基的两两内积</h4>回忆：坐标基 \(\partial_i\) 对应第 \(i\) 个标准单位向量 \(e_i\)。<div class="eq">$$g_{ij}=g(\partial_i,\partial_j)=\langle e_i,e_j\rangle=\delta_{ij}$$</div>主对角线为一，非对角项为零，所以度量矩阵是单位矩阵。
+<h4>第3步：把任意向量代入二次型</h4>回忆：若 \(v=\sum_i v^i\partial_i\)，双线性将度量写成双重求和。<div class="eq">$$g(v,v)=\sum_{i,j}\delta_{ij}v^iv^j=\sum_i(v^i)^2$$</div>非零向量至少有一个非零坐标，故平方长度严格正。
+<h4>第4步：计算两个向量的夹角数据</h4>回忆：内积和长度都已由前面算出；非零向量的夹角满足余弦公式。<div class="eq">$$\cos\theta=\frac{g(v,w)}{\sqrt{g(v,v)}\sqrt{g(w,w)}}=\frac{\sum_i v^iw^i}{\sqrt{\sum_i(v^i)^2}\sqrt{\sum_i(w^i)^2}}$$</div>所得恰是初等解析几何中的夹角公式。
+<h4>第5步：将位移代入得到线元</h4>回忆：线元 \(ds^2\) 是无穷小位移 \(dx^i\) 的度量二次型。<div class="eq">$$ds^2=\sum_{i,j}g_{ij}dx^i dx^j=\sum_{i,j}\delta_{ij}dx^i dx^j=\sum_i(dx^i)^2$$</div>交叉项全被 \(\delta_{ij}\) 消去，这正是勾股形式。
+<h4>第6步：沿曲线逐项算速度长度</h4>回忆：若 \(\gamma(t)=(x^1(t),\ldots,x^n(t))\)，则 \(\dot\gamma=\sum_i\dot x^i\partial_i\)。<div class="eq">$$g(\dot\gamma,\dot\gamma)=\sum_i(\dot x^i)^2,\qquad |\dot\gamma|_g=\sqrt{\sum_i(\dot x^i)^2}$$</div>速度长度就是通常欧氏速度向量的模。
+<h4>第7步：把速度积分为曲线长度</h4>回忆：黎曼曲线长度的定义是速度长度的时间积分。<div class="eq">$$L_g(\gamma)=\int_a^b\sqrt{g(\dot\gamma,\dot\gamma)}\,dt=\int_a^b\sqrt{\sum_i(\dot x^i)^2}\,dt$$</div>这一步核对了由单位矩阵得到的是熟悉的欧氏弧长。
+<h4>第8步：算联络系数</h4>回忆：Levi-Civita 联络的坐标公式只含度量的一阶偏导；这里 \(g_{ij}=\delta_{ij}\) 为常数。<div class="eq">$$\Gamma^k_{ij}=\tfrac12g^{k\ell}(\partial_i g_{j\ell}+\partial_jg_{i\ell}-\partial_\ell g_{ij})=0$$</div>每一项偏导均为零，故全部 Christoffel 符号为零。
+<h4>第9步：把零联络代入曲率公式</h4>回忆：曲率分量由 \(\Gamma\) 的偏导和二次项组成。<div class="eq">$$R^\ell{}_{kij}=\partial_i\Gamma^\ell_{jk}-\partial_j\Gamma^\ell_{ik}+\Gamma^m_{jk}\Gamma^\ell_{im}-\Gamma^m_{ik}\Gamma^\ell_{jm}=0$$</div>四项逐项为零，所以欧氏度量平坦。
+<div class="keybox">$$\boxed{g_{ij}=\delta_{ij},\qquad ds^2=\sum_i(dx^i)^2,\qquad R=0}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>单位矩阵量出勾股长度；矩阵处处不变，使联络与曲率分量都为零。</div>`,
+    1: L`<h4>第1步：列出所给时空度量</h4>回忆：狭义相对论采用时间 \(t\) 与空间坐标 \(x,y,z\)，常数光速 \(c>0\)。<div class="eq">$$\eta=-c^2dt\otimes dt+dx\otimes dx+dy\otimes dy+dz\otimes dz$$</div>这个对称二阶张量的时间项系数为负。
+<h4>第2步：把度量写成矩阵</h4>回忆：在 \((\partial_t,\partial_x,\partial_y,\partial_z)\) 基下，各混合项为零。<div class="eq">$$[\eta_{\mu\nu}]=\operatorname{diag}(-c^2,1,1,1)$$</div>矩阵有一个负方向、三个正方向，即符号型为 \((-,+,+,+)\)。
+<h4>第3步：复述黎曼正定条件</h4>回忆：黎曼度量要求每个非零切向量都有严格正的平方长度。<div class="eq">$$v\ne0\quad\Longrightarrow\quad g(v,v)>0$$</div>检查是否属于黎曼度量，只需找一个违背条件的非零向量。
+<h4>第4步：代入纯时间向量</h4>回忆：\(\partial_t\) 的四个坐标分量为 \((1,0,0,0)\)。<div class="eq">$$\eta(\partial_t,\partial_t)=-c^2(1)^2+0^2+0^2+0^2=-c^2<0$$</div>非零时间方向却有负平方长度，已经排除了正定性。
+<h4>第5步：再算纯空间方向</h4>回忆：\(\partial_x\) 的分量为 \((0,1,0,0)\)。<div class="eq">$$\eta(\partial_x,\partial_x)=-c^2(0)^2+1^2+0^2+0^2=1>0$$</div>时间和空间方向的平方长度符号确实不同。
+<h4>第6步：找一个非零零长度向量</h4>回忆：把时间和空间分量放在同一个向量中，选 \(w=\partial_t+c\partial_x\)。<div class="eq">$$\eta(w,w)=-c^2(1)^2+(c)^2+0+0=0,\qquad w\ne0$$</div>这里的零平方长度不表示零向量，而是类光方向。
+<h4>第7步：分清非正定和退化</h4>回忆：双线性型退化是矩阵不可逆；矩阵的行列式可逐个对角元相乘。<div class="eq">$$\det[\eta_{\mu\nu}]=(-c^2)\cdot1\cdot1\cdot1=-c^2\ne0$$</div>所以它是非退化的，只是没有满足黎曼度量的正定条件。
+<h4>第8步：给出正确名称</h4>回忆：具有一个负方向、三个正方向的光滑非退化对称度量叫 Lorentz 度量，它属于伪黎曼度量。<div class="eq">$$\operatorname{signature}(\eta)=(1,3),\qquad \eta(\partial_t,\partial_t)<0$$</div>这与原例的分类一致，且负方向的代入给出了具体理由。
+<div class="keybox">$$\boxed{\eta=-c^2dt^2+dx^2+dy^2+dz^2\text{ 是 Lorentz 度量，而非正定黎曼度量}}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>时间方向平方长度为负；非退化仍然可以不正定。</div>`,
+    2: L`<h4>第1步：从正规参数化开始</h4>回忆：曲面局部由 \(X(u,v)\in\mathbb R^3\) 参数化，正规表示 \(X_u,X_v\) 线性无关。<div class="eq">$$dX(a\partial_u+b\partial_v)=aX_u+bX_v$$</div>因此参数域里的两个方向被送成曲面上的两条独立切向方向。
+<h4>第2步：写出诱导度量定义</h4>回忆：曲面度量是环境欧氏内积的拉回。<div class="eq">$$I_{(u,v)}(a\partial_u+b\partial_v,c\partial_u+d\partial_v)=\langle aX_u+bX_v,cX_u+dX_v\rangle$$</div>这一定义只使用参数化的微分和环境内积。
+<h4>第3步：在坐标基上逐项取值</h4>回忆：第一基本形式系数是把两个坐标基分别代入诱导度量。<div class="eq">$$E=\langle X_u,X_u\rangle,\qquad F=\langle X_u,X_v\rangle,\qquad G=\langle X_v,X_v\rangle$$</div>对称性还给 \(\langle X_v,X_u\rangle=F\)。
+<h4>第4步：完全展开一般切向量的平方</h4>回忆：欧氏内积对两个变量各自线性。<div class="eq">$$\langle aX_u+bX_v,aX_u+bX_v\rangle=a^2E+abF+baF+b^2G=Ea^2+2Fab+Gb^2$$</div>混合项的系数二来自两项相同的乘积。
+<h4>第5步：换成无穷小位移</h4>回忆：令一般切向量的坐标分量为 \(du,dv\)，就得到线元。<div class="eq">$$I=E\,du^2+2F\,du\,dv+G\,dv^2$$</div>这正是曲面第一基本形式的标准写法。
+<h4>第6步：核查正定性</h4>回忆：正规参数化使 \(aX_u+bX_v=0\) 只在 \(a=b=0\) 发生。<div class="eq">$$Ea^2+2Fab+Gb^2=\lVert aX_u+bX_v\rVert^2>0\quad((a,b)\ne(0,0))$$</div>因此这个拉回双线性型确实是黎曼度量。
+<h4>第7步：取一张具体弯曲曲面来求导</h4>回忆：用图面 \(X(u,v)=(u,v,u^2+v^2)\) 作数值结构核查。<div class="eq">$$X_u=(1,0,2u),\qquad X_v=(0,1,2v)$$</div>两个导向量的前两个分量是标准基，故它们处处线性无关。
+<h4>第8步：把导向量代入三个系数</h4>回忆：按第3步的欧氏点积定义分别相乘求和。<div class="eq">$$E=1+4u^2,\qquad F=4uv,\qquad G=1+4v^2$$</div>混合项 \(4uv\) 来自两个高度分量 \(2u\) 与 \(2v\) 的乘积。
+<h4>第9步：写出并核查具体线元</h4>回忆：把第8步得到的 \(E,F,G\) 原样代入第5步。<div class="eq">$$I=(1+4u^2)du^2+8uv\,du\,dv+(1+4v^2)dv^2,\quad EG-F^2=1+4u^2+4v^2>0$$</div>行列式为正且 \(E>0\)，与正规性保证的正定性相符。
+<div class="keybox">$$\boxed{I=X^*\langle\cdot,\cdot\rangle=E\,du^2+2F\,du\,dv+G\,dv^2}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>把参数方向送进三维空间，再做点积，就算出了曲面自己测量长度的公式。</div>`
   },
   "r7": {
-    0: L`<h4>目标</h4>
-用音乐同构定义函数的梯度。
-
-<h4>第一步：微分是余切向量</h4>
-光滑函数 \(f\) 的微分 \(df\) 是余切向量场，坐标分量 \(\partial_j f\)。
-
-<h4>第二步：升指标得梯度</h4>
-梯度是 \(df\) 的升调 \(\sharp\) 结果：
-
-<div class="keybox">$$\boxed{(\operatorname{grad} f)^i=g^{ij}\,\partial_j f}$$</div>
-
-即把 \(df\) 的下标用 \(g^{ij}\) 抬上去。
-
-<div class="memobox"><strong>关键词：</strong>梯度 = 微分的「升调」，坐标下乘 \(g^{ij}\) 升指标。</div>`,
-    1: L`<h4>目标</h4>
-理解散度的两种等价定义。
-
-<h4>第一步：分量缩并定义</h4>
-向量场 \(X\) 的散度是协变导数的缩并
-
-<div class="eq">$$\operatorname{div} X=\nabla_i X^i$$</div>
-
-<h4>第二步：体积形式定义</h4>
-散度也刻画向量场对体积的「拉伸」：Lie 导数满足
-
-<div class="keybox">$$\boxed{L_X\,dV_g=(\operatorname{div}X)\,dV_g}$$</div>
-
-两种定义一致，后者揭示了散度的几何意义——流经某点的通量发散率。
-
-<div class="memobox"><strong>关键词：</strong>散度 = 协变导数的迹 = 体积形式沿 \(X\) 的变化率。</div>`,
-    2: L`<h4>目标</h4>
-写出 Laplace–Beltrami 算子，它是欧氏 Laplace 算子在流形上的推广。
-
-<h4>第一步：定义是散度与梯度的复合</h4>
-
-<div class="eq">$$\Delta f=\operatorname{div}(\operatorname{grad} f)$$</div>
-
-<h4>第二步：坐标展开</h4>
-代入梯度与散度的坐标表达式，得到
-
-<div class="keybox">$$\boxed{\Delta f=g^{ij}\big(\partial_i\partial_j f-\Gamma^k_{ij}\,\partial_k f\big)}$$</div>
-
-当度量为欧氏度量（\(\Gamma=0,\ g^{ij}=\delta^{ij}\)）时，退化为熟知的 \(\Delta f=\sum_i\partial_i^2 f\)。
-
-<div class="memobox"><strong>关键词：</strong>Laplace–Beltrami = \(\operatorname{div}\circ\operatorname{grad}\)，多出的 \(\Gamma\) 项是曲率修正。</div>`
+    0: L`<h4>第1步：写出梯度的定义</h4>回忆：梯度是与微分 \(df\) 经度量对应的向量场，定义要求对每个测试向量 \(Y\) 都成立。<div class="eq">$$g(\operatorname{grad}f,Y)=df(Y)$$</div>要计算梯度，就要把这条对所有 \(Y\) 的等式解成向量分量。
+<h4>第2步：把函数微分写成分量</h4>回忆：坐标函数 \(x^i\) 的微分形成余切基。<div class="eq">$$df=\sum_j(\partial_jf)\,dx^j$$</div>因此 \(df\) 的第 \(j\) 个余切分量就是偏导 \(\partial_jf\)。
+<h4>第3步：设未知梯度的分量</h4>回忆：每个向量场都能在坐标基上展开。<div class="eq">$$\operatorname{grad}f=V^i\partial_i$$</div>未知量是 \(n\) 个函数 \(V^i\)。
+<h4>第4步：取基向量测试定义式</h4>回忆：定义式对所有 \(Y\) 成立，特别可取 \(Y=\partial_j\)。<div class="eq">$$g(V^i\partial_i,\partial_j)=g_{ji}V^i=df(\partial_j)=\partial_jf$$</div>梯度问题成为线性方程组 \(G V=\partial f\)。
+<h4>第5步：乘逆矩阵逐项消去度量</h4>回忆：正定矩阵 \(G=(g_{ij})\) 可逆，逆矩阵记 \(g^{ij}\)。<div class="eq">$$g^{kj}g_{ji}V^i=g^{kj}\partial_jf,\qquad \delta^k_iV^i=g^{kj}\partial_jf$$</div>所以梯度第 \(k\) 个分量为 \(V^k=g^{kj}\partial_jf\)。
+<h4>第6步：先用欧氏度量校验</h4>回忆：在标准欧氏坐标中 \(g_{ij}=\delta_{ij}\)，逆矩阵仍为单位矩阵。<div class="eq">$$(\operatorname{grad}f)^i=\delta^{ij}\partial_jf=\partial_if$$</div>这还原了多元微积分的通常梯度。
+<h4>第7步：给出具体非单位度量与函数</h4>回忆：取 \(g=4dx^2+dy^2\)、\(f(x,y)=x^2+y\)。<div class="eq">$$G=\begin{pmatrix}4&0\\0&1\end{pmatrix},\qquad G^{-1}=\begin{pmatrix}1/4&0\\0&1\end{pmatrix},\qquad df=2x\,dx+dy$$</div>这里横向长度权重为四，所以横向梯度分量会缩小四倍。
+<h4>第8步：把偏导逐项代入梯度公式</h4>回忆：第5步给 \(V^i=g^{ij}\partial_jf\)。<div class="eq">$$V^x=(1/4)(2x)+0(1)=x/2,\qquad V^y=0(2x)+1(1)=1$$</div>因此候选梯度是 \((x/2)\partial_x+\partial_y\)。
+<h4>第9步：用任意向量反向检验</h4>回忆：定义要求对任意 \(Y=a\partial_x+b\partial_y\) 成立。<div class="eq">$$g((x/2)\partial_x+\partial_y,Y)=4(x/2)a+1\cdot b=2xa+b=df(Y)$$</div>验证了这不是只在坐标基上碰巧成立，而是对所有向量都成立。
+<div class="keybox">$$\boxed{\operatorname{grad}f=g^{ij}(\partial_jf)\partial_i,\qquad g=4dx^2+dy^2,\ f=x^2+y\Rightarrow\operatorname{grad}f=\tfrac{x}{2}\partial_x+\partial_y}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>梯度是微分经过逆度量升指标得到的向量；较重的方向分量相应缩小。</div>`,
+    1: L`<h4>第1步：从散度的体积定义开始</h4>回忆：给定黎曼体积密度 \(dV_g\)，散度由流沿 \(X\) 对体积的瞬时变化定义。<div class="eq">$$\mathcal L_X(dV_g)=(\operatorname{div}X)dV_g$$</div>因此只需把左侧的 Lie 导数算成体积密度的倍数。
+<h4>第2步：写出坐标体积密度</h4>回忆：正定度量矩阵 \(G=(g_{ij})\) 的行列式为正。<div class="eq">$$\rho=\sqrt{\det G},\qquad dV_g=\rho\,dx^1\wedge\cdots\wedge dx^n$$</div>局部坐标中的体积缩放因子就是 \(\rho\)。
+<h4>第3步：先计算系数函数的变化</h4>回忆：Lie 导数作用在函数上就是向量场作方向导数。<div class="eq">$$\mathcal L_X\rho=X(\rho)=\sum_iX^i\partial_i\rho$$</div>这给出了体积变化中由密度本身变化贡献的一项。
+<h4>第4步：再计算坐标体积元的变化</h4>回忆：对坐标一形式有 \(\mathcal L_Xdx^j=d(X^j)=\partial_iX^jdx^i\)。<div class="eq">$$\mathcal L_X(dx^1\wedge\cdots\wedge dx^n)=(\partial_iX^i)dx^1\wedge\cdots\wedge dx^n$$</div>楔积中替换一项后，只有原位的 \(dx^j\) 分量不为零；它们求和成普通坐标散度。
+<h4>第5步：用乘积法则合并两项</h4>回忆：Lie 导数对函数乘形式满足乘积法则。<div class="eq">$$\mathcal L_XdV_g=\bigl(X^i\partial_i\rho+\rho\,\partial_iX^i\bigr)dx^1\wedge\cdots\wedge dx^n$$</div>第一项来自密度变化，第二项来自坐标流的局部伸缩。
+<h4>第6步：改写成一个全导数</h4>回忆：一元乘积法则逐项给 \(\partial_i(\rho X^i)=(\partial_i\rho)X^i+\rho\partial_iX^i\)。<div class="eq">$$\mathcal L_XdV_g=\partial_i(\rho X^i)\,dx^1\wedge\cdots\wedge dx^n$$</div>分子现在是一项可以直接代数计算的散度型表达式。
+<h4>第7步：与定义比较并除以密度</h4>回忆：由于 \(\rho>0\)，可比较第1步定义式中的同一体积形式。<div class="eq">$$\operatorname{div}X=\frac1\rho\partial_i(\rho X^i)=\frac1{\sqrt{\det G}}\partial_i\bigl(\sqrt{\det G}\,X^i\bigr)$$</div>这是散度的坐标公式，直接来自体积定义。
+<h4>第8步：在极坐标中算度量行列式</h4>回忆：欧氏平面去掉原点后的极坐标度量为 \(g=dr^2+r^2d\theta^2\)，其中 \(r>0\)。<div class="eq">$$G=\begin{pmatrix}1&0\\0&r^2\end{pmatrix},\qquad \det G=r^2,\qquad\rho=r$$</div>因此极坐标面积元比 \(dr\,d\theta\) 多一个 \(r\) 因子。
+<h4>第9步：选向外伸张的向量场</h4>回忆：取 \(X=r\partial_r\)，则其极坐标分量为 \(X^r=r,X^\theta=0\)。<div class="eq">$$\rho X^r=r\cdot r=r^2,\qquad \rho X^\theta=r\cdot0=0$$</div>把这些分量代入即可逐项求偏导。
+<h4>第10步：完成极坐标散度计算</h4>回忆：第7步公式要求先求导，再除以 \(\rho=r\)。<div class="eq">$$\operatorname{div}X=\frac1r\bigl[\partial_r(r^2)+\partial_\theta(0)\bigr]=\frac1r(2r)=2$$</div>结果在每个 \(r>0\) 的点都为二。
+<h4>第11步：换成直角坐标复核</h4>回忆：极坐标变换满足 \(r\partial_r=x\partial_x+y\partial_y\)。<div class="eq">$$\operatorname{div}(x\partial_x+y\partial_y)=\partial_xx+\partial_yy=1+1=2$$</div>两种坐标算得相同，说明密度因子 \(r\) 已正确计入。
+<div class="keybox">$$\boxed{\operatorname{div}X=\frac1{\sqrt{\det g}}\partial_i(\sqrt{\det g}\,X^i),\qquad\operatorname{div}(r\partial_r)=2}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>散度是流改变体积的速率；坐标体积元会变，所以求导前必须乘体积密度。</div>`,
+    2: L`<h4>第1步：按定义连接梯度与散度</h4>回忆：本例取非负号约定的 Laplace–Beltrami 算子。<div class="eq">$$\Delta f:=\operatorname{div}(\operatorname{grad}f)$$</div>先算梯度的分量，再把它们放进散度公式。
+<h4>第2步：写出梯度分量</h4>回忆：梯度由 \(g(\operatorname{grad}f,Y)=df(Y)\) 定义，乘逆矩阵解出分量。<div class="eq">$$(\operatorname{grad}f)^i=g^{ij}\partial_jf$$</div>这是第一层指标升降计算。
+<h4>第3步：写出散度分量</h4>回忆：若 \(\rho=\sqrt{\det g}\)，体积定义给 \(\operatorname{div}X=\rho^{-1}\partial_i(\rho X^i)\)。<div class="eq">$$\operatorname{div}X=\frac1{\rho}\partial_i(\rho X^i)$$</div>这是第二层体积变化计算。
+<h4>第4步：把梯度逐项代入散度</h4>回忆：在第3步中令 \(X^i=g^{ij}\partial_jf\)。<div class="eq">$$\Delta f=\frac1\rho\partial_i\bigl(\rho g^{ij}\partial_jf\bigr)$$</div>得到了可直接用于坐标计算的主公式。
+<h4>第5步：先展开一次乘积法则</h4>回忆：对 \(\rho g^{ij}\partial_jf\) 按三个因子求导。<div class="eq">$$\Delta f=g^{ij}\partial_i\partial_jf+\bigl(\partial_i g^{ij}+g^{ij}\partial_i\log\rho\bigr)\partial_jf$$</div>第一项含二阶偏导，第二项负责修正非恒定度量和体积因子。
+<h4>第6步：写出 Christoffel 符号</h4>回忆：Levi-Civita 联络由度量唯一确定，坐标系数为度量的一阶导数。<div class="eq">$$\Gamma^k_{ij}=\tfrac12g^{k\ell}(\partial_i g_{j\ell}+\partial_jg_{i\ell}-\partial_\ell g_{ij})$$</div>这允许把第5步的修正项改写成联络形式。
+<h4>第7步：计算体积密度的导数</h4>回忆：Jacobi 行列式求导公式为 \(\partial_i\log\det G=g^{k\ell}\partial_i g_{k\ell}\)。<div class="eq">$$\partial_i\log\rho=\tfrac12g^{k\ell}\partial_i g_{k\ell}=\Gamma^k_{ki}$$</div>最后一个等号把第6步的 Christoffel 公式代入并对对称的两项整理得到。
+<h4>第8步：用度量相容性整理逆矩阵导数</h4>回忆：Levi-Civita 联络满足 \(\nabla_i g^{ij}=0\)。<div class="eq">$$0=\partial_i g^{ij}+\Gamma^i_{ik}g^{kj}+\Gamma^j_{ik}g^{ik}$$</div>把中间项用第7步的 \(\partial_k\log\rho\) 替换，便能识别第5步的修正项。
+<h4>第9步：得到协变 Hessian 形式</h4>回忆：由第8步移项得 \(\partial_i g^{ij}+g^{ij}\partial_i\log\rho=-g^{ik}\Gamma^j_{ik}\)。<div class="eq">$$\Delta f=g^{ij}\bigl(\partial_i\partial_jf-\Gamma^k_{ij}\partial_kf\bigr)$$</div>这说明 Laplace–Beltrami 算子也是函数 Hessian 的度量迹。
+<h4>第10步：选极坐标作具体计算</h4>回忆：在 \(r>0\) 的欧氏平面极坐标中，\(g=dr^2+r^2d\theta^2\)。<div class="eq">$$g^{rr}=1,\qquad g^{\theta\theta}=r^{-2},\qquad \rho=r$$</div>将这三项逐个放进第4步即可得极坐标算子。
+<h4>第11步：展开极坐标算子</h4>回忆：分别对径向与角向的两项求偏导。<div class="eq">$$\Delta f=\frac1r\partial_r(r\partial_rf)+\frac1r\partial_\theta(r\cdot r^{-2}\partial_\theta f)=\partial_r^2f+\frac1r\partial_rf+\frac1{r^2}\partial_\theta^2f$$</div>角向求导时 \(r\) 被视为常数，因此得到 \(r^{-2}\partial_\theta^2f\)。
+<h4>第12步：代入函数并和直角坐标核对</h4>回忆：令 \(f=r^2=x^2+y^2\)，则 \(\partial_rf=2r\)、\(\partial_r^2f=2\)、\(\partial_\theta^2f=0\)。<div class="eq">$$\Delta(r^2)=2+\frac1r(2r)+0=4=\partial_x^2(x^2+y^2)+\partial_y^2(x^2+y^2)$$</div>两套坐标一致，具体计算也验证了符号约定。
+<div class="keybox">$$\boxed{\Delta f=\frac1{\sqrt{\det g}}\partial_i(\sqrt{\det g}\,g^{ij}\partial_jf)=g^{ij}(\partial_i\partial_jf-\Gamma^k_{ij}\partial_kf)}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>先用逆度量得到梯度，再按体积密度求散度，就得到了流形上的 Laplace 算子。</div>`
   },
   "r8": {
-    0: L`<h4>目标</h4>
-验证欧氏空间 \(\mathbb R^n\) 的等距群达到维数上界。
-
-<h4>第一步：欧氏群结构</h4>
-\(\mathbb R^n\) 的等距由正交变换 \(A\in O(n)\) 与平移 \(b\in\mathbb R^n\) 组成，即
-
-<div class="eq">$$F(x)=Ax+b$$</div>
-
-记作半直积 \(E(n)=O(n)\ltimes\mathbb R^n\)。
-
-<h4>第二步：数维数</h4>
-\(O(n)\) 维数为 \(\frac{n(n-1)}{2}\)，平移 \(\mathbb R^n\) 维数为 \(n\)，故
-
-<div class="keybox">$$\boxed{\dim E(n)=\frac{n(n-1)}{2}+n=\frac{n(n+1)}{2}}$$</div>
-
-欧氏空间是「最大对称空间」，等距群达到维数上界。
-
-<div class="memobox"><strong>关键词：</strong>欧氏群 \(E(n)=O(n)\ltimes\mathbb R^n\)，维数恰为 \(\frac{n(n+1)}{2}\)。</div>`,
-    1: L`<h4>目标</h4>
-球面 \(S^n\) 的等距群也是最大对称的。
-
-<h4>第一步：等距来自正交群</h4>
-球面 \(S^n\subset\mathbb R^{n+1}\) 的等距正是限制在其上的正交变换，即
-
-<div class="eq">$$\operatorname{Isom}(S^n)=O(n+1)$$</div>
-
-<h4>第二步：维数验证</h4>
-\(O(n+1)\) 的维数是 \(\frac{(n+1)n}{2}=\frac{n(n+1)}{2}\)，同样达到上界。球面每一点都是「各向同性」的——过一点的任意方向都能被等距互换。
-
-<div class="keybox">$$\boxed{\dim\operatorname{Isom}(S^n)=\frac{n(n+1)}{2}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>球面等距群 \(O(n+1)\)，与欧氏空间同为最大对称空间。</div>`,
-    2: L`<h4>目标</h4>
-认识双曲平面 \(H^2\) 的等距群。
-
-<h4>第一步：上半平面模型</h4>
-双曲平面可用上半平面模型 \(\mathbb H^2=\{z:\operatorname{Im}z>0\}\)，其等距由分式线性变换给出
-
-<div class="eq">$$z\mapsto\frac{az+b}{cz+d},\qquad ad-bc=1$$</div>
-
-<h4>第二步：群结构</h4>
-保向等距群同构于 \(PSL(2,\mathbb R)=SL(2,\mathbb R)/\{\pm I\}\)。
-
-<div class="keybox">$$\boxed{\operatorname{Isom}^+(H^2)\cong PSL(2,\mathbb R)}$$</div>
-
-它同样是三维 Lie 群，达到 \(\frac{2\cdot 3}{2}=3\) 的维数上界。
-
-<div class="memobox"><strong>关键词：</strong>双曲平面保向等距群 = \(PSL(2,\mathbb R)\)，三维。</div>`
+    0: L`<h4>第1步：从欧氏等距的定义开始</h4>回忆：全局欧氏等距 \(F:\mathbb R^n\to\mathbb R^n\) 保持任意两点的距离。<div class="eq">$$\lVert F(x)-F(y)\rVert=\lVert x-y\rVert\qquad(x,y\in\mathbb R^n)$$</div>我们要从这一条定义式算出 \(F\) 的全部可能形式。
+<h4>第2步：先去掉平移部分</h4>回忆：令 \(b=F(0)\)，定义 \(H(x)=F(x)-b\)。平移不改变两点差向量。<div class="eq">$$H(0)=0,\qquad\lVert H(x)-H(y)\rVert=\lVert x-y\rVert$$</div>所以只需分类固定原点的等距 \(H\)，最后再加回 \(b\)。
+<h4>第3步：把到原点的距离写成范数</h4>回忆：在第2步取 \(y=0\)，并用 \(H(0)=0\)。<div class="eq">$$\lVert H(x)\rVert=\lVert H(x)-H(0)\rVert=\lVert x-0\rVert=\lVert x\rVert$$</div>固定原点的等距保持每个向量的范数。
+<h4>第4步：用极化恒等式恢复内积</h4>回忆：实内积满足 \(2\langle u,v\rangle=\lVert u\rVert^2+\lVert v\rVert^2-\lVert u-v\rVert^2\)。<div class="eq">$$2\langle H(x),H(y)\rangle=\lVert H(x)\rVert^2+\lVert H(y)\rVert^2-\lVert H(x)-H(y)\rVert^2=2\langle x,y\rangle$$</div>因此 \(H\) 保持任意两个向量的内积。
+<h4>第5步：计算标准基的像</h4>回忆：标准基满足 \(\langle e_i,e_j\rangle=\delta_{ij}\)；记 \(u_i=H(e_i)\)。<div class="eq">$$\langle u_i,u_j\rangle=\langle H(e_i),H(e_j)\rangle=\delta_{ij}$$</div>所以 \(u_1,\ldots,u_n\) 是一组正交归一基。
+<h4>第6步：用这些列向量组成矩阵</h4>回忆：令 \(A\) 的第 \(i\) 列为 \(u_i\)；矩阵 \(A^TA\) 的第 \((i,j)\) 项是列向量点积。<div class="eq">$$(A^TA)_{ij}=u_i\cdot u_j=\delta_{ij},\qquad A^TA=I$$</div>因此 \(A\in O(n)\)，即 \(A\) 是正交矩阵。
+<h4>第7步：逐坐标识别任意点的像</h4>回忆：在正交基 \(u_i\) 下，向量的第 \(i\) 个系数是它与 \(u_i\) 的内积。<div class="eq">$$\langle H(x),u_i\rangle=\langle H(x),H(e_i)\rangle=\langle x,e_i\rangle=x^i$$</div>所以 \(H(x)=\sum_i x^iu_i=Ax\)，这里没有预先假设 \(H\) 线性。
+<h4>第8步：把平移加回去</h4>回忆：第2步定义 \(H(x)=F(x)-b\)。<div class="eq">$$F(x)=H(x)+b=Ax+b,\qquad A\in O(n),\ b\in\mathbb R^n$$</div>这说明任何全局欧氏等距都必是正交变换后接平移。
+<h4>第9步：反向代入验证没有遗漏</h4>回忆：若 \(A^TA=I\)，则 \(\lVert Av\rVert^2=v^TA^TAv=\lVert v\rVert^2\)。<div class="eq">$$\lVert (Ax+b)-(Ay+b)\rVert^2=\lVert A(x-y)\rVert^2=(x-y)^TA^TA(x-y)=\lVert x-y\rVert^2$$</div>故每个 \(Ax+b\) 确实是欧氏等距，分类的两个方向都已证明。
+<h4>第10步：逐项计算复合律</h4>回忆：把 \((A,b)\) 理解为映射 \(x\mapsto Ax+b\)。<div class="eq">$$(A,b)\circ(C,d):x\longmapsto A(Cx+d)+b=(AC)x+(Ad+b)$$</div>这就是 \(O(n)\ltimes\mathbb R^n\) 的半直积乘法。
+<h4>第11步：数正交与平移的自由度</h4>回忆：平移向量有 \(n\) 个实分量；正交群的切向矩阵斜对称。<div class="eq">$$\dim O(n)=\frac{n(n-1)}2,\qquad\dim\mathbb R^n=n$$</div>正交部分由上三角的 \(n(n-1)/2\) 项决定。
+<h4>第12步：合并群结构与维数</h4>回忆：半直积作为流形局部由两部分参数组成，维数相加。<div class="eq">$$\dim E(n)=\dim O(n)+n=\frac{n(n-1)}2+n=\frac{n(n+1)}2$$</div>欧氏空间恰好达到一般连通 \(n\) 维黎曼流形等距群的维数上界。
+<div class="keybox">$$\boxed{\operatorname{Isom}(\mathbb R^n)=O(n)\ltimes\mathbb R^n,\qquad\dim\operatorname{Isom}(\mathbb R^n)=\frac{n(n+1)}2}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>固定原点的等距保内积，只能由正交矩阵给出；剩下的自由度是平移。</div>`,
+    1: L`<h4>第1步：说明球面与度量</h4>回忆：取半径 \(R>0\) 的球面，度量是环境 \(\mathbb R^{n+1}\) 欧氏内积在切空间上的限制。<div class="eq">$$S^n(R)=\{x\in\mathbb R^{n+1}:\lVert x\rVert=R\}$$</div>等距群的候选来自保持环境点积的正交矩阵。
+<h4>第2步：先检验正交矩阵保持球面</h4>回忆：若 \(A^TA=I\)，则 \(\lVert Ax\rVert^2=x^TA^TAx\)。<div class="eq">$$\lVert Ax\rVert^2=\lVert x\rVert^2=R^2\quad(x\in S^n(R))$$</div>所以 \(A\) 的限制把球面映回自身。
+<h4>第3步：检验它保持诱导度量</h4>回忆：正交矩阵的微分仍为 \(A\)，并满足 \(\langle Au,Av\rangle=\langle u,v\rangle\)。<div class="eq">$$g_{Ax}(dA_xu,dA_xv)=\langle Au,Av\rangle=u^TA^TAv=\langle u,v\rangle=g_x(u,v)$$</div>每个 \(A\in O(n+1)\) 的限制都是球面等距。
+<h4>第4步：用球面距离读出环境点积</h4>回忆：球面两点的最短大圆弧长度为 \(d(x,y)=R\vartheta\)，中心角满足 \(\cos\vartheta=\langle x,y\rangle/R^2\)。<div class="eq">$$\langle x,y\rangle=R^2\cos\bigl(d(x,y)/R\bigr)$$</div>因此球面内蕴距离已经决定了两点在环境空间中的点积。
+<h4>第5步：对任意球面等距代入保距式</h4>回忆：设 \(F\) 为球面全局等距；第4步公式可分别用于 \((x,y)\) 和 \((F(x),F(y))\)。<div class="eq">$$\langle F(x),F(y)\rangle=R^2\cos\bigl(d(F(x),F(y))/R\bigr)=\langle x,y\rangle$$</div>所以 \(F\) 保持环境点积，尽管它最初只定义在球面上。
+<h4>第6步：选取环境空间的一组球面参照点</h4>回忆：标准基 \(e_1,\ldots,e_{n+1}\) 乘 \(R\) 后都在球面上。<div class="eq">$$p_i=Re_i,\qquad\langle p_i,p_j\rangle=R^2\delta_{ij}$$</div>这 \(n+1\) 个点足以读取任意环境向量的全部坐标。
+<h4>第7步：计算参照点的像组成什么</h4>回忆：第5步给保点积；令 \(u_i=F(p_i)/R\)。<div class="eq">$$\langle u_i,u_j\rangle=R^{-2}\langle F(p_i),F(p_j)\rangle=\delta_{ij}$$</div>这些像组成环境 \(\mathbb R^{n+1}\) 的正交归一基。
+<h4>第8步：据此构造唯一候选矩阵</h4>回忆：以 \(u_i\) 为列定义 \(A\)，则列向量正交。<div class="eq">$$Ae_i=u_i,\qquad A^TA=I,\qquad Ap_i=F(p_i)$$</div>所以候选 \(A\) 是正交矩阵，并在所有参照点与 \(F\) 一致。
+<h4>第9步：逐坐标比较任意点</h4>回忆：因为 \(F(p_i)=Ap_i\)，第5步与正交性分别给两种像的同一组内积。<div class="eq">$$\langle F(x),Ap_i\rangle=\langle F(x),F(p_i)\rangle=\langle x,p_i\rangle=\langle Ax,Ap_i\rangle$$</div>\(Ap_i/R\) 是基；每个坐标相同意味着 \(F(x)=Ax\) 对所有 \(x\) 成立。
+<h4>第10步：计算群的维数</h4>回忆：第3步给 \(O(n+1)\) 全部包含于等距群，第9步给反向包含。斜对称 \((n+1)\times(n+1)\) 矩阵的上三角项自由。<div class="eq">$$\operatorname{Isom}(S^n(R))\cong O(n+1),\qquad\dim O(n+1)=\frac{(n+1)n}{2}$$</div>因此球面也达到 \(n\) 维等距群维数上界。
+<h4>第11步：具体检查一点的各向同性</h4>回忆：固定北极 \(p=Re_{n+1}\) 后，作用在垂直于 \(p\) 的切空间上的任意 \(B\in O(n)\) 可扩为 \(\operatorname{diag}(B,1)\)。<div class="eq">$$\operatorname{diag}(B,1)p=p,\qquad dA_p|_{T_pS^n}=B$$</div>因为 \(O(n)\) 能把任意单位向量送往任意另一个单位向量，球面在每点各向同性。
+<div class="keybox">$$\boxed{\operatorname{Isom}(S^n(R))\cong O(n+1),\qquad \dim=\frac{n(n+1)}2}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>球面距离能还原环境点积；一组基点的像就确定了整个球面等距。</div>`,
+    2: L`<h4>第1步：写出双曲上半平面的度量</h4>回忆：取复坐标 \(z=x+iy\)，其中 \(y>0\)；双曲度量把欧氏线元除以高度的平方。<div class="eq">$$\mathbb H^2=\{z=x+iy:y>0\},\qquad ds^2=\frac{dx^2+dy^2}{y^2}=\frac{|dz|^2}{(\operatorname{Im}z)^2}$$</div>接下来逐项检查 Möbius 变换是否保持这个比值。
+<h4>第2步：写出实矩阵作用</h4>回忆：令 \(A=\begin{pmatrix}a&b\\c&d\end{pmatrix}\in SL(2,\mathbb R)\)，故 \(ad-bc=1\)。<div class="eq">$$F_A(z)=\frac{az+b}{cz+d}$$</div>分母若为零则 \(z=-d/c\) 是实数，不在上半平面；所以作用在 \(\mathbb H^2\) 内有定义。
+<h4>第3步：把分母乘共轭以便取虚部</h4>回忆：分式乘以共轭分母不会改变值。<div class="eq">$$F_A(z)=\frac{(az+b)(c\bar z+d)}{|cz+d|^2}$$</div>分母变成正实数，虚部只需从分子提取。
+<h4>第4步：逐项计算分子的虚部</h4>回忆：令 \(z=x+iy\)、\(\bar z=x-iy\)；\(ac|z|^2+bd\) 都是实数。<div class="eq">$$\operatorname{Im}[(az+b)(c\bar z+d)]=\operatorname{Im}(ad z+bc\bar z)=(ad-bc)y=y$$</div>这里行列式条件恰好把虚部的系数化为一。
+<h4>第5步：得出新点的高度</h4>回忆：把第4步的虚部除以第3步的实分母。<div class="eq">$$\operatorname{Im}F_A(z)=\frac{y}{|cz+d|^2}>0$$</div>变换仍落在上半平面，高度被因子 \(|cz+d|^{-2}\) 缩放。
+<h4>第6步：用商法则计算复导数</h4>回忆：分子与分母都是 \(z\) 的一次函数。<div class="eq">$$F_A^{\prime}(z)=\frac{a(cz+d)-c(az+b)}{(cz+d)^2}=\frac{ad-bc}{(cz+d)^2}=\frac1{(cz+d)^2}$$</div>微分的欧氏长度平方因此被 \(|cz+d|^{-4}\) 缩放。
+<h4>第7步：把微分长度算清楚</h4>回忆：复解析映射局部微分是乘以复数 \(F_A^{\prime}(z)\)。<div class="eq">$$|dF_A(z)|^2=|F_A^{\prime}(z)\,dz|^2=\frac{|dz|^2}{|cz+d|^4}$$</div>分子线元的缩放因子已经与高度平方的缩放因子相同。
+<h4>第8步：把两项完整代回度量</h4>回忆：新高度平方由第5步给 \(y^2/|cz+d|^4\)。<div class="eq">$$F_A^*ds^2=\frac{|dF_A(z)|^2}{(\operatorname{Im}F_A(z))^2}=\frac{|dz|^2/|cz+d|^4}{y^2/|cz+d|^4}=\frac{|dz|^2}{y^2}$$</div>分子分母的相同缩放因子抵消，故 \(F_A\) 是双曲等距。
+<h4>第9步：求出矩阵作用的核</h4>回忆：若 \(F_A(z)=z\) 对所有 \(z\in\mathbb H^2\)，则多项式恒等式 \(az+b=cz^2+dz\) 逐系数成立。<div class="eq">$$c=0,\quad b=0,\quad a=d,\quad ad=1\quad\Longrightarrow\quad A=I\text{ 或 }A=-I$$</div>故两个相差符号的矩阵给同一等距，作用核恰为 \(\{\pm I\}\)。
+<h4>第10步：计算轨道能否覆盖上半平面</h4>回忆：平移 \(z\mapsto z+x\) 与正伸缩 \(z\mapsto yz\) 都由行列式为一的实矩阵表示。<div class="eq">$$i\xmapsto{z\mapsto yz}iy\xmapsto{z\mapsto z+x}x+iy$$</div>所以该群可把基点 \(i\) 送到任意目标点。
+<h4>第11步：计算固定基点时的方向旋转</h4>回忆：取 \(A_t=\begin{pmatrix}\cos t&\sin t\\-\sin t&\cos t\end{pmatrix}\)；直接代入得 \(F_{A_t}(i)=i\)。<div class="eq">$$F_{A_t}^{\prime}(i)=\frac1{(-i\sin t+\cos t)^2}=e^{2it}$$</div>随 \(t\) 变化，这个导数给出切平面上的所有保向单位旋转。
+<h4>第12步：说明这些变换已穷尽保向等距</h4>回忆：连通黎曼流形的等距由一点的像和该点微分确定；保向等距的微分是正交且保向的二维线性映射。<div class="eq">$$F(i)=q,\quad dF_i\in SO(T_i\mathbb H^2,T_q\mathbb H^2)\quad\Longrightarrow\quad F=F_A\text{ 对某个 }A\in SL(2,\mathbb R)$$</div>第10步匹配点，第11步匹配方向，唯一性随后把局部匹配推广为全局相同。
+<h4>第13步：数出保向群维数</h4>回忆：\(SL(2,\mathbb R)\) 的四个实矩阵元满足一个独立方程 \(ad-bc=1\)，除以有限核不改变维数。<div class="eq">$$\operatorname{Isom}^+(\mathbb H^2)\cong PSL(2,\mathbb R)=SL(2,\mathbb R)/\{\pm I\},\qquad\dim=4-1=3$$</div>因此原例中的 \(PSL(2,\mathbb R)\) 准确表示保向等距群。
+<h4>第14步：检查全等距群还含反向分支</h4>回忆：反射 \(J(z)=-\bar z\) 把 \(x+iy\) 送到 \(-x+iy\)，保持 \(y\) 与 \(dx^2+dy^2\)，但改变平面定向。<div class="eq">$$J^*ds^2=\frac{(-dx)^2+dy^2}{y^2}=ds^2,\qquad J^2=\operatorname{id}$$</div>任一反向等距与 \(J\) 复合后保向，故全群还多一个由 \(J\) 代表的分支。
+<div class="keybox">$$\boxed{\operatorname{Isom}^+(\mathbb H^2)=PSL(2,\mathbb R),\quad\dim=3;\qquad\operatorname{Isom}(\mathbb H^2)=PSL(2,\mathbb R)\rtimes\langle J\rangle}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>实 Möbius 变换让分子长度和高度同步缩放；反射再补上反向等距。</div>`
   },
   "r9": {
-    0: L`<h4>目标</h4>
-写出球面 \(S^2\) 在球坐标下的诱导度量。
-
-<h4>第一步：球面参数化</h4>
-半径 \(R\) 的球面参数化为
-
-<div class="eq">$$X(\theta,\varphi)=(R\sin\theta\cos\varphi,\ R\sin\theta\sin\varphi,\ R\cos\theta)$$</div>
-
-<h4>第二步：计算切向量内积</h4>
-\(|X_\theta|=R\)，\(|X_\varphi|=R\sin\theta\)，且 \(X_\theta\perp X_\varphi\)，故
-
-<div class="keybox">$$\boxed{ds^2=R^2(d\theta^2+\sin^2\theta\,d\varphi^2)}$$</div>
-
-这就是球面的标准诱导度量。
-
-<div class="memobox"><strong>关键词：</strong>球面度量 \(R^2(d\theta^2+\sin^2\theta\,d\varphi^2)\)，\(\sin^2\theta\) 来自纬线圈半径收缩。</div>`,
-    1: L`<h4>目标</h4>
-计算环面的诱导度量。
-
-<h4>第一步：环面参数化</h4>
-以 \(R\) 为大半径、\(r\) 为小半径，参数化
-
-<div class="eq">$$X(\theta,\varphi)=\big((R+r\cos\theta)\cos\varphi,\ (R+r\cos\theta)\sin\varphi,\ r\sin\theta\big)$$</div>
-
-<h4>第二步：求切向量并算内积</h4>
-\(|X_\theta|=r\)，\(|X_\varphi|=R+r\cos\theta\)，且 \(X_\theta\perp X_\varphi\)，故
-
-<div class="keybox">$$\boxed{ds^2=r^2d\theta^2+(R+r\cos\theta)^2\,d\varphi^2}$$</div>
-
-\(\theta\) 方向的「管半径」恒为 \(r\)，而 \(\varphi\) 方向半径随 \(\cos\theta\) 变化。
-
-<div class="memobox"><strong>关键词：</strong>环面度量含因子 \((R+r\cos\theta)^2\)，反映截面半径随位置变化。</div>`,
-    2: L`<h4>目标</h4>
-理解共形参数化如何使曲面度量「共形平坦」。
-
-<h4>第一步：共形参数化的定义</h4>
-若参数 \((u,v)\) 使 \(E=G,\ F=0\)，则度量可写成
-
-<div class="eq">$$ds^2=e^{2\lambda(u,v)}(du^2+dv^2)$$</div>
-
-<h4>第二步：几何意义</h4>
-此时度量与欧氏度量只差一个正标量因子 \(e^{2\lambda}\)——角度被保持，长度被逐点缩放。
-
-<div class="keybox">$$\boxed{ds^2=e^{2\lambda}(du^2+dv^2)}$$</div>
-
-<h4>第三步：应用</h4>
-这种「共形平坦」形式在计算机图形学纹理映射、地图投影中广泛使用，因为它保角、变形可控。
-
-<div class="memobox"><strong>关键词：</strong>共形参数化 ⟹ 度量 = \(e^{2\lambda}\) 乘欧氏度量，保角。</div>`
+    0: L`<h4>第1步：明确球面与参数范围</h4>回忆：半径 \(R>0\) 的球面是 \(X^2+Y^2+Z^2=R^2\)；球坐标避开两极取 \(0<	heta<\pi\)。<div class="eq">$$X(\theta,\varphi)=(R\sin\theta\cos\varphi,R\sin\theta\sin\varphi,R\cos\theta)$$</div>把参数点代入三维空间，就能按拉回度量定义计算。
+<h4>第2步：先检查参数点确在球面</h4>回忆：\(\cos^2arphi+\sin^2arphi=1\) 且 \(\sin^2	heta+\cos^2	heta=1\)。<div class="eq">$$|X|^2=R^2\sin^2\theta(\cos^2\varphi+\sin^2\varphi)+R^2\cos^2\theta=R^2$$</div>所以这确实是半径 \(R\) 球面的参数化。
+<h4>第3步：对极角逐分量求导</h4>回忆：\(\partial_	heta\sin	heta=\cos	heta\)，\(\partial_	heta\cos	heta=-\sin	heta\)。<div class="eq">$$X_\theta=(R\cos\theta\cos\varphi,R\cos\theta\sin\varphi,-R\sin\theta)$$</div>这个向量是固定经度时沿球面南北移动的切向量。
+<h4>第4步：对方位角逐分量求导</h4>回忆：\(\partial_arphi\cosarphi=-\sinarphi\)，\(\partial_arphi\sinarphi=\cosarphi\)。<div class="eq">$$X_\varphi=(-R\sin\theta\sin\varphi,R\sin\theta\cos\varphi,0)$$</div>这个向量是固定纬度时绕球面转动的切向量。
+<h4>第5步：按拉回定义写出第一个系数</h4>回忆：欧氏内积诱导的第一基本形式满足 \(g_{	heta	heta}=X_	heta\cdot X_	heta\)。<div class="eq">$$g_{\theta\theta}=R^2\cos^2\theta\cos^2\varphi+R^2\cos^2\theta\sin^2\varphi+R^2\sin^2\theta$$</div>先保留三项，下一步再用三角恒等式化简。
+<h4>第6步：化简极角方向的平方长度</h4>回忆：\(\cos^2arphi+\sin^2arphi=1\)。<div class="eq">$$g_{\theta\theta}=R^2\cos^2\theta+R^2\sin^2\theta=R^2$$</div>沿经线每变化一个弧度，实际弧长变化率为 \(R\)。
+<h4>第7步：按拉回定义写出第二个系数</h4>回忆：\(g_{arphiarphi}=X_arphi\cdot X_arphi\)。<div class="eq">$$g_{\varphi\varphi}=R^2\sin^2\theta\sin^2\varphi+R^2\sin^2\theta\cos^2\varphi$$</div>两个非零分量都带 \(R\sin	heta\) 因子。
+<h4>第8步：化简方位角方向的平方长度</h4>回忆：\(\sin^2arphi+\cos^2arphi=1\)。<div class="eq">$$g_{\varphi\varphi}=R^2\sin^2\theta(\sin^2\varphi+\cos^2\varphi)=R^2\sin^2\theta$$</div>这反映纬线圈的半径为 \(R\sin	heta\)。
+<h4>第9步：把混合系数完整相乘</h4>回忆：混合系数是 \(g_{	hetaarphi}=X_	heta\cdot X_arphi\)。<div class="eq">$$g_{\theta\varphi}=-R^2\cos\theta\sin\theta\cos\varphi\sin\varphi+R^2\cos\theta\sin\theta\sin\varphi\cos\varphi+0=0$$</div>两项逐项抵消，经向与纬向正交。
+<h4>第10步：组装度量矩阵</h4>回忆：二维线元的矩阵形式是 \(g_{ij}du^idu^j\)。<div class="eq">$$(g_{ij})=\begin{pmatrix}R^2&0\\0&R^2\sin^2\theta\end{pmatrix}$$</div>矩阵对角项和混合项都已由偏导点积直接算出。
+<h4>第11步：写成原题所要的第一基本形式</h4>回忆：矩阵的两个对角项分别乘 \(d	heta^2\) 和 \(darphi^2\)。<div class="eq">$$ds^2=R^2d\theta^2+R^2\sin^2\theta\,d\varphi^2=R^2(d\theta^2+\sin^2\theta\,d\varphi^2)$$</div>这就是球面 \(S^2(R)\) 的诱导度量。
+<h4>第12步：解释极点处的坐标退化</h4>回忆：球极 \(	heta=0,\pi\) 处所有 \(arphi\) 表示同一点。<div class="eq">$$\sin\theta=0\quad\Longrightarrow\quad X_\varphi=0,\qquad \det(g_{ij})=R^4\sin^2\theta=0$$</div>这里退化的是球坐标，不是球面本身的黎曼度量。
+<div class="keybox">$$\boxed{ds^2_{S^2(R)}=R^2(d\theta^2+\sin^2\theta\,d\varphi^2)}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>对参数化分别求导并点乘；纬线半径 \(R\sin	heta\) 产生 \(\sin^2	heta\) 系数。</div>`,
+    1: L`<h4>第1步：写出环面的原题参数化</h4>回忆：令大半径 \(R\) 大于管半径 \(r>0\)，使标准旋转环面没有自交。<div class="eq">$$X(\theta,\varphi)=((R+r\cos\theta)\cos\varphi,(R+r\cos\theta)\sin\varphi,r\sin\theta)$$</div>下面只使用此参数化和欧氏内积计算诱导度量。
+<h4>第2步：记一个便于求导的中间量</h4>回忆：固定 \(	heta\) 时绕中心轴旋转的圆半径是前两坐标的共同因子。<div class="eq">$$a(\theta):=R+r\cos\theta,\qquad a^{\prime}(\theta)=-r\sin\theta,\qquad a(\theta)>0$$</div>记号 \(a\) 减少重复书写，也说明环面的纬向半径随 \(	heta\) 变化。
+<h4>第3步：对管角求第一个切向量</h4>回忆：乘积求导中 \(arphi\) 固定，故只对 \(a(	heta)\) 和 \(r\sin	heta\) 求导。<div class="eq">$$X_\theta=(-r\sin\theta\cos\varphi,-r\sin\theta\sin\varphi,r\cos\theta)$$</div>这是沿小圆截面移动的切向量。
+<h4>第4步：对绕轴角求第二个切向量</h4>回忆：\(	heta\) 固定时 \(a(	heta)\) 为常数。<div class="eq">$$X_\varphi=(-a\sin\varphi,a\cos\varphi,0)$$</div>这是沿大圆方向转动的切向量。
+<h4>第5步：计算管角方向的点积</h4>回忆：拉回度量分量为切向量的欧氏点积。<div class="eq">$$g_{\theta\theta}=|X_\theta|^2=r^2\sin^2\theta\cos^2\varphi+r^2\sin^2\theta\sin^2\varphi+r^2\cos^2\theta$$</div>三项分别是三维切向量三个分量的平方。
+<h4>第6步：把第一个系数化简</h4>回忆：两次使用 \(\sin^2+\cos^2=1\)。<div class="eq">$$g_{\theta\theta}=r^2\sin^2\theta(\cos^2\varphi+\sin^2\varphi)+r^2\cos^2\theta=r^2$$</div>沿管截面移动的长度倍率始终是 \(r\)。
+<h4>第7步：计算绕轴方向的点积</h4>回忆：第4步的切向量只有前两个分量非零。<div class="eq">$$g_{\varphi\varphi}=|X_\varphi|^2=a^2\sin^2\varphi+a^2\cos^2\varphi=a^2$$</div>绕轴一弧度的实际长度由所在圆的半径 \(a\) 决定。
+<h4>第8步：把中间量代回第二个系数</h4>回忆：第2步定义 \(a=R+r\cos	heta\)。<div class="eq">$$g_{\varphi\varphi}=(R+r\cos\theta)^2$$</div>外侧 \(	heta=0\) 半径为 \(R+r\)，内侧 \(	heta=\pi\) 半径为 \(R-r\)。
+<h4>第9步：逐项计算交叉点积</h4>回忆：\(g_{	hetaarphi}=X_	heta\cdot X_arphi\)。<div class="eq">$$g_{\theta\varphi}=ar\sin\theta\cos\varphi\sin\varphi-ar\sin\theta\sin\varphi\cos\varphi+0=0$$</div>沿管截面和绕轴两个方向互相正交。
+<h4>第10步：把三个分量放入线元</h4>回忆：二维线元一般为 \(g_{	heta	heta}d	heta^2+2g_{	hetaarphi}d	heta\,darphi+g_{arphiarphi}darphi^2\)。<div class="eq">$$ds^2=r^2d\theta^2+2(0)d\theta\,d\varphi+(R+r\cos\theta)^2d\varphi^2$$</div>交叉项已经明确计算为零。
+<h4>第11步：检验拉回矩阵正定</h4>回忆：对角矩阵正定当且仅当对角项都正。<div class="eq">$$\det(g_{ij})=r^2(R+r\cos\theta)^2>0\qquad(R>r>0)$$</div>在标准环面的参数范围内，该参数化是浸入，诱导式确实是黎曼度量。
+<h4>第12步：读出原题的最终公式</h4>回忆：第10步的式子已将两个方向的长度倍率分别放回线元。<div class="eq">$$ds^2=r^2d\theta^2+(R+r\cos\theta)^2d\varphi^2$$</div>管角方向恒定，绕轴方向随内外侧位置改变。
+<div class="keybox">$$\boxed{ds^2_{\mathrm{torus}}=r^2d\theta^2+(R+r\cos\theta)^2d\varphi^2}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>小圆方向的倍率是 \(r\)，绕大轴的倍率是当下到轴的距离 \(R+r\cos	heta\)。</div>`,
+    2: L`<h4>第1步：把原题写成系数条件</h4>回忆：曲面参数化 \(X(u,v)\) 的第一基本形式由两个切向量的内积给出。<div class="eq">$$ds^2=E\,du^2+2F\,du\,dv+G\,dv^2,\quad E=X_u\cdot X_u,\ F=X_u\cdot X_v,\ G=X_v\cdot X_v$$</div>共形参数化要让 \(F=0\) 且 \(E=G>0\)。
+<h4>第2步：把等系数化为指数形式</h4>回忆：任一正的光滑函数 \(E\) 可唯一写成 \(e^{2\lambda}\)，其中 \(\lambda=rac12\log E\)。<div class="eq">$$F=0,\ E=G>0\quad\Longrightarrow\quad ds^2=E(du^2+dv^2)=e^{2\lambda}(du^2+dv^2)$$</div>这给出原题所说的共形平坦形式。
+<h4>第3步：取一个能算到最后的具体参数化</h4>回忆：平面是 \(\mathbb R^3\) 的曲面；取极坐标型局部映射以展示非恒定共形因子。<div class="eq">$$X(u,v)=(e^u\cos v,e^u\sin v,0)$$</div>它在任意足够窄的 \(v\) 区间上是一张局部参数图。
+<h4>第4步：对第一个参数求导</h4>回忆：\(\partial_u e^u=e^u\)，且 \(v\) 在此固定。<div class="eq">$$X_u=(e^u\cos v,e^u\sin v,0)$$</div>参数 \(u\) 的增量对应径向移动。
+<h4>第5步：对第二个参数求导</h4>回忆：\(\partial_v\cos v=-\sin v\)，\(\partial_v\sin v=\cos v\)。<div class="eq">$$X_v=(-e^u\sin v,e^u\cos v,0)$$</div>参数 \(v\) 的增量对应转向移动。
+<h4>第6步：算出第一个平方长度</h4>回忆：第一个系数 \(E=|X_u|^2\)。<div class="eq">$$E=e^{2u}\cos^2v+e^{2u}\sin^2v=e^{2u}$$</div>利用平方和为一，径向长度倍率为 \(e^u\)。
+<h4>第7步：算出第二个平方长度</h4>回忆：第三个系数 \(G=|X_v|^2\)。<div class="eq">$$G=e^{2u}\sin^2v+e^{2u}\cos^2v=e^{2u}$$</div>绕向长度倍率也为 \(e^u\)，与第一个方向相同。
+<h4>第8步：算出两个方向的交叉项</h4>回忆：混合系数 \(F=X_u\cdot X_v\)。<div class="eq">$$F=-e^{2u}\cos v\sin v+e^{2u}\sin v\cos v+0=0$$</div>这两个切向量确实正交。
+<h4>第9步：把三项代回第一基本形式</h4>回忆：第1步的一般式中交叉项有因子 \(2F\)。<div class="eq">$$ds^2=e^{2u}du^2+2(0)du\,dv+e^{2u}dv^2=e^{2u}(du^2+dv^2)$$</div>具体例子中的共形函数为 \(\lambda(u,v)=u\)。
+<h4>第10步：直接核对角度保持</h4>回忆：角的余弦等于内积除以两边长度，公共正因子会抵消。<div class="eq">$$\cos\angle_g(a,b)=\frac{e^{2u}(a\cdot b)}{e^u|a|\,e^u|b|}=\frac{a\cdot b}{|a|\,|b|}$$</div>尽管长度倍率随 \(u\) 变化，夹角与参数平面中的欧氏夹角相同。
+<h4>第11步：说明这个例子的适用边界</h4>回忆：\(v\) 增加 \(2\pi\) 会回到同一个点，因此该映射在整个参数平面不是一一对应。<div class="eq">$$X(u,v+2\pi)=X(u,v),\qquad |X_u\times X_v|=e^{2u}>0$$</div>它始终是浸入，在局部参数片上足以说明共形诱导度量。
+<div class="keybox">$$\boxed{X(u,v)=(e^u\cos v,e^u\sin v,0)\quad\Longrightarrow\quad ds^2=e^{2u}(du^2+dv^2)}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>共形参数化就是两条坐标方向正交且等长；这时度量只差一个位置相关的共同倍率。</div>`
   },
   "r10": {
     0: L`<h4>目标</h4>
@@ -757,132 +1040,55 @@ Haar 测度在紧 Lie 群的表示论（Peter–Weyl 定理）、调和分析、
 <div class="memobox"><strong>关键词：</strong>\(CP^n\) 的 Fubini–Study 度量，截面曲率 \(1\sim 4\)。</div>`
   },
   "r17": {
-    0: L`<h4>目标</h4>
-写出欧氏空间的标准（平坦）联络。
-
-<h4>第一步：方向导数</h4>
-\(\mathbb R^n\) 上联络由普通方向导数给出
-
-<div class="eq">$$\nabla_X Y=(XY^i)\,\partial_i$$</div>
-
-<h4>第二步：Christoffel 符号为零</h4>
-
-<div class="keybox">$$\boxed{\Gamma^k_{ij}=0}$$</div>
-
-这是最简单的联络：协变导数退化为普通偏导数。
-
-<div class="memobox"><strong>关键词：</strong>欧氏联络 = 方向导数，Christoffel 符号全为零。</div>`,
-    1: L`<h4>目标</h4>
-理解曲面在 \(\mathbb R^3\) 中的诱导联络。
-
-<h4>第一步：切向投影</h4>
-设 \(D_X Y\) 是 \(\mathbb R^3\) 中普通方向导数，诱导联络取它的<strong>切平面投影</strong>
-
-<div class="eq">$$\nabla_X Y=(D_X Y)^\top$$</div>
-
-<h4>第二步：几何意义</h4>
-即把 \(D_X Y\) 中垂直于曲面的法向分量去掉，只保留切向部分。这正是曲面「内蕴」看待导数的方式。
-
-<div class="keybox">$$\boxed{\nabla_X Y=(D_X Y)^\top}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>曲面诱导联络 = 外蕴导数的切向投影。</div>`,
-    2: L`<h4>目标</h4>
-认识 Lie 群上的左不变联络。
-
-<h4>第一步：由 Lie 代数双线性映射确定</h4>
-左不变联络由单位元处的双线性映射 \(\alpha:\mathfrak g\times\mathfrak g\to\mathfrak g\) 完全确定，因为左不变向量场由 Lie 代数元素一一对应。
-
-<h4>第二步：几何力学应用</h4>
-不同的 \(\alpha\) 对应不同的联络（挠率、曲率各异），在刚体运动、控制论的几何力学中用于刻画系统的几何结构。
-
-<div class="keybox">$$\boxed{\text{左不变联络}\ \longleftrightarrow\ \alpha:\mathfrak g\times\mathfrak g\to\mathfrak g}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>左不变联络由 Lie 代数上一个双线性映射确定。</div>`
+    0: L`<h4>第1步：写出标准坐标和向量场</h4><p>回忆：欧氏空间的全局坐标基 \(\partial_i\) 在每点都可自然比较。</p><p>令 \(X=X^i\partial_i\)、\(Y=Y^j\partial_j\)，其中分量是光滑函数。</p><p>因此，计算可逐分量进行。</p><h4>第2步：定义普通方向导数</h4><p>回忆：方向导数 \(X(Y^j)=X^i\partial_iY^j\)。</p><p><div class="eq">$$\nabla_XY:=X^i(\partial_iY^j)\partial_j$$</div></p><p>因此，这正是欧氏标准联络。</p><h4>第3步：检查第一变量线性</h4><p>回忆：对函数乘方向场有 \((fX)(Y^j)=fX(Y^j)\)。</p><p><div class="eq">$$\nabla_{fX}Y=fX^i\partial_iY^j\partial_j=f\nabla_XY$$</div></p><p>因此，满足联络第一公理。</p><h4>第4步：检查第二变量 Leibniz 法则</h4><p>回忆：对每个分量使用普通乘积法则。</p><p><div class="eq">$$\nabla_X(fY)=X^i\partial_i(fY^j)\partial_j=f\nabla_XY+(Xf)Y$$</div></p><p>因此，满足联络第二公理。</p><h4>第5步：直接计算坐标基的协变导数</h4><p>回忆：坐标基 \(\partial_j\) 的第 \(k\) 个分量是常数 \(\delta^k_j\)。</p><p><div class="eq">$$\nabla_{\partial_i}\partial_j=(\partial_i\delta^k_j)\partial_k=0$$</div></p><p>因此，所有坐标基都相互平行。</p><h4>第6步：读出 Christoffel 符号</h4><p>回忆：定义 \(
+abla_{\partial_i}\partial_j=\Gamma^k_{ij}\partial_k\)。</p><p><div class="eq">$$\Gamma^k_{ij}=0\quad\text{对所有 }i,j,k$$</div></p><p>因此，联络系数全为零。</p><h4>第7步：代入一个具体向量场</h4><p>回忆：上一公式要求先对每个分量求偏导。</p><p>在 \(\mathbb R^2\) 中取 \(X=\partial_x+y\partial_y\)、\(Y=x^2\partial_x+xy\partial_y\)，则 <div class="eq">$$X(x^2)=2x,\quad X(xy)=y+xy$$</div>因此 \(
+abla_XY=2x\partial_x+(y+xy)\partial_y\)。</p><p>因此，例子显示只有分量变化会贡献导数。</p><h4>第8步：把所选向量场的两个分量逐一代入</h4>
+例中 \(X=\partial_x+y\partial_y\)、\(Y=x^2\partial_x+xy\partial_y\)。分开算 <div class="eq">$$X(Y^x)=1\cdot\partial_x(x^2)+y\cdot\partial_y(x^2)=2x+0=2x,$$</div><div class="eq">$$X(Y^y)=1\cdot\partial_x(xy)+y\cdot\partial_y(xy)=y+xy.$$</div>这两项正是 \(\nabla_XY\) 的 \(x,y\) 分量。
+<h4>第9步：验证曲率为零</h4><p>回忆：曲率是两个协变导数的交换子减 Lie 括号项。</p><p>坐标基中 \(\Gamma=0\) 且 \([\partial_i,\partial_j]=0\)，故 \(R(\partial_i,\partial_j)\partial_k=0\)。</p><p>因此，欧氏标准联络平坦。</p><div class="keybox">$$\boxed{\nabla_XY=X^i\partial_iY^j\partial_j,\quad\Gamma^k_{ij}=0}$$</div><div class="memobox"><strong>一句话记忆：</strong>在固定的直角坐标架里，只需对向量的分量做普通方向导数。</div>`,
+    1: L`<h4>第1步：说明要投影到哪里</h4><p>回忆：曲面 \(M\subset\mathbb R^3\) 每点有切平面 \(T_pM\) 和单位法向 \(N(p)\)。</p><p>把环境空间导数 \(D_XY\) 分成切向和法向，定义曲面上的导数为切向部分。</p><p>因此，目标是写出可计算的投影。</p><h4>第2步：写正交投影公式</h4><p>回忆：任意 \(a\in\mathbb R^3\) 的切向投影为 \(a-\langle a,Nangle N\)。</p><p><div class="eq">$$\nabla_XY=(D_XY)^T=D_XY-\langle D_XY,N\rangle N$$</div></p><p>因此，输出确实切于曲面。</p><h4>第3步：用切向条件改写法向量</h4><p>回忆：因为 \(\langle Y,Nangle=0\)，沿 \(X\) 求导为零。</p><p><div class="eq">$$0=X\langle Y,N\rangle=\langle D_XY,N\rangle+\langle Y,D_XN\rangle$$</div></p><p>因此，法向系数也可写成 \(-\langle Y,D_XNangle\)。</p><h4>第4步：检查切向性</h4><p>回忆：单位法向满足 \(\langle N,Nangle=1\)。</p><p><div class="eq">$$\langle\nabla_XY,N\rangle=\langle D_XY,N\rangle-\langle D_XY,N\rangle\langle N,N\rangle=0$$</div></p><p>因此，投影结果在 \(T_pM\) 内。</p><h4>第5步：检查联络乘积法则</h4><p>回忆：环境导数满足 \(D_X(fY)=fD_XY+(Xf)Y\)。</p><p>由于 \(Y\) 已切向，投影后 <div class="eq">$$\nabla_X(fY)=f(D_XY)^T+(Xf)Y=f\nabla_XY+(Xf)Y$$</div></p><p>因此，诱导运算真是联络。</p><h4>第6步：检查无挠性</h4><p>回忆：欧氏导数满足 \(D_XY-D_YX=[X,Y]\)。</p><p>把等式两边取切向部分；\([X,Y]\) 仍切于曲面，所以 <div class="eq">$$\nabla_XY-\nabla_YX=[X,Y]$$</div></p><p>因此，诱导联络无挠。</p><h4>第7步：检查度量相容性</h4><p>回忆：诱导度量是欧氏内积在切空间上的限制。</p><p><div class="eq">$$X\langle Y,Z\rangle=\langle D_XY,Z\rangle+\langle Y,D_XZ\rangle=\langle\nabla_XY,Z\rangle+\langle Y,\nabla_XZ\rangle$$</div></p><p>因此，法向分量与切向量正交，故度量相容。</p><h4>第8步：在单位球上做一次投影</h4><p>回忆：单位球的外法向是 \(N(p)=p\)。</p><p>取球面曲线 \(\gamma\) 与切向场 \(Y\)，则 <div class="eq">$$D_tY=\nabla_{\dot\gamma}Y+\langle D_tY,\gamma\rangle\gamma,\quad\langle D_tY,\gamma\rangle=-\langle Y,\dot\gamma\rangle$$</div></p><p>因此，公式具体化为 \(
+abla_{\dot\gamma}Y=D_tY+\langle Y,\dot\gammaangle\gamma\)。</p><h4>第9步：用球面坐标逐项求一个投影</h4>
+单位球取 \(F(\theta,\phi)=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta)\)。令 \(Y=F_\theta\)、方向为 \(F_\phi\)，则 <div class="eq">$$D_{\partial_\phi}Y=F_{\theta\phi}=(-\cos\theta\sin\phi,\cos\theta\cos\phi,0)=\cot\theta\,F_\phi.$$</div>此向量已切向，故投影不改变它。
+<h4>第10步：在指定点代入角度</h4>
+取 \(\theta=\pi/3,\phi=0\)。此时 \(\cot(\pi/3)=1/\sqrt3\)，故 <div class="eq">$$\nabla_{\partial_\phi}\partial_\theta=\frac1{\sqrt3}\partial_\phi.$$</div>用单位纬向量 \(e_\phi=(\sin\theta)^{-1}\partial_\phi\) 表示，则同一结果为 \(\frac12e_\phi\)。
+<div class="keybox">$$\boxed{\nabla_XY=D_XY-\langle D_XY,N\rangle N}$$</div><div class="memobox"><strong>一句话记忆：</strong>先在环境空间求导，再扔掉垂直于曲面的那一部分。</div>`,
+    2: L`<h4>第1步：从 Lie 代数开始</h4><p>回忆：Lie 群单位元处的切空间 \(\mathfrak g=T_eG\) 是 Lie 代数。</p><p>给定双线性映射 \(lpha:\mathfrak g	imes\mathfrak g	o\mathfrak g\)。</p><p>因此，它将决定左不变向量场之间的导数。</p><h4>第2步：把代数元素延成左不变场</h4><p>回忆：左平移 \(L_g(h)=gh\) 的微分把 \(T_eG\) 送到 \(T_gG\)。</p><p><div class="eq">$$X^L(g)=(dL_g)_eX$$</div></p><p>因此，每个代数元素给出一个全局向量场。</p><h4>第3步：规定左不变场的联络</h4><p>回忆：双线性 \(lpha\) 给每对 \(X,Y\) 一个代数元素。</p><p><div class="eq">$$\nabla_{X^L}Y^L=(\alpha(X,Y))^L$$</div></p><p>因此，左不变场上的导数已经指定。</p><h4>第4步：扩展到任意局部向量场</h4><p>回忆：左不变场构成全局标架，任意场可写为 \(X=X^aE_a\)、\(Y=Y^bE_b\)。</p><p><div class="eq">$$\nabla_XY=X^aE_a(Y^b)E_b+X^aY^b\alpha(E_a,E_b)^L$$</div></p><p>因此，第一项来自 Leibniz 法则，第二项来自 \(lpha\)。</p><h4>第5步：检查第一变量线性</h4><p>回忆：上式的每一项都线性依赖 \(X^a\)。</p><p><div class="eq">$$\nabla_{fX}Y=fX^aE_a(Y^b)E_b+fX^aY^b\alpha(E_a,E_b)^L=f\nabla_XY$$</div></p><p>因此，第一条公理成立。</p><h4>第6步：检查第二变量乘积法则</h4><p>回忆：左不变基上的方向导数满足 \(E_a(fY^b)=(E_af)Y^b+fE_aY^b\)。</p><p><div class="eq">$$\nabla_X(fY)=f\nabla_XY+(Xf)Y$$</div></p><p>因此，第二条公理成立。</p><h4>第7步：验证左平移不变</h4><p>回忆：左不变基在任意左平移下仍是自身，\(lpha\) 的系数是常数。</p><p>把左平移同时作用在 \(X,Y,
+abla_XY\) 上，上述分量公式的形式不变。</p><p>因此，得到左不变联络。</p><h4>第8步：算一个特例的挠率</h4><p>回忆：挠率是 \(T(X,Y)=
+abla_XY-
+abla_YX-[X,Y]\)。</p><p>若取 \(lpha=0\)，则对左不变场 <div class="eq">$$T(X^L,Y^L)=-[X,Y]^L$$</div>故非交换 Lie 群上的此联络一般有挠。</p><p>因此，左不变不意味着无挠。</p><h4>第9步：把结构常数代进非交换例子</h4>
+取 \(SO(3)\) 的一组基 \(E_1,E_2,E_3\)，规定 \([E_1,E_2]=E_3\)。若 \(\alpha=0\)，则 <div class="eq">$$T(E_1^L,E_2^L)=0-0-[E_1,E_2]^L=-E_3^L\ne0.$$</div>这把“零系数左不变联络可有挠”算成了具体分量。
+<h4>第10步：代入无挠的另一选择</h4>
+若改取 \(\alpha(X,Y)=\frac12[X,Y]\)，则 <div class="eq">$$T(E_1^L,E_2^L)=\tfrac12E_3^L-(-\tfrac12E_3^L)-E_3^L=0.$$</div>两个联络在同一 Lie 群上说明挠率取决于 \(\alpha\) 的反对称部分。
+<h4>第11步：读出 Levi-Civita 的一个特殊选择</h4><p>回忆：双不变度量下，左不变场的 Levi-Civita 联络满足 \(
+abla_{X^L}Y^L=	frac12[X,Y]^L\)。</p><p>此时 \(lpha(X,Y)=	frac12[X,Y]\)，挠率为 \(	frac12[X,Y]-	frac12[Y,X]-[X,Y]=0\)。</p><p>因此，同一框架可包含典范无挠联络。</p><div class="keybox">$$\boxed{\nabla_{X^L}Y^L=\alpha(X,Y)^L}$$</div><div class="memobox"><strong>一句话记忆：</strong>左不变标架把群上的联络浓缩成单位元处的一张双线性表。</div>`
   },
   "r18": {
-    0: L`<h4>目标</h4>
-验证欧氏空间的 Levi-Civita 联络就是普通导数。
-
-<h4>第一步：度量为常数</h4>
-欧氏度量 \(g_{ij}=\delta_{ij}\) 是常数，故 \(\partial_i g_{jl}=0\)。
-
-<h4>第二步：Christoffel 符号消失</h4>
-
-<div class="keybox">$$\boxed{\Gamma^k_{ij}=0}$$</div>
-
-于是 Levi-Civita 联络退化为普通方向导数，协变导数 = 偏导数。
-
-<div class="memobox"><strong>关键词：</strong>度量常数 ⟹ Christoffel 符号为零 ⟹ 联络平凡。</div>`,
-    1: L`<h4>目标</h4>
-计算球面 \(S^2\) 的非零 Christoffel 符号。
-
-<h4>第一步：球面度量与诱导联络</h4>
-\(S^2\) 的 Levi-Civita 联络是 \(\nabla_X Y=(D_X Y)^\top\)。在球坐标 \((\theta,\varphi)\) 下，度量 \(ds^2=R^2(d\theta^2+\sin^2\theta\,d\varphi^2)\)。
-
-<h4>第二步：直接计算 Christoffel 符号</h4>
-代入公式得非零项
-
-<div class="keybox">$$\boxed{\Gamma^\theta_{\varphi\varphi}=-\sin\theta\cos\theta,\qquad \Gamma^\varphi_{\theta\varphi}=\Gamma^\varphi_{\varphi\theta}=\cot\theta}$$</div>
-
-其余为零。这些符号反映了球面度量随纬度变化。
-
-<div class="memobox"><strong>关键词：</strong>球面 Christoffel 符号含 \(\sin\theta\cos\theta\) 与 \(\cot\theta\)。</div>`,
-    2: L`<h4>目标</h4>
-计算双曲平面（上半平面模型）的 Christoffel 符号。
-
-<h4>第一步：度量</h4>
-上半平面模型 \(H^2=\{y>0\}\) 配度量
-
-<div class="eq">$$ds^2=\frac{dx^2+dy^2}{y^2}$$</div>
-
-<h4>第二步：计算 Christoffel 符号</h4>
-非零项为
-
-<div class="keybox">$$\boxed{\Gamma^x_{xy}=\Gamma^y_{xx}=-\Gamma^y_{yy}=-\frac1y}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>双曲平面 Christoffel 符号都是 \(\pm 1/y\) 的形式。</div>`
+    0: L`<h4>第1步：写出欧氏度量分量</h4><p>回忆：标准直角坐标中的内积为 \(g_{ij}=\delta_{ij}\)。</p><p><div class="eq">$$g=\sum_{i=1}^n dx^i\otimes dx^i$$</div></p><p>因此，所有度量分量都是常数。</p><h4>第2步：求度量偏导</h4><p>回忆：常数函数的偏导为零。</p><p><div class="eq">$$\partial_k g_{ij}=\partial_k\delta_{ij}=0$$</div></p><p>因此，Christoffel 公式的三类导数都消失。</p><h4>第3步：求逆度量</h4><p>回忆：单位矩阵的逆仍是单位矩阵。</p><p><div class="eq">$$g^{ij}=\delta^{ij}$$</div></p><p>因此，可直接代入联络公式。</p><h4>第4步：代入 Koszul 坐标公式</h4><p>回忆：Levi-Civita 系数为 \(\Gamma^k_{ij}=	frac12g^{k\ell}(\partial_i g_{j\ell}+\partial_jg_{i\ell}-\partial_\ell g_{ij})\)。</p><p><div class="eq">$$\Gamma^k_{ij}=\tfrac12\delta^{k\ell}(0+0-0)=0$$</div></p><p>因此，全部系数为零。</p><h4>第5步：计算一般向量场的导数</h4><p>回忆：局部式为 \((
+abla_XY)^k=X^i\partial_iY^k+\Gamma^k_{ij}X^iY^j\)。</p><p><div class="eq">$$\nabla_XY=X^i\partial_iY^k\partial_k$$</div></p><p>因此，这正是普通方向导数。</p><h4>第6步：代入一组非恒定向量分量</h4>
+在 \(\mathbb R^2\) 取 \(X=\partial_x\)、\(Y=x^2\partial_x+xy\partial_y\)。因全部 \(\Gamma=0\)，<div class="eq">$$\nabla_XY=(\partial_x x^2)\partial_x+(\partial_x xy)\partial_y=2x\partial_x+y\partial_y.$$</div>在 \((x,y)=(2,3)\) 处得到 \(4\partial_x+3\partial_y\)。
+<h4>第7步：核对无挠</h4><p>回忆：坐标基对易，且 \(\Gamma^k_{ij}=\Gamma^k_{ji}=0\)。</p><p><div class="eq">$$T^k{}_{ij}=\Gamma^k_{ij}-\Gamma^k_{ji}=0$$</div></p><p>因此，标准联络无挠。</p><h4>第8步：核对度量相容</h4><p>回忆：坐标中的度量导数公式是 \(
+abla_k g_{ij}=\partial_k g_{ij}-\Gamma^\ell_{ki}g_{\ell j}-\Gamma^\ell_{kj}g_{i\ell}\)。</p><p><div class="eq">$$\nabla_k g_{ij}=0-0-0=0$$</div></p><p>因此，标准联络相容于欧氏度量。</p><h4>第9步：利用唯一性收束</h4><p>回忆：无挠且度量相容的联络只有一个。</p><p>上两步验证了普通导数同时满足这两个条件，故它就是欧氏度量的 Levi-Civita 联络。</p><p>因此，两种计算方法相互核对。</p><div class="keybox">$$\boxed{\nabla_XY=X^i\partial_iY^k\partial_k,\quad\Gamma^k_{ij}=0}$$</div><div class="memobox"><strong>一句话记忆：</strong>直角坐标中的度量不变，所以 Levi-Civita 修正项全为零。</div>`,
+    1: L`<h4>第1步：参数化单位球</h4><p>回忆：球坐标用余纬 \(0<	heta<\pi\) 和经度 \(\phi\)。</p><p><div class="eq">$$F(\theta,\phi)=(\sin\theta\cos\phi,\sin\theta\sin\phi,\cos\theta)$$</div></p><p>因此，在极点外可用这张坐标图。</p><h4>第2步：计算两个坐标切向量</h4><p>回忆：切向量由参数化对坐标求偏导。</p><p><div class="eq">$$F_\theta=(\cos\theta\cos\phi,\cos\theta\sin\phi,-\sin\theta),\quad F_\phi=(-\sin\theta\sin\phi,\sin\theta\cos\phi,0)$$</div></p><p>因此，接着计算它们的内积。</p><h4>第3步：计算诱导度量</h4><p>回忆：诱导度量的分量是 \(g_{ij}=\langle F_i,F_jangle\)。</p><p><div class="eq">$$g_{\theta\theta}=1,\quad g_{\theta\phi}=0,\quad g_{\phi\phi}=\sin^2\theta$$</div></p><p>因此，得到 \(ds^2=d	heta^2+\sin^2	heta\,d\phi^2\)。</p><h4>第4步：求逆矩阵和非零偏导</h4><p>回忆：对角矩阵逐项取倒数。</p><p><div class="eq">$$g^{\theta\theta}=1,\quad g^{\phi\phi}=\sin^{-2}\theta,\quad\partial_\theta g_{\phi\phi}=2\sin\theta\cos\theta$$</div></p><p>因此，只有 \(g_{\phi\phi}\) 随坐标变化。</p><h4>第5步：算 \(\Gamma^	heta_{\phi\phi}\)</h4><p>回忆：Levi-Civita 公式中仅 \(-\partial_	heta g_{\phi\phi}\) 留下。</p><p><div class="eq">$$\Gamma^\theta_{\phi\phi}=-\tfrac12g^{\theta\theta}\partial_\theta g_{\phi\phi}=-\sin\theta\cos\theta$$</div></p><p>因此，得到第一个非零系数。</p><h4>第6步：算 \(\Gamma^\phi_{	heta\phi}\)</h4><p>回忆：对称下标允许先算这一项再复制到 \(\Gamma^\phi_{\phi	heta}\)。</p><p><div class="eq">$$\Gamma^\phi_{\theta\phi}=\tfrac12g^{\phi\phi}\partial_\theta g_{\phi\phi}=\frac{\cos\theta}{\sin\theta}=\cot\theta$$</div></p><p>因此，第二个非零系数已得。</p><h4>第7步：列出对称项与其余零项</h4><p>回忆：Levi-Civita 联络无挠，故 \(\Gamma^k_{ij}=\Gamma^k_{ji}\)。</p><p><div class="eq">$$\Gamma^\phi_{\phi\theta}=\cot\theta,\qquad\Gamma^\theta_{\theta\theta}=\Gamma^\theta_{\theta\phi}=\Gamma^\phi_{\theta\theta}=\Gamma^\phi_{\phi\phi}=0$$</div></p><p>因此，完整列出局部系数。</p><h4>第8步：在一条纬线上代入具体角度</h4>
+令 \(\theta=\pi/3\)，则 \(\sin\theta=\sqrt3/2\)、\(\cos\theta=1/2\)。逐项代入：<div class="eq">$$\Gamma^\theta_{\phi\phi}=-(\sqrt3/2)(1/2)=-\sqrt3/4,\qquad\Gamma^\phi_{\theta\phi}=(1/2)/(\sqrt3/2)=1/\sqrt3.$$</div>两者量纲和符号都与一般公式一致。
+<h4>第9步：用嵌入投影核对</h4><p>回忆：球面的单位法向是位置向量 \(F\)。</p><p>对 \(F_{\phi\phi}\) 取切向投影，其沿 \(F_	heta\) 的系数为 <div class="eq">$$\frac{\langle F_{\phi\phi},F_\theta\rangle}{|F_\theta|^2}=-\sin\theta\cos\theta$$</div>与坐标公式相同。</p><p>因此，诱导联络和 Levi-Civita 公式一致。</p><h4>第10步：说明极点处的表象</h4><p>回忆：坐标式中的 \(\cot	heta\) 在极点发散，因为 \(\phi\) 在极点失效。</p><p>球面联络本身在极点仍光滑，只须换用另一张坐标图。</p><p>因此，系数的奇性不是几何奇性。</p><div class="keybox">$$\boxed{\Gamma^\theta_{\phi\phi}=-\sin\theta\cos\theta,\quad\Gamma^\phi_{\theta\phi}=\Gamma^\phi_{\phi\theta}=\cot\theta}$$</div><div class="memobox"><strong>一句话记忆：</strong>球面弯曲反映在角向度量 \(\sin^2	heta\) 的导数中。</div>`,
+    2: L`<h4>第1步：写出上半平面的度量</h4><p>回忆：取 \(y>0\)，度量为 \(g=y^{-2}(dx^2+dy^2)\)。</p><p><div class="eq">$$g_{xx}=g_{yy}=y^{-2},\quad g_{xy}=0$$</div></p><p>因此，度量只依赖高度 \(y\)。</p><h4>第2步：求逆度量</h4><p>回忆：对角矩阵的逆逐项倒置。</p><p><div class="eq">$$g^{xx}=g^{yy}=y^2,\quad g^{xy}=0$$</div></p><p>因此，接下来乘以度量偏导。</p><h4>第3步：求唯一非零的度量偏导</h4><p>回忆：\(\partial_y(y^{-2})=-2y^{-3}\)，而 \(\partial_xg_{ij}=0\)。</p><p><div class="eq">$$\partial_y g_{xx}=\partial_y g_{yy}=-2y^{-3}$$</div></p><p>因此，只有两个偏导可能进入公式。</p><h4>第4步：计算 \(\Gamma^x_{xy}\)</h4><p>回忆：套用 Levi-Civita 公式并令 \((k,i,j)=(x,x,y)\)。</p><p><div class="eq">$$\Gamma^x_{xy}=\tfrac12g^{xx}\partial_y g_{xx}=\tfrac12y^2(-2y^{-3})=-1/y$$</div></p><p>因此，由下标对称性还有 \(\Gamma^x_{yx}=-1/y\)。</p><h4>第5步：计算 \(\Gamma^y_{xx}\)</h4><p>回忆：这次公式中的度量导数带负号。</p><p><div class="eq">$$\Gamma^y_{xx}=-\tfrac12g^{yy}\partial_y g_{xx}=-\tfrac12y^2(-2y^{-3})=+1/y$$</div></p><p>因此，原数据把这一项写成负号，现已纠正。</p><h4>第6步：计算 \(\Gamma^y_{yy}\)</h4><p>回忆：三个偏导中两项相加再减一项，净留一项。</p><p><div class="eq">$$\Gamma^y_{yy}=\tfrac12g^{yy}\partial_y g_{yy}=\tfrac12y^2(-2y^{-3})=-1/y$$</div></p><p>因此，这一项与 \(\Gamma^y_{xx}\) 异号。</p><h4>第7步：核对其余分量为零</h4><p>回忆：涉及 \(\partial_xg\)、\(g_{xy}\) 或逆度量非对角元的项都为零。</p><p><div class="eq">$$\Gamma^x_{xx}=\Gamma^x_{yy}=\Gamma^y_{xy}=\Gamma^y_{yx}=0$$</div></p><p>因此，非零列表已完整。</p><h4>第8步：在高度二逐项代入</h4>
+取 \(y=2\)。由于 \(1/y=1/2\)，有 <div class="eq">$$\Gamma^x_{xy}=\Gamma^x_{yx}=-1/2,\quad\Gamma^y_{xx}=+1/2,\quad\Gamma^y_{yy}=-1/2.$$</div>特别地 \(\nabla_{\partial_x}\partial_x=\frac12\partial_y\)，验证 \(\Gamma^y_{xx}\) 是正号。
+<h4>第9步：用曲率再查一次双曲号数</h4>
+按 \(R(X,Y)Z=\nabla_X\nabla_YZ-\nabla_Y\nabla_XZ-\nabla_{[X,Y]}Z\)，<div class="eq">$$R^x{}_{yxy}=-\partial_y\Gamma^x_{xy}+\Gamma^y_{yy}\Gamma^x_{xy}-\Gamma^x_{xy}\Gamma^x_{yx}=-y^{-2}+y^{-2}-y^{-2}=-y^{-2}.$$</div>分子 \(g_{xx}R^x{}_{yxy}=-y^{-4}\)，面积平方 \(y^{-4}\)，故 \(K=-1\)。
+<h4>第10步：写出测地线方程作符号核查</h4><p>回忆：测地线满足 \(\ddot x^k+\Gamma^k_{ij}\dot x^i\dot x^j=0\)。</p><p><div class="eq">$$\ddot x-\frac{2\dot x\dot y}{y}=0,\qquad\ddot y+\frac{\dot x^2-\dot y^2}{y}=0$$</div></p><p>因此，这些方程与上半平面的竖直线和半圆测地线相容。</p><h4>第11步：集中列出纠正后的答案</h4><p>回忆：原题把三个量用同一个等号连起来会造成符号错误。</p><p><div class="eq">$$\Gamma^x_{xy}=\Gamma^x_{yx}=-1/y,\quad\Gamma^y_{xx}=+1/y,\quad\Gamma^y_{yy}=-1/y$$</div></p><p>因此，各项符号由逐项代入确定。</p><div class="keybox">$$\boxed{\Gamma^x_{xy}=\Gamma^x_{yx}=-\frac1y,\quad\Gamma^y_{xx}=\frac1y,\quad\Gamma^y_{yy}=-\frac1y}$$</div><div class="memobox"><strong>一句话记忆：</strong>上半平面的高度导数都为负，但 Christoffel 公式前面的符号会改变结果。</div>`
   },
   "r19": {
-    0: L`<h4>目标</h4>
-理解球面上沿纬线平行移动的「转角」。
-
-<h4>第一步：沿纬线平行移动</h4>
-球面上沿一条闭纬线平行移动一个切向量，回到起点后向量相对原方向旋转了一个角。
-
-<h4>第二步：转角 = 围出球冠的曲率积分</h4>
-这个转角等于纬线所围球冠的 Gauss 曲率积分
-
-<div class="eq">$$\text{转角}=\int_{\text{球冠}}K\,dA$$</div>
-
-这是 Gauss–Bonnet 定理的和乐（holonomy）版本。
-
-<div class="keybox">$$\boxed{\text{平行移动的转角}=\text{围成区域的曲率积分}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>球面平行移动产生转角，转角即曲率积分——和乐现象。</div>`,
-    1: L`<h4>目标</h4>
-理解 Foucault 摆是平行移动的物理实例。
-
-<h4>第一步：摆面与地球</h4>
-Foucault 摆的摆动平面在空间中保持方向，但地球自转使其相对地面旋转——这正是摆动方向沿球面<strong>平行移动</strong>的体现。
-
-<h4>第二步：转角公式</h4>
-摆面每周期旋转角度 \(2\pi\sin\varphi\)（\(\varphi\) 为纬度），对应球面平行移动绕纬线的和乐。
-
-<div class="keybox">$$\boxed{\text{Foucault 摆转角}=2\pi\sin\varphi}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>Foucault 摆是地球自转造成的平行移动和乐。</div>`,
-    2: L`<h4>目标</h4>
-认识量子力学中的 Berry 相位——参数空间的平行移动。
-
-<h4>第一步：绝热演化</h4>
-系统参数 \(\lambda\) 绕参数空间闭路绝热演化一周，波函数获得一个<strong>几何相位</strong>（Berry 相位）。
-
-<h4>第二步：联络与和乐</h4>
-Berry 相位正是参数空间上「Berry 联络」沿闭路的平行移动和乐，是微分几何在量子力学的直接应用。
-
-<div class="keybox">$$\boxed{\text{Berry 相位}=\text{参数空间联络的和乐}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>Berry 相位 = 量子系统的「平行移动和乐」。</div>`
+    0: L`<h4>第1步：选定纬线和局部标架</h4><p>回忆：单位球用余纬 \(	heta\)，固定 \(	heta=	heta_0\) 的圆是纬线。</p><p>在 \(0<	heta_0<\pi\) 上取单位切向标架 \(e_	heta=\partial_	heta\)、\(e_\phi=(\sin	heta)^{-1}\partial_\phi\)。</p><p>因此，沿纬线两基向量都单位且正交。</p><h4>第2步：计算标架沿经度的转动</h4><p>回忆：球面联络满足 \(\Gamma^	heta_{\phi\phi}=-\sin	heta\cos	heta\)、\(\Gamma^\phi_{\phi	heta}=\cot	heta\)。</p><p><div class="eq">$$\nabla_{\partial_\phi}e_\theta=\cos\theta_0e_\phi,\qquad\nabla_{\partial_\phi}e_\phi=-\cos\theta_0e_\theta$$</div></p><p>因此，标架本身随 \(\phi\) 转动。</p><h4>第3步：写平行向量的分量</h4><p>回忆：设 \(V=a(\phi)e_	heta+b(\phi)e_\phi\)。</p><p>把乘积法则用到 \(
+abla_{\partial_\phi}V=0\)，分别收集 \(e_	heta,e_\phi\) 系数。</p><p>因此，得到两个一阶方程。</p><h4>第4步：列出分量方程</h4><p>回忆：上一标架导数决定耦合项的符号。</p><p><div class="eq">$$a'-b\\cos\\theta_0=0,\\qquad b'+a\\cos\\theta_0=0$$</div></p><p>因此，向量分量以恒定角速度旋转。</p><h4>第5步：解这个旋转方程</h4><p>回忆：令 \(z=a+ib\)，则 \(z'=-i\cos\theta_0z\)。</p><p><div class="eq">$$z(\\phi)=e^{-i\\phi\\cos\\theta_0}z(0)$$</div></p><p>因此，走完 \(2\pi\) 后分量旋转 \(-2\pi\cos\theta_0\)。</p><h4>第6步：把角度化为球冠面积</h4><p>回忆：单位球曲率 \(K=1\)，面积元 \(dA=\sin	heta\,d	heta d\phi\)。</p><p><div class="eq">$$\int_{\text{北球冠}}K\,dA=\int_0^{2\pi}\!\int_0^{\theta_0}\sin\theta\,d\theta d\phi=2\pi(1-\cos\theta_0)$$</div></p><p>因此，球冠总曲率等于该数。</p><h4>第7步：比较两个旋转角代表</h4><p>回忆：方向角只按 \(2\pi\) 取模。</p><p><div class="eq">$$-2\pi\cos\theta_0\equiv2\pi(1-\cos\theta_0)\pmod{2\pi}$$</div></p><p>因此，平行移动的和乐角与球冠总曲率一致。</p><h4>第8步：取余纬六十度作数值核查</h4>
+令 \(\theta_0=\pi/3\)，则 \(\cos\theta_0=1/2\)。ODE 解给 <div class="eq">$$z(2\pi)=e^{-i\pi}z(0)=-z(0).$$</div>北球冠积分是 \(2\pi(1-1/2)=\pi\)，旋转半圈与面积公式一致。
+<h4>第9步：说明赤道与小圆的区别</h4><p>回忆：赤道 \(	heta_0=\pi/2\) 本身是测地线。</p><p>此时 \(\cos	heta_0=0\)，平行移动一圈返回原方向；一般纬线则有非平凡和乐。</p><p>因此，旋转来自闭路围住的曲率，而不是向量长度变化。</p><div class="keybox">$$\boxed{\Delta\psi\equiv\int_{\text{球冠}}K\,dA=2\pi(1-\cos\theta_0)\pmod{2\pi}}$$</div><div class="memobox"><strong>一句话记忆：</strong>沿纬线绕一圈，箭头转过的角度等于所围球冠的总曲率，按整圈取模。</div>`,
+    1: L`<h4>第1步：确定地理纬度</h4><p>回忆：记地理纬度为 \(\lambda\)，余纬为 \(	heta=\pi/2-\lambda\)。</p><p><div class="eq">$$\cos\theta=\sin\lambda$$</div></p><p>因此，前一球面平行移动计算可直接换成纬度。</p><h4>第2步：写理想化物理模型</h4><p>回忆：理想 Foucault 摆的摆动平面在惯性空间近似保持方向，地面上的竖直方向随地球转动。</p><p>把摆的水平摆动方向投影到当地切平面，比较一恒星日后与地面标架的夹角；忽略摩擦和小振幅之外的效应。</p><p>因此，该几何比较可由沿纬线的平行移动描述。</p><h4>第3步：复用纬线联络方程</h4><p>回忆：沿固定 \(\theta\) 的平行向量分量满足 \(a'-b\cos\theta=0\)、\(b'+a\cos\theta=0\)。</p><p><div class="eq">$$(a+ib)(2\\pi)=e^{-2\\pi i\\cos\\theta}(a+ib)(0)$$</div></p><p>因此，相对局部标架的转角大小为 \(2\pi|\cos\theta|\)。</p><h4>第4步：把余纬换成地理纬度</h4><p>回忆：第一步已有 \(\cos	heta=\sin\lambda\)。</p><p><div class="eq">$$|\Delta\psi|=2\pi|\sin\lambda|$$</div></p><p>因此，每恒星日的进动角由纬度决定。</p><h4>第5步：算北极</h4><p>回忆：北极 \(\lambda=\pi/2\)。</p><p><div class="eq">$$|\Delta\psi|=2\pi\sin(\pi/2)=2\pi$$</div></p><p>因此，理想摆相对地面一日转满一圈。</p><h4>第6步：算赤道</h4><p>回忆：赤道 \(\lambda=0\)。</p><p><div class="eq">$$|\Delta\psi|=2\pi\sin0=0$$</div></p><p>因此，理想几何进动为零。</p><h4>第7步：算中纬度举例</h4><p>回忆：若 \(\lambda=30^\circ\)，则 \(\sin\lambda=1/2\)。</p><p><div class="eq">$$|\Delta\psi|=2\pi\cdot\tfrac12=\pi$$</div></p><p>因此，一恒星日相对地面约转半圈。</p><h4>第8步：代入四十五度纬度</h4>
+若 \(\lambda=45^\circ\)，则 \(\sin\lambda=\sqrt2/2\)，一恒星日的累计进动角大小为 <div class="eq">$$2\pi\sin45^\circ=\sqrt2\pi\ \mathrm{rad}=180\sqrt2^\circ\approx254.6^\circ.$$</div>它介于赤道的零和极点的整圈之间。
+<h4>第9步：解释方向与取模</h4><p>回忆：南北半球的 \(\sin\lambda\) 符号相反。</p><p>有向进动角的正负取决于观察方向和基向量定向；物理报数常说相对地面的连续累计角，球面和乐则按 \(2\pi\) 取模。</p><p>因此，两种角度叙述不冲突。</p><div class="keybox">$$\boxed{|\Delta\psi|=2\pi|\sin\lambda|\quad\text{每恒星日}}$$</div><div class="memobox"><strong>一句话记忆：</strong>纬度越高，地面标架绕竖直方向转得越多，摆面相对地面进动越快。</div>`,
+    2: L`<h4>第1步：说明所用的量子例子</h4><p>回忆：Berry 相位是参数沿闭路变化时本征态的几何相位。</p><p>取二能级态 \(|n,+angle\)，其中 \(n\) 是单位球上的参数方向；假设能级不简并且演化足够缓慢。</p><p>因此，此模型把参数空间联络写得可计算。</p><h4>第2步：写出一个局部本征态</h4><p>回忆：用球坐标 \((	heta,\phi)\) 表示 \(n\)。</p><p><div class="eq">$$|n,+\rangle=\begin{pmatrix}\cos(\theta/2)\\e^{i\phi}\sin(\theta/2)\end{pmatrix}$$</div></p><p>因此，它已归一化，局部相位规范已选定。</p><h4>第3步：对经度求导</h4><p>回忆：只第二个分量含 \(e^{i\phi}\)。</p><p><div class="eq">$$\partial_\phi|n,+\rangle=\begin{pmatrix}0\\i e^{i\phi}\sin(\theta/2)\end{pmatrix}$$</div></p><p>因此，得到相位随参数转动的导数。</p><h4>第4步：计算内积</h4><p>回忆：复内积的第一因子要取共轭转置。</p><p><div class="eq">$$\langle n,+|\partial_\phi n,+\rangle=i\sin^2(\theta/2)$$</div></p><p>因此，该内积纯虚，乘 \(i\) 后成为实连接系数。</p><h4>第5步：写 Berry 联络</h4><p>回忆：本规范取 \(\mathcal A=i\langle n,+|d|n,+angle\)。</p><p><div class="eq">$$\mathcal A_\phi=i\langle n,+|\partial_\phi n,+\rangle=-\sin^2(\theta/2)=-\tfrac12(1-\cos\theta)$$</div></p><p>因此，沿纬线的连接一形式已求出。</p><h4>第6步：沿闭路积分</h4><p>回忆：Berry 相位是连接在闭路上的积分，按 \(2\pi\) 取模。</p><p><div class="eq">$$\gamma_B=\oint\mathcal A=\int_0^{2\pi}-\tfrac12(1-\cos\theta)\,d\phi=-\pi(1-\cos\theta)$$</div></p><p>因此，获得具体相位。</p><h4>第7步：写成球面立体角</h4><p>回忆：北球冠立体角为 \(\Omega=2\pi(1-\cos	heta)\)。</p><p><div class="eq">$$\gamma_B=-\Omega/2\pmod{2\pi}$$</div></p><p>因此，半个立体角就是该自旋态的几何相位。</p><h4>第8步：把联络再求一次外微分</h4>
+由 \(\mathcal A=-\tfrac12(1-\cos\theta)d\phi\) 得 <div class="eq">$$\mathcal F=d\mathcal A=-\tfrac12\sin\theta\,d\theta\wedge d\phi.$$</div>北球冠积分 \(\int\mathcal F=-\pi(1-\cos\theta_0)\)，与边界积分 \(\oint\mathcal A\) 一致。
+<h4>第9步：代入六十度参数环路</h4>
+取 \(\theta_0=\pi/3\)，则球冠立体角 \(\Omega=2\pi(1-1/2)=\pi\)。故 <div class="eq">$$\gamma_B=-\Omega/2=-\pi/2,\qquad e^{i\gamma_B}=-i.$$</div>闭路后获得的是相位因子 \(-i\)，并非切向量的球面旋转角。
+<h4>第10步：解释和乐而不混同两种联络</h4><p>回忆：闭路后物理态可获得整体相位；局部规范变换改变 \(\mathcal A\)，闭路相位只按 \(2\pi\) 改变。</p><p>这是复线丛的 \(U(1)\) 联络和乐；它与切丛 Levi-Civita 平行移动共享“绕圈产生和乐”的结构，但数值公式不必相同。</p><p>因此，类比被精确计算取代。</p><div class="keybox">$$\boxed{\gamma_B=-\frac{\Omega}{2}\pmod{2\pi}\quad\text{对 }|n,+\rangle}$$</div><div class="memobox"><strong>一句话记忆：</strong>Berry 相位是量子态线丛沿闭合参数路搬运一圈的相位差。</div>`
   },
   "r20": {
     0: L`<h4>目标</h4>
@@ -1222,180 +1428,256 @@ Calabi–Yau 流形是 Ricci 平坦的 Kähler 流形，其和乐群恰为
 <div class="memobox"><strong>关键词：</strong>Morse 理论：测地线数量被 Betti 数之和下界控制。</div>`
   },
   "r28": {
-    0: L`<h4>目标</h4>
-二维黎曼流形上，曲率张量的分量看似有 \(2^4=16\) 个，但对称性把独立分量压到<strong>只有一个</strong>。我们要找出它与 Gauss 曲率 \(K\) 的关系。
+    0: L`<h4>第一步：明确要计算的量</h4>
+回忆 \(K(e_1,e_2)=\langle R(e_1,e_2)e_2,e_1\rangle/D\)，其中 \(D=g_{11}g_{22}-g_{12}^2>0\)。这是二维唯一的截面曲率。
 
-<h4>第一步：数独立分量</h4>
-曲率张量的对称性（反对称性 \(R_{ijkl}=-R_{jikl}=-R_{ijlk}\) 与对偶对称 \(R_{ijkl}=R_{klij}\)）在二维时把所有分量都约化到一个：\(R_{1212}\)。其余分量要么为零、要么是 \(\pm R_{1212}\)。
+<h4>第二步：固定四槽次序</h4>
+设 \(T_{ijkl}=\langle R(e_i,e_j)e_k,e_l\rangle\)。按本文符号，\(T_{1221}=KD\)，而 \(T_{1212}=-KD\)；交换末两槽会变号。
 
-<h4>第二步：与 Gauss 曲率挂钩</h4>
-截面曲率定义在唯一的二维切平面（整个切空间）上，恰好就是 Gauss 曲率：
+<h4>第三步：数独立分量</h4>
+回忆 \(T\) 在首两槽及末两槽均反对称。因此任何同一对重复的分量为零；二维只剩 \(T_{1212},T_{1221},T_{2112},T_{2121}\)，且由对称性只含一个自由数。
 
-<div class="eq">$$K=\frac{R_{1212}}{g_{11}g_{22}-g_{12}^{2}}=\frac{R_{1212}}{\det g}$$</div>
+<h4>第四步：把分量写成曲率</h4>
+由上一步与截面曲率定义，<div class="eq">$$T_{1221}=K(g_{11}g_{22}-g_{12}^2)$$</div>。这是任意坐标都正确的分量关系。
 
-<div class="keybox">$$\boxed{R_{1212}=K\det g}$$</div>
+<h4>第五步：检查上标形式</h4>
+回忆 \(R(e_1,e_2)e_2=R^l{}_{2,1,2}e_l\)，与 \(e_1\) 取内积：<div class="eq">$$KD=g_{11}R^1{}_{2,1,2}+g_{12}R^2{}_{2,1,2}$$</div>。原题只用单个上标分量除 \(\det g\) 的写法在一般坐标下缺少度量因子。
 
-<h4>结论</h4>
-二维时曲率张量完全退化为标量 \(K\)——这就是为什么二维曲面的弯曲只需一个函数即可描述，也是 Gauss 曲率是内蕴量（仅由度量决定）的体现。
+<h4>第六步：换正交单位基复算</h4>
+在 \(p\) 取 \(g_{ab}=\delta_{ab}\)，则 \(D=1\) 且第二个分量项为零，于是 \(R^1{}_{2,1,2}=K\)。这说明简式只在这样的基下成立。
 
-<div class="memobox"><strong>关键词：</strong>二维 ⟹ 曲率张量只有一个独立分量 ⟹ 它正是 Gauss 曲率 \(K\)。</div>`,
-    1: L`<h4>目标</h4>
-常截面曲率 \(c\) 的空间里，曲率张量有极其简洁的规范形式，我们要把它写出来。
+<h4>第七步：代入球面数值</h4>
+半径 \(R_0\) 的球面有 \(K=R_0^{-2}\)。正交单位基下 \(R(e_1,e_2)e_2=R_0^{-2}e_1\)，所以 \(T_{1221}=R_0^{-2}\)。
 
-<h4>推导</h4>
-若所有二维截面的曲率都等于同一个数 \(c\)，则曲率张量作为 (0,4) 型张量必须是唯一的、由 \(g\) 和 \(c\) 决定的那个张量。这个规范形式是：
+<h4>第八步：恢复整个张量</h4>
+回忆二维代数曲率张量只有一个独立分量，故<div class="eq">$$T(X,Y,Z,W)=K(\langle Y,Z\rangle\langle X,W\rangle-\langle X,Z\rangle\langle Y,W\rangle)$$</div>。代 \((e_1,e_2,e_2,e_1)\) 即回到第四步。
 
-<div class="keybox">$$\boxed{R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)}$$</div>
+<div class="keybox">$$\boxed{K=\frac{g_{1l}R^l{}_{2,1,2}}{g_{11}g_{22}-g_{12}^2}}$$</div>
 
-<h4>验证</h4>
-代入截面曲率公式验证：取正交单位向量 \(u,v\)，则
+<div class="memobox"><strong>一句话记忆：</strong>二维只有一个独立曲率分量；先降下输出指标，再除以面积平方。</div>`,
+    1: L`<h4>第一步：固定模型公式</h4>
+回忆常截面曲率 \(c\) 的模型张量在本文符号下是<div class="eq">$$R(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$$</div>。我们把它代回截面曲率定义验算。
 
-<div class="eq">$$\langle R(u,v)v,u\rangle=c\big(\langle v,v\rangle\langle u,u\rangle-\langle u,v\rangle^2\big)=c\cdot(1\cdot 1-0)=c$$</div>
+<h4>第二步：选任意截面基</h4>
+取线性独立的 \(u,v\)，张成 \(\sigma\)。回忆分母是面积平方 \(D=|u|^2|v|^2-\langle u,v\rangle^2>0\)。
 
-确实每个截面的曲率都是 \(c\)。
+<h4>第三步：计算曲率作用</h4>
+令 \(X=u,Y=v,Z=v\)，则<div class="eq">$$R(u,v)v=c(|v|^2u-\langle u,v\rangle v)$$</div>。
 
-<div class="memobox"><strong>一句话记忆：</strong>常曲率 \(c\) ⟹ 曲率张量 = 规范形式 \(c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)\)，完全由标量 \(c\) 决定。</div>`,
-    2: L`<h4>目标</h4>
-欧氏空间 \(\mathbb R^n\) 的曲率张量恒为零，我们要验证它，并说明判断「是否局部等距于欧氏度量」的判据。
+<h4>第四步：取内积</h4>
+与 \(u\) 内积并按线性展开：<div class="eq">$$\langle R(u,v)v,u\rangle=c(|v|^2|u|^2-\langle u,v\rangle^2)=cD$$</div>。
 
-<h4>第一步：欧氏空间协变导数可交换</h4>
-在 \(\mathbb R^n\) 的标准坐标系下，Christoffel 符号全部为零，协变导数退化为普通偏导：
+<h4>第五步：约去面积平方</h4>
+回忆 \(D>0\)，所以<div class="eq">$$K(\sigma)=\frac{cD}{D}=c$$</div>，与 \(u,v\) 是否正交无关。
 
-<div class="eq">$$\nabla_i=\partial_i,\qquad \nabla_i\nabla_j=\partial_i\partial_j=\partial_j\partial_i$$</div>
+<h4>第六步：正交基快速核对</h4>
+若 \(|u|=|v|=1,\langle u,v\rangle=0\)，则 \(R(u,v)v=cu\)，分子 \(c\)、分母 \(1\)。
 
-所以协变导数<strong>可交换</strong>，交换子为零。
+<h4>第七步：代具体数值</h4>
+对半径 \(2\) 的圆球，\(c=1/4\)；取任意正交切向量，\(K=\langle(1/4)u,u\rangle=1/4\)。欧氏空间取 \(c=0\) 得零。
 
-<h4>第二步：曲率张量为零</h4>
+<h4>第八步：辨别双曲模型</h4>
+标准曲率 \(-1\) 的双曲空间取 \(c=-1\)，同一计算给 \(R(u,v)v=-u\) 和 \(K=-1\)，符号与截面曲率定义一致。
 
-<div class="eq">$$R(X,Y)Z=\nabla_X\nabla_Y Z-\nabla_Y\nabla_X Z-\nabla_{[X,Y]}Z=0$$</div>
+<div class="keybox">$$\boxed{R(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)\Longrightarrow K(\sigma)=c}$$</div>
 
-<div class="keybox">$$\boxed{\text{平坦空间 }\iff R\equiv 0}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>把 \(R(u,v)v\) 与 \(u\) 相乘，分子恰是 \(c\) 倍面积平方。</div>`,
+    2: L`<h4>第一步：说明对象</h4>
+回忆欧氏空间 \(\mathbb R^n\) 用标准度量与标准坐标 \(x^i\)。目标是计算其 Levi-Civita 联络和曲率。
 
-<h4>结论</h4>
-反过来，若一个度量满足 \(R\equiv 0\)，则它局部等距于欧氏度量（曲率张量是「偏离欧氏」的唯一障碍）。这就是判断度量是否平坦的根本判据。
+<h4>第二步：求度量分量</h4>
+标准基向量 \(e_i\) 满足 \(g_{ij}=\langle e_i,e_j\rangle=\delta_{ij}\)，所以所有偏导 \(\partial_k g_{ij}=0\)。
 
-<div class="memobox"><strong>关键词：</strong>协变导数可交换 ⟺ 曲率为零 ⟺ 局部平坦。</div>`
+<h4>第三步：代入 Christoffel 公式</h4>
+回忆 <div class="eq">$$\Gamma^l_{ij}=\tfrac12g^{lm}(\partial_i g_{jm}+\partial_j g_{im}-\partial_mg_{ij})$$</div>。三项偏导都是零，故 \(\Gamma^l_{ij}=0\)。
+
+<h4>第四步：代入曲率分量</h4>
+回忆 \(R^l{}_{kij}=\partial_i\Gamma^l_{jk}-\partial_j\Gamma^l_{ik}+\Gamma^a_{jk}\Gamma^l_{ia}-\Gamma^a_{ik}\Gamma^l_{ja}\)。将全部 \(\Gamma=0\) 代入得 \(R^l{}_{kij}=0\)。
+
+<h4>第五步：推广到任意向量</h4>
+回忆曲率是张量；全部坐标分量为零意味着对任何 \(X,Y,Z\) 都有 \(R(X,Y)Z=0\)。
+
+<h4>第六步：复算一个平面</h4>
+在 \(\mathbb R^2\) 取 \(u=(1,0),v=(0,1)\)，面积平方 \(D=1\)、分子 \(\langle R(u,v)v,u\rangle=0\)，故 \(K=0\)。
+
+<h4>第七步：说明逆向判据</h4>
+若某开集上 \(R\equiv0\)，Levi-Civita 联络平坦且无挠；在充分小的单连通邻域可取平行正交标架。无挠使标架对易，积分得欧氏坐标。
+
+<h4>第八步：限定结论的尺度</h4>
+因此 \(R=0\) 蕴含<strong>局部</strong>欧氏等距；环面可整体平坦却不与整个 \(\mathbb R^n\) 等距。这个区分防止把局部判据误用为全局判据。
+
+<div class="keybox">$$\boxed{R_{\mathbb R^n}\equiv0,\qquad R\equiv0\Longleftrightarrow\text{局部欧氏平坦}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>标准欧氏坐标的度量系数恒定，Christoffel 符号与曲率分量都为零。</div>`
   },
   "r29": {
-    0: L`<h4>目标</h4>
-模型空间 \(S^n\)、\(\mathbb R^n\)、\(H^n\) 的截面曲率分别为 \(1/R^2\)、\(0\)、\(-1\)，我们要说明它们「所有截面方向曲率相同」的含义。
+    0: L`<h4>第一步：写截面曲率定义</h4>
+回忆 \(K(u,v)=\langle R(u,v)v,u\rangle/D\)，其中 \(D=|u|^2|v|^2-\langle u,v\rangle^2\)。取任意二维截面，证明三个模型的 \(K\) 都与方向无关。
 
-<h4>计算</h4>
-这三个模型空间的共同点是曲率张量都是规范形式：
+<h4>第二步：使用常曲率模型</h4>
+回忆模型张量 \(R(u,v)v=c(|v|^2u-\langle u,v\rangle v)\)。取内积得分子 \(cD\)。
 
-<div class="eq">$$R(X,Y)Z=c\big(\langle Y,Z\rangle X-\langle X,Z\rangle Y\big)$$</div>
+<h4>第三步：计算半径为二的球面</h4>
+球面 \(S^n(2)\) 的 \(c=1/2^2=1/4\)。对正交单位 \(u,v\)，\(R(u,v)v=(1/4)u\)。
 
-其中 \(c\) 分别取 \(1/R^2,\ 0,\ -1\)。代入截面曲率公式，对<strong>任意</strong>二维平面 \(\sigma\)：
+<h4>第四步：完成球面除法</h4>
+上一步分子是 \(1/4\)，分母是 \(1\)，所以 \(K_{S^n(2)}=1/4\)。把半径 \(2\) 换成 \(R_0\) 得 \(1/R_0^2\)。
 
-<div class="eq">$$K(\sigma)=\frac{c(|u|^2|v|^2-\langle u,v\rangle^2)}{|u|^2|v|^2-\langle u,v\rangle^2}=c$$</div>
+<h4>第五步：计算欧氏模型</h4>
+回忆欧氏 \(\Gamma=0\) 使 \(R=0\)，于是任意 \(u,v\) 的分子为零，\(K_{\mathbb R^n}=0\)。
 
-<div class="keybox">$$\boxed{K_{S^n}=\frac{1}{R^2},\quad K_{\mathbb R^n}=0,\quad K_{H^n}=-1}$$</div>
+<h4>第六步：计算双曲模型</h4>
+标准双曲空间 \(\mathbb H^n\) 取曲率参数 \(c=-1\)，则正交单位 \(u,v\) 满足 \(R(u,v)v=-u\)，分子 \(-1\)，所以 \(K=-1\)。
 
-<h4>几何含义</h4>
-这三个空间是「常曲率空间」的三种代表：正、零、负。它们分别是黎曼几何里的三个「标准尺」，其它流形的曲率都是和它们比较得来的。
+<h4>第七步：检验非正交基</h4>
+取 \(|u|^2=2,|v|^2=3,\langle u,v\rangle=1\)，则 \(D=2\cdot3-1=5\)。模型分子 \(5c\)，商仍是 \(c\)。
 
-<div class="memobox"><strong>关键词：</strong>正 / 零 / 负曲率的三个模型：球面 / 欧氏 / 双曲。</div>`,
-    1: L`<h4>目标</h4>
-复射影空间 \(\mathbb{CP}^n\) 配 Fubini–Study 度量，截面曲率不是常数，而是落在区间 \([1/4,\,1]\) 内，取决于二维平面相对复结构的位置。
+<h4>第八步：收束</h4>
+任意截面和任意基都会得到同一 \(c\)，这就是“常截面曲率”而不只是“某个方向的曲率”。
 
-<h4>第一步：Fubini–Study 度量的截面曲率</h4>
-对 \(\mathbb{CP}^n\)，截面曲率由平面与复结构 \(J\) 的夹角决定：
+<div class="keybox">$$\boxed{K_{S^n(R_0)}=R_0^{-2},\quad K_{\mathbb R^n}=0,\quad K_{\mathbb H^n}=-1}$$</div>
 
-<div class="eq">$$K(\sigma)=\frac{1+3\cos^2\theta}{4},\qquad \theta=\text{平面 }\sigma\text{ 与 }J\sigma\text{ 的夹角}$$</div>
+<div class="memobox"><strong>一句话记忆：</strong>三个模型都满足 \(\langle R(u,v)v,uangle=cD\)，所以每个截面的商都等于 \(c\)。</div>`,
+    1: L`<h4>第一步：声明归一化</h4>
+回忆 Fubini–Study 度量有不同缩放；这里取复直线的截面曲率为 \(1\) 的归一化。对 \(n\ge2\) 的 \(\mathbb{CP}^n\) 计算范围。
 
-<h4>第二步：两种极端情形</h4>
+<h4>第二步：引入复结构</h4>
+复结构 \(J\) 满足 \(J^2=-I\) 且保持内积。任取正交单位向量 \(u,v\)，记 \(a=\langle Ju,v\rangle\)。Cauchy–Schwarz 给 \(|a|\le1\)。
 
-<div class="warnbox"><strong>全实平面</strong>（\(\sigma\) 垂直于 \(J\sigma\)，\(\cos\theta=0\)）：\(K=1/4\)。<br><strong>全复平面</strong>（\(\sigma\) 是复直线，\(\cos\theta=1\)）：\(K=1\)。</div>
+<h4>第三步：写出可代入的曲率式</h4>
+回忆这个归一化下的 Fubini–Study 曲率公式为<div class="eq">$$K(u,v)=\frac{1+3\langle Ju,v\rangle^2}{4}=\frac{1+3a^2}{4}$$</div>。数值只取决于平面对 \(J\) 的位置。
 
-<div class="keybox">$$\boxed{\tfrac14\le K(\mathbb{CP}^n)\le 1}$$</div>
+<h4>第四步：算全实平面</h4>
+若 \(v\perp Ju\)，则 \(a=0\)，直接代入得 \(K=(1+0)/4=1/4\)。维数 \(n\ge2\) 时可选这样的 \(v\)。
 
-<h4>几何含义</h4>
-\(\mathbb{CP}^n\) 是「非负但非零」曲率的经典例子——它不常曲率，但截面曲率被严格控制在 \([1/4,1]\) 之间，这使它成为比较定理的重要测试场。
+<h4>第五步：算复直线</h4>
+若 \(v=Ju\)，则 \(|v|=1\)、\(a=\langle Ju,Ju\rangle=1\)，故 \(K=(1+3)/4=1\)。
 
-<div class="memobox"><strong>关键词：</strong>复结构「扭曲」曲率：复方向曲率最大（1），实方向最小（1/4）。</div>`,
-    2: L`<h4>目标</h4>
-乘积流形 \(M\times N\) 的截面曲率取决于截面「横跨」还是「落在」两个因子，我们要分三种情形算。
+<h4>第六步：代中间角度</h4>
+若 \(a=1/2\)，则 \(a^2=1/4\)，所以<div class="eq">$$K=\frac{1+3/4}{4}=\frac{7}{16}$$</div>。这可直接复算，介于两端之间。
 
-<h4>第一步：乘积度量的曲率结构</h4>
-乘积度量的曲率张量在因子间「解耦」：若 \(X,Y\) 分别在 \(M\)、\(N\) 的切空间里，则
+<h4>第七步：推出整个范围</h4>
+由 \(0\le a^2\le1\)，<div class="eq">$$\frac14\le\frac{1+3a^2}{4}\le1$$</div>。连续改变二维截面可取到区间中的值。
 
-<div class="eq">$$R(X,Y)Z=0\quad(\text{跨因子的方向})$$</div>
+<h4>第八步：处理低维例外</h4>
+当 \(n=1\) 时实维只有 \(2\)，唯一的二维平面总由 \(u,Ju\) 张成，所以 \(a^2=1\)、\(K=1\)，下端 \(1/4\) 不出现。
 
-<h4>第二步：三种截面</h4>
+<div class="keybox">$$\boxed{K_{FS}(u,v)=\tfrac14(1+3\langle Ju,v\rangle^2)\in[\tfrac14,1]}$$</div>
 
-<div class="warnbox">1. <strong>跨因子</strong>（一个方向在 \(M\)，一个在 \(N\)）：\(K=0\)。<br>2. <strong>全在 \(M\)</strong>：\(K=K_M\)（原流形 \(M\) 的截面曲率）。<br>3. <strong>全在 \(N\)</strong>：\(K=K_N\)。</div>
+<div class="memobox"><strong>一句话记忆：</strong>复结构把截面分为全实与复直线两个极端；中间值由 \(\langle Ju,vangle^2\) 插值。</div>`,
+    2: L`<h4>第一步：确定乘积度量</h4>
+回忆 \(M\times N\) 的切向量写作 \((u,a)\)，内积为 \(g_M(u,v)+g_N(a,b)\)。联络按两因子分别计算。
 
-<div class="keybox">$$\boxed{K(\text{跨因子})=0,\quad K(\text{全在 }M)=K_M,\quad K(\text{全在 }N)=K_N}$$</div>
+<h4>第二步：写曲率分解</h4>
+由联络逐因子分解，<div class="eq">$$R^{M\times N}((u,a),(v,b))(w,c)=(R^M(u,v)w,R^N(a,b)c)$$</div>。没有跨因子的混合项。
 
-<h4>几何含义</h4>
-乘积流形总是含有「零曲率平面」（跨因子方向），所以只要一个因子是弯曲的，乘积流形就不可能常曲率——它是「非负曲率但非正曲率」的构造来源。
+<h4>第三步：取混合截面</h4>
+令 \(U=(u,0),V=(0,b)\) 且二者非零，则 \(R(U,V)V=(0,0)\)。
 
-<div class="memobox"><strong>关键词：</strong>乘积把两个因子的曲率「并列」起来，跨因子方向总是平坦的。</div>`
+<h4>第四步：算混合分母</h4>
+由于 \(\langle U,V\rangle=0\)，面积平方为 \(D=|u|_M^2|b|_N^2>0\)，故混合截面 \(K=0/D=0\)。
+
+<h4>第五步：取完全在 M 的截面</h4>
+令 \(U=(u,0),V=(v,0)\)。曲率分子变成 \(\langle R^M(u,v)v,u\rangle\)，分母变成 \(|u|^2|v|^2-\langle u,v\rangle^2\)。
+
+<h4>第六步：约成 M 的曲率</h4>
+由截面曲率定义，上一步的商就是 \(K_M(u,v)\)；没有 \(N\) 因子的贡献。
+
+<h4>第七步：取完全在 N 的截面</h4>
+同样令 \(U=(0,a),V=(0,b)\)，商直接变成 \(K_N(a,b)\)。
+
+<h4>第八步：给数值复算</h4>
+在 \(S^2(2)\times\mathbb R\)，球面内部截面 \(K=1/4\)，球面与直线的混合截面 \(K=0\)。因此乘积通常不是常截面曲率空间。
+
+<div class="keybox">$$\boxed{K_{M\times N}(T M,T N)=0,\quad K(T M,T M)=K_M,\quad K(T N,T N)=K_N}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>乘积联络逐因子运算；混合平面的曲率分子为零。</div>`
   },
   "r30": {
-    0: L`<h4>目标</h4>
-计算半径 \(R\) 的球面 \(S^n\) 的 Ricci 曲率与标量曲率，验证它是 Einstein 流形。
+    0: L`<h4>第一步：给定球面与符号</h4>
+取半径 \(R_0>0\) 的 \(S^n(R_0)\)，沿用正球面有正截面曲率的约定，\(c=R_0^{-2}\)。
 
-<h4>第一步：写出曲率张量</h4>
-\(S^n(R)\) 是常曲率 \(c=1/R^2\) 空间，曲率张量为
+<h4>第二步：写曲率模型</h4>
+回忆常曲率公式<div class="eq">$$R(X,Y)Z=c(\langle Y,Z\rangle X-\langle X,Z\rangle Y)$$</div>。
 
-<div class="eq">$$R_{ijkl}=\frac{1}{R^2}(g_{ik}g_{jl}-g_{il}g_{jk})$$</div>
+<h4>第三步：写 Ricci 的迹</h4>
+回忆 \(\operatorname{Ric}(v,w)=\sum_{a=1}^n\langle R(e_a,v)w,e_a\rangle\)，其中 \(e_a\) 为正交单位基。
 
-<h4>第二步：缩并得 Ricci</h4>
-对 \(i,l\) 缩并（即 \(R_{jk}=g^{il}R_{ijkl}\)）：
+<h4>第四步：算每个求和项</h4>
+代入曲率模型：<div class="eq">$$\langle R(e_a,v)w,e_a\rangle=c(\langle v,w\rangle-\langle e_a,w\rangle\langle v,e_a\rangle)$$</div>。
 
-<div class="eq">$$R_{jk}=g^{il}\frac{1}{R^2}(g_{ik}g_{jl}-g_{il}g_{jk})=\frac{n-1}{R^2}g_{jk}$$</div>
+<h4>第五步：求和第一部分</h4>
+\(n\) 个 \(c\langle v,w\rangle\) 相加得 \(nc\langle v,w\rangle\)。
 
-<div class="keybox">$$\boxed{\mathrm{Ric}=\frac{n-1}{R^2}\,g}$$</div>
+<h4>第六步：求和第二部分</h4>
+回忆正交展开 \(\sum_a\langle e_a,w\rangle\langle v,e_a\rangle=\langle v,w\rangle\)，所以减去 \(c\langle v,w\rangle\)。
 
-<h4>第三步：再缩并得标量曲率</h4>
+<h4>第七步：得到 Ricci</h4>
+两部分合并：<div class="eq">$$\operatorname{Ric}(v,w)=(n-1)c\langle v,w\rangle=\frac{n-1}{R_0^2}g(v,w)$$</div>。
 
-<div class="eq">$$S=g^{jk}R_{jk}=\frac{n-1}{R^2}\,n=\frac{n(n-1)}{R^2}$$</div>
+<h4>第八步：再取标量迹</h4>
+回忆 \(S=\sum_i\operatorname{Ric}(e_i,e_i)\)。每项是 \((n-1)/R_0^2\)，共 \(n\) 项，故 \(S=n(n-1)/R_0^2\)。
 
-<div class="keybox">$$\boxed{S=\frac{n(n-1)}{R^2}}$$</div>
+<h4>第九步：代三维数字</h4>
+若 \(n=3,R_0=2\)，则 \(\operatorname{Ric}=(2/4)g=\tfrac12 g\)、\(S=3\cdot2/4=3/2\)，可独立核对。
 
-<h4>结论</h4>
-\(\mathrm{Ric}=\lambda g\)（\(\lambda=\frac{n-1}{R^2}\)），所以球面是 <strong>Einstein 流形</strong>，且标量曲率恒正。
+<div class="keybox">$$\boxed{\operatorname{Ric}_{S^n(R_0)}=\frac{n-1}{R_0^2}g,\qquad S=\frac{n(n-1)}{R_0^2}}$$</div>
 
-<div class="memobox"><strong>关键词：</strong>球面 \(\mathrm{Ric}=\frac{n-1}{R^2}g\)、\(S=\frac{n(n-1)}{R^2}\)，是 Einstein 流形的标准模型。</div>`,
-    1: L`<h4>目标</h4>
-Einstein 度量指 \(\mathrm{Ric}=\lambda g\)（Ricci 与度量成比例）。我们要看一个极端情形：Ricci 平坦但曲率非零的 Einstein 流形。
+<div class="memobox"><strong>一句话记忆：</strong>球面每个与 \(v\) 垂直的 \(n-1\) 个方向都贡献 \(R_0^{-2}\)。</div>`,
+    1: L`<h4>第一步：说明题意</h4>
+回忆 Einstein 度量满足 \(\operatorname{Ric}=\lambda g\)。K3 上的 Calabi–Yau 度量取 \(\lambda=0\)，但不能把 Ricci 零误读成全曲率零。
 
-<h4>第一步：Ricci 平坦 \(\neq\) 平坦</h4>
-Ricci 曲率是曲率张量的<strong>迹</strong>。迹为零只说明「部分」曲率信息消失，但曲率张量本身（尤其是无迹的 Weyl 部分）可以非零：
+<h4>第二步：写 Ricci 平坦</h4>
+回忆 K3 的第一陈类为零，Calabi–Yau 定理在给定 Kähler 类中给出 \(\operatorname{Ric}=0\) 的度量。这是存在性输入。
 
-<div class="eq">$$\mathrm{Ric}=0\quad\nRightarrow\quad R=0$$</div>
+<h4>第三步：说明缩并会丢信息</h4>
+回忆 Ricci 只是 \(R\) 的迹：<div class="eq">$$\operatorname{Ric}(v,w)=\sum_a\langle R(e_a,v)w,e_a\rangle$$</div>。和为零并不逐项强迫 \(R(e_a,v)w=0\)。
 
-<h4>第二步：Calabi–Yau / K3 曲面</h4>
-K3 曲面上的 Calabi–Yau 度量满足 \(\mathrm{Ric}=0\)（Ricci 平坦），但它是紧致 Ricci 平坦但<strong>非平坦</strong>的 4 维流形，\(R\neq 0\)。
+<h4>第四步：看四维曲率分解</h4>
+在四维，若 \(\operatorname{Ric}=0\)，标量 \(S=0\)，则 Weyl 分解化为 \(R=W\)。因此剩余曲率可以全部位于无迹部分。
 
-<div class="keybox">$$\boxed{\mathrm{Ric}=0,\ R\neq 0\quad(\text{Ricci 平坦但不平坦})}$$</div>
+<h4>第五步：用拓扑检测平坦性</h4>
+回忆紧致平坦流形的 Euler 示性数为零；这是 Chern–Gauss–Bonnet 中曲率形式为零直接给出的。K3 的 Euler 示性数是 \(24\)。
 
-<h4>几何含义</h4>
-这类流形是 \(\lambda=0\) 的 Einstein 流形，在弦论与 Kähler 几何里极其重要。它说明「Einstein」是一类比「平坦」宽松得多的条件。
+<h4>第六步：作数值比较</h4>
+若这份度量还满足 \(R=0\)，Gauss–Bonnet 的 Euler 积分会给 \(\chi=0\)，而 \(\chi(K3)=24\)。两个整数不相等，故 \(R\) 不能恒为零。
 
-<div class="memobox"><strong>关键词：</strong>Ricci 平坦（迹为零）≠ 平坦（全张量为零），中间隔着 Weyl 张量。</div>`,
-    2: L`<h4>目标</h4>
-Schwarzschild 解是真空 Einstein 方程 \(\mathrm{Ric}=0\) 的解，我们要说明它 Ricci 为零但曲率张量非零。
+<h4>第七步：指出量词</h4>
+结论是 \(R\not\equiv0\)，即至少某点曲率非零；未声称每一点的每个截面都非零。
 
-<h4>第一步：真空 Einstein 方程</h4>
-真空（无物质）时，Einstein 方程化为
+<h4>第八步：整理 Einstein 常数</h4>
+由 \(\operatorname{Ric}=0=0\cdot g\)，这确实是 Einstein 度量，常数 \(\lambda=0\)，而非平坦度量。
 
-<div class="eq">$$\mathrm{Ric}-\frac12 Sg=0\ \Longrightarrow\ \mathrm{Ric}=0$$</div>
+<div class="keybox">$$\boxed{\operatorname{Ric}_{K3}=0,\qquad R_{K3}\not\equiv0}$$</div>
 
-所以 Schwarzschild 时空满足 \(\mathrm{Ric}=0\)。
+<div class="memobox"><strong>一句话记忆：</strong>Ricci 只看曲率的迹；K3 的 \(\chi=24\) 排除全曲率为零。</div>`,
+    2: L`<h4>第一步：标明几何背景</h4>
+Schwarzschild 是四维 Lorentz 时空，不是正定黎曼流形；这里借用同一曲率缩并思想，取几何单位 \(G=c=1\) 且 \(r>2M\)。
 
-<h4>第二步：曲率张量非零</h4>
-但 Schwarzschild 时空不是平坦的——它的 Weyl 张量非零：
+<h4>第二步：写度量以便复算</h4>
+回忆球对称静态解的线元<div class="eq">$$ds^2=-(1-2M/r)dt^2+(1-2M/r)^{-1}dr^2+r^2(d\theta^2+\sin^2\theta\,d\phi^2)$$</div>。
 
-<div class="eq">$$\mathrm{Ric}=0,\quad W\neq 0$$</div>
+<h4>第三步：写真空方程</h4>
+在无宇宙学常数的真空区域，场方程是 \(\operatorname{Ric}-\tfrac12 Sg=0\)。对它取迹：\(S-2S=-S=0\)，故 \(S=0\)。
 
-<div class="keybox">$$\boxed{\text{真空：}\mathrm{Ric}=0,\ \text{但 }W\neq 0}$$</div>
+<h4>第四步：返回 Ricci</h4>
+把 \(S=0\) 代回真空方程，得到 \(\operatorname{Ric}=0\)。这不是“曲率全零”的结论。
 
-<h4>几何含义</h4>
-Weyl 张量描述的是「潮汐力」——真空引力场里，物体不受 Ricci（体积收缩）影响，但仍被 Weyl 张量（形状拉伸压缩）作用。这就是引力波携带的曲率信息。
+<h4>第五步：给可计算的不变量</h4>
+回忆 Kretschmann 标量 \(\mathcal K=R_{abcd}R^{abcd}\)。对上面度量直接算联络与曲率可得<div class="eq">$$\mathcal K=\frac{48M^2}{r^6}$$</div>；它与坐标选择无关。
 
-<div class="memobox"><strong>关键词：</strong>真空 ⟹ \(\mathrm{Ric}=0\)，但引力（潮汐力）由 Weyl 张量承载。</div>`
+<h4>第六步：代具体数值</h4>
+取 \(M=1,r=4\)，则<div class="eq">$$\mathcal K=\frac{48}{4^6}=\frac{3}{256}>0$$</div>。因而这个点的全曲率张量非零。
+
+<h4>第七步：指出 Weyl 部分</h4>
+四维真空时 \(\operatorname{Ric}=S=0\)，Weyl 分解给 \(R=W\)。所以上一步算到的非零曲率是 Weyl 曲率。
+
+<h4>第八步：限定论断</h4>
+当 \(M=0\) 公式给 \(\mathcal K=0\)，退化为平坦 Minkowski 时空；非零质量才有本例的潮汐曲率。
+
+<div class="keybox">$$\boxed{\operatorname{Ric}=0,\quad R=W\ne0,\quad R_{abcd}R^{abcd}=48M^2/r^6}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>真空只消去 Ricci；\(48M^2/r^6\) 直接检出剩余的 Weyl 潮汐曲率。</div>`
   },
   "r31": {
     0: L`<h4>目标</h4>
@@ -2544,406 +2826,814 @@ Cheeger–Colding 证明：这样的极限空间<strong>几乎处处</strong>有
 <div class="memobox"><strong>关键词：</strong>Ricci 下界 GH 极限 = 几乎处处可微的 Lipschitz 流形（Cheeger–Colding）。</div>`
   },
   "t1": {
-    0: L`<h4>目标</h4>
-证明 \(\mathbb R^n\) 可缩——同伦等价于一个点。
+    0: L`<h4>我们要计算什么</h4>
+计算 \(\mathbb R^n\) 的收缩同伦，核对连续性、端点和强形变收缩条件。
 
-<h4>第一步：写出同伦</h4>
-恒等映射 \(\mathrm{id}:\mathbb R^n\to\mathbb R^n\) 与常值映射 \(c_0(x)=0\) 之间的同伦为
+<h4>第1步：指定收缩目标</h4>
+回忆：可缩是 \(\mathrm{id}_X\) 与某常值映射同伦。
 
-<div class="eq">$$H(x,t)=(1-t)x$$</div>
+取原点 \(0\in\mathbb R^n\)，令 \(c_0(x)=0\)。
 
-<h4>第二步：验证端点</h4>
-\(H(x,0)=x=\mathrm{id}(x)\)，\(H(x,1)=0=c_0(x)\)，且连续。
+本步得到：目标是从每点滑到原点。
 
-<div class="keybox">$$\boxed{\mathbb R^n\simeq\{\ast\},\quad \text{同伦 } H(x,t)=(1-t)x}$$</div>
+<h4>第2步：写出线性同伦</h4>
+回忆：欧氏空间可以做凸组合。
 
-<div class="memobox"><strong>关键词：</strong>可缩空间 = 同伦等价于单点，\(\mathbb R^n\) 是典型。</div>`,
-    1: L`<h4>目标</h4>
-说明 \(S^1\) 与穿孔平面 \(\mathbb R^2\setminus\{0\}\) 同伦等价。
+设 \(H(x,t)=(1-t)x+t0=(1-t)x\)。
 
-<h4>第一步：两个方向</h4>
-包含映射 \(i:S^1\hookrightarrow\mathbb R^2\setminus\{0\}\) 与径向投影
+本步得到：有候选同伦公式。
 
-<div class="eq">$$r(x)=\frac{x}{|x|}$$</div>
+<h4>第3步：核对起始时刻</h4>
+回忆：把 \(t=0\) 代入。
 
-<h4>第二步：验证同伦逆</h4>
-\(r\circ i=\mathrm{id}_{S^1}\)；\(i\circ r\simeq\mathrm{id}\)（沿射线方向收缩），同伦为 \(H(x,t)=(1-t)x+t\frac{x}{|x|}\)。
+\(H(x,0)=(1-0)x=x\)。
 
-<div class="keybox">$$\boxed{S^1\simeq\mathbb R^2\setminus\{0\}}$$</div>
+本步得到：起始映射是恒等。
 
-<div class="memobox"><strong>关键词：</strong>穿孔平面沿径向收缩到 \(S^1\)。</div>`,
-    2: L`<h4>目标</h4>
-说明 Möbius 带与 \(S^1\) 同伦等价但不同胚。
+<h4>第4步：核对结束时刻</h4>
+回忆：把 \(t=1\) 代入。
 
-<h4>第一步：沿中心线收缩</h4>
-Möbius 带可沿其中心圆<strong>形变收缩</strong>到 \(S^1\)，故两者同伦等价。
+\(H(x,1)=(1-1)x=0=c_0(x)\)。
 
-<h4>第二步：不同胚</h4>
-但 Möbius 带是<strong>带边流形</strong>，\(S^1\) 是闭流形，边界性质不同，故不同胚。这体现了「同伦等价比同胚弱」。
+本步得到：结束映射是常值。
 
-<div class="keybox">$$\boxed{\text{Möbius 带}\simeq S^1,\quad \text{但不同胚}}$$</div>
+<h4>第5步：核对固定核</h4>
+回忆：强形变收缩要求核上的点全程不动。
 
-<div class="memobox"><strong>关键词：</strong>同伦等价允许「压缩维度」，同胚不允许。</div>`
+\(H(0,t)=(1-t)0=0\) 对每个 \(t\) 成立。
+
+本步得到：原点固定。
+
+<h4>第6步：核对连续性</h4>
+回忆：标量乘法 \(\mathbb R\times\mathbb R^n\to\mathbb R^n\) 连续。
+
+\((x,t)\mapsto(1-t)x\) 是连续映射的复合。
+
+本步得到：公式确实是一段同伦。
+
+<h4>第7步：写同伦逆</h4>
+回忆：点空间到 \(\mathbb R^n\) 的映射只能选一个点。
+
+取 \(r(x)=0\) 和包含 \(i:\{0\}\hookrightarrow\mathbb R^n\)；\(ri=\mathrm{id}_{\{0\}}\)，\(ir=c_0\simeq\mathrm{id}_{\mathbb R^n}\)。
+
+本步得到：两空间同伦等价。
+
+<h4>第8步：求基本群作为检验</h4>
+回忆：基本群在同伦等价下不变，点的基本群平凡。
+
+\(\pi_1(\mathbb R^n,0)\cong\pi_1(\{0\})=\{e\}\)。
+
+本步得到：收缩公式也解释了环路为何可缩。
+
+<div class="keybox">$$\boxed{\mathbb R^n\simeq\{0\},\quad\pi_1(\mathbb R^n)=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>沿直线把每个向量乘以逐渐变小的系数。</div>`,
+    1: L`<h4>我们要计算什么</h4>
+计算穿孔平面到单位圆的径向形变收缩，逐项核对整个过程中不碰原点。
+
+<h4>第1步：确定两个映射</h4>
+回忆：径向投影把非零向量缩放到单位长度。
+
+令 \(X=\mathbb R^2\setminus\{0\}\)，\(r(x)=x/\|x\|\)，\(i:S^1\hookrightarrow X\)。
+
+本步得到：有 \(r:X\to S^1\) 与 \(i:S^1\to X\)。
+
+<h4>第2步：计算一个复合</h4>
+回忆：单位圆上的点满足 \(\
+
+u\|=1\)。|\(ri(u)=u/\|u\|=u\)。
+
+本步得到：圆上的复合严格等于恒等。
+
+<h4>第3步：构造另一复合的同伦</h4>
+回忆：两点 \(x\) 与 \(x/\
+
+x\|\) 在同一正射线上。|令 \(H(x,t)=(1-t)x+t\,x/\|x\|\)。
+
+本步得到：得到从 \(x\) 到 \(ir(x)\) 的直线公式。
+
+<h4>第4步：核对两端</h4>
+回忆：\(t=0,1\) 时凸组合退化成端点。
+
+\(H(x,0)=x\)，\(H(x,1)=x/\|x\|\)。
+
+本步得到：确实连接 \(\mathrm{id}_X\) 与 \(ir\)。
+
+<h4>第5步：证明不碰原点</h4>
+回忆：因子 \(1-t+t/\
+
+x\|\) 始终正。|\(H(x,t)=(1-t+t/\|x\|)x\)，其中 \(\|x\|>0\) 且 \(0\le t\le1\)，故 \(H(x,t)\ne0\)。
+
+本步得到：同伦始终留在 \(X\)。
+
+<h4>第6步：核对圆周固定</h4>
+回忆：若 \(u\in S^1\)，则 \(r(u)=u\)。
+
+\(H(u,t)=(1-t)u+tu=u\)。
+
+本步得到：这是强形变收缩。
+
+<h4>第7步：核对连续性</h4>
+回忆：范数和除以非零范数在 \(X\) 上连续。
+
+公式是连续函数的加法与乘法，且分母始终非零。
+
+本步得到：形变收缩合法。
+
+<h4>第8步：计算不变量</h4>
+回忆：形变收缩诱导基本群同构。
+
+\(\pi_1(X)\cong\pi_1(S^1)\cong\mathbb Z\)，一圈绕数为 \(1\)。
+
+本步得到：穿孔平面的一维洞被圆保留。
+
+<div class="keybox">$$\boxed{\mathbb R^2\setminus\{0\}\simeq S^1,\quad\pi_1\cong\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>只改半径不改方向，整条轨迹始终不经过被挖掉的原点。</div>`,
+    2: L`<h4>我们要计算什么</h4>
+把 Möbius 带写成商空间，显式收缩横向坐标并核对缝合处的公式。
+
+<h4>第1步：给出商模型</h4>
+回忆：Möbius 带可由矩形两端反向粘合。
+
+令 \(M=([0,1]\times[-1,1])/\!\sim\)，关系为 \((0,s)\sim(1,-s)\)。
+
+本步得到：扭转由端点符号反转体现。
+
+<h4>第2步：找中心圆</h4>
+回忆：横坐标 \(s=0\) 在粘合下不变。
+
+子集 \(C=\{[u,0]:u\in[0,1]\}\) 且 \([0,0]=[1,0]\)，故 \(C\cong S^1\)。
+
+本步得到：有一个圆形收缩核。
+
+<h4>第3步：定义逐时收缩</h4>
+回忆：横向纤维是区间，可按系数 \(1-t\) 缩短。
+
+设 \(H([u,s],t)=[u,(1-t)s]\)。
+
+本步得到：有候选形变。
+
+<h4>第4步：核对商映射良定且连续</h4>
+回忆：在商空间上定义映射，要检查等价代表给同一结果；商映射的连续性由兼容的原空间映射下降得到。
+
+矩形上的 \(F(u,s,t)=(u,(1-t)s)\) 连续，并满足 \(F(0,s,t)=(0,(1-t)s)\sim(1,-(1-t)s)=F(1,-s,t)\)。所以 \(H([u,s],t)=[u,(1-t)s]\) 良定。商映射与区间的乘积仍是商映射，故连续的 \(F\) 下降为连续的 \(H:M\times I\to M\)。
+
+本步得到：收缩在扭转缝合处也保持连续。
+
+<h4>第5步：核对起点</h4>
+回忆：\(1-0=1\)。
+
+\(H([u,s],0)=[u,s]\)。
+
+本步得到：初态是恒等。
+
+<h4>第6步：核对终点</h4>
+回忆：\(1-1=0\)。
+
+\(H([u,s],1)=[u,0]\in C\)。
+
+本步得到：末态落到中心圆。
+
+<h4>第7步：核对中心固定</h4>
+回忆：在 \(s=0\) 时乘任何系数仍为零。
+
+\(H([u,0],t)=[u,0]\)。
+
+本步得到：这是强形变收缩。
+
+<h4>第8步：计算基本群</h4>
+回忆：同伦等价保持基本群。
+
+\(\pi_1(M)\cong\pi_1(C)\cong\pi_1(S^1)\cong\mathbb Z\)。
+
+本步得到：扭转不改变中心一圈的基本群。
+
+<h4>第9步：区分同胚</h4>
+回忆：同胚保持局部边界性质。
+
+Möbius 带有边界点，而圆是一维流形；若二者同胚则局部维数相同，与一维和二维的局部模型不符。
+
+本步得到：同伦等价比同胚弱。
+
+<div class="keybox">$$\boxed{M\simeq S^1,\quad\pi_1(M)\cong\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>扭带沿每根横向线段缩到中点，端点反向粘合仍相容。</div>`
   },
   "t2": {
-    0: L`<h4>目标</h4>
-理解 \(\pi_1(S^1)\cong\mathbb Z\) 的几何含义。
+    0: L`<h4>我们要计算什么</h4>
+以 \(1\in S^1\) 为基点，逐个给环路分配整数绕数，并把这个整数与群运算比较。
 
-<h4>第一步：绕数</h4>
-\(S^1\) 上的每个环路同伦类由「绕数」唯一确定——正向绕一圈记 \(1\)，反向记 \(-1\)。
+<h4>第1步：先写下覆盖映射</h4>
+回忆：指数函数的周期为整数。
 
-<h4>第二步：群结构</h4>
-绕数相加对应环路拼接，故
+取 \(p:\mathbb R\to S^1\)，\(p(u)=e^{2\pi i u}\)。每个短于一周的开圆弧都有一段实区间作为逆像分支，所以它是覆叠映射。
 
-<div class="keybox">$$\boxed{\pi_1(S^1)\cong\mathbb Z}$$</div>
+本步得到：局部上可把圆上的角度连续选为实数。
 
-生成元是绕一圈的环路，对应整数 \(1\)。
+<h4>第2步：提升一条基点环路</h4>
+回忆：覆叠的道路提升定理在指定起点后给唯一提升。
 
-<div class="memobox"><strong>关键词：</strong>\(\pi_1(S^1)=\mathbb Z\)，绕数刻画同伦类。</div>`,
-    1: L`<h4>目标</h4>
-高维球面 \(S^n\)（\(n\ge 2\)）的基本群平凡。
+设 \(\gamma(0)=\gamma(1)=1\)。将参数区间细分到每段像落在一个小圆弧，再逐段取 \(p\) 的局部逆，得到唯一 \(\widetilde\gamma:I\to\mathbb R\) 且 \(\widetilde\gamma(0)=0\)。
 
-<h4>第一步：环路可收缩</h4>
-\(n\ge 2\) 时，\(S^n\) 上的任何环路都能连续缩为一点（高维有足够的「空间」避开障碍）。
+本步得到：环路变成从零出发的实数道路。
 
-<h4>第二步：基本群平凡</h4>
+<h4>第3步：证明终点是整数</h4>
+回忆：\(p^{-1}(1)=\mathbb Z\)。
 
-<div class="keybox">$$\boxed{\pi_1(S^n)=\{e\},\qquad n\ge 2}$$</div>
+因为 \(p(\widetilde\gamma(1))=\gamma(1)=1\)，必有 \(\widetilde\gamma(1)=n\in\mathbb Z\)。把这个 \(n\) 定义为 \(\gamma\) 的绕数。
 
-<div class="memobox"><strong>关键词：</strong>高维球面单连通，基本群平凡。</div>`,
-    2: L`<h4>目标</h4>
-理解环面 \(T^2\) 的基本群。
+本步得到：每条环路有一个整数标签。
 
-<h4>第一步：两个生成环</h4>
-\(T^2\) 有赤道方向与经线方向两个独立环路，记生成元 \(a,b\)。
+<h4>第4步：核对同伦不改变绕数</h4>
+回忆：覆叠的同伦提升定理把保持基点的环路同伦提升到实数线。
 
-<h4>第二步：群结构</h4>
-两个方向独立且可交换，故
+若 \(H(s,t)\) 把 \(\gamma_0\) 变成 \(\gamma_1\)，提升时让 \(\widetilde H(0,t)=0\)。连续函数 \(t\mapsto\widetilde H(1,t)\) 取值于离散集 \(\mathbb Z\)，所以恒定；两个绕数相同。
 
-<div class="keybox">$$\boxed{\pi_1(T^2)\cong\mathbb Z\times\mathbb Z}$$</div>
+本步得到：绕数只依赖环路同伦类。
 
-<div class="memobox"><strong>关键词：</strong>\(\pi_1(T^2)=\mathbb Z^2\)，由两个独立环生成。</div>`
+<h4>第5步：构造每个整数的代表</h4>
+回忆：\(e^{2\pi i n}=1\) 对每个整数 \(n\) 成立。
+
+令 \(\gamma_n(t)=e^{2\pi i nt}\)。其从零开始的提升是 \(\widetilde\gamma_n(t)=nt\)，终点为 \(n\)。
+
+本步得到：每个整数确实出现。
+
+<h4>第6步：证明同绕数环路同伦</h4>
+回忆：实数线是凸的，两个同端点的道路可线性插值。
+
+若 \(\widetilde\gamma(0)=0\)、\(\widetilde\gamma(1)=n\)，令 \(K(s,t)=(1-t)\widetilde\gamma(s)+t(ns)\)。在 \(s=0,1\) 时分别恒为 \(0,n\)；\(pK\) 因此是固定基点的环路同伦。
+
+本步得到：相同绕数只对应一个同伦类。
+
+<h4>第7步：计算拼接的提升</h4>
+回忆：\(p(u+n)=p(u)\) 对整数 \(n\) 成立。
+
+若 \(\alpha,\beta\) 的提升终点分别为 \(m,n\)，则 \(\alpha*\beta\) 的提升前半段走 \(\widetilde\alpha(2t)\)，后半段走 \(m+\widetilde\beta(2t-1)\)；两半在 \(t=1/2\) 都等于 \(m\)。
+
+本步得到：拼接后的提升终点为 (m+n)。
+
+<h4>第8步：把群运算换成加法</h4>
+回忆：基本群运算由环路拼接定义。
+
+绕数映射 \(w([\gamma])=\widetilde\gamma(1)\) 满足 <div class="eq">$$w([\alpha][\beta])=w([\alpha])+w([\beta])=m+n.$$</div> 它既是同态，又由前两步知双射。
+
+本步得到：圆的基本群就是整数加法群。
+
+<div class="keybox">$$\boxed{\pi_1(S^1,1)\cong(\mathbb Z,+)}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>把圆上的环路提到实数线，提升道路的整数终点就是绕数。</div>`,
+    1: L`<h4>我们要计算什么</h4>
+对 \(n\ge2\)，计算球面 \(S^n\) 的基本群；关键是把球面分成两个可缩开集。
+
+<h4>第1步：固定基点与两极</h4>
+回忆：球面 \(S^n\subset\mathbb R^{n+1}\) 有北极 \(N\) 和南极 \(S\)。
+
+在赤道选基点 \(x_0\)。令 \(U=S^n\setminus\{N\}\)，\(V=S^n\setminus\{S\}\)。两者均含 \(x_0\)。
+
+本步得到：得到了一个带共同基点的开覆盖。
+
+<h4>第2步：检查并集</h4>
+回忆：南极与北极是不同的点。
+
+任一点最多等于其中一个极点，故至少落在 \(U\) 或 \(V\)：<div class="eq">$$S^n=U\cup V.$$</div>
+
+本步得到：可使用开覆盖的 van Kampen 定理。
+
+<h4>第3步：把第一个开集识别为欧氏空间</h4>
+回忆：从北极作立体投影给 \(S^n\setminus\{N\}\) 到 \(\mathbb R^n\) 的同胚。
+
+设 \(h_N:U\to\mathbb R^n\) 为立体投影。欧氏空间以任一点 \(h_N(x_0)\) 为中心线性收缩，所以 \(U\) 可缩。
+
+本步得到：(pi_1(U,x_0)={e})。
+
+<h4>第4步：把第二个开集也收缩</h4>
+回忆：从南极作立体投影同样是同胚。
+
+\(h_S:V\to\mathbb R^n\) 把 \(V\) 识别为欧氏空间；用 \((1-t)y+t h_S(x_0)\) 收缩每条环路。
+
+本步得到：(pi_1(V,x_0)={e})。
+
+<h4>第5步：计算交集的形状</h4>
+回忆：去掉两极后，赤道方向与高度可分别记录。
+
+把 \(x\in U\cap V\) 写成 \((v,z)\in\mathbb R^n\times(-1,1)\)，其中 \(\|v\|^2+z^2=1\)。因为 \(v\ne0\)，可用 \((v/\|v\|,z)\) 给出 <div class="eq">$$U\cap V\cong S^{n-1}\times(-1,1).$$</div>
+
+本步得到：交集的道路连通性可从球面维数读出。
+
+<h4>第6步：核对交集道路连通</h4>
+回忆：\(S^k\) 在 \(k\ge1\) 时道路连通，区间也道路连通。
+
+这里 \(n\ge2\)，故 \(n-1\ge1\)；\(S^{n-1}\times(-1,1)\) 道路连通。特别是 \(n=2\) 时交集像一个环带，虽然它本身有非平凡环路，却不影响下面的商群。
+
+本步得到：van Kampen 的交集条件满足。
+
+<h4>第7步：代入融合自由积</h4>
+回忆：van Kampen 把 \(\pi_1(U\cup V)\) 写成两群自由积再加交集关系。
+
+两边群都平凡，故自由积仍平凡：<div class="eq">$$\pi_1(U,x_0)*\pi_1(V,x_0)=\{e\}*\{e\}=\{e\}.$$</div>
+
+本步得到：商去任何关系仍是平凡群。
+
+<h4>第8步：写出计算结果</h4>
+回忆：平凡群只有单位元。
+
+于是 <div class="eq">$$\pi_1(S^n,x_0)\cong\{e\},\qquad n\ge2.$$</div> 这表示球面上的任一基点环路都可收缩；论证并未误把交集当作可缩。
+
+本步得到：所有高维球面的基本群计算完成。
+
+<div class="keybox">$$\boxed{n\ge2\Longrightarrow\pi_1(S^n)=\{e\}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>用两个各自可缩的“去掉一极”开集覆盖球面；它们的自由积只有单位元。</div>`,
+    2: L`<h4>我们要计算什么</h4>
+把环面写成两个圆的乘积，计算经线、纬线环路组成的整数对。
+
+<h4>第1步：写出空间模型</h4>
+回忆：环面有乘积模型 \(T^2=S^1\times S^1\)。
+
+取基点 \((1,1)\)。一个环路 \(\gamma(t)\) 可唯一写成 \((\alpha(t),\beta(t))\)，两坐标各为圆上的基点环路。
+
+本步得到：环面环路由两个圆环路组成。
+
+<h4>第2步：确定第一个坐标的不变量</h4>
+回忆：圆的基本群由绕数给出 \(\pi_1(S^1,1)\cong\mathbb Z\)。
+
+把 \(\alpha\) 提升到从 \(0\) 起的实数道路，终点记 \(m\in\mathbb Z\)。
+
+本步得到：第一个方向得到整数 (m)。
+
+<h4>第3步：确定第二个坐标的不变量</h4>
+回忆：第二个圆因子也有相同覆盖映射。
+
+把 \(\beta\) 提升到从 \(0\) 起的实数道路，终点记 \(n\in\mathbb Z\)。
+
+本步得到：第二个方向得到整数 (n)。
+
+<h4>第4步：定义总绕数映射</h4>
+回忆：乘积公式由两个投影诱导。
+
+定义 <div class="eq">$$W:\pi_1(T^2,(1,1))\longrightarrow\mathbb Z^2,\quad W[\gamma]=(m,n).$$</div> 两个坐标同伦时绕数各不变，所以 \(W\) 良定义。
+
+本步得到：得到一个明确的候选同构。
+
+<h4>第5步：计算乘法</h4>
+回忆：圆上拼接使绕数相加。
+
+若 \(W[\gamma]=(m,n)\)、\(W[\delta]=(p,q)\)，则 <div class="eq">$$W([\gamma][\delta])=(m+p,n+q).$$</div>
+
+本步得到：(W) 是群同态。
+
+<h4>第6步：构造每个整数对的环路</h4>
+回忆：\(e^{2\pi i kt}\) 绕圆 \(k\) 圈。
+
+对任意 \((m,n)\in\mathbb Z^2\)，取 \(\gamma_{m,n}(t)=(e^{2\pi i mt},e^{2\pi i nt})\)。
+
+本步得到：(W[gamma_{m,n}]=(m,n))，所以满射。
+
+<h4>第7步：证明没有额外环路类</h4>
+回忆：乘积同伦可由两个坐标同伦逐点配对。
+
+若两个环面的环路有同一 \((m,n)\)，则各坐标圆环路分别同伦；把两个同伦配成 \((H_1(s,t),H_2(s,t))\)，得到环面的基点同伦。
+
+本步得到：(W) 也是单射。
+
+<h4>第8步：指出两个生成元</h4>
+回忆：\(\mathbb Z^2\) 由 \((1,0),(0,1)\) 生成且交换。
+
+环路 \(a(t)=(e^{2\pi it},1)\)、\(b(t)=(1,e^{2\pi it})\) 分别对应 \((1,0),(0,1)\)。每类唯一写成 \([a]^m[b]^n\)。
+
+本步得到：环面基本群的群结构被具体识别。
+
+<div class="keybox">$$\boxed{\pi_1(T^2,(1,1))\cong\mathbb Z\times\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>环面有两个独立绕数，经线记一个整数，纬线再记一个整数。</div>`
   },
   "t3": {
-    0: L`<h4>目标</h4>
-计算有限图的基本群。
+    0: L`<h4>我们要计算什么</h4>
+对含 \(V\) 个顶点、\(E\) 条边的有限连通图 \(G\)，构造自由群生成元并算出秩。
 
-<h4>第一步：图是一维复形</h4>
-有限连通图 \(G\) 有 \(V\) 个顶点、\(E\) 条边，其 Euler 示性数 \(\chi(G)=V-E\)。
+<h4>第1步：选一棵生成树</h4>
+回忆：有限连通图存在包含全部顶点且无圈的生成树 \(T\)。
 
-<h4>第二步：基本群是自由群</h4>
-把生成树收缩掉，剩下的每条「多余边」贡献一个自由生成元，故
+固定根顶点 \(x_0\)。对每个顶点 \(v\)，树中有唯一的根到 \(v\) 的边路径，记作 \(p_v\)。
 
-<div class="keybox">$$\boxed{\pi_1(G)\cong F_{1-\chi(G)}}$$</div>
+本步得到：所有非树边都可接回同一基点。
 
-秩为 \(E-V+1=1-\chi(G)\)。
+<h4>第2步：计算树的边数</h4>
+回忆：一棵有 \(V\) 个顶点的树恰有 \(V-1\) 条边。
 
-<div class="memobox"><strong>关键词：</strong>图的基本群是自由群，秩 = 边数 − 顶点数 + 1。</div>`,
-    1: L`<h4>目标</h4>
-用 van Kampen 定理计算 \(\pi_1(T^2)\)。
+可从单顶点树开始，每添一个新顶点必须恰添一条边；重复 \(V-1\) 次。
 
-<h4>第一步：粘合正方形</h4>
-环面由正方形对边粘合得到，生成元 \(a\)（水平边）、\(b\)（竖直边）。
+本步得到：(E(T)=V-1)。
 
-<h4>第二步：关系</h4>
-沿边界的粘合给出关系 \(aba^{-1}b^{-1}=1\)，故
+<h4>第3步：数出非树边</h4>
+回忆：图的全部边分成树边与非树边。
 
-<div class="keybox">$$\boxed{\pi_1(T^2)\cong\langle a,b\mid aba^{-1}b^{-1}=1\rangle\cong\mathbb Z\times\mathbb Z}$$</div>
+因此非树边数为 <div class="eq">$$r=E-(V-1)=E-V+1.$$</div>
 
-<div class="memobox"><strong>关键词：</strong>环面基本群 = 两个交换生成元，关系是交换子平凡。</div>`,
-    2: L`<h4>目标</h4>
-计算 Klein 瓶的基本群。
+本步得到：候选自由生成元应有 (r) 个。
 
-<h4>第一步：粘合与关系</h4>
-Klein 瓶由正方形对边粘合，但一条边反向，给出关系
+<h4>第4步：对每条非树边造环路</h4>
+回忆：边路径可按首尾拼接，反向路径记为上横线。
 
-<div class="eq">$$aba^{-1}b=1$$</div>
+若非树有向边 \(e:u\to v\)，令 \(\ell_e=p_u*e*\bar p_v\)。它从 \(x_0\) 出发又回到 \(x_0\)。
 
-<h4>第二步：非交换群</h4>
+本步得到：每条非树边给出一个基点环路。
 
-<div class="keybox">$$\boxed{\pi_1(K)\cong\langle a,b\mid aba^{-1}b=1\rangle}$$</div>
+<h4>第5步：把树收缩为一点</h4>
+回忆：树可缩，且它是图的 CW 子复形。
 
-这个群<strong>非交换</strong>，与环面 \(\mathbb Z^2\) 本质不同。
+对 CW 复形中的可缩子复形，商映射 \(G\to G/T\) 是同伦等价；直观上树内道路都被压成同一个顶点，非树边两端也随之相接。
 
-<div class="memobox"><strong>关键词：</strong>Klein 瓶基本群非交换，区别于环面的 \(\mathbb Z^2\)。</div>`
+本步得到：计算可转到商图。
+
+<h4>第6步：识别商图的形状</h4>
+回忆：非树边在商空间里成为以同一点为两端的圆。
+
+共有 \(r\) 条非树边，故 <div class="eq">$$G/T\cong\bigvee_{j=1}^{r}S^1.$$</div> 原来的 \(\ell_e\) 正好对应第 \(e\) 个圆的正向一圈。
+
+本步得到：商图是 (r) 个圆的楔和。
+
+<h4>第7步：计算楔和的基本群</h4>
+回忆：van Kampen 对两个圆的楔和给自由积；逐个添加圆可归纳。
+
+每个圆的基本群为 \(\mathbb Z\)，所以 <div class="eq">$$\pi_1(G/T,x_0)\cong\underbrace{\mathbb Z*\cdots*\mathbb Z}_{r\text{ 个}}=F_r.$$</div>
+
+本步得到：([ell_e]) 自由生成该群。
+
+<h4>第8步：写成欧拉示性数</h4>
+回忆：图的欧拉示性数按细胞数定义为 \(\chi(G)=V-E\)。
+
+把 \(r=E-V+1\) 改写为 \(r=1-\chi(G)\)。因此 <div class="eq">$$\pi_1(G,x_0)\cong F_{1-\chi(G)}.$$</div>
+
+本步得到：得到了原题的通式。
+
+<h4>第9步：做一组具体数值核对</h4>
+回忆：一棵生成树总含 \(V-1\) 边。
+
+例如四个顶点的正方形再加一条对角线有 \(V=4,E=5\)，生成树用三条边，余下两条边给 \(F_2\)。相应 \(\chi=4-5=-1\)，\(1-\chi=2\)。
+
+本步得到：公式在具体图上算出自由群 (F_2)。
+
+<div class="keybox">$$\boxed{\pi_1(G)\cong F_{E-V+1}=F_{1-\chi(G)}}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>树边只负责连通；每多一条非树边，就多一个独立自由生成元。</div>`,
+    1: L`<h4>我们要计算什么</h4>
+沿正方形对边粘合的环面模型，算出二维胞腔给两个圆环路施加的关系。
+
+<h4>第1步：选胞腔模型</h4>
+回忆：把正方形的相对边同向粘合得到 \(T^2\)。
+
+四个顶点粘成一个零胞腔，两组边粘成两个一胞腔，内部为一个二胞腔；记两条基点环路为 \(a,b\)。
+
+本步得到：一骨架是 (S^1ee S^1)。
+
+<h4>第2步：先算一骨架的群</h4>
+回忆：两个圆的楔和基本群是两个无限循环群的自由积。
+
+<div class="eq">$$\pi_1((T^2)^{(1)})\cong\langle a,b\rangle=F_2.$$</div> 这一步还没有使用正方形内部。
+
+本步得到：先得到两个完全自由的生成元。
+
+<h4>第3步：沿方框读边界词</h4>
+回忆：有向边逆向走记为群元素的逆。
+
+依次沿正方形边界走，读到 \(a,b,a^{-1},b^{-1}\)，故附着环路代表 <div class="eq">$$[a,b]=aba^{-1}b^{-1}.$$</div>
+
+本步得到：二胞腔的附着词是交换子。
+
+<h4>第4步：施加二胞腔关系</h4>
+回忆：附着一个二胞腔会使其边界环路在整体空间中可缩。
+
+van Kampen 的附胞腔形式把附着词的正规闭包商掉：<div class="eq">$$\pi_1(T^2)\cong\langle a,b\mid aba^{-1}b^{-1}=1\rangle.$$</div>
+
+本步得到：得到明确的群表示。
+
+<h4>第5步：化简关系</h4>
+回忆：在任意群中 \(aba^{-1}b^{-1}=1\) 等价于 \(ab=ba\)。
+
+原式右乘 \(b\)，再右乘 \(a\)，得到 \(ab=ba\)；反过来由 \(ab=ba\) 也可把交换子约成单位元。
+
+本步得到：两个生成元现在交换。
+
+<h4>第6步：把任意词整理为标准形</h4>
+回忆：\(a\) 与 \(b\) 交换时可交换相邻字母次序。
+
+任意由 \(a^{\pm1},b^{\pm1}\) 组成的词都可将所有 \(a\) 移到左边、\(b\) 移到右边，约去逆元后写成 \(a^m b^n\)。
+
+本步得到：群中每个元素至多由一个整数对描述。
+
+<h4>第7步：构造到整数对的同态</h4>
+回忆：\(\mathbb Z^2\) 是交换群，所以交换子在其中为零。
+
+令 \(\phi(a)=(1,0)\)、\(\phi(b)=(0,1)\)。关系在 \(\mathbb Z^2\) 成立，因此群表示给出同态 \(\phi:\pi_1(T^2)\to\mathbb Z^2\)。
+
+本步得到：(phi(a^m b^n)=(m,n))。
+
+<h4>第8步：核对双射并给数值例</h4>
+回忆：标准形的整数对可直接读回群元素。
+
+\(\phi\) 满射；若 \(\phi(a^m b^n)=(0,0)\)，则 \(m=n=0\)，所以核平凡。比如 \(a^2b^{-3}\) 对应 \((2,-3)\)，确实有两个独立绕数。
+
+本步得到：环面基本群同构于 (mathbb Z^2)。
+
+<div class="keybox">$$\boxed{\pi_1(T^2)\cong\langle a,b\mid[a,b]=1\rangle\cong\mathbb Z^2}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>方形边界贴上去使交换子可缩，于是两个绕数可以自由相加。</div>`,
+    2: L`<h4>我们要计算什么</h4>
+用 Klein 瓶的正方形粘合词计算其基本群，并把群表示识别为一个具体半直积。
+
+<h4>第1步：写出胞腔分解</h4>
+回忆：Klein 瓶由正方形的一组对边同向、另一组反向粘合。
+
+粘合后得到一个零胞腔、两个一胞腔 \(a,b\)、一个二胞腔。它的一骨架仍是两个圆的楔和。
+
+本步得到：一骨架的基本群是 (F(a,b))。
+
+<h4>第2步：读出附着词</h4>
+回忆：逆向经过一条有向边记为逆元。
+
+按选定边的方向沿正方形边界读到 \(a,b,a^{-1},b\)，故边界词是 <div class="eq">$$aba^{-1}b.$$</div>
+
+本步得到：唯一的二胞腔给出这个词的关系。
+
+<h4>第3步：得到群表示</h4>
+回忆：二胞腔的边界在贴上圆盘后可缩。
+
+把边界词的正规闭包商掉：<div class="eq">$$\pi_1(K)\cong\langle a,b\mid aba^{-1}b=1\rangle.$$</div>
+
+本步得到：原题要求的群表示得到。
+
+<h4>第4步：改写成作用关系</h4>
+回忆：群等式可在两侧乘以逆元。
+
+从 \(aba^{-1}b=1\) 右乘 \(b^{-1}\)，得到 <div class="eq">$$aba^{-1}=b^{-1}.$$</div> 也就是说走一圈 \(a\) 会把 \(b\) 的方向倒过来。
+
+本步得到：识别出半直积的反转作用。
+
+<h4>第5步：构造具体的整数对群</h4>
+回忆：把 \(\mathbb Z\) 对另一份 \(\mathbb Z\) 的作用取为 \(n\mapsto(-1)^m n\)。
+
+在集合 \(\mathbb Z^2\) 上定义 <div class="eq">$$(m,n)(m',n')=(m+m',\ n+(-1)^m n').$$</div> 这个乘法由半直积定义满足结合律，单位元是 \((0,0)\)。
+
+本步得到：有可直接运算的候选群。
+
+<h4>第6步：检查生成元满足关系</h4>
+回忆：在上述乘法下，\(a=(1,0)\)、\(b=(0,1)\)。
+
+先算 \(ab=(1,-1)\)，再乘 \(a^{-1}=(-1,0)\) 得 \(aba^{-1}=(0,-1)=b^{-1}\)。
+
+本步得到：群表示映到该整数对群。
+
+<h4>第7步：证明这个模型没有多余关系</h4>
+回忆：关系 \(aba^{-1}=b^{-1}\) 让 \(a^m b^{n'}=b^{(-1)^m n'}a^m\)。
+
+每个词可整理为 \(b^n a^m\)；映到整数对群后它恰是 \((m,n)\)。反向令 \((m,n)\mapsto b^n a^m\)，按上式计算可见它保乘法，并与前一个映射互逆。
+
+本步得到：基本群确实是 (mathbb Zltimes_{-1}mathbb Z)。
+
+<h4>第8步：具体比较交换次序</h4>
+回忆：群元素相等必须有相同的整数对坐标。
+
+在模型中 <div class="eq">$$ab=(1,-1),\qquad ba=(1,1).$$</div> 因为 \(-1\ne1\)，所以 \(ab\ne ba\)。
+
+本步得到：Klein 瓶基本群是非交换群。
+
+<h4>第9步：顺便计算其阿贝尔化</h4>
+回忆：阿贝尔化把所有生成元强制交换。
+
+将关系 \(aba^{-1}b=1\) 写成加法得 \(a+b-a+b=2b=0\)；\(a\) 没有新的有限阶关系。因此 <div class="eq">$$H_1(K;\mathbb Z)\cong\pi_1(K)_{\mathrm{ab}}\cong\mathbb Z\oplus\mathbb Z/2.$$</div>
+
+本步得到：也得到一个可检验的具体同调群。
+
+<div class="keybox">$$\boxed{\pi_1(K)\cong\langle a,b\mid aba^{-1}b=1\rangle\cong\mathbb Z\ltimes_{-1}\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>沿 (a) 方向绕一圈会把 (b) 方向反转，所以群不交换。</div>`
   },
   "t4": {
-    0: L`<h4>目标</h4>
-认识万有覆叠 \(\mathbb R\to S^1\)。
-
-<h4>第一步：覆叠映射</h4>
-
-<div class="eq">$$p(t)=e^{2\pi it}$$</div>
-
-<h4>第二步：纤维与变换群</h4>
-纤维 \(p^{-1}(1)=\mathbb Z\)，覆叠变换群是平移 \(\mathbb Z\)。\(\mathbb R\) 单连通，故是万有覆叠。
-
-<div class="keybox">$$\boxed{\mathbb R\xrightarrow{e^{2\pi it}}S^1,\quad \text{万有覆叠}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(\mathbb R\to S^1\) 是万有覆叠，纤维 \(\mathbb Z\)。</div>`,
-    1: L`<h4>目标</h4>
-认识 \(S^n\to RP^n\) 的二重覆叠。
-
-<h4>第一步：对径等同</h4>
-\(RP^n=S^n/\{\pm 1\}\)，商映射 \(p(x)=[x]\) 是对径等同。
-
-<h4>第二步：二重覆叠</h4>
-每点纤维有两个点，覆叠变换群为 \(\mathbb Z/2\)。
-
-<div class="keybox">$$\boxed{S^n\xrightarrow{\text{对径}}RP^n,\quad \text{二重覆叠},\ \text{变换群}\ \mathbb Z_2}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(S^n\to RP^n\) 是二重覆叠，变换群 \(\mathbb Z_2\)。</div>`,
-    2: L`<h4>目标</h4>
-理解 \(n\) 重覆叠 \(S^1\to S^1\)。
-
-<h4>第一步：映射</h4>
-
-<div class="eq">$$p(z)=z^n$$</div>
-
-<h4>第二步：纤维与诱导同态</h4>
-纤维有 \(n\) 个点。诱导同态 \(p_*:\pi_1(S^1)\cong\mathbb Z\to\mathbb Z\) 是乘 \(n\)：
-
-<div class="keybox">$$\boxed{p_*(k)=nk,\qquad p_*(\pi_1(S^1))=n\mathbb Z}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(z\mapsto z^n\) 诱导乘 \(n\) 的同态。</div>`
+    0: L`<h4>我们要做什么</h4>验证 \(p:\mathbb R\to S^1\)、\(p(t)=e^{2\pi it}\) 是万有覆叠，并把纤维、道路提升和覆叠变换群全部算出来。<h4>第1步：先验证映射落在圆周</h4>回忆：复数 eⁱθ 的模恒为 1。<div class="eq">$$|p(t)|=|e^{2\pi it}|=1.$$</div>因此 p 的值确实属于 S¹。本步得到：映射的定义域和值域正确。<h4>第2步：求一个点的全部原像</h4>回忆：e²πⁱᵗ=1 当且仅当 t 是整数。<div class="eq">$$p^{-1}(1)=\{k:k\in\mathbb Z\}=\mathbb Z.$$</div>一般点 e²πⁱᵃ 的纤维是 a+Z。本步得到：每条纤维是离散的整数平移集。<h4>第3步：选择不绕满一圈的小圆弧</h4>回忆：去掉圆周上一点后可以连续选择辐角。对 x=e²πⁱᵃ，取长度小于 1 的实区间 (a−ε,a+ε)，并令 U=p((a−ε,a+ε))，其中 0<ε<1/2。本步得到：U 是一个不会跨越整圈的开圆弧。<h4>第4步：写出 U 的全部覆盖片</h4>回忆：p(t+k)=p(t) 对每个整数 k 成立。<div class="eq">$$p^{-1}(U)=\coprod_{k\in\mathbb Z}(a-\varepsilon+k,a+\varepsilon+k).$$</div>这些区间两两不交。本步得到：逆像已经分裂成离散层。<h4>第5步：验证每张片同胚到 U</h4>回忆：在长度小于 1 的区间上，指数映射不可能相差一个非零整数。p 在每个区间上连续、双射；其逆由该圆弧上的连续辐角除以 2π 给出。本步得到：p 是覆叠映射。<h4>第6步：提升标准生成环路</h4>回忆：标准正向环路是 \(\gamma(s)=e^{2\pi is}\)。<div class="eq">$$\widetilde\gamma(s)=s,\qquad p(\widetilde\gamma(s))=e^{2\pi is}=\gamma(s).$$</div>从 0 出发的提升终点是 1。本步得到：绕一圈对应在覆盖线上上升一层。<h4>第7步：证明覆盖空间单连通</h4>回忆：实直线可缩到 0。同伦 \(H(t,u)=(1-u)t\) 把 R 的恒等映射收缩到常值映射，所以 π₁(R)=0。本步得到：这是一个单连通覆叠，因此是万有覆叠。<h4>第8步：构造所有整数平移</h4>回忆：平移不改变指数函数。<div class="eq">$$T_m(t)=t+m,\qquad p(T_m(t))=e^{2\pi i(t+m)}=p(t),\quad m\in\mathbb Z.$$</div>所以每个 Tₘ 都是覆叠变换。本步得到：得到一个 Z 作用。<h4>第9步：证明没有别的覆叠变换</h4>回忆：覆叠变换由一个点的像唯一决定。若 F 是覆叠变换，则 F(0)∈p⁻¹(1)=Z，记 F(0)=m。F 与 Tₘ 都是恒等底映射的提升，并在 0 处相同；道路提升唯一性给 F=Tₘ。本步得到：所有覆叠变换恰是整数平移。<h4>第10步：计算群运算</h4>回忆：平移复合就是位移量相加。<div class="eq">$$T_m\circ T_n=T_{m+n},\qquad T_m^{-1}=T_{-m}.$$</div>因此覆叠变换群与加法群 Z 同构。本步得到：例子的全部结构算完。<div class="keybox">$$\boxed{p(t)=e^{2\pi it}:\mathbb R\to S^1\text{ 是万有覆叠},\quad\operatorname{Deck}(p)\cong\mathbb Z}$$</div><div class="memobox"><strong>一句话记忆：</strong>圆周每绕一圈，实线提升就平移一个整数；整数平移正是全部覆叠对称。</div>`,
+    1: L`<h4>我们要做什么</h4>验证对径商映射 \(p:S^n\to\mathbb{RP}^n\)、\(p(x)=[x]\) 是二重覆叠，并算出其覆叠变换群。<h4>第1步：回忆射影空间的点</h4>回忆：RPⁿ 的一个点是一条过原点的实直线。<div class="eq">$$[x]=\{\lambda x:\lambda\ne0\},\qquad x\in S^n.$$</div>单位球面上一条直线恰交于 x 与 −x。本步得到：每个射影点有两个球面代表。<h4>第2步：直接求纤维</h4>回忆：p(y)=[x] 且 |y|=1，意味着 y 是 x 所在直线上的单位向量。<div class="eq">$$p^{-1}([x])=\{x,-x\}.$$</div>两个点不同，因为球面不含零向量。本步得到：覆叠次数候选为 2。<h4>第3步：选择不与对径像相交的小邻域</h4>回忆：球面是 Hausdorff，x 与 −x 有不交开邻域。取足够小的球面测地球 V 围住 x，使 V∩(−V)=∅；令 U=p(V)。本步得到：两张候选覆盖片 V 与 −V 已分开。<h4>第4步：计算 U 的逆像</h4>回忆：若一条射影直线在 U 中，它在 V 中有一个单位代表，另一个代表就在 −V。<div class="eq">$$p^{-1}(U)=V\sqcup(-V).$$</div>不会有第三个单位代表。本步得到：逆像恰分成两张片。<h4>第5步：验证局部同胚</h4>回忆：在 V 内不可能同时出现 y 与 −y。故 p|V 是连续双射到 U，局部商图给出连续逆；p|−V 同理。本步得到：p 是二重覆叠。<h4>第6步：写出非平凡覆叠变换</h4>回忆：对径映射 A(x)=−x 不改变所张成的直线。<div class="eq">$$p(A(x))=[-x]=[x]=p(x),\qquad A^2=\mathrm{id}.$$</div>A 交换每条纤维中的两个点。本步得到：得到一个阶为 2 的覆叠变换。<h4>第7步：证明覆叠变换只有两个</h4>回忆：在连通覆盖空间上，覆叠变换由一点的像决定。固定 x₀。任一 F 必把 x₀ 送到纤维 {x₀,−x₀}。若送到 x₀，唯一性给 F=id；若送到 −x₀，唯一性给 F=A。本步得到：Deck(p)={id,A}。<h4>第8步：识别群结构</h4>回忆：A²=id 且 A≠id。<div class="eq">$$\operatorname{Deck}(p)\cong\mathbb Z/2\mathbb Z.$$</div>生成元由对径变换给出。本步得到：覆叠群计算完成。<h4>第9步：判断何时是万有覆叠</h4>回忆：Sⁿ 在 n≥2 时单连通，而 S¹ 不单连通。所以 n≥2 时该二重覆叠还是 RPⁿ 的万有覆叠；n=1 时 RP¹≅S¹，此映射只是一个二重中间覆叠。本步得到：避免把所有维数混为一谈。<h4>第10步：读出基本群</h4>回忆：万有覆叠的正规覆叠变换群同构于底空间基本群。<div class="eq">$$n\ge2\quad\Longrightarrow\quad\pi_1(\mathbb{RP}^n)\cong\mathbb Z/2.$$</div>这与提升一圈后从 x 到 −x 的图像一致。本步得到：得到经典基本群结果。<div class="keybox">$$\boxed{p:S^n\to\mathbb{RP}^n\text{ 是二重覆叠},\quad\operatorname{Deck}(p)\cong\mathbb Z/2}$$</div><div class="memobox"><strong>一句话记忆：</strong>一条实直线在单位球面上只有正负两个代表；对径变换交换它们。</div>`,
+    2: L`<h4>我们要做什么</h4>对 \(p_n:S^1\to S^1\)、\(p_n(z)=z^n\) 逐项验证 n 重覆叠，并计算它在基本群上把 1 送到哪里。<h4>第1步：固定正整数 n</h4>回忆：n 重覆叠通常取 n≥1；n=0 时 z⁰ 为常值映射，不是覆叠。以下假设 n≥1。本步得到：参数范围先说明清楚。<h4>第2步：求任意点的纤维</h4>回忆：若 w=eⁱθ，则 zⁿ=w 的解是 n 个等间隔的 n 次根。<div class="eq">$$p_n^{-1}(e^{i\theta})=\left\{e^{i(\theta+2\pi k)/n}:k=0,1,\ldots,n-1\right\}.$$</div>这些根两两不同。本步得到：每条纤维恰有 n 个点。<h4>第3步：选择短圆弧</h4>回忆：要让 n 次方在一张片内单射，辐角宽度必须小于 2π/n。在 w 周围取不跨越选定切口的开圆弧 U，并选连续辐角 θ(u)。本步得到：U 上可以连续选择 n 个根。<h4>第4步：写出 n 个局部逆</h4>回忆：每个 k 给出一支 n 次根。<div class="eq">$$s_k(u)=\exp\!\left(\frac{i(\theta(u)+2\pi k)}{n}\right),\qquad k=0,\ldots,n-1.$$</div>代入得 pₙ(sₖ(u))=u。本步得到：得到 n 个连续局部截面。<h4>第5步：验证覆盖片互不相交</h4>回忆：不同 k 的辐角相差 2π/n，而 U 足够短。令 Vₖ=sₖ(U)，则 Vₖ 两两不交，且 pₙ|Vₖ 的逆正是 sₖ。本步得到：局部逆像分裂为 n 张片。<h4>第6步：得出 n 重覆叠</h4>回忆：所有原像都由 n 个根公式列出。<div class="eq">$$p_n^{-1}(U)=V_0\sqcup\cdots\sqcup V_{n-1}.$$</div>每张片同胚到 U。本步得到：pₙ 是 n 重覆叠。<h4>第7步：选基本群生成元</h4>回忆：π₁(S¹,1)≅Z，正向绕一圈的环路代表 1。<div class="eq">$$\alpha(t)=e^{2\pi it},\qquad[\alpha]=1.$$</div>定义域和目标域都使用这一生成元。本步得到：诱导同态可以在一个生成元上计算。<h4>第8步：把生成环路代入 pₙ</h4>回忆：复数幂指数相乘。<div class="eq">$$(p_n\circ\alpha)(t)=(e^{2\pi it})^n=e^{2\pi int}.$$</div>它在目标圆周正向绕 n 圈。本步得到：生成元的像是 n。<h4>第9步：写出诱导同态</h4>回忆：Z 的群同态由 1 的像唯一决定。<div class="eq">$$(p_n)_*:\mathbb Z\to\mathbb Z,\qquad m\longmapsto nm.$$</div>其像为 nZ，核为 0。本步得到：题目所述 p₍*₎π₁(S¹)=nZ 得到。<h4>第10步：用提升终点交叉核对</h4>回忆：目标中的一圈从 z=1 开始提升。<div class="eq">$$\widetilde\gamma(t)=e^{2\pi it/n},\qquad\widetilde\gamma(1)=e^{2\pi i/n}.$$</div>除 n=1 外终点不是 1，所以一圈不在子群 nZ 中；绕 n 圈才闭合。本步得到：提升图像与代数计算一致。<h4>第11步：计算覆叠变换</h4>回忆：乘以 n 次单位根不改变 n 次方。<div class="eq">$$R_k(z)=e^{2\pi ik/n}z,\qquad k=0,\ldots,n-1.$$</div>这些旋转在纤维上传递作用，复合按 k 模 n 相加。本步得到：Deck(pₙ)≅Z/nZ。<div class="keybox">$$\boxed{p_n(z)=z^n\text{ 是 }n\text{ 重覆叠},\qquad(p_n)_*(\mathbb Z)=n\mathbb Z}$$</div><div class="memobox"><strong>一句话记忆：</strong>n 次方把定义域的一圈变成目标中的 n 圈；反过来，目标一圈的提升只走完定义域的 1/n 圈。</div>`
   },
   "t5": {
-    0: L`<h4>目标</h4>
-分类 \(S^1\) 的所有覆叠。
-
-<h4>第一步：子群</h4>
-\(\pi_1(S^1)\cong\mathbb Z\) 的子群为 \(n\mathbb Z\)（\(n=0,1,2,\dots\)）。
-
-<h4>第二步：对应覆叠</h4>
-\(n>0\) 对应 \(n\) 重覆叠 \(z\mapsto z^n\)；\(n=0\)（平凡子群）对应万有覆叠 \(\mathbb R\to S^1\)。
-
-<div class="keybox">$$\boxed{n\mathbb Z\ \longleftrightarrow\ z\mapsto z^n,\qquad 0\ \longleftrightarrow\ \mathbb R\to S^1}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(S^1\) 的覆叠由整数 \(n\) 完全分类。</div>`,
-    1: L`<h4>目标</h4>
-理解环面的覆叠。
-
-<h4>第一步：子群格</h4>
-\(\pi_1(T^2)\cong\mathbb Z\times\mathbb Z\) 的子群构成一个格，对应各种覆叠环面。
-
-<h4>第二步：万有覆叠</h4>
-万有覆叠是
-
-<div class="keybox">$$\boxed{\mathbb R^2\to T^2}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>环面万有覆叠是 \(\mathbb R^2\)。</div>`,
-    2: L`<h4>目标</h4>
-认识 8 字形 \(S^1\vee S^1\) 的覆叠。
-
-<h4>第一步：自由群</h4>
-\(\pi_1(S^1\vee S^1)\cong F_2\)（两生成元自由群）。
-
-<h4>第二步：丰富的子群</h4>
-自由群的子群极其丰富，对应各种图作为覆叠空间。
-
-<div class="keybox">$$\boxed{F_2\ \text{的子群}\ \longleftrightarrow\ \text{各种图覆叠}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>8 字形的覆叠对应自由群 \(F_2\) 的子群。</div>`
+    0: L`<h4>我们要做什么</h4>完整分类圆周 (S^1) 的连通覆叠，并把子群、覆叠次数、具体映射和万有覆叠逐一对上。<h4>第1步：先写出基本群</h4>回忆：圆周的基本群由正向绕一圈生成。<div class="eq">$$\pi_1(S^1,1)\cong\mathbb Z.$$</div>整数 k 表示带符号绕 k 圈。本步得到：分类问题化为列出 Z 的子群。<h4>第2步：列出 Z 的全部子群</h4>回忆：整数群的每个非零子群都有最小正元素 n。除零子群外，若 n 是最小正元素，用带余除法 k=qn+r 可证余数 r 也在子群，最小性迫使 r=0。本步得到：所有子群恰为 nZ，其中 n=0,1,2,…。<h4>第3步：处理 n≥1 的具体覆叠</h4>回忆：nZ 的指数是 n。<div class="eq">$$p_n:S^1\to S^1,\qquad p_n(z)=z^n.$$</div>上一节已验证它是 n 重覆叠，且 ((p_n)_*(m)=nm)。本步得到：pₙ 对应子群 nZ。<h4>第4步：直接数纤维核对次数</h4>回忆：对 w=eⁱθ，n 次根按 k=0,…,n−1 编号。<div class="eq">$$p_n^{-1}(w)=\{e^{i(\theta+2\pi k)/n}:0\le k<n\}.$$</div>所以纤维有 n 个点，与指数 [Z:nZ]=n 一致。本步得到：代数指数等于几何层数。<h4>第5步：处理 n=1</h4>回忆：子群 Z 本身指数 1。p₁(z)=z 是恒等覆叠；每条底空间环路提升后都闭合。本步得到：最大子群对应最少的一层。<h4>第6步：处理 n=0</h4>回忆：记号 0Z 表示零子群 {0}，不是常值幂映射。<div class="eq">$$p_0:\mathbb R\to S^1,\qquad p_0(t)=e^{2\pi it}.$$</div>R 单连通，所以诱导基本群像是 {0}。本步得到：零子群对应无限层万有覆叠。<h4>第7步：核对万有覆叠的纤维</h4>回忆：e²πⁱᵗ=1 当且仅当 t∈Z。<div class="eq">$$p_0^{-1}(1)=\mathbb Z.$$</div>无限指数 [Z:{0}]=∞ 与无限纤维完全一致。本步得到：子群指数仍正确预言层数。<h4>第8步：说明为什么没有遗漏</h4>回忆：S¹ 满足道路连通、局部道路连通、半局部单连通。分类定理说每个连通覆叠都由一个 Z 的子群得到，而第 2 步已经列尽全部子群。本步得到：列表 pₙ 与万有覆叠是完备的。<h4>第9步：计算覆叠变换群</h4>回忆：Z 是阿贝尔群，所以每个子群 nZ 都正规。<div class="eq">$$\operatorname{Deck}(p_n)\cong\mathbb Z/n\mathbb Zquad(n\ge1),\qquad \operatorname{Deck}(p_0)\cong\mathbb Z.$$</div>有限情形由单位根旋转实现，无限情形由整数平移实现。本步得到：圆周的每个连通覆叠都是正规覆叠。<h4>第10步：解释提升闭合规则</h4>回忆：底环路绕 k 圈代表整数 k。<div class="eq">$$\text{提升在 }p_n\text{ 中闭合}\quad\Longleftrightarrow\quad k\in n\mathbb Z.$$</div>也就是必须绕 n 的整数倍圈。本步得到：图形上的“回到原层”精确等于子群隶属。<h4>第11步：整理分类表</h4>回忆：n 同时控制子群、层数和幂映射。n=1 是恒等覆叠；n≥2 是有限 n 层；n=0 是 R 给出的无限层万有覆叠。本步得到：S¹ 的连通覆叠分类完成。<div class="keybox">$$\boxed{n\mathbb Z\longleftrightarrow(z\mapsto z^n),\ n\ge1;\qquad\{0\}\longleftrightarrow(\mathbb R\to S^1)}$$</div><div class="memobox"><strong>一句话记忆：</strong>圆周覆叠只有一种整数参数：nZ 说“绕 n 圈才回原层”，也正好产生 n 层覆叠。</div>`,
+    1: L`<h4>我们要做什么</h4>把环面写成 (T^2=\mathbb R^2/\mathbb Z^2)，用 (\mathbb Z^2) 的子群直接看出万有覆叠、圆柱型无限覆叠和有限层环面覆叠。<h4>第1步：写出万有覆叠</h4>回忆：坐标逐项模 1 会把平面卷成环面。<div class="eq">$$q:\mathbb R^2\to T^2,\qquad q(x,y)=(e^{2\pi ix},e^{2\pi iy}).$$</div>R² 单连通，纤维是 Z²。本步得到：π₁(T²)≅Z²，且 q 是万有覆叠。<h4>第2步：从任意子群构造覆叠</h4>回忆：分类定理把 H≤Z² 变成万有覆叠的轨道商。<div class="eq">$$Y_H=\mathbb R^2/H\longrightarrow\mathbb R^2/\mathbb Z^2=T^2.$$</div>H 中整数向量按平移作用。本步得到：环面覆叠可通过给平面加入部分晶格识别来画。<h4>第3步：秩 0：什么都不先粘</h4>回忆：零子群不识别任何非零平移。R²/{0}=R²，仍是单连通平面；投到底环面时每个点上方有 Z² 那么多层。本步得到：H=0 给万有覆叠。<h4>第4步：秩 1：只粘一个方向</h4>回忆：若 H 由一个非零整数向量 v 生成，就只把沿 v 相差整数倍的点识别。<div class="eq">$$\mathbb R^2/\langle v\rangle\cong S^1\times\mathbb R.$$</div>垂直于 v 的方向仍不封口。本步得到：秩 1 子群产生圆柱型无限覆叠。<h4>第5步：具体算一个秩 1 例子</h4>回忆：取 H=⟨(2,0)⟩。先把宽度 2 的竖条两侧粘合得到圆柱；底环面的 x 方向绕两圈才闭合，y 方向的提升永远沿无限方向移动。本步得到：“一个方向有限、一个方向无限”能从生成元直接读出。<h4>第6步：秩 2：得到另一张环面</h4>回忆：两个线性无关整数向量张成平面中的子晶格。若 H=⟨v₁,v₂⟩，取它们张成的平行四边形，把两对对边粘合便得到 R²/H，它仍同胚于环面。本步得到：满秩子群产生有限层环面覆叠。<h4>第7步：用行列式算层数</h4>回忆：令 v₁=(a,c)、v₂=(b,d)，把它们作矩阵 A 的两列。<div class="eq">$$[\mathbb Z^2:H]=|\det A|=|ad-bc|.$$</div>几何上这也是基本平行四边形相对单位方格的面积。本步得到：有限覆叠次数可直接计算。<h4>第8步：写出具体有限覆叠映射</h4>回忆：整数矩阵保持 Z²，因此在线性映射 x↦Ax 下可下降到商。<div class="eq">$$f_A:T^2\to T^2,\qquad [x]\longmapsto[Ax].$$</div>若 det A≠0，它是 |det A| 重覆叠。本步得到：矩阵给出可代入计算的环面覆叠。<h4>第9步：算一个二重例子</h4>回忆：取 A=diag(2,1)。<div class="eq">$$f_A(z,w)=(z^2,w),\qquad|\det A|=2.$$</div>每个目标点在第一坐标有两个平方根，第二坐标唯一。本步得到：得到显式二重环面覆叠。<h4>第10步：判断正规性</h4>回忆：Z² 是阿贝尔群，所以每个子群都正规。<div class="eq">$$\operatorname{Deck}(Y_H/T^2)\cong\mathbb Z^2/H.$$</div>满秩时这是阶为指数的有限阿贝尔群；低秩时是无限群。本步得到：所有连通环面覆叠都是正规覆叠。<h4>第11步：归纳图形变化</h4>回忆：H 的秩告诉有几个方向已经首尾粘合。秩 0：平面；秩 1：先粘一对边成圆柱；秩 2：再粘另一方向成环面。本步得到：每一步粘合与子群生成元一一对应。<div class="keybox">$$\boxed{H\le\mathbb Z^2\quad\longmapsto\quad\mathbb R^2/H\to T^2,\qquad\deg=[\mathbb Z^2:H]}$$</div><div class="memobox"><strong>一句话记忆：</strong>在平面上选几个独立整数平移来识别：不选是平面，选一个方向是圆柱，选两个方向是环面。</div>`,
+    2: L`<h4>我们要做什么</h4>用标号图具体构造 8 字形 (R=S^1_a\vee S^1_b) 的一个二重覆叠，并从顶点与边数算出覆叠图的基本群秩。<h4>第1步：写出底图与基本群</h4>回忆：8 字形是一点上粘两条圆环。<div class="eq">$$\pi_1(R,v)\cong F(a,b).$$</div>a、b 是两条有向环路，没有交换关系。本步得到：覆叠分类变成自由群 F(a,b) 的子群分类。<h4>第2步：选择一个指数 2 子群</h4>回忆：给自由群定义满同态到 Z/2。<div class="eq">$$\varphi:F(a,b)\to\mathbb Z/2,\qquad\varphi(a)=1,\quad\varphi(b)=0.$$</div>令 H=ker φ，则 [F(a,b):H]=2。本步得到：对应覆叠应有两个顶点层。<h4>第3步：先画两个纤维顶点</h4>回忆：底图唯一顶点 v 的纤维大小等于子群指数。画 v₀、v₁ 两点，分别代表两个右陪集 H 与 Ha。本步得到：初始状态有 2 个顶点。<h4>第4步：按 a 的陪集作用连边</h4>回忆：读一条 a 边会把陪集 Hg 送到 Hga。因为 φ(a)=1，a 交换两个陪集：v₀ 读 a 到 v₁，v₁ 再读 a 到 v₀。按有向图模型需画两条 a 标号边，保证每个顶点恰有一条出 a 边和一条入 a 边。本步得到：a 在两层之间来回切换。<h4>第5步：按 b 的陪集作用连边</h4>回忆：φ(b)=0，所以乘 b 不改变陪集。在 v₀ 与 v₁ 各画一条 b 环。每个顶点附近现在各有 a、b 两种方向的一份局部副本。本步得到：b 在各自层内闭合。<h4>第6步：检查局部覆叠条件</h4>回忆：图的覆叠要求每个上方顶点的星形邻域同胚到下方顶点的星形邻域。v₀、v₁ 各有一条出 a、一条入 a、一条出 b、一条入 b；投影只需忘掉顶点下标和边的层号。本步得到：所得标号图确实是二重覆叠。<h4>第7步：数覆叠图的元素</h4>回忆：按非定向一胞腔计数，每个底边在二重覆叠中有两条提升。<div class="eq">$$V=2,\qquad E=2\cdot2=4.$$</div>四条边可看成两条 a 型与两个 b 环。本步得到：得到可用于 Euler 公式的 V、E。<h4>第8步：计算基本群秩</h4>回忆：连通有限图的基本群是秩 (E-V+1) 的自由群。<div class="eq">$$\operatorname{rank}\pi_1(\widetilde R)=E-V+1=4-2+1=3.$$</div>这也与 Schreier 指数公式 (1+2(2-1)=3) 一致。本步得到：H 是秩 3 的自由群。<h4>第9步：写出三个具体生成元</h4>回忆：从 v₀ 出发的闭合词必须含偶数个 a。<div class="eq">$$a^2,\qquad b,\qquad aba^{-1}$$</div>都落在 ker φ，并可由选生成树后的三条非树边读出。本步得到：覆叠图把抽象子群生成元变成可走的闭路。<h4>第10步：观察非正规覆叠会怎样</h4>回忆：一般子群 H 的陪集图仍能构造覆叠，但只有 H 正规时所有层具有全局一致的对称交换。本例 H 是同态的核，所以正规，非平凡覆叠变换交换 v₀、v₁，并保持 a、b 标号。本步得到：本例是正规二重覆叠。<h4>第11步：说明自由群为何产生丰富图形</h4>回忆：F(a,b) 有大量不同有限指数和无限指数子群。每个子群的 Schreier 陪集图都满足“每顶点每标号各有一入一出”，但顶点数、环和连接方式可以完全不同。本步得到：8 字形覆叠的丰富性就是自由群子群结构的几何版本。<div class="keybox">$$\boxed{H=\ker(F(a,b)\to\mathbb Z/2)\quad\longleftrightarrow\quad\text{二重标号图},\qquad\pi_1(\widetilde R)\cong F_3}$$</div><div class="memobox"><strong>一句话记忆：</strong>把陪集当顶点，把“右乘 a 或 b”当有向边；子群表立刻变成一张真正的覆叠图。</div>`
   },
   "t6": {
-    0: L`<h4>目标</h4>
-计算楔和 \(S^1\vee S^1\) 的基本群。
-
-<h4>第一步：取开邻域</h4>
-取 \(U,V\) 为两个圆各自的加厚开邻域，交集 \(U\cap V\) 可缩。
-
-<h4>第二步：van Kampen</h4>
-\(\pi_1(U)\cong\mathbb Z,\ \pi_1(V)\cong\mathbb Z\)，交集平凡，故
-
-<div class="keybox">$$\boxed{\pi_1(S^1\vee S^1)\cong\mathbb Z*\mathbb Z\cong F_2}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>楔和的基本群是两个 \(\mathbb Z\) 的自由积 \(F_2\)。</div>`,
-    1: L`<h4>目标</h4>
-用 van Kampen 定理计算环面。
-
-<h4>第一步：切开</h4>
-沿子午线与赤道切开环面，交集是环带（基本群 \(\mathbb Z\)）。
-
-<h4>第二步：关系</h4>
-两个生成元 \(a,b\) 满足交换关系 \(aba^{-1}b^{-1}=1\)。
-
-<div class="keybox">$$\boxed{\pi_1(T^2)\cong\langle a,b\mid aba^{-1}b^{-1}\rangle\cong\mathbb Z\times\mathbb Z}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>环面 = 两个圆环的自由积模交换关系。</div>`,
-    2: L`<h4>目标</h4>
-写出亏格 \(g\) 曲面 \(\Sigma_g\) 的基本群。
-
-<h4>第一步：标准生成元</h4>
-\(\Sigma_g\) 有 \(2g\) 个生成元 \(a_1,b_1,\dots,a_g,b_g\)。
-
-<h4>第二步：唯一关系</h4>
-唯一的粘合关系是乘积
-
-<div class="eq">$$\prod_{i=1}^g [a_i,b_i]=1$$</div>
-
-<h4>第三步：基本群</h4>
-
-<div class="keybox">$$\boxed{\pi_1(\Sigma_g)\cong\Big\langle a_1,b_1,\dots,a_g,b_g\ \Big|\ \prod_{i=1}^g[a_i,b_i]=1\Big\rangle}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>亏格 \(g\) 曲面有 \(2g\) 生成元、1 个关系。</div>`
+    0: L`<h4>我们要做什么</h4>用 Van Kampen 从头计算两圆楔和 (S^1_a\vee S^1_b) 的基本群，并说明为什么结果是自由群而不是 (\mathbb Z^2)。<h4>第1步：选覆盖</h4>回忆：把楔点附近稍微加厚可得到开集。取 U 包含整个 a 圆和 b 圆上一小段，取 V 包含整个 b 圆和 a 圆上一小段，使 U∪V=X。本步得到：两个开集覆盖 8 字形。<h4>第2步：找形变收缩核</h4>回忆：多出来的小短枝是树枝，可沿自身缩回楔点。U 强形变收缩到 a 圆，V 强形变收缩到 b 圆。本步得到：π₁(U)≅Z⟨a⟩，π₁(V)≅Z⟨b⟩。<h4>第3步：分析交集</h4>回忆：可把覆盖取得使 U∩V 只是楔点附近的一棵小树。树可缩，所以 (\pi_1(U\cap V)=1)。本步得到：交集不提供任何非平凡关系。<h4>第4步：代入 Van Kampen</h4>回忆：沿平凡群融合的自由积就是普通自由积。<div class="eq">$$\pi_1(X)\cong\mathbb Z*_{1}\mathbb Z=\mathbb Z*\mathbb Z.$$</div>两个因子的生成元分别记 a、b。本步得到：得到两生成元自由群候选。<h4>第5步：写出群表示</h4>回忆：Z 的表示是 ⟨a|〉 和 ⟨b|〉。<div class="eq">$$\pi_1(S^1\vee S^1)\cong\langle a,b\mid angle=F(a,b).$$</div>竖线右边为空表示没有额外关系。本步得到：基本群是 F₂。<h4>第6步：解释一个词的几何意义</h4>回忆：群乘法是依次走环路。词 (ab^{-1}a) 表示先正向绕 a 圆，再反向绕 b 圆，最后再正向绕 a 圆。本步得到：自由词逐字记录经过哪一瓣及方向。<h4>第7步：做一次约化计算</h4>回忆：相邻的生成元与其逆元是立即折返，可缩掉。<div class="eq">$$ab\,b^{-1}a^{-1}b=aa^{-1}b=b.$$</div>第一处 bb⁻¹ 消掉，随后 aa⁻¹ 消掉。本步得到：自由群计算就是消去相邻逆对。<h4>第8步：说明为什么 a 与 b 不交换</h4>回忆：交集基本群平凡，Van Kampen 没给出 ab=ba 的关系。词 aba⁻¹b⁻¹ 已经约化且非空，所以不是单位元。本步得到：F₂ 非阿贝尔。<h4>第9步：与环面对比</h4>回忆：环面也是从 a、b 两个一胞腔开始，但还粘了一个二胞腔。环面的二胞腔边界正好给关系 aba⁻¹b⁻¹=1；8 字形没有这块面，所以不能加入该关系。本步得到：是否有二胞腔决定两个环是否交换。<h4>第10步：收束</h4>回忆：U 与 V 各贡献一个生成元，交集没有贡献关系。因此所有约化的 a、b 词都代表不同环路同伦类。本步得到：计算完成。<div class="keybox">$$\boxed{\pi_1(S^1\vee S^1)\cong\mathbb Z*\mathbb Z=F_2}$$</div><div class="memobox"><strong>一句话记忆：</strong>两瓣各给一个绕圈字母，交集是一棵树，不能强迫两个字母发生任何关系。</div>`,
+    1: L`<h4>我们要做什么</h4>把环面看成在 8 字形一骨架上粘一个二胞腔，逐段读出附着词，并用 Van Kampen 算出 (\pi_1(T^2))。<h4>第1步：从正方形商模型开始</h4>回忆：环面由正方形上下边同向识别、左右边同向识别得到。四个角粘成一个顶点，两对边分别成为一胞腔 a、b，正方形内部成为一个二胞腔。本步得到：CW 计数为 V=1、E=2、F=1。<h4>第2步：读正方形边界词</h4>回忆：沿有向边界逆时针走一圈，要根据每边箭头判断正向或反向。<div class="eq">$$w=aba^{-1}b^{-1}.$$</div>这就是交换子 [a,b]。本步得到：二胞腔沿交换子附着到 8 字形。<h4>第3步：选用于 Van Kampen 的开集</h4>回忆：令 U 是一骨架加上一圈很薄的二胞腔领圈，令 V 是二胞腔内部稍微扩大的一张开盘。U 形变收缩到 a∨b，V 可缩，U∩V 形变收缩到一个圆环。本步得到：三个局部基本群都容易计算。<h4>第4步：计算 U、V、交集的群</h4>回忆：形变收缩保持基本群。<div class="eq">$$\pi_1(U)=F(a,b),\qquad\pi_1(V)=1,\qquad\pi_1(U\cap V)=\mathbb Z\langle c\rangle.$$</div>c 绕二胞腔领圈一周。本步得到：Van Kampen 的三个输入准备完成。<h4>第5步：算交集生成元进入 U 的像</h4>回忆：在 U 中把领圈推到一骨架，就是沿附着映射走一遍。<div class="eq">$$i_*(c)=aba^{-1}b^{-1}.$$</div>这里每个字母都来自边界四段。本步得到：交集圆在 U 中贡献交换子。<h4>第6步：算交集生成元进入 V 的像</h4>回忆：V 是开盘，任何环路都可缩。<div class="eq">$$j_*(c)=1\in\pi_1(V).$$</div>所以融合关系会把 U 中的交换子设为单位元。本步得到：二胞腔的作用就是杀死其边界词。<h4>第7步：代入融合自由积</h4>回忆：与平凡群融合等价于商掉 i_*(π₁(U∩V)) 的正规闭包。<div class="eq">$$\pi_1(T^2)\cong F(a,b)/\langle\!\langle aba^{-1}b^{-1}\rangle\!\rangle.$$</div>只有一个二胞腔，所以只有这一族共轭关系。本步得到：得到标准群表示。<h4>第8步：把关系逐步化简</h4>回忆：关系 aba⁻¹b⁻¹=1 可在群中移项。<div class="eq">$$aba^{-1}b^{-1}=1\iff aba^{-1}=b\iff ab=ba.$$</div>第二个等价式右乘 b，第三个再右乘 a。本步得到：a 与 b 被迫交换。<h4>第9步：构造到 Z² 的同态</h4>回忆：阿贝尔群 Z² 由 (1,0)、(0,1) 生成且交换。令 a↦(1,0)、b↦(0,1)。交换子映到 0，因此该映射从商群良好定义并满射到 Z²。本步得到：得到群表示到 Z² 的自然同态。<h4>第10步：构造反向同态</h4>回忆：在商群中 a、b 已交换。<div class="eq">$$(m,n)\longmapsto a^m b^n$$</div>保持加法，因为 (a^mb^na^{m′}b^{n′}=a^{m+m′}b^{n+n′})。本步得到：得到 Z² 到群表示的同态。<h4>第11步：验证互为逆</h4>回忆：两个同态在各自生成元上互相还原。a、b 被送回 a、b；标准基向量被送回标准基向量。因此复合均为恒等。本步得到：群表示同构于 Z²。<h4>第12步：用环路提升核对两个整数</h4>回忆：万有覆叠 R²→T² 中，基点环路的提升终点与起点相差整数向量。绕 a m 次、绕 b n 次的提升位移是 (m,n)，位移相加正好对应群乘法。本步得到：几何图像与 Z² 计算一致。<h4>第13步：收束</h4>回忆：一骨架提供自由生成元，二胞腔提供一个附着关系。关系是交换子等于 1，所以两个独立方向可以任意整数次绕行且彼此交换。本步得到：环面基本群计算完成。<div class="keybox">$$\boxed{\pi_1(T^2)\cong\langle a,b\mid aba^{-1}b^{-1}=1\rangle\cong\mathbb Z^2}$$</div><div class="memobox"><strong>一句话记忆：</strong>8 字形先给自由群；填上正方形这块面时，其边界交换子被缩掉，于是 a、b 开始交换。</div>`,
+    2: L`<h4>我们要做什么</h4>从标准 (4g) 边多边形构造亏格 (g) 的闭可定向曲面 (\Sigma_g)，再逐项读出生成元、唯一关系和 Euler 示性数。<h4>第1步：写出标准边界标号</h4>回忆：每个把手贡献一对边 aᵢ、bᵢ。<div class="eq">$$a_1b_1a_1^{-1}b_1^{-1}\;a_2b_2a_2^{-1}b_2^{-1}\cdots a_gb_ga_g^{-1}b_g^{-1}.$$</div>相同字母的两条边按箭头粘合。本步得到：多边形边界是 g 个交换子的乘积。<h4>第2步：追踪顶点识别</h4>回忆：按标准箭头依次粘边时，每个多边形角最终都能通过端点配对连到第一个角。因此 4g 个原角点形成一个等价类。本步得到：商空间只有 V=1 个零胞腔。<h4>第3步：追踪边识别</h4>回忆：每个字母出现两次，粘成一条一胞腔。a₁,b₁,…,a_g,b_g 共 2g 个字母，所以商空间有 E=2g 条一胞腔。本步得到：一骨架是 2g 个圆的楔和。<h4>第4步：追踪内部</h4>回忆：多边形内部没有参与边界识别。整个内部成为一个开二胞腔，所以 F=1。本步得到：曲面有一个二胞腔。<h4>第5步：先算一骨架基本群</h4>回忆：n 个圆的楔和基本群是 n 生成元自由群。<div class="eq">$$\pi_1(X^1)=F(a_1,b_1,\ldots,a_g,b_g).$$</div>此时还没有关系。本步得到：得到 2g 个自由生成元。<h4>第6步：确定二胞腔附着词</h4>回忆：沿多边形边界走一圈正是附着映射 S¹→X¹。<div class="eq">$$w=\prod_{i=1}^{g}[a_i,b_i],\qquad[a_i,b_i]=a_ib_ia_i^{-1}b_i^{-1}.$$</div>乘积按 i 从 1 到 g 排列。本步得到：唯一二胞腔将杀死 w。<h4>第7步：设置 Van Kampen 覆盖</h4>回忆：取 U 为一骨架加二胞腔领圈，V 为二胞腔内部开盘。U≃X¹，V 可缩，U∩V≃S¹；交集生成元进 U 的像为 w，进 V 的像为 1。本步得到：与环面的计算结构完全相同。<h4>第8步：应用定理得到表示</h4>回忆：融合关系只要求 w=1。<div class="eq">$$\pi_1(\Sigma_g)\cong\left\langle a_1,b_1,\ldots,a_g,b_g\ middle| \prod_{i=1}^{g}[a_i,b_i]=1\right\rangle.$$</div>这不是要求每个交换子单独等于 1，而只要求它们的乘积为 1。本步得到：得到曲面群标准表示。<h4>第9步：检查 g=1</h4>回忆：亏格 1 曲面就是环面。<div class="eq">$$\langle a_1,b_1\mid[a_1,b_1]=1\rangle\cong\mathbb Z^2.$$</div>与上一例完全吻合。本步得到：公式在最小非零亏格上通过检查。<h4>第10步：检查 g=2 的关系</h4>回忆：双环面有四个生成元。<div class="eq">$$\pi_1(\Sigma_2)=\langle a_1,b_1,a_2,b_2\mid[a_1,b_1][a_2,b_2]=1\rangle.$$</div>可改写为 ([a_2,b_2]=[a_1,b_1]^{-1})，但不能推出每个交换子为 1。本步得到：双环面群通常非阿贝尔。<h4>第11步：计算 Euler 示性数</h4>回忆：胞腔计数给 χ=V−E+F。<div class="eq">$$\chi(\Sigma_g)=1-2g+1=2-2g.$$</div>g=0 得 2，g=1 得 0，g=2 得 −2。本步得到：群表示与曲面的胞腔计数来自同一粘合图。<h4>第12步：做阿贝尔化核对</h4>回忆：基本群阿贝尔化后每个交换子自动变成 1。唯一关系在阿贝尔化中不再产生限制，因此 (H_1(\Sigma_g)\cong\mathbb Z^{2g})。本步得到：这与 2g 条一胞腔的同调直觉一致。<h4>第13步：收束粘合过程</h4>回忆：多边形先把 4g 个角并成 1 点，再把成对边并成 2g 条环，最后保留内部为一块面。一骨架给生成元，面边界给唯一关系。本步得到：整个计算没有跳过任何识别阶段。<div class="keybox">$$\boxed{\pi_1(\Sigma_g)\cong\left\langle a_1,b_1,\ldots,a_g,b_g\ middle| \prod_{i=1}^{g}[a_i,b_i]=1\right\rangle}$$</div><div class="memobox"><strong>一句话记忆：</strong>每个把手给一对字母；唯一一块面沿所有交换子的乘积粘上去，所以只增加一条总关系。</div>`
   },
   "t7": {
-    0: L`<h4>目标</h4>
-用基本群证明代数基本定理。
-
-<h4>第一步：反设多项式无根</h4>
-设 \(p(z)\) 无根，对半径 \(r\) 定义映射
-
-<div class="eq">$$f_r(z)=\frac{p(rz)}{|p(rz)|}:S^1\to S^1$$</div>
-
-<h4>第二步：比较绕数</h4>
-\(r\to 0\) 时 \(f_r\) 近似常值（绕数 \(0\)）；\(r\to\infty\) 时 \(f_r(z)\approx z^{\deg p}/|z^{\deg p}|\)（绕数 \(\deg p\)）。绕数连续变化必为常数，矛盾（除非 \(\deg p=0\)）。
-
-<div class="keybox">$$\boxed{\text{非常数多项式必有复根}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>绕数从 0 连续变到 \(\deg p\)，除非有根否则矛盾。</div>`,
-    1: L`<h4>目标</h4>
-理解毛球定理：\(S^2\) 上无处处非零切向量场。
-
-<h4>第一步：反设</h4>
-若有处处非零切向量场，则每点的切向量可归一化，给出映射 \(S^2\to S^1\) 于每条纤维，进而构造与基本群/同伦矛盾的结构。
-
-<h4>第二步：矛盾</h4>
-
-<div class="keybox">$$\boxed{S^2\ \text{上不存在处处非零的连续切向量场}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>「毛球」总有一根毛竖不起来（必有零点）。</div>`,
-    2: L`<h4>目标</h4>
-证明 \(\mathbb R^2\not\cong\mathbb R^3\)。
-
-<h4>第一步：去掉一点</h4>
-若同胚，则去掉一点后仍同胚：\(\mathbb R^2\setminus\{0\}\cong\mathbb R^3\setminus\{0\}\)。
-
-<h4>第二步：比较基本群</h4>
-\(\pi_1(\mathbb R^2\setminus\{0\})=\mathbb Z\)，而 \(\pi_1(\mathbb R^3\setminus\{0\})=\{e\}\)（高维穿孔仍单连通）。矛盾。
-
-<div class="keybox">$$\boxed{\mathbb R^m\cong\mathbb R^n\ \Longleftrightarrow\ m=n}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>去掉一点后基本群不同，故维数不同。</div>`
+    0: L`<h4>我们要做什么</h4>用绕数证明代数基本定理：每个次数 (d\ge1) 的复多项式都有复根。关键是把“无根”变成一族圆周映射，再分别从小半径与大半径算出互相矛盾的绕数。<h4>第1步：写出多项式</h4>回忆：设<div class="eq">$$p(z)=a_dz^d+a_{d-1}z^{d-1}+\cdots+a_0,\qquad a_d\ne0,\ d\ge1.$$</div>目标是证明存在 z₀ 使 p(z₀)=0。本步得到：次数与首项已固定。<h4>第2步：作无根反设</h4>回忆：若 p 在 C 中处处非零，就能连续归一化到单位圆。<div class="eq">$$p(z)\ne0\qquad\text{对所有 }z\in\mathbb C.$$</div>这保证后面所有分母合法。本步得到：可以沿任意半径观察 p 的方向。<h4>第3步：定义半径 r 上的圆周映射</h4>回忆：单位圆参数 z∈S¹，rz 是半径 r 的圆。<div class="eq">$$f_r(z)=\frac{p(rz)}{|p(rz)|}:S^1\to S^1.$$</div>分子非零，故 fᵣ 连续。本步得到：每个 r≥0 都得到一个绕数。<h4>第4步：把不同半径连成同伦</h4>回忆：二变量公式<div class="eq">$$F(z,r)=\frac{p(rz)}{|p(rz)|}$$</div>在 S¹×[0,R] 上连续，所以 f₀ 与 f_R 同伦。本步得到：绕数必须与 r 无关。<h4>第5步：计算 r=0 的映射</h4>回忆：无根反设特别给 p(0)=a₀≠0。<div class="eq">$$f_0(z)=\frac{a_0}{|a_0|}$$</div>与 z 无关，是常值映射。本步得到：deg(f₀)=0。<h4>第6步：分离大半径首项</h4>回忆：对 |z|=1，提取 a_dR^dz^d。<div class="eq">$$p(Rz)=a_dR^dz^d\left(1+\frac{a_{d-1}}{a_dR}z^{-1}+\cdots+\frac{a_0}{a_dR^d}z^{-d}\right).$$</div>括号中是 1 加误差。本步得到：可用 R 大控制低次项。<h4>第7步：给误差作统一估计</h4>回忆：单位圆上 |z⁻ᵏ|=1。<div class="eq">$$\left|\frac{p(Rz)}{a_dR^dz^d}-1\right|\le\sum_{k=0}^{d-1}\frac{|a_k|}{|a_d|R^{d-k}}.$$</div>右边与 z 无关并随 R→∞ 趋于 0。本步得到：可选 R 使误差处处小于 1。<h4>第8步：选定足够大的 R</h4>回忆：取 R 使上一步的和小于 1。于是 p(Rz) 与首项 a_dR^dz^d 的相对误差小于 100%，特别地它们之间的直线段不经过 0。本步得到：可在 C∖{0} 中把 p(Rz) 变到首项。<h4>第9步：写出不穿零的同伦</h4>回忆：令 0≤s≤1。<div class="eq">$$H_s(z)=(1-s)p(Rz)+s\,a_dR^dz^d.$$</div>除以非零首项后，H_s/(a_dR^dz^d) 位于以 1 为中心、半径小于 1 的圆盘内，故不为 0。本步得到：归一化 H_s 给 f_R 与首项方向的同伦。<h4>第10步：计算首项方向映射</h4>回忆：正实数 Rᵈ 不影响方向。<div class="eq">$$z\longmapsto\frac{a_dR^dz^d}{|a_dR^dz^d|}=\frac{a_d}{|a_d|}z^d.$$</div>常数单位复数只是旋转，次数为 1 的旋转不改变绕数。本步得到：该映射的度数等于 z↦zᵈ 的度数。<h4>第11步：直接算 z 的 d 次方绕数</h4>回忆：当 z=eⁱθ 从 θ=0 走到 2π，zᵈ=eⁱᵈθ 的辐角增加 2πd。<div class="eq">$$\deg(z\mapsto z^d)=d.$$</div>所以 deg(f_R)=d。本步得到：大半径圆的像绕原点 d 圈。<h4>第12步：与小半径同伦不变性冲突</h4>回忆：同伦映射的度数相同。<div class="eq">$$0=\deg(f_0)=\deg(f_R)=d.$$</div>但题设 d≥1。本步得到：无根反设产生整数矛盾。<h4>第13步：推出存在复根</h4>回忆：唯一被否定的假设是 p(z) 处处非零。因此至少存在 z₀∈C 使 p(z₀)=0。本步得到：代数基本定理的存在部分得证。<h4>第14步：说明证明画面</h4>回忆：小圆上 p 的方向几乎不变，大圆上最高次项迫使方向绕 d 圈。如果中间没有零点，这些圆周映射应能随半径连续变形，绕数却不能从 0 变成 d。本步得到：根就是阻止绕数矛盾的必经零点。<div class="keybox">$$\boxed{\deg p\ge1\quad\Longrightarrow\quad\exists z_0\in\mathbb C: p(z_0)=0}$$</div><div class="memobox"><strong>一句话记忆：</strong>无根会让所有半径的方向映射同伦；可小圆绕 0 圈、大圆由首项逼着绕 d 圈，所以中间必碰到零。</div>`,
+    1: L`<h4>我们要做什么</h4>证明毛球定理：偶维球面 (S^2) 上不存在处处非零的连续切向量场。我们把假想向量场归一化，用它显式构造恒等映射到对径映射的同伦，再比较映射度。<h4>第1步：写出切向量条件</h4>回忆：S² 在 x 点的切空间是与 x 正交的平面。<div class="eq">$$T_xS^2=\{v\in\mathbb R^3:\langle v,x\rangle=0\}.$$</div>设 V(x) 连续且 V(x)∈TₓS²。本步得到：切向量与半径向量正交。<h4>第2步：作处处非零反设</h4>回忆：毛球定理否认的是无零点向量场。<div class="eq">$$V(x)\ne0\qquad\text{对所有 }x\in S^2.$$</div>因此长度函数始终为正。本步得到：可以安全归一化。<h4>第3步：归一化向量场</h4>回忆：除以长度保留切向方向。<div class="eq">$$u(x)=\frac{V(x)}{\|V(x)\|},\qquad\|u(x)\|=1,\quad\langle u(x),x\rangle=0.$$</div>u 仍连续。本步得到：每点得到一个与 x 正交的单位向量。<h4>第4步：构造旋转同伦</h4>回忆：正交的两个单位向量可按圆周公式旋转。<div class="eq">$$H(x,t)=\cos(\pi t)x+\sin(\pi t)u(x),\qquad0\le t\le1.$$</div>这把 x 沿由 x、u(x) 张成的大圆移动。本步得到：得到候选 H:S²×I→R³。<h4>第5步：核对始终落在 S²</h4>回忆：展开范数平方，交叉项含 ⟨x,u(x)⟩=0。<div class="eq">$$\|H(x,t)\|^2=\cos^2(\pi t)+\sin^2(\pi t)=1.$$</div>所以 H 的值不离开球面。本步得到：H 真的是 S² 中的同伦。<h4>第6步：核对两个端点映射</h4>回忆：代入 t=0 与 t=1。<div class="eq">$$H(x,0)=x,\qquad H(x,1)=-x.$$</div>所以恒等映射 id 与对径映射 A(x)=−x 同伦。本步得到：反设推出 id≃A。<h4>第7步：回忆映射度的同伦不变性</h4>回忆：S²→S² 的映射在 H₂(S²)≅Z 上是乘某个整数，这个整数就是度。同伦映射诱导相同同调同态，因此有相同度。本步得到：若 id≃A，就必须 deg(id)=deg(A)。<h4>第8步：计算恒等映射的度</h4>回忆：恒等映射保持基本类。<div class="eq">$$\deg(\operatorname{id}_{S^2})=1.$$</div>它既不翻转也不重复覆盖球面。本步得到：同伦一端的度为 1。<h4>第9步：计算对径映射的度</h4>回忆：Sⁿ 上对径映射的度为 (−1)ⁿ⁺¹。<div class="eq">$$\deg(A|_{S^2})=(-1)^3=-1.$$</div>也可把 A 看成 R³ 中线性映射 −I，其行列式为 −1，故反转定向。本步得到：同伦另一端的度为 −1。<h4>第10步：得到矛盾</h4>回忆：同伦不变性要求 1=−1。这在整数中不成立，因此处处非零向量场不能存在。本步得到：至少有一点 x 满足 V(x)=0。<h4>第11步：解释“毛旋”画面</h4>回忆：u(x) 给出每点梳毛方向，H 试图沿该方向把每点转半圈到对径点。若毛处处有方向，这个半圈旋转会连续完成；度数却说保持定向的 id 无法连续变成反转定向的 A。本步得到：零点是连续梳毛无法避开的地方。<h4>第12步：指出偶维推广</h4>回忆：同一构造适用于 S²ᵏ。对径映射在 S²ᵏ 上度为 (−1)²ᵏ⁺¹=−1，与恒等映射度 1 不同。本步得到：每个正偶维球面都没有处处非零切向量场。<div class="keybox">$$\boxed{\forall V\in\Gamma(TS^2)\text{ 连续},\quad\exists x\in S^2: V(x)=0}$$</div><div class="memobox"><strong>一句话记忆：</strong>若每根“毛”都有非零方向，就能沿毛把每点连续转到对径点；但恒等映射度为 1、对径映射度为 −1，二者不能同伦。</div>`,
+    2: L`<h4>我们要做什么</h4>证明 (\mathbb R^2) 与 (\mathbb R^3) 不同胚，并用约化同调说明一般的 (\mathbb R^m\cong\mathbb R^n) 必须有 (m=n)。<h4>第1步：作同胚反设</h4>回忆：假设存在同胚 (F:\mathbb R^2\to\mathbb R^3)。令 p=F(0)。限制 F 会把去掉 0 的定义域送到去掉 p 的值域。本步得到：准备比较穿孔空间。<h4>第2步：限制同胚到补空间</h4>回忆：同胚与逆映射都会保持集合差。<div class="eq">$$F|:\mathbb R^2\setminus\{0\}\xrightarrow{\cong}\mathbb R^3\setminus\{p\}.$$</div>平移把右边同胚到 R³∖{0}。本步得到：若原空间同胚，两个穿孔空间也同胚。<h4>第3步：径向收缩二维穿孔空间</h4>回忆：非零向量可沿射线调节长度为 1。<div class="eq">$$H(x,t)=\left((1-t)+\frac{t}{\|x\|}\right)x.$$</div>系数为正，所以过程不碰原点；终态为 x/‖x‖∈S¹。本步得到：R²∖{0}≃S¹。<h4>第4步：径向收缩三维穿孔空间</h4>回忆：同一个公式适用于 R³。它把 R³∖{0} 强形变收缩到 S²。本步得到：R³∖{0}≃S²。<h4>第5步：计算左边基本群</h4>回忆：同伦等价保持基本群。<div class="eq">$$\pi_1(\mathbb R^2\setminus\{0\})\cong\pi_1(S^1)\cong\mathbb Z.$$</div>绕原点次数给出整数。本步得到：左边基本群非平凡。<h4>第6步：计算右边基本群</h4>回忆：S² 单连通。<div class="eq">$$\pi_1(\mathbb R^3\setminus\{0\})\cong\pi_1(S^2)=0.$$</div>二维球面上的每条环路都能缩掉。本步得到：右边基本群平凡。<h4>第7步：利用同胚不变性得到矛盾</h4>回忆：同胚会诱导基本群同构。Z 不同构于平凡群，因为前者含非单位元素 1，后者只有单位元。本步得到：不存在 R²→R³ 的同胚。<h4>第8步：推广到任意维数的第一步</h4>回忆：若 Rᵐ≅Rⁿ，仍可去掉一个对应点。<div class="eq">$$\mathbb R^m\setminus\{0\}\cong\mathbb R^n\setminus\{0\}.$$</div>两边分别形变收缩到 Sᵐ⁻¹ 与 Sⁿ⁻¹。本步得到：问题化为区分不同维球面。<h4>第9步：选能看见维数的同调群</h4>回忆：球面的约化同调只在自己的最高维非零。<div class="eq">$$\widetilde H_k(S^{m-1};\mathbb Z)=\begin{cases}\mathbb Z,&k=m-1,\\0,&k\ne m-1.\end{cases}$$</div>Sⁿ⁻¹ 同理。本步得到：非零同调所在次数记录了维数。<h4>第10步：比较非零次数</h4>回忆：同胚诱导所有次数的同调同构。若 m<n，则在 k=m−1 时左边是 Z，而右边是 0；若 n<m 对称地交换两边，也矛盾。本步得到：只能有 m=n。<h4>第11步：说明基本群方法的范围</h4>回忆：π₁ 能区分 S¹ 与 S²，因此足够解决 2 维对 3 维。但 S²、S³ 等都单连通，继续只看 π₁ 就失效；约化同调同时处理全部维数。本步得到：选择不变量要与问题维度匹配。<h4>第12步：收束</h4>回忆：穿孔使欧氏空间暴露出一个包围缺点的球面。这个球面的非零同调维数是原欧氏空间维数减 1，所以任何同胚都必须保持原维数。本步得到：结论完成。<div class="keybox">$$\boxed{\mathbb R^m\cong\mathbb R^n\quad\Longleftrightarrow\quad m=n}$$</div><div class="memobox"><strong>一句话记忆：</strong>去掉一点后，Rⁿ 会露出一颗 Sⁿ⁻¹；它唯一的非零约化同调次数把维数永久记录下来。</div>`
   },
   "t8": {
-    0: L`<h4>目标</h4>
-穿孔平面形变收缩到 \(S^1\)。
+    0: L`<h4>我们要计算什么</h4>
+计算穿孔平面到单位圆的径向形变收缩，逐项核对整个过程中不碰原点。
 
-<h4>第一步：径向投影</h4>
-映射
+<h4>第1步：确定两个映射</h4>
+回忆：径向投影把非零向量缩放到单位长度。
 
-<div class="eq">$$r(x)=\frac{x}{|x|}$$</div>
+令 \(X=\mathbb R^2\setminus\{0\}\)，\(r(x)=x/\|x\|\)，\(i:S^1\hookrightarrow X\)。
 
-<h4>第二步：强形变收缩</h4>
-\(r\) 是强形变收缩（保持 \(S^1\) 不动），故
+本步得到：有 \(r:X\to S^1\) 与 \(i:S^1\to X\)。
 
-<div class="keybox">$$\boxed{\mathbb R^2\setminus\{0\}\simeq S^1,\quad \pi_1=\mathbb Z}$$</div>
+<h4>第2步：计算一个复合</h4>
+回忆：单位圆上的点满足 \(\
 
-<div class="memobox"><strong>关键词：</strong>径向投影是穿孔平面到 \(S^1\) 的强形变收缩。</div>`,
-    1: L`<h4>目标</h4>
-Möbius 带形变收缩到中心圆。
+u\|=1\)。|\(ri(u)=u/\|u\|=u\)。
 
-<h4>第一步：中心圆周</h4>
-Möbius 带的中心线是一条 \(S^1\)，整个带可「压」到它上面。
+本步得到：圆上的复合严格等于恒等。
 
-<h4>第二步：基本群</h4>
+<h4>第3步：构造另一复合的同伦</h4>
+回忆：两点 \(x\) 与 \(x/\
 
-<div class="keybox">$$\boxed{\text{Möbius 带}\simeq S^1,\quad \pi_1\cong\mathbb Z}$$</div>
+x\|\) 在同一正射线上。|令 \(H(x,t)=(1-t)x+t\,x/\|x\|\)。
 
-<div class="memobox"><strong>关键词：</strong>Möbius 带压到中心圆，基本群 \(\mathbb Z\)。</div>`,
-    2: L`<h4>目标</h4>
-\(\mathbb R^n\) 形变收缩到原点。
+本步得到：得到从 \(x\) 到 \(ir(x)\) 的直线公式。
 
-<h4>第一步：线性收缩</h4>
-同伦
+<h4>第4步：核对两端</h4>
+回忆：\(t=0,1\) 时凸组合退化成端点。
 
-<div class="eq">$$H(x,t)=(1-t)x$$</div>
+\(H(x,0)=x\)，\(H(x,1)=x/\|x\|\)。
 
-<h4>第二步：可缩空间</h4>
+本步得到：确实连接 \(\mathrm{id}_X\) 与 \(ir\)。
 
-<div class="keybox">$$\boxed{\mathbb R^n\simeq\{\ast\}}$$</div>
+<h4>第5步：证明不碰原点</h4>
+回忆：因子 \(1-t+t/\
 
-<div class="memobox"><strong>关键词：</strong>\(\mathbb R^n\) 可缩，同伦等价于单点。</div>`
+x\|\) 始终正。|\(H(x,t)=(1-t+t/\|x\|)x\)，其中 \(\|x\|>0\) 且 \(0\le t\le1\)，故 \(H(x,t)\ne0\)。
+
+本步得到：同伦始终留在 \(X\)。
+
+<h4>第6步：核对圆周固定</h4>
+回忆：若 \(u\in S^1\)，则 \(r(u)=u\)。
+
+\(H(u,t)=(1-t)u+tu=u\)。
+
+本步得到：这是强形变收缩。
+
+<h4>第7步：核对连续性</h4>
+回忆：范数和除以非零范数在 \(X\) 上连续。
+
+公式是连续函数的加法与乘法，且分母始终非零。
+
+本步得到：形变收缩合法。
+
+<h4>第8步：计算不变量</h4>
+回忆：形变收缩诱导基本群同构。
+
+\(\pi_1(X)\cong\pi_1(S^1)\cong\mathbb Z\)，一圈绕数为 \(1\)。
+
+本步得到：穿孔平面的一维洞被圆保留。
+
+<div class="keybox">$$\boxed{\mathbb R^2\setminus\{0\}\simeq S^1,\quad\pi_1\cong\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>只改半径不改方向，整条轨迹始终不经过被挖掉的原点。</div>`,
+    1: L`<h4>我们要计算什么</h4>
+把 Möbius 带写成商空间，显式收缩横向坐标并核对缝合处的公式。
+
+<h4>第1步：给出商模型</h4>
+回忆：Möbius 带可由矩形两端反向粘合。
+
+令 \(M=([0,1]\times[-1,1])/\!\sim\)，关系为 \((0,s)\sim(1,-s)\)。
+
+本步得到：扭转由端点符号反转体现。
+
+<h4>第2步：找中心圆</h4>
+回忆：横坐标 \(s=0\) 在粘合下不变。
+
+子集 \(C=\{[u,0]:u\in[0,1]\}\) 且 \([0,0]=[1,0]\)，故 \(C\cong S^1\)。
+
+本步得到：有一个圆形收缩核。
+
+<h4>第3步：定义逐时收缩</h4>
+回忆：横向纤维是区间，可按系数 \(1-t\) 缩短。
+
+设 \(H([u,s],t)=[u,(1-t)s]\)。
+
+本步得到：有候选形变。
+
+<h4>第4步：核对商映射良定且连续</h4>
+回忆：在商空间上定义映射，要检查等价代表给同一结果；商映射的连续性由兼容的原空间映射下降得到。
+
+矩形上的 \(F(u,s,t)=(u,(1-t)s)\) 连续，并满足 \(F(0,s,t)=(0,(1-t)s)\sim(1,-(1-t)s)=F(1,-s,t)\)。所以 \(H([u,s],t)=[u,(1-t)s]\) 良定。商映射与区间的乘积仍是商映射，故连续的 \(F\) 下降为连续的 \(H:M\times I\to M\)。
+
+本步得到：收缩在扭转缝合处也保持连续。
+
+<h4>第5步：核对起点</h4>
+回忆：\(1-0=1\)。
+
+\(H([u,s],0)=[u,s]\)。
+
+本步得到：初态是恒等。
+
+<h4>第6步：核对终点</h4>
+回忆：\(1-1=0\)。
+
+\(H([u,s],1)=[u,0]\in C\)。
+
+本步得到：末态落到中心圆。
+
+<h4>第7步：核对中心固定</h4>
+回忆：在 \(s=0\) 时乘任何系数仍为零。
+
+\(H([u,0],t)=[u,0]\)。
+
+本步得到：这是强形变收缩。
+
+<h4>第8步：计算基本群</h4>
+回忆：同伦等价保持基本群。
+
+\(\pi_1(M)\cong\pi_1(C)\cong\pi_1(S^1)\cong\mathbb Z\)。
+
+本步得到：扭转不改变中心一圈的基本群。
+
+<h4>第9步：区分同胚</h4>
+回忆：同胚保持局部边界性质。
+
+Möbius 带有边界点，而圆是一维流形；若二者同胚则局部维数相同，与一维和二维的局部模型不符。
+
+本步得到：同伦等价比同胚弱。
+
+<div class="keybox">$$\boxed{M\simeq S^1,\quad\pi_1(M)\cong\mathbb Z}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>扭带沿每根横向线段缩到中点，端点反向粘合仍相容。</div>`,
+    2: L`<h4>我们要计算什么</h4>
+计算 \(\mathbb R^n\) 的收缩同伦，核对连续性、端点和强形变收缩条件。
+
+<h4>第1步：指定收缩目标</h4>
+回忆：可缩是 \(\mathrm{id}_X\) 与某常值映射同伦。
+
+取原点 \(0\in\mathbb R^n\)，令 \(c_0(x)=0\)。
+
+本步得到：目标是从每点滑到原点。
+
+<h4>第2步：写出线性同伦</h4>
+回忆：欧氏空间可以做凸组合。
+
+设 \(H(x,t)=(1-t)x+t0=(1-t)x\)。
+
+本步得到：有候选同伦公式。
+
+<h4>第3步：核对起始时刻</h4>
+回忆：把 \(t=0\) 代入。
+
+\(H(x,0)=(1-0)x=x\)。
+
+本步得到：起始映射是恒等。
+
+<h4>第4步：核对结束时刻</h4>
+回忆：把 \(t=1\) 代入。
+
+\(H(x,1)=(1-1)x=0=c_0(x)\)。
+
+本步得到：结束映射是常值。
+
+<h4>第5步：核对固定核</h4>
+回忆：强形变收缩要求核上的点全程不动。
+
+\(H(0,t)=(1-t)0=0\) 对每个 \(t\) 成立。
+
+本步得到：原点固定。
+
+<h4>第6步：核对连续性</h4>
+回忆：标量乘法 \(\mathbb R\times\mathbb R^n\to\mathbb R^n\) 连续。
+
+\((x,t)\mapsto(1-t)x\) 是连续映射的复合。
+
+本步得到：公式确实是一段同伦。
+
+<h4>第7步：写同伦逆</h4>
+回忆：点空间到 \(\mathbb R^n\) 的映射只能选一个点。
+
+取 \(r(x)=0\) 和包含 \(i:\{0\}\hookrightarrow\mathbb R^n\)；\(ri=\mathrm{id}_{\{0\}}\)，\(ir=c_0\simeq\mathrm{id}_{\mathbb R^n}\)。
+
+本步得到：两空间同伦等价。
+
+<h4>第8步：求基本群作为检验</h4>
+回忆：基本群在同伦等价下不变，点的基本群平凡。
+
+\(\pi_1(\mathbb R^n,0)\cong\pi_1(\{0\})=\{e\}\)。
+
+本步得到：收缩公式也解释了环路为何可缩。
+
+<div class="keybox">$$\boxed{\mathbb R^n\simeq\{0\},\quad\pi_1(\mathbb R^n)=0}$$</div>
+
+<div class="memobox"><strong>一句话记忆：</strong>沿直线把每个向量乘以逐渐变小的系数。</div>`
   },
   "t9": {
-    0: L`<h4>目标</h4>
-\(S^1\) 的最简三角剖分。
-
-<h4>第一步：三角形边界</h4>
-\(S^1\) 可剖分为 3 条边、3 个顶点——即一个三角形的边界。
-
-<h4>第二步：验证</h4>
-三角形的三条边首尾相接、无交叉，同胚于圆周。
-
-<div class="keybox">$$\boxed{S^1:\ 3\text{ 顶点},\ 3\text{ 边}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(S^1\) 最简剖分是三角形边界。</div>`,
-    1: L`<h4>目标</h4>
-环面 \(T^2\) 的最小三角剖分。
-
-<h4>第一步：最小剖分</h4>
-\(T^2\) 最小需 14 个三角形、7 个顶点、21 条边。
-
-<h4>第二步：与同调的关系</h4>
-最小剖分的规模由同调群结构约束（需足够的三角形生成 \(H_1=\mathbb Z^2\)）。
-
-<div class="keybox">$$\boxed{T^2:\ 7\text{ 顶点},\ 21\text{ 边},\ 14\text{ 面}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>环面最小剖分 14 个三角形。</div>`,
-    2: L`<h4>目标</h4>
-射影平面 \(RP^2\) 的最小三角剖分。
-
-<h4>第一步：最小剖分</h4>
-\(RP^2\) 最小剖分需 10 顶点、27 边、18 面。
-
-<h4>第二步：扭转的来源</h4>
-其同调群含扭转 \(H_1(RP^2)=\mathbb Z/2\)，扭转需要更复杂的剖分结构来体现。
-
-<div class="keybox">$$\boxed{RP^2:\ 10\text{ 顶点},\ 27\text{ 边},\ 18\text{ 面}}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(RP^2\) 最小剖分，同调含 \(\mathbb Z/2\) 扭转。</div>`
+    0: L`<h4>我们要做什么</h4>把三角形边界写成圆周的单纯复形，逐项检查顶点、边、局部邻域和 Euler 示性数。<h4>第1步：列出三个顶点</h4>回忆：0 单形是顶点。取 (v_0,v_1,v_2) 三个不同顶点。本步得到：V=3。<h4>第2步：列出三条边</h4>回忆：每条 1 单形连两个顶点。取 (e_{01},e_{12},e_{20})，不加入填充三角形。本步得到：E=3、F=0。<h4>第3步：写出几何实现</h4>回忆：每条抽象边实现为线段，并按公共端点粘合。三条线段首尾相连形成三角形边界 (\partial\Delta^2)。本步得到：|K| 是一条闭合折线。<h4>第4步：构造到单位圆的映射</h4>回忆：用弧长参数沿边界走一周。把总周长归一为 1，再送到 (e^{2\pi it})；每条边依次覆盖圆周的三分之一。本步得到：得到连续双射 |K|→S¹。<h4>第5步：证明是同胚</h4>回忆：|K| 紧致，S¹ 是 Hausdorff。紧空间到 Hausdorff 空间的连续双射自动是同胚。本步得到：该复形确实三角剖分 S¹。<h4>第6步：检查每个顶点附近</h4>回忆：一维流形的每点局部像开区间。每个 vᵢ 恰接两条边；把两条半边在顶点处拼合，局部就是一个开区间。本步得到：粘合处没有端点奇点。<h4>第7步：计算 Euler 示性数</h4>回忆：有限复形 χ=V−E。<div class="eq">$$\chi(S^1)=3-3=0.$$</div>这与圆周同调的 1−1=0 一致。本步得到：组合计数通过核对。<h4>第8步：说明为何两条边不够</h4>回忆：抽象单纯复形中，同一对顶点之间至多有一个 1 单形。两个顶点若只连一条边得到区间；不能用两条重边形成圆，所以最少需要三个顶点。本步得到：三角形边界是最小单纯剖分。<div class="keybox">$$\boxed{|K|=|\partial\Delta^2|\cong S^1,\qquad(V,E,F)=(3,3,0)}$$</div><div class="memobox"><strong>一句话记忆：</strong>圆周不是一条“首尾同顶点的单纯边”；抽象单纯复形不允许重边，所以最小模型是三顶点、三边的三角形边界。</div>`,
+    1: L`<h4>我们要做什么</h4>证明任意单纯三角剖分的环面至少需要 7 个顶点和 14 个三角形，并给出达到下界的 7 顶点组合模型。<h4>第1步：设组合计数</h4>回忆：记顶点、边、三角形数为 V,E,F。环面是闭曲面，所以每条边恰被两个三角形使用。本步得到：可双重计数三角形的边。<h4>第2步：建立 3F=2E</h4>回忆：每个三角形贡献三次边出现。<div class="eq">$$3F=2E.$$</div>左边按面数，右边按每条边被两个面共用。本步得到：得到第一条计数式。<h4>第3步：代入 Euler 示性数</h4>回忆：环面 χ(T²)=0。<div class="eq">$$0=V-E+F=V-E+\frac{2E}{3}=V-\frac E3.$$</div>所以 E=3V，继而 F=2V。本步得到：全部计数由 V 决定。<h4>第4步：使用简单复形边数上界</h4>回忆：V 个顶点的抽象单纯复形最多有 (\binom V2) 条不同边。<div class="eq">$$3V=E\le\binom V2=\frac{V(V-1)}2.$$</div>V>0，约去 V 得 6≤V−1。本步得到：V≥7。<h4>第5步：推出面数下界</h4>回忆：已知 F=2V。<div class="eq">$$F\ge2\cdot7=14.$$</div>同时 E≥21。本步得到：任何环面单纯三角剖分至少有 14 面。<h4>第6步：给出 7 顶点构造</h4>回忆：顶点取模 7 的 0,…,6。对每个 i 加入两类三角形 ([i,i+1,i+3]) 与 ([i,i+2,i+3])，所有下标模 7；共 14 个。本步得到：构造达到计数下界。<h4>第7步：逐边核对出现次数</h4>回忆：边的差模 7 可归为 ±1、±2、±3。代入两类三角形可检查每条无向边恰出现两次；总共有全部 (\binom72=21) 条边。本步得到：复形没有边界。<h4>第8步：核对可定向性</h4>回忆：给第一类三角形定向 ([i,i+1,i+3])，给第二类反向定向 ([i,i+3,i+2])。每条公共边在相邻两面中方向相反，所以基本 2 链的边界为零。本步得到：所得闭曲面可定向。<h4>第9步：识别为环面</h4>回忆：计数给 χ=7−21+14=0。闭、连通、可定向曲面分类定理说明 χ=2−2g=0，故 g=1。本步得到：几何实现同胚于 T²。<h4>第10步：说明“最少”已证</h4>回忆：下界来自任意剖分，构造给出等号例子。因此 7 顶点、21 边、14 面都是真正的最小值。本步得到：不是只展示某个方便剖分。<div class="keybox">$$\boxed{V_{\min}=7,\qquad E=21,\qquad F=14}$$</div><div class="memobox"><strong>一句话记忆：</strong>闭三角曲面先用 3F=2E，再用 χ(T²)=0 得 E=3V、F=2V；简单图最多有 V(V−1)/2 条边，立即逼出 V≥7。</div>`,
+    2: L`<h4>我们要做什么</h4>验证 (\mathbb{RP}^2) 的最小三角剖分计数 ((V,E,F)=(6,15,10))，并说明它如何预示 (H_1\cong\mathbb Z/2)。<h4>第1步：写闭曲面计数关系</h4>回忆：RP² 无边界，所以每边仍被两个三角形使用。<div class="eq">$$3F=2E.$$</div>Euler 示性数 χ(RP²)=1。本步得到：有 E=3(V−1)、F=2(V−1)。<h4>第2步：用边数上界求 V</h4>回忆：简单复形满足 E≤V(V−1)/2。<div class="eq">$$3(V-1)\le\frac{V(V-1)}2.$$</div>V>1，约去 V−1 得 6≤V。本步得到：至少需要 6 个顶点。<h4>第3步：算等号时 E,F</h4>回忆：令 V=6。<div class="eq">$$E=3(6-1)=15,\qquad F=2(6-1)=10.$$</div>15 恰等于 (\binom62)，所以每对顶点都有一条边。本步得到：候选最小剖分是邻接完全的。<h4>第4步：列出十个面</h4>回忆：在顶点 1,…,6 上取面 123、124、135、146、156、236、245、256、345、346。本步得到：得到 10 个不同三角形。<h4>第5步：核对每条边两次</h4>回忆：逐面列边并计数。例如 12 在 123、124 中，34 在 345、346 中；对全部 15 对顶点同样检查，每条恰出现两次。本步得到：复形是无边界二维伪流形。<h4>第6步：检查顶点链接</h4>回忆：一个顶点的链接由与它同面的对边组成。例如顶点 1 的链接边为 23、24、35、46、56，它们组成五边形 2−3−5−6−4−2；其余顶点同理。本步得到：每点邻域是圆盘，故确为闭曲面。<h4>第7步：识别非可定向性</h4>回忆：若能给十个面一致定向，沿公共边传播方向后会在某条闭链返回相反方向。等价地，此复形的基本 2 链无法让所有公共边系数相消；它没有整数二维基本类。本步得到：该闭曲面不可定向。<h4>第8步：用分类定理识别</h4>回忆：闭连通曲面 χ=1 且不可定向。不可定向亏格 k 的 χ=2−k，故 k=1。本步得到：几何实现是 RP²。<h4>第9步：连接到胞腔模型</h4>回忆：RP² 也可由一个 0 胞腔、一条 1 胞腔和一个沿度 2 粘合的 2 胞腔构成。胞腔边界 (d_2:\mathbb Z\to\mathbb Z) 是乘 2。本步得到：扭转来自“边界绕两次”。<h4>第10步：计算一维同调</h4>回忆：d₁=0，im d₂=2Z。<div class="eq">$$H_1(\mathbb{RP}^2;\mathbb Z)=\ker d_1/\operatorname{im}d_2=\mathbb Z/2\mathbb Z.$$</div>非平凡一维类绕两次才成为边界。本步得到：三角剖分与胞腔计算给出同一扭转。<div class="keybox">$$\boxed{(V,E,F)=(6,15,10),\qquad H_1(\mathbb{RP}^2;\mathbb Z)\cong\mathbb Z/2}$$</div><div class="memobox"><strong>一句话记忆：</strong>χ=1 与每边两面先逼出 V≥6；六顶点模型不可定向，正是 RP²，而度 2 附着把一维生成元变成二阶扭转。</div>`
   },
   "t10": {
-    0: L`<h4>目标</h4>
-球面 \(S^2\) 的同调群。
-
-<h4>第一步：各维同调</h4>
-
-<div class="eq">$$H_0(S^2)=\mathbb Z,\quad H_1(S^2)=0,\quad H_2(S^2)=\mathbb Z$$</div>
-
-<h4>第二步：解释</h4>
-一个二维洞（空腔），没有一维洞（无「环」）。
-
-<div class="keybox">$$\boxed{H_*(S^2)=\mathbb Z,\ 0,\ \mathbb Z}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(S^2\) 有一个二维洞、无一维洞。</div>`,
-    1: L`<h4>目标</h4>
-环面 \(T^2\) 的同调群。
-
-<h4>第一步：各维同调</h4>
-
-<div class="eq">$$H_0(T^2)=\mathbb Z,\quad H_1(T^2)=\mathbb Z^2,\quad H_2(T^2)=\mathbb Z$$</div>
-
-<h4>第二步：解释</h4>
-两个独立的一维洞（赤道与经线），一个二维洞（内部空腔）。
-
-<div class="keybox">$$\boxed{H_*(T^2)=\mathbb Z,\ \mathbb Z^2,\ \mathbb Z}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>环面有两个一维洞、一个二维洞。</div>`,
-    2: L`<h4>目标</h4>
-射影平面 \(RP^2\) 的同调群（含扭转）。
-
-<h4>第一步：各维同调</h4>
-
-<div class="eq">$$H_0(RP^2)=\mathbb Z,\quad H_1(RP^2)=\mathbb Z/2,\quad H_2(RP^2)=0$$</div>
-
-<h4>第二步：扭转的含义</h4>
-存在非平凡的一维闭链，它绕<strong>两圈</strong>才成为边缘——这就是 \(\mathbb Z/2\) 扭转。
-
-<div class="keybox">$$\boxed{H_*(RP^2)=\mathbb Z,\ \mathbb Z/2,\ 0}$$</div>
-
-<div class="memobox"><strong>关键词：</strong>\(RP^2\) 同调含 \(\mathbb Z/2\) 扭转。</div>`
+    0: L`<h4>我们要做什么</h4>用一个 0 胞腔和一个 2 胞腔的链复形逐维计算球面 (S^2) 的同调，并解释每个群对应什么“洞”。<h4>第1步：选最简 CW 结构</h4>回忆：S² 可看成 D² 的边界 S¹ 全部压成一点。因此有一个 0 胞腔 e⁰、没有 1 胞腔、一个 2 胞腔 e²。本步得到：链群由胞腔数直接读出。<h4>第2步：写链复形</h4>回忆：每个 n 胞腔贡献一份 Z。<div class="eq">$$0\to C_2=\mathbb Z\xrightarrow{d_2}C_1=0\xrightarrow{d_1}C_0=\mathbb Z\to0.$$</div>本步得到：中间群为零迫使两个边界映射都是零。<h4>第3步：计算 H₂</h4>回忆：H₂=ker d₂/im d₃。d₂:Z→0 的核是全部 Z，且 C₃=0，所以 im d₃=0。本步得到：<div class="eq">$$H_2(S^2)=\mathbb Z.$$</div><h4>第4步：计算 H₁</h4>回忆：H₁=ker d₁/im d₂。ker(0→Z)=0，im(Z→0)=0，所以 0/0 是零群。本步得到：<div class="eq">$$H_1(S^2)=0.$$</div><h4>第5步：计算 H₀</h4>回忆：H₀=ker d₀/im d₁。d₀ 视为到 0 的映射，核是 Z；d₁ 的像是 0。本步得到：<div class="eq">$$H_0(S^2)=\mathbb Z.$$</div><h4>第6步：处理其他维数</h4>回忆：其余维没有胞腔。Cₙ=0 直接给 Hₙ=0（n≠0,2）。本步得到：同调列表完整。<h4>第7步：解释生成元</h4>回忆：H₀ 的 1 表示唯一连通分支；H₂ 的 1 是整张有向球面的基本类。H₁=0 表示任何一维闭链都能由二维链填充。本步得到：代数结果与几何洞一致。<h4>第8步：用 Euler 示性数核对</h4>回忆：自由秩交错和为 1−0+1。<div class="eq">$$\chi(S^2)=2.$$</div>也等于胞腔交错和 1+1。本步得到：计算通过独立核对。<div class="keybox">$$\boxed{H_k(S^2)=\begin{cases}\mathbb Z,&k=0,2,\\0,&\text{其他}.\end{cases}}$$</div><div class="memobox"><strong>一句话记忆：</strong>最简 CW 结构在维 0、2 各放一份 Z，中间没有链群，所以顶维基本类存活而一维洞为零。</div>`,
+    1: L`<h4>我们要做什么</h4>从环面的一个顶点、两条一胞腔和一个二胞腔出发，计算全部同调群，并把边界交换子为何在阿贝尔链群中变成零写清楚。<h4>第1步：列胞腔</h4>回忆：正方形对边粘合后四角成一个 e⁰，两对边成 a,b，内部成 e²。所以 C₂=Z、C₁=Z²、C₀=Z。本步得到：链群已确定。<h4>第2步：计算 d₁</h4>回忆：a、b 都从唯一顶点出发又回到它。<div class="eq">$$d_1(a)=e^0-e^0=0,\qquad d_1(b)=0.$$</div>故 d₁ 是零映射。本步得到：所有 1 链都是闭链。<h4>第3步：读二胞腔附着词</h4>回忆：正方形边界词为 aba⁻¹b⁻¹。胞腔边界只记录每条一胞腔的总带符号次数。本步得到：a 与 b 都正向一次、反向一次。<h4>第4步：计算 d₂</h4>回忆：分别收集系数。<div class="eq">$$d_2(e^2)=(1-1)a+(1-1)b=0.$$</div>注意基本群中交换子可能非平凡，但阿贝尔链群只看指数和。本步得到：d₂ 也是零映射。<h4>第5步：计算 H₂</h4>回忆：d₂ 的核是 Z，d₃ 像为 0。<div class="eq">$$H_2(T^2)=\mathbb Z.$$</div>本步得到：环面有一个定向二维基本类。<h4>第6步：计算 H₁</h4>回忆：ker d₁=Z²，im d₂=0。<div class="eq">$$H_1(T^2)=\mathbb Z^2.$$</div>两个生成元由经线、纬线给出。本步得到：有两个独立一维同调方向。<h4>第7步：计算 H₀ 与高维</h4>回忆：唯一零胞腔给连通性。<div class="eq">$$H_0(T^2)=\mathbb Z,\qquad H_k(T^2)=0\ (k>2).$$</div>本步得到：全部维数完成。<h4>第8步：用 Euler 示性数核对</h4>回忆：胞腔数给 1−2+1=0；Betti 数给 1−2+1=0。两种计算一致。本步得到：没有漏掉自由秩。<h4>第9步：对比基本群</h4>回忆：π₁(T²)=⟨a,b|[a,b]=1⟩≅Z²。H₁ 是 π₁ 的阿贝尔化；本例 π₁ 已阿贝尔，所以仍是 Z²。本步得到：解释了同调结果。<div class="keybox">$$\boxed{(H_0,H_1,H_2)(T^2)=(\mathbb Z,\mathbb Z^2,\mathbb Z)}$$</div><div class="memobox"><strong>一句话记忆：</strong>二胞腔边界是交换子；进入阿贝尔链群后 a、b 都正负各一次而相消，所以两条一维生成元和一份二维基本类都留下。</div>`,
+    2: L`<h4>我们要做什么</h4>用 (\mathbb{RP}^2) 的度 2 附着映射逐维计算整数同调，明确说明 (\mathbb Z/2) 为什么出现、顶维同调为什么消失。<h4>第1步：列标准 CW 结构</h4>回忆：RP² 在维 0、1、2 各有一个胞腔。一骨架 RP¹≅S¹；二胞腔边界沿这个圆绕两次。本步得到：C₂=C₁=C₀=Z。<h4>第2步：计算 d₁</h4>回忆：唯一一胞腔两端都粘到同一零胞腔。<div class="eq">$$d_1=0: \mathbb Z\to\mathbb Z.$$</div>本步得到：每个 1 链都是闭链。<h4>第3步：计算 d₂</h4>回忆：胞腔边界系数是附着映射 S¹→S¹ 的度。RP² 的附着映射把对径边界点识别，沿目标圆总共绕两圈。本步得到：<div class="eq">$$d_2=\times2:\mathbb Z\to\mathbb Z.$$</div><h4>第4步：求 H₂</h4>回忆：乘 2 在 Z 上没有非零核。<div class="eq">$$H_2=\ker d_2/\operatorname{im}d_3=0/0=0.$$</div>本步得到：不可定向闭曲面没有整数顶维基本类。<h4>第5步：求 H₁</h4>回忆：ker d₁=Z，im d₂=2Z。<div class="eq">$$H_1=\mathbb Z/2\mathbb Z.$$</div>生成闭链 e¹ 不是边缘，但 2e¹=d₂(e²) 是边缘。本步得到：得到二阶扭转。<h4>第6步：求 H₀</h4>回忆：d₀=0 且 im d₁=0。<div class="eq">$$H_0=\mathbb Z.$$</div>本步得到：空间连通。<h4>第7步：处理高维</h4>回忆：没有三维及以上胞腔。Cₖ=0 直接给 Hₖ=0（k>2）。本步得到：同调列表完整。<h4>第8步：用 Euler 示性数核对自由秩</h4>回忆：扭转不贡献 Betti 数。b₀=1,b₁=0,b₂=0，所以 χ=1；胞腔数也是 1−1+1=1。本步得到：自由部分计数一致。<h4>第9步：用“绕两圈”记忆</h4>回忆：e¹ 的同调类记作 α。<div class="eq">$$2\alpha=0,\qquad\alpha\ne0.$$</div>这正是 Z/2 的定义关系。本步得到：几何附着次数直接变成代数扭转阶数。<div class="keybox">$$\boxed{(H_0,H_1,H_2)(\mathbb{RP}^2)=(\mathbb Z,\mathbb Z/2,0)}$$</div><div class="memobox"><strong>一句话记忆：</strong>二胞腔边界绕一骨架两圈，所以 d₂ 是乘 2：一维生成元本身不消失，绕两次却成为边缘，于是留下 Z/2。</div>`
   },
   "t11": {
     0: L`<h4>目标</h4>

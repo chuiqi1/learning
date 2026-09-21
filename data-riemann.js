@@ -24,7 +24,7 @@ const nodes = [
   {
     id: "r1", label: "平面曲线曲率", chapter: "ch1", layer: 0,
     desc: "平面曲线的曲率度量曲线偏离直线的程度，由曲率半径的倒数给出，是曲率概念的最初等形式。",
-    content: "平面曲线的曲率是微分几何中最基本的曲率概念。对于弧长参数化的平面曲线 γ(s)，曲率定义为 κ(s) = |γ''(s)|，即单位切向量沿曲线的旋转速率。对于一般参数化曲线，曲率公式为 κ = |γ' × γ''| / |γ'|³。曲率半径 R = 1/κ 表示在该点处最佳逼近圆的半径。曲率为正表示曲线向左侧弯曲，为负表示向右侧弯曲（在给定定向后）。Frenet标架 {T, N} 构成了曲线上的活动正交标架，满足 Frenet 方程 dT/ds = κN, dN/ds = -κT。曲率完全决定了平面曲线的形状（基本定理：曲率函数相同且相差刚体运动的曲线等价）。",
+    content: "平面曲线的曲率是微分几何中最基本的曲率概念。对于弧长参数化的平面曲线 γ(s)，曲率定义为 κ(s) = |γ''(s)|，即单位切向量沿曲线的旋转速率。对于一般参数化曲线，曲率公式为 κ = |γ' × γ''| / |γ'|³。曲率半径 R = 1/κ 表示在该点处最佳逼近圆的半径。这里的κ=|γ″|是无符号曲率，永远不为负。若固定平面定向并定义带符号曲率k_s=det(γ′,γ″)（弧长参数），则k_s>0表示向左转，k_s<0表示向右转。Frenet标架 {T, N} 构成了曲线上的活动正交标架，满足 Frenet 方程 dT/ds = κN, dN/ds = -κT。曲率完全决定了平面曲线的形状（基本定理：曲率函数相同且相差刚体运动的曲线等价）。",
     understanding: "可以想象在弯曲的道路上开车：曲率大的地方需要急转弯，方向盘转得厉害；曲率小的地方接近直线，几乎不用转方向盘。曲率半径就是'等效转弯半径'——如果前方弯道是半径为50米的圆弧，曲率就是1/50=0.02。",
     svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2563eb"/></marker></defs><path d="M20,160 Q60,100 100,70 Q140,40 180,30" fill="none" stroke="#2563eb" stroke-width="2.5"/><path d="M100,70 Q120,130 140,155" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,3"/><circle cx="100" cy="70" r="3" fill="#dc2626"/><circle cx="125" cy="112" r="2" fill="#dc2626"/><text x="115" y="50" font-size="11" fill="#2563eb" font-family="serif" font-style="italic">κ = 1/R</text><text x="105" y="140" font-size="9" fill="#dc2626">R</text><line x1="100" y1="70" x2="125" y2="112" stroke="#dc2626" stroke-width="1"/></svg>`,
     examples: [
@@ -58,21 +58,21 @@ const nodes = [
     svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="100" rx="70" ry="50" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="50" ry="30" fill="none" stroke="#dc2626" stroke-width="1"/><ellipse cx="100" cy="100" rx="20" ry="50" fill="none" stroke="#dc2626" stroke-width="1"/><text x="130" y="50" font-size="10" fill="#2563eb">κ₁</text><text x="60" y="55" font-size="10" fill="#dc2626">κ₂</text><text x="70" y="150" font-size="11" fill="#7c3aed">K = κ₁κ₂</text><circle cx="100" cy="100" r="2.5" fill="#7c3aed"/></svg>`,
     examples: [
       { title: "球面", content: "半径为R的球面上每点主曲率均为 1/R，Gauss曲率恒为 K = 1/R² > 0，是常正曲率曲面的典型。" },
-      { title: "伪球面", content: "伪球面（tractroid）的Gauss曲率恒为 -1，是常负曲率曲面，黎曼之前就已发现其内蕴几何与双曲几何一致。" },
+      { title: "伪球面", content: "尺度为1的伪球面（tractroid）在光滑部分的Gauss曲率恒为 -1，局部体现双曲几何；它不完备，因此不与整个完备双曲平面全局等距。" },
       { title: "环面", content: "环面上外侧区域 K > 0（椭圆点），内侧区域 K < 0（双曲点），顶部和底部圆周上 K = 0，展示了曲率如何在曲面上变化。" }
     ],
-    theorems: [{ name: "Gauss绝妙定理", statement: "Gauss曲率 K 仅由曲面的第一基本形式及其导数决定，是等距变换下的不变量。", proof: "Gauss通过直接计算发现：虽然K的定义涉及第二基本形式（外蕴量），但将Christoffel符号用度量张量及其导数表示后，曲率张量R^l_ijk完全由g_ij及其一阶、二阶导数决定。在二维情形，K = R^1_212/det(g)，因此K仅依赖于第一基本形式。这是历史上首次证明曲率可以是内蕴量。" }],
+    theorems: [{ name: "Gauss绝妙定理", statement: "Gauss曲率 K 仅由曲面的第一基本形式及其导数决定，是等距变换下的不变量。", proof: "Gauss通过直接计算发现：虽然K的定义涉及第二基本形式（外蕴量），但将Christoffel符号用度量张量及其导数表示后，曲率张量R^l_ijk完全由g_ij及其一阶、二阶导数决定。在二维情形，K = R_{1212}/det(g)（取 R(X,Y)Z=∇_X∇_YZ−∇_Y∇_XZ−∇_[X,Y]Z 的约定），因此K仅依赖于第一基本形式。这是历史上首次证明曲率可以是内蕴量。" }],
     applications: "薄膜和壳体结构的力学分析中，Gauss曲率决定刚度；计算机图形学中网格曲面平滑和特征检测；地理信息系统中的地形曲率分析。",
     refs: { book: "Lee", ch: "Ch.1", sec: "§1.3" }
   },
   {
     id: "r4", label: "曲率的内蕴性", chapter: "ch1", layer: 1,
     desc: "内蕴曲率是仅依赖于流形自身度量结构而不依赖于外围嵌入方式的几何量，是黎曼几何的核心思想。",
-    content: "曲率的内蕴性是黎曼几何区别于古典微分几何的根本特征。Gauss的绝妙定理首次揭示了曲率可以是内蕴的：曲面的Gauss曲率可以通过度量张量 g_ij 及其导数计算，不需要知道曲面在R³中的嵌入方式。这直接启发了黎曼在1854年就职演讲中提出的n维流形概念。内蕴曲率意味着：两个等距的黎曼流形具有相同的曲率性质，即便它们在外观上完全不同。例如，平面和圆柱面等距，因此内蕴曲率都为零。内蕴曲率的计算依赖于Christoffel符号和曲率张量，这些量完全由度量张量决定。",
+    content: "曲率的内蕴性是黎曼几何区别于古典微分几何的根本特征。Gauss的绝妙定理首次揭示了曲率可以是内蕴的：曲面的Gauss曲率可以通过度量张量 g_ij 及其导数计算，不需要知道曲面在R³中的嵌入方式。这直接启发了黎曼在1854年就职演讲中提出的n维流形概念。内蕴曲率意味着：两个等距的黎曼流形具有相同的曲率性质，即便它们在外观上完全不同。例如，平面和圆柱面局部等距，因此内蕴曲率都为零；两者基本群不同，故不可能全局等距。内蕴曲率的计算依赖于Christoffel符号和曲率张量，这些量完全由度量张量决定。",
     understanding: "在平面上画一个三角形，内角和恰好180度。把纸弯成圆柱面，三角形内角和还是180度——因为弯曲只是'外部'的。但如果把纸压成球面的一部分，三角形内角和就大于180度了——因为球面的曲率是'内蕴'的，改变了空间本身的几何。",
     svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="30" width="70" height="70" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/><polygon points="35,85 55,40 80,80" fill="none" stroke="#dc2626" stroke-width="1.5"/><text x="30" y="115" font-size="9" fill="#2563eb">平面 K=0</text><text x="38" y="130" font-size="8" fill="#dc2626">内角和=180°</text><path d="M130,30 Q150,30 155,50 Q160,70 155,90 Q150,110 130,110" fill="none" stroke="#2563eb" stroke-width="1.5"/><path d="M130,30 Q110,30 105,50 Q100,70 105,90 Q110,110 130,110" fill="none" stroke="#2563eb" stroke-width="1.5"/><text x="100" y="135" font-size="9" fill="#2563eb">圆柱面 K=0</text><text x="108" y="148" font-size="8" fill="#dc2626">内角和=180°</text><text x="60" y="165" font-size="10" fill="#7c3aed" font-weight="bold">等距 → 内蕴曲率相等</text></svg>`,
     examples: [
-      { title: "平面与圆柱面", content: "平面和圆柱面是等距的。将平面卷成圆柱不改变任何内蕴几何量，因此Gauss曲率均为零。平面上三角形内角和180度，圆柱面上也如此。" },
+      { title: "平面与圆柱面", content: "平面和圆柱面局部等距。把平面的一条窄带卷成圆柱的一片不会改变局部的长度与夹角，因此Gauss曲率均为零；圆柱上的小测地三角形与平面上一样，内角和为180度。" },
       { title: "地图投影", content: "地图投影无法同时保持角度和面积，正是因为球面（K>0）与平面（K=0）不等距。任何平面地图必然存在畸变，这是内蕴曲率不同的必然结果。" }
     ],
     theorems: [{ name: "等距不变性", statement: "若两个黎曼流形之间存在等距映射，则它们的曲率张量、截面曲率、Ricci曲率和标量曲率均对应相等。", proof: "等距映射F满足F*h=g，即度量张量在拉回下不变。由于Christoffel符号和曲率张量完全由度量张量及其导数决定，等距映射必然保持这些量。具体地，Γ^k_ij在等距下按张量变换律变换，R^l_ijk作为(1,3)-张量也相应变换，截面曲率、Ricci曲率和标量曲率作为缩并也保持不变。" }],
@@ -210,7 +210,7 @@ const nodes = [
     understanding: "在地球表面行走，沿大圆航线是最短路径（测地线），这就是为什么北京到纽约的航班飞越北极。球面上三角形的内角和总是大于180度，比如从北极到赤道上两点形成的三角形，内角和可达270度。在球面上，你无法画出'平行线'——任何两条大圆必然相交。",
     svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="70" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="70" ry="25" fill="none" stroke="#7c3aed" stroke-width="1"/><path d="M100,30 Q130,70 100,100" fill="none" stroke="#dc2626" stroke-width="1.5"/><path d="M100,30 Q70,70 100,100" fill="none" stroke="#dc2626" stroke-width="1.5"/><text x="110" y="45" font-size="9" fill="#dc2626">大圆</text><text x="35" y="90" font-size="10" fill="#2563eb">K=1/R²</text><text x="105" y="125" font-size="9" fill="#7c3aed">赤道</text></svg>`,
     examples: [
-      { title: "二维球面 S²", content: "半径为R的二维球面，面积 4πR²，Gauss曲率 1/R²，直径 πR。测地线是大圆，两点间有两段大圆弧。" },
+      { title: "二维球面 S²", content: "半径为R的二维球面，面积 4πR²，Gauss曲率 1/R²，直径 πR。测地线是大圆；非对径两点间的短大圆弧给出距离，若两点对径则有无穷多条极小大圆半弧。" },
       { title: "三维球面 S³", content: "S³ 是 Lie 群 SU(2) 的底流形，在物理学中描述旋转对称性，Hopf纤维化 S³→S² 是重要的拓扑构造。" },
       { title: "射影空间 RPⁿ", content: "实射影空间 RPⁿ = Sⁿ/{±1} 配备球面诱导度量，是常正曲率的非单连通流形，基本群为 Z₂。" }
     ],
@@ -441,7 +441,7 @@ const nodes = [
     understanding: "曲率张量描述了'先沿X方向再沿Y方向'与'先沿Y方向再沿X方向'求导的差异。在欧氏空间中，求导顺序可交换，曲率为零。在弯曲空间中，这个差异不为零，反映了空间的弯曲。就像在球面上，先向东走再向北走，与先向北走再向东走，到达的位置不同——这就是曲率的体现。",
     svg: `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path d="M30,150 Q30,100 70,90 Q110,80 140,70" fill="none" stroke="#2563eb" stroke-width="2"/><line x1="40" y1="130" x2="70" y2="110" stroke="#dc2626" stroke-width="1.5" marker-end="url(#ar1)"/><line x1="70" y1="110" x2="90" y2="95" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ar2)"/><text x="38" y="120" font-size="8" fill="#dc2626">X</text><text x="80" y="90" font-size="8" fill="#7c3aed">Y</text><text x="25" y="50" font-size="9" fill="#2563eb">R(X,Y)Z</text><text x="25" y="65" font-size="8" fill="#7c3aed">=[∇_X,∇_Y]Z - ∇_{[X,Y]}Z</text><defs><marker id="ar1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#dc2626"/></marker><marker id="ar2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#7c3aed"/></marker></defs></svg>`,
     examples: [
-      { title: "二维曲面的曲率张量", content: "在二维黎曼流形上，曲率张量只有一个独立分量 R^1_212，由 Gauss 曲率 K = R^1_212 / det(g) 给出。" },
+      { title: "二维曲面的曲率张量", content: "在二维黎曼流形上，降指标后的曲率张量只有一个独立分量 R_{1212}，由 Gauss 曲率 K = R_{1212} / det(g)（R_{1212}=〈R(∂₁,∂₂)∂₂,∂₁〉） 给出。" },
       { title: "常曲率空间", content: "常截面曲率c的空间中，R(X,Y)Z = c(⟨Y,Z⟩X - ⟨X,Z⟩Y)，曲率张量完全由标量c决定。" },
       { title: "平坦空间", content: "Rⁿ中的曲率张量恒为零。通过计算曲率张量是否为零可以判断度量是否局部等距于欧氏度量。" }
     ],
@@ -753,7 +753,7 @@ const nodes = [
       { title: "双曲空间vs欧氏空间", content: "Hⁿ(-1)上J''-J=0，|J(t)|指数增长。Rauch定理给出：负曲率空间中Jacobi场增长快于欧氏空间。" },
       { title: "球面定理", content: "若截面曲率 1/4 < K ≤ 1，则流形同胚于Sⁿ。上界1防止过大的曲率，下界1/4由Rauch定理和共轭点比较得出。" }
     ],
-    theorems: [{ name: "Rauch比较定理", statement: "若 K_M ≥ K_M~，则沿等长测地线且相同初始条件的Jacobi场满足 |J(t)| ≤ |J~(t)|（在无共轭点区间）。", proof: "考虑函数f(t) = |J(t)|²/|J~(t)|²。计算f'(t)并利用Jacobi方程。关键步骤：定义指标形式I_t(J,J) = ∫_0^t (|∇J|² - ⟨R(J,γ')γ',J⟩) ds。由曲率条件K_M ≥ K_M~，有I_t(J,J) ≤ I_t(J~,J~)。然后利用指标形式的性质，比较J和J~的增长率。通过分析f(t)的导数并用曲率不等式，可证f(t) ≤ 1，即|J(t)| ≤ |J~(t)|。这是所有比较定理的基石。" }],
+    theorems: [{ name: "Rauch比较定理", statement: "设M与M~同维，γ与γ~为单位速度测地线，J与J~为法向Jacobi场，J(0)=J~(0)=0且|J′(0)|=|J~′(0)|>0。若比较区间内两侧无共轭点，且沿γ的每个径向截面曲率不小于沿γ~的每个径向截面曲率，则|J(t)|≤|J~(t)|。", proof: "固定终点并归一化Jacobi场：对法向场使用指标形式I_t(V,V)=∫(|D_tV|²−⟨R(V,T)T,V⟩)dt。无共轭点保证固定端点Jacobi场使指标形式最小；该事实可由Jacobi矩阵的Riccati方程把I_t(W,W)配成平方证明。把对照Jacobi场经平行正交标架搬到M并对齐终点，曲率下界使竞争场的指标形式不增，故(|J|′/|J|)≤(|J~|′/|J~|)。再用原点处|J|/|J~|→1，积分得到|J|≤|J~|。详细证明见下方逐步推演。" }],
     applications: "球面定理和刚性定理；广义相对论中奇点定理（如Hawking-Penrose定理）；Gromov-Hausdorff收敛理论。",
     refs: { book: "Lee", ch: "Ch.10", sec: "§10.1" }
   },

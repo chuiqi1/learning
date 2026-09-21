@@ -16,8 +16,19 @@ const riemannBig = require('./data-riemann-big.js');
 const topoBig = require('./data-topo-big.js');
 const riemannBig2 = require('./data-riemann-big2.js');
 const topoBig2 = require('./data-topo-big2.js');
+const quizExpansion = require('./quiz-expansion.js');
+const quizExpansionPart2 = require('./quiz-expansion-part2.js');
 const exampleDetails = require('./example-details.js');
 const theoremDetails = require('./theorem-details.js');
+const applyQuizDetails = require('./quiz-details.js');
+const topologyVisuals = require('./topology-visuals.js');
+
+// 对现有证明题、计算题补充逐步解答，先于汇总题库与去重执行。
+applyQuizDetails({
+  riemannBig, riemannBig2, topoBig, topoBig2,
+  theoremDetails, exampleDetails,
+  quizExpansion
+});
 
 // ---- 构建学科数据 ----
 const subjects = [
@@ -45,10 +56,23 @@ const subjects = [
 const allNodes = [];
 const allEdges = [];
 const allQuizzes = [];
+const quizByQuestion = new Map();
 const allChapters = [];
 
 function addQuiz(q, subject) {
-  allQuizzes.push({ ...q, subject: subject, type: q.type || 'choice' });
+  const item = { ...q, subject: subject, type: q.type || 'choice' };
+  const key = subject + ':' + (item.chapter || '') + ':' + item.q.trim();
+  const prior = quizByQuestion.get(key);
+  if (prior !== undefined) {
+    // 多个题库重收录同一题时保留解释更充分的版本。
+    const old = allQuizzes[prior];
+    if (String(item.answer || item.explanation || '').length > String(old.answer || old.explanation || '').length) {
+      allQuizzes[prior] = item;
+    }
+    return;
+  }
+  quizByQuestion.set(key, allQuizzes.length);
+  allQuizzes.push(item);
 }
 
 subjects.forEach(subj => {
@@ -71,6 +95,20 @@ riemannBig.forEach(q => addQuiz(q, 'riemann'));
 topoBig.forEach(q => addQuiz(q, 'topo'));
 riemannBig2.forEach(q => addQuiz(q, 'riemann'));
 topoBig2.forEach(q => addQuiz(q, 'topo'));
+
+// 补充题库：跨学科题在两个学科的对应章节都能找到。
+(quizExpansion.riemann || []).forEach(q => addQuiz(q, 'riemann'));
+(quizExpansion.topo || []).forEach(q => addQuiz(q, 'topo'));
+(quizExpansion.cross || []).forEach(q => {
+  addQuiz({ ...q, chapter: q.riemannChapter, crossSubject: true }, 'riemann');
+  addQuiz({ ...q, chapter: q.topoChapter, crossSubject: true }, 'topo');
+});
+(quizExpansionPart2.riemann || []).forEach(q => addQuiz(q, 'riemann'));
+(quizExpansionPart2.topo || []).forEach(q => addQuiz(q, 'topo'));
+(quizExpansionPart2.cross || []).forEach(q => {
+  addQuiz({ ...q, chapter: q.riemannChapter, crossSubject: true }, 'riemann');
+  addQuiz({ ...q, chapter: q.topoChapter, crossSubject: true }, 'topo');
+});
 
 // ---- 跨学科关联边（黎曼几何 ↔ 代数拓扑）----
 const CROSS_EDGES = [
@@ -168,7 +206,10 @@ function mathHTML(s) {
 
 // 判断内容是否为 LaTeX 富文本（含反斜杠命令），是则跳过 ^/_ 转换、按富文本渲染
 function isRich(s) {
-  return typeof s === 'string' && s.indexOf('\\') >= 0;
+  return typeof s === 'string' && (
+    s.indexOf('\\') >= 0 ||
+    /<(?:h4|figure|div class="(?:eq|keybox|memobox|topo-process))/.test(s)
+  );
 }
 
 // 对节点与题目的数学字段做渲染转换（不动 svg，svg 需保持原始标签）
@@ -197,8 +238,9 @@ function sanitizeData() {
   });
   allQuizzes.forEach(function (q) {
     ['q', 'answer', 'explanation'].forEach(function (k) {
-      if (typeof q[k] === 'string') q[k] = mathHTML(q[k]);
+      if (typeof q[k] === 'string' && !(k === 'answer' && q.richAnswer)) q[k] = mathHTML(q[k]);
     });
+    if (typeof q.idea === 'string') q.idea = mathHTML(q.idea);
     if (Array.isArray(q.options)) {
       q.options = q.options.map(function (o) { return mathHTML(o); });
     }
@@ -223,6 +265,30 @@ function sanitizeData() {
     var map = theoremDetails[nodeId];
     Object.keys(map).forEach(function (k) {
       if (node.theorems && node.theorems[k]) node.theorems[k].detailProof = map[k];
+    });
+  });
+
+  // 为涉及形变、商空间粘合、胞腔附着和提升过程的条目加入逐帧图解。
+  Object.keys(topologyVisuals.nodes || {}).forEach(function (nodeId) {
+    var node = allNodes.find(function (n) { return n.id === nodeId; });
+    if (node) node.processVisual = topologyVisuals.nodes[nodeId];
+  });
+  Object.keys(topologyVisuals.examples || {}).forEach(function (nodeId) {
+    var node = allNodes.find(function (n) { return n.id === nodeId; });
+    if (!node || !node.examples) return;
+    var map = topologyVisuals.examples[nodeId];
+    Object.keys(map).forEach(function (k) {
+      if (!node.examples[k]) return;
+      node.examples[k].detail = map[k] + (node.examples[k].detail || '');
+    });
+  });
+  Object.keys(topologyVisuals.theorems || {}).forEach(function (nodeId) {
+    var node = allNodes.find(function (n) { return n.id === nodeId; });
+    if (!node || !node.theorems) return;
+    var map = topologyVisuals.theorems[nodeId];
+    Object.keys(map).forEach(function (k) {
+      if (!node.theorems[k]) return;
+      node.theorems[k].detailProof = map[k] + (node.theorems[k].detailProof || '');
     });
   });
 })();
@@ -1094,7 +1160,7 @@ sub { vertical-align: sub; }
 .modal {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  width: min(820px, 100%);
+  width: min(1000px, 100%);
   max-height: 86vh;
   display: flex;
   flex-direction: column;
@@ -1170,6 +1236,179 @@ sub { vertical-align: sub; }
 }
 .modal-body .rich-content th { background: var(--bg-sidebar); font-weight: 700; }
 .modal-body .rich-content .chain { text-align: center; margin: 10px 0; line-height: 2.2; font-size: 14px; }
+.node-overview-visual {
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.node-overview-visual svg {
+  display: inline-block;
+  width: min(260px, 100%);
+  height: auto;
+  max-height: 240px;
+}
+
+/* 代数拓扑：形变、粘合、提升和胞腔附着的逐帧图解 */
+.topo-process {
+  white-space: normal;
+  margin: 16px 0 20px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+}
+.topo-process figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.topo-process figcaption strong { color: var(--topo); font-size: 15px; }
+.topo-process figcaption span { color: var(--text-secondary); font-size: 13px; }
+.topo-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.topo-stage {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+.topo-stage-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 24px;
+  color: var(--text);
+  font-size: 13px;
+}
+.topo-stage-number {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--topo);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+.topo-stage-count {
+  min-height: 34px;
+  margin: 6px 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.topo-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  margin: 5px 0 8px;
+  border-radius: 5px;
+  background: var(--bg-sidebar);
+}
+.topo-stage p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.topo-process-takeaway {
+  margin-top: 11px;
+  padding: 9px 11px;
+  border-left: 4px solid var(--topo);
+  background: color-mix(in srgb, var(--topo) 7%, var(--bg-card));
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.topo-process svg .tv-frame, .topo-process svg .tv-grid-box {
+  fill: var(--bg-card); stroke: var(--border); stroke-width: 1.5;
+}
+.topo-process svg .tv-line { fill: none; stroke: var(--text-secondary); stroke-width: 2; }
+.topo-process svg .tv-muted-line { fill: none; stroke: var(--border); stroke-width: 2; stroke-dasharray: 5 4; }
+.topo-process svg .tv-guide { fill: none; stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.topo-process svg .tv-grid { fill: none; stroke: var(--border); stroke-width: 1.5; }
+.topo-process svg .tv-point, .topo-process svg .tv-vertex { fill: var(--accent); stroke: var(--bg-card); stroke-width: 1.5; }
+.topo-process svg .tv-point-b { fill: var(--topo); stroke: var(--bg-card); stroke-width: 1.5; }
+.topo-process svg .tv-target { fill: var(--topo); stroke: var(--bg-card); stroke-width: 2; }
+.topo-process svg .tv-fiber { fill: var(--text-secondary); }
+.topo-process svg .tv-hole { fill: var(--text); stroke: var(--topo); stroke-width: 2; }
+.topo-process svg .tv-halo { fill: color-mix(in srgb, var(--topo) 14%, transparent); stroke: var(--topo); stroke-width: 1.5; }
+.topo-process svg .tv-core, .topo-process svg .tv-core-b {
+  fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 3;
+}
+.topo-process svg .tv-core-b { stroke: var(--topo); }
+.topo-process svg .tv-core-strong, .topo-process svg .tv-center-strong {
+  fill: none; stroke: var(--accent); stroke-width: 3;
+}
+.topo-process svg .tv-hole-ring { fill: var(--bg-sidebar); stroke: var(--topo); stroke-width: 2; }
+.topo-process svg .tv-sheet {
+  fill: color-mix(in srgb, var(--accent) 9%, var(--bg-card));
+  stroke: var(--text-secondary); stroke-width: 1.5;
+}
+.topo-process svg .tv-center { stroke: var(--topo); stroke-width: 2.5; stroke-dasharray: 5 3; }
+.topo-process svg .tv-edge-a { fill: none; stroke: var(--accent); stroke-width: 3; }
+.topo-process svg .tv-edge-b { fill: none; stroke: var(--topo); stroke-width: 3; }
+.topo-process svg .tv-edge-a-fill { fill: var(--accent); }
+.topo-process svg .tv-edge-b-fill { fill: var(--topo); }
+.topo-process svg .tv-cross { fill: none; stroke: var(--warning); stroke-width: 5; opacity: .6; }
+.topo-process svg .tv-region-a {
+  fill: color-mix(in srgb, var(--accent) 12%, transparent);
+  stroke: var(--accent); stroke-width: 2;
+}
+.topo-process svg .tv-region-b {
+  fill: color-mix(in srgb, var(--topo) 12%, transparent);
+  stroke: var(--topo); stroke-width: 2;
+}
+.topo-process svg .tv-box, .topo-process svg .tv-box-a, .topo-process svg .tv-box-b {
+  fill: var(--bg-card); stroke: var(--border); stroke-width: 1.5;
+}
+.topo-process svg .tv-box-a { stroke: var(--accent); }
+.topo-process svg .tv-box-b { stroke: var(--topo); }
+.topo-process svg .tv-triangle-a {
+  fill: color-mix(in srgb, var(--accent) 12%, var(--bg-card));
+  stroke: var(--accent); stroke-width: 2;
+}
+.topo-process svg .tv-triangle-b {
+  fill: color-mix(in srgb, var(--topo) 12%, var(--bg-card));
+  stroke: var(--topo); stroke-width: 2;
+}
+.topo-process svg .tv-face {
+  fill: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  stroke: var(--accent); stroke-width: 2;
+}
+.topo-process svg .tv-active-cell {
+  fill: color-mix(in srgb, var(--accent) 18%, var(--bg-card)); stroke: var(--accent); stroke-width: 1.5;
+}
+.topo-process svg .tv-active-cell-b {
+  fill: color-mix(in srgb, var(--topo) 15%, var(--bg-card)); stroke: var(--topo); stroke-width: 1.5;
+}
+.topo-process svg .tv-active-all {
+  fill: color-mix(in srgb, var(--success) 14%, var(--bg-card)); stroke: var(--success); stroke-width: 2;
+}
+.topo-process svg .tv-label, .topo-process svg .tv-label-a, .topo-process svg .tv-label-b {
+  fill: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 9px;
+}
+.topo-process svg .tv-label-a { fill: var(--accent); font-weight: 700; }
+.topo-process svg .tv-label-b { fill: var(--topo); font-weight: 700; }
+@media (max-width: 560px) {
+  .topo-stage-grid { grid-template-columns: 1fr; }
+  .topo-stage svg { max-height: 180px; }
+}
 
 /* 思路 / 解答 */
 .idea-box {
@@ -1897,7 +2136,11 @@ const LEARNING_PATH = ${pathJSON};
     html += '</div>';
     if (node.svg) {
       html += '<div class="m-section"><div class="m-title">示意图</div>';
-      html += '<div style="text-align:center;background:var(--bg);border-radius:var(--radius);padding:12px">' + node.svg + '</div></div>';
+      html += '<div class="node-overview-visual">' + node.svg + '</div></div>';
+    }
+    if (node.processVisual) {
+      html += '<div class="m-section"><div class="m-title">形变与粘合的逐帧图解</div>';
+      html += node.processVisual + '</div>';
     }
     if (node.desc) html += '<div class="m-section"><div class="m-title">描述</div><div class="m-text">' + node.desc + '</div></div>';
     if (node.content) html += '<div class="m-section"><div class="m-title">详细内容</div><div class="m-text">' + node.content + '</div></div>';
@@ -2238,6 +2481,7 @@ const LEARNING_PATH = ${pathJSON};
 
   // ---- 题解：思路 + 详细代入计算 ----
   function ideaLine(q) {
+    if (q.idea) return q.idea;
     if (q.type === 'proof') {
       return '先明确结论中要证明的量，回顾它的定义；再借助本知识点对应的定理（点击下方标签查看），按逻辑逐层推导，最后化简收敛到目标等式。';
     }
@@ -2266,7 +2510,9 @@ const LEARNING_PATH = ${pathJSON};
     // 解答
     var steps = toNumberedSteps(answerText);
     html += '<div class="idea-box answer"><div class="idea-label">解答（详细代入计算）</div><div class="idea-content">';
-    if (steps.length > 1) {
+    if (q.richAnswer && answerText) {
+      html += '<div class="m-proof rich-content">' + answerText + '</div>';
+    } else if (steps.length > 1) {
       steps.forEach(function (s) {
         var m = s.match(/^([①-⑩])\s*/);
         var num = m ? m[1] : '';
@@ -2306,9 +2552,11 @@ const LEARNING_PATH = ${pathJSON};
       html += '<div class="quiz-question" data-idx="' + idx + '">';
       html += '<div class="q-meta">';
       html += '<span class="q-type">' + typeLabel + '</span>';
+      if (q.crossSubject) html += '<span class="q-type">跨学科</span>';
       html += '<span class="q-difficulty ' + (q.difficulty || 'medium') + '">' + diffLabel + '</span>';
       html += '</div>';
       html += '<div class="q-text">' + (idx + 1) + '. ' + q.q + '</div>';
+      if (q.source) html += '<div style="font-size:11px;color:var(--text-muted);margin:3px 0 8px">参考主题：' + q.source + '</div>';
       if (q.type === 'choice') {
         html += '<div class="q-options">';
         q.options.forEach(function(opt, oi) {
@@ -2331,6 +2579,9 @@ const LEARNING_PATH = ${pathJSON};
     html += '</div>';
 
     body.innerHTML = html;
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise(Array.from(body.querySelectorAll('.q-text, .q-options'))).catch(function () {});
+    }
 
     // 选择题点击
     body.querySelectorAll('.quiz-question').forEach(function(question) {
@@ -2348,6 +2599,9 @@ const LEARNING_PATH = ${pathJSON};
               opt.style.pointerEvents = 'none';
             });
             question.querySelector('.q-explanation').classList.add('show');
+            if (window.MathJax && window.MathJax.typesetPromise) {
+              MathJax.typesetPromise([question.querySelector('.q-explanation')]).catch(function () {});
+            }
             if (selected === q.answer) question.classList.add('correct');
             else question.classList.add('wrong');
           });
@@ -2359,6 +2613,9 @@ const LEARNING_PATH = ${pathJSON};
           var isShowing = expl.classList.contains('show');
           expl.classList.toggle('show');
           showBtn.textContent = isShowing ? '显示详细解答' : '收起详细解答';
+          if (!isShowing && window.MathJax && window.MathJax.typesetPromise) {
+            MathJax.typesetPromise([expl]).catch(function () {});
+          }
         });
       }
       // 题解中的 "涉及定义/定理" 标签：点击跳转到对应知识点
