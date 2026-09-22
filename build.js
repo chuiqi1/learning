@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // ---- 加载数据 ----
 const riemann = require('./data-riemann.js');
@@ -62,6 +63,8 @@ const allChapters = [];
 function addQuiz(q, subject) {
   const item = { ...q, subject: subject, type: q.type || 'choice' };
   const key = subject + ':' + (item.chapter || '') + ':' + item.q.trim();
+  // 题解可以更新，但同一题的答题记录仍要找到原题。
+  item.id = 'q-' + crypto.createHash('sha256').update(key).digest('hex').slice(0, 20);
   const prior = quizByQuestion.get(key);
   if (prior !== undefined) {
     // 多个题库重收录同一题时保留解释更充分的版本。
@@ -803,6 +806,16 @@ body {
   display: flex; align-items: center; justify-content: center;
 }
 .path-header .close-btn:hover { background: #fee2e2; color: var(--danger); }
+.path-tools { padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 11px; line-height: 1.55; color: var(--text-secondary); }
+.path-tools p { margin: 0 0 8px; }
+.path-tool-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.path-tool-actions button, .path-practice {
+  border: 1px solid var(--accent); border-radius: 6px; background: var(--bg-card);
+  color: var(--accent); padding: 5px 8px; font: inherit; cursor: pointer;
+}
+.path-tool-actions button:hover, .path-practice:hover { background: var(--accent-light); }
+.path-status { min-height: 1em; margin-top: 6px; color: var(--text-secondary); }
+.path-status.error { color: var(--danger); }
 .path-body { flex: 1; overflow-y: auto; padding: 12px; }
 .path-stage {
   margin-bottom: 10px;
@@ -827,6 +840,9 @@ body {
 }
 .path-stage-head .stage-title { flex: 1; }
 .path-stage-head .stage-count { font-size: 10px; color: var(--text-muted); font-weight: 400; }
+.path-stage-progress { padding: 5px 12px 9px; background: var(--bg-sidebar); font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+.path-stage-progress strong { color: var(--success); }
+.path-practice { padding: 2px 7px; margin-left: 6px; font-size: 11px; }
 .path-node {
   padding: 6px 12px 6px 20px;
   font-size: 12px;
@@ -837,12 +853,15 @@ body {
   color: var(--text-secondary);
   transition: all var(--transition);
   border-top: 1px solid var(--border-light);
+  width: 100%; border-right: 0; border-bottom: 0; border-left: 0;
+  background: var(--bg-card); text-align: left; font-family: var(--font);
 }
 .path-node:hover { background: var(--accent-light); color: var(--accent); }
 .path-node .pn-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: #cbd5e1; }
 .path-node.read .pn-dot { background: var(--success); }
 .path-node.current { background: #fef9c3; color: #854d0e; font-weight: 600; }
 .path-node.current .pn-dot { background: var(--warning); width: 8px; height: 8px; }
+.path-node .pn-state { margin-left: auto; flex-shrink: 0; font-size: 10px; color: var(--text-muted); }
 
 /* ============================================================
    Quiz Panel
@@ -978,6 +997,8 @@ body {
   display: inline-block;
   background: #ede9fe; color: #6d28d9;
 }
+.quiz-question .q-result { font-size: 11px; color: var(--text-secondary); }
+.quiz-question .q-option:disabled { cursor: default; }
 .quiz-question .show-answer {
   margin-top: 8px;
   padding: 6px 14px;
@@ -1518,7 +1539,7 @@ sub { vertical-align: sub; }
     <span class="search-icon">&#128269;</span>
     <input type="text" id="search-input" placeholder="搜索知识点...">
   </div>
-  <span class="progress-info" id="progress-info"></span>
+  <span class="progress-info" id="progress-info" title="打开知识点只表示浏览过；选择题记录首次作答结果"></span>
 </div>
 
 <!-- Main Layout -->
@@ -1556,9 +1577,15 @@ sub { vertical-align: sub; }
   <div class="path-header">
     <div>
       <h3>学习路径</h3>
-      <div class="path-desc">推荐阅读顺序：从上到下，从基础到进阶</div>
+      <div class="path-desc">推荐顺序：从基础到进阶</div>
     </div>
     <button class="close-btn" id="path-close">&times;</button>
+  </div>
+  <div class="path-tools">
+    <p>打开知识点只记“已浏览”，不等于学会。章节选择题按首次作答计分；至少答 10 题、正确率达 80% 标为“练习达标”。证明题与计算题请先独立完成再看解析，暂不自动评分。</p>
+    <p>进度只保存在本浏览器。换设备可先导出备份，再在另一台设备导入；清除网站数据或使用无痕模式可能丢失进度。</p>
+    <div class="path-tool-actions"><button id="progress-export" type="button">导出进度</button><button id="progress-import" type="button">导入进度</button><input id="progress-file" type="file" accept=".json,application/json" hidden></div>
+    <div class="path-status" id="path-status" role="status" aria-live="polite"></div>
   </div>
   <div class="path-body" id="path-body"></div>
 </div>
@@ -1628,7 +1655,12 @@ const LEARNING_PATH = ${pathJSON};
   var PAGE_SIZE = 10;
   var layerFilter = 'all';
   var sidebarCollapsed = false;
-  var readNodes = loadProgress();
+  var STORAGE_KEY = 'learning-workbench-progress-v2';
+  var OLD_STORAGE_KEY = 'learning-workbench-progress';
+  var storageAvailable = true;
+  var progress = loadProgress();
+  var readNodes = progress.readNodes;
+  var quizAttempts = progress.quizAttempts;
   var currentDetailNode = null;
 
   // ---- 文本拆分为步骤（支持中文句号/分号，避免破坏 sup/sub 标签）----
@@ -1702,27 +1734,106 @@ const LEARNING_PATH = ${pathJSON};
     });
   }
 
-  // ---- Progress ----
-  var STORAGE_KEY = 'learning-workbench-progress';
+  // ---- 本地进度：旧版浏览记录迁移，选择题只记录首次作答 ----
+  function cleanProgress(data) {
+    var clean = { version: 2, readNodes: {}, quizAttempts: {} };
+    if (!data || typeof data !== 'object' || data.version !== 2) return clean;
+    var reads = data.readNodes || {};
+    var attempts = data.quizAttempts || {};
+    ALL_NODES.forEach(function(n) {
+      if (typeof reads[n.id] === 'number' && Number.isFinite(reads[n.id]) && reads[n.id] > 0) {
+        clean.readNodes[n.id] = reads[n.id];
+      }
+    });
+    ALL_QUIZZES.forEach(function(q) {
+      var attempt = attempts[q.id];
+      if (q.type === 'choice' && attempt && Number.isInteger(attempt.selected) &&
+          attempt.selected >= 0 && attempt.selected < q.options.length &&
+          typeof attempt.at === 'number' && Number.isFinite(attempt.at) && attempt.at > 0) {
+        clean.quizAttempts[q.id] = { selected: attempt.selected, at: attempt.at };
+      }
+    });
+    return clean;
+  }
   function loadProgress() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) { return {}; }
+      if (raw) return cleanProgress(JSON.parse(raw));
+      var old = JSON.parse(localStorage.getItem(OLD_STORAGE_KEY) || '{}');
+      return cleanProgress({ version: 2, readNodes: old, quizAttempts: {} });
+    } catch (e) {
+      // JSON 损坏时也能继续使用页面；存储权限被禁用时提示访客导出备份。
+      try { localStorage.getItem(STORAGE_KEY); } catch (blocked) { storageAvailable = false; }
+      return cleanProgress(null);
+    }
   }
   function saveProgress() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(readNodes)); } catch (e) {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      storageAvailable = true;
+      return true;
+    } catch (e) {
+      storageAvailable = false;
+      var status = document.getElementById('path-status');
+      if (status) { status.textContent = '当前浏览器无法保存进度，请导出备份。'; status.classList.add('error'); }
+      return false;
+    }
   }
   function markRead(nodeId) {
     if (!readNodes[nodeId]) {
       readNodes[nodeId] = Date.now();
       saveProgress();
       updateProgress();
+      if (document.getElementById('path-panel').classList.contains('open')) renderPathPanel();
     }
   }
   function updateProgress() {
-    var count = Object.keys(readNodes).filter(function(k) { return ALL_NODES.some(function(n) { return n.id === k; }); }).length;
-    document.getElementById('progress-info').textContent = '已读 ' + count + '/' + ALL_NODES.length;
+    document.getElementById('progress-info').textContent = '已浏览 ' + Object.keys(readNodes).length + '/' + ALL_NODES.length +
+      ' · 已答 ' + Object.keys(quizAttempts).length + ' 题';
+  }
+  function chapterPractice(subject, chapter) {
+    var total = 0, correct = 0;
+    ALL_QUIZZES.forEach(function(q) {
+      if (q.subject !== subject || q.chapter !== chapter || q.type !== 'choice') return;
+      var attempt = quizAttempts[q.id];
+      if (!attempt) return;
+      total++;
+      if (attempt.selected === q.answer) correct++;
+    });
+    return { total: total, correct: correct, passed: total >= 10 && correct / total >= 0.8 };
+  }
+  function recordAttempt(q, selected) {
+    if (quizAttempts[q.id]) return;
+    quizAttempts[q.id] = { selected: selected, at: Date.now() };
+    saveProgress();
+    updateProgress();
+    if (document.getElementById('path-panel').classList.contains('open')) renderPathPanel();
+  }
+  function showProgressMessage(message, isError) {
+    var status = document.getElementById('path-status');
+    status.textContent = message;
+    status.classList.toggle('error', !!isError);
+  }
+  function importProgress(data) {
+    if (!data || data.version !== 2 || !data.readNodes || !data.quizAttempts ||
+        typeof data.readNodes !== 'object' || typeof data.quizAttempts !== 'object' ||
+        Array.isArray(data.readNodes) || Array.isArray(data.quizAttempts)) {
+      throw new Error('文件不是本工作台的进度备份（版本 2）。');
+    }
+    var imported = cleanProgress(data);
+    var addedReads = 0, addedAnswers = 0;
+    Object.keys(imported.readNodes).forEach(function(id) {
+      if (!readNodes[id]) { readNodes[id] = imported.readNodes[id]; addedReads++; }
+    });
+    Object.keys(imported.quizAttempts).forEach(function(id) {
+      if (!quizAttempts[id]) { quizAttempts[id] = imported.quizAttempts[id]; addedAnswers++; }
+    });
+    saveProgress();
+    updateProgress();
+    renderPathPanel();
+    renderQuiz();
+    showProgressMessage('已合并：新增浏览 ' + addedReads + ' 个知识点、首次作答 ' + addedAnswers + ' 题。' +
+      (storageAvailable ? '' : ' 当前浏览器无法保存，请导出备份。'), !storageAvailable);
   }
 
   // ---- 学科选中状态 ----
@@ -1974,7 +2085,7 @@ const LEARNING_PATH = ${pathJSON};
     html += '<span class="tag">' + subjName + '</span>';
     html += '<span class="tag">' + chName + '</span>';
     html += '<span class="tag">Layer ' + (node.layer || '?') + '</span>';
-    if (readNodes[node.id]) html += '<span class="tag" style="background:#dcfce7;color:#16a34a;">已读</span>';
+    if (readNodes[node.id]) html += '<span class="tag" style="background:#dcfce7;color:#16a34a;">已浏览</span>';
     html += '</div>';
 
     html += '<button class="node-detail-btn">查看完整详情 &#8594;</button>';
@@ -2389,20 +2500,26 @@ const LEARNING_PATH = ${pathJSON};
     LEARNING_PATH.forEach(function(stage) {
       stageIndex++;
       var readCount = stage.nodes.filter(function(n) { return readNodes[n.id]; }).length;
+      var practice = chapterPractice(stage.subject, stage.chapter);
+      var chapterKey = stage.subject + ':' + stage.chapter;
       var color = stage.subjectColor;
       html += '<div class="path-stage">';
       html += '<div class="path-stage-head"><span class="stage-num" style="background:' + color + '">' + stageIndex + '</span>';
       html += '<span class="stage-title">' + stage.subjectName + ' · ' + stage.title + '</span>';
-      html += '<span class="stage-count">' + readCount + '/' + stage.nodes.length + ' 已读</span></div>';
+      html += '<span class="stage-count">已浏览 ' + readCount + '/' + stage.nodes.length + '</span></div>';
+      html += '<div class="path-stage-progress">选择题首次作答：' + practice.correct + '/' + practice.total + ' 正确';
+      if (practice.passed) html += ' · <strong>练习达标</strong>';
+      else html += ' · 距参考标准：至少 10 题，正确率 80%';
+      html += '<button type="button" class="path-practice" data-chapter="' + chapterKey + '">练习本章</button></div>';
       stage.nodes.forEach(function(n) {
         var isRead = !!readNodes[n.id];
         var isCurrent = !currentFound && !isRead;
         if (isCurrent) currentFound = true;
-        html += '<div class="path-node' + (isRead ? ' read' : '') + (isCurrent ? ' current' : '') + '" data-node="' + n.id + '">';
+        html += '<button type="button" class="path-node' + (isRead ? ' read' : '') + (isCurrent ? ' current' : '') + '" data-node="' + n.id + '">';
         html += '<span class="pn-dot"></span>' + n.label;
-        if (isCurrent) html += '<span style="margin-left:auto;font-size:10px;color:#d97706">&#8594; 推荐从这里继续</span>';
-        if (isRead) html += '<span style="margin-left:auto;font-size:10px;color:#16a34a">&#10003;</span>';
-        html += '</div>';
+        if (isCurrent) html += '<span class="pn-state">→ 推荐继续</span>';
+        if (isRead) html += '<span class="pn-state">已浏览</span>';
+        html += '</button>';
       });
       html += '</div>';
     });
@@ -2427,6 +2544,33 @@ const LEARNING_PATH = ${pathJSON};
           // 高亮该节点
           nodeGroup.selectAll('circle').classed('highlighted', function(d) { return d.id === id; });
         }
+      });
+    });
+    body.querySelectorAll('.path-practice').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var key = button.getAttribute('data-chapter');
+        var subject = key.split(':')[0];
+        if (!hasSubject(subject)) {
+          activeSubjects[subject] = true;
+          updateSubjectButtons();
+          initGraph();
+          renderSidebar();
+        }
+        quizChapter = key;
+        quizDifficulty = 'all';
+        quizType = 'choice';
+        document.getElementById('quiz-difficulty').value = 'all';
+        document.getElementById('quiz-type').value = 'choice';
+        var choices = filteredQuizzes();
+        var firstUnanswered = choices.findIndex(function(q) { return !quizAttempts[q.id]; });
+        quizPage = firstUnanswered < 0 ? 0 : Math.floor(firstUnanswered / PAGE_SIZE);
+        quizCollapsed = false;
+        document.getElementById('quiz-panel').classList.remove('collapsed');
+        document.getElementById('quiz-toggle').innerHTML = '&#9660; 收起测验';
+        renderQuizTabs();
+        renderQuiz();
+        document.getElementById('path-panel').classList.remove('open');
+        document.getElementById('quiz-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
   }
@@ -2528,6 +2672,24 @@ const LEARNING_PATH = ${pathJSON};
     return html;
   }
 
+  function showChoiceResult(question, q, selected) {
+    question.querySelectorAll('.q-option').forEach(function(opt) {
+      var ans = parseInt(opt.getAttribute('data-answer'), 10);
+      if (ans === q.answer) opt.classList.add('correct-answer');
+      if (ans === selected && ans !== q.answer) opt.classList.add('wrong-answer');
+      opt.disabled = true;
+    });
+    question.classList.add(selected === q.answer ? 'correct' : 'wrong');
+    question.querySelector('.q-explanation').classList.add('show');
+    var result = question.querySelector('.q-result');
+    if (!result) {
+      result = document.createElement('span');
+      result.className = 'q-result';
+      question.querySelector('.q-meta').appendChild(result);
+    }
+    result.textContent = selected === q.answer ? '首次答对' : '首次答错（解析已展开）';
+  }
+
   function renderQuiz() {
     var body = document.getElementById('quiz-body');
     var quizzes = filteredQuizzes();
@@ -2543,7 +2705,7 @@ const LEARNING_PATH = ${pathJSON};
     var pageQuizzes = quizzes.slice(quizPage * PAGE_SIZE, (quizPage + 1) * PAGE_SIZE);
     var startIdx = quizPage * PAGE_SIZE;
 
-    var html = '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">共 ' + quizzes.length + ' 题，第 ' + (quizPage + 1) + '/' + totalPages + ' 页</div>';
+    var html = '<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">共 ' + quizzes.length + ' 题，第 ' + (quizPage + 1) + '/' + totalPages + ' 页。选择题只按首次作答计入章节练习；证明与计算题不自动评分。</div>';
 
     pageQuizzes.forEach(function(q, i) {
       var idx = startIdx + i;
@@ -2579,31 +2741,21 @@ const LEARNING_PATH = ${pathJSON};
     html += '</div>';
 
     body.innerHTML = html;
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      MathJax.typesetPromise(Array.from(body.querySelectorAll('.q-text, .q-options'))).catch(function () {});
-    }
-
     // 选择题点击
     body.querySelectorAll('.quiz-question').forEach(function(question) {
       var idx = parseInt(question.getAttribute('data-idx'), 10);
       var q = quizzes[idx];
       if (q.type === 'choice') {
+        if (quizAttempts[q.id]) showChoiceResult(question, q, quizAttempts[q.id].selected);
         question.querySelectorAll('.q-option').forEach(function(btn) {
           btn.addEventListener('click', function() {
-            if (question.querySelector('.q-option.correct-answer') || question.querySelector('.q-option.wrong-answer')) return;
+            if (quizAttempts[q.id]) return;
             var selected = parseInt(btn.getAttribute('data-answer'), 10);
-            question.querySelectorAll('.q-option').forEach(function(opt) {
-              var ans = parseInt(opt.getAttribute('data-answer'), 10);
-              if (ans === q.answer) opt.classList.add('correct-answer');
-              if (ans === selected && ans !== q.answer) opt.classList.add('wrong-answer');
-              opt.style.pointerEvents = 'none';
-            });
-            question.querySelector('.q-explanation').classList.add('show');
+            recordAttempt(q, selected);
+            showChoiceResult(question, q, selected);
             if (window.MathJax && window.MathJax.typesetPromise) {
               MathJax.typesetPromise([question.querySelector('.q-explanation')]).catch(function () {});
             }
-            if (selected === q.answer) question.classList.add('correct');
-            else question.classList.add('wrong');
           });
         });
       } else {
@@ -2627,6 +2779,9 @@ const LEARNING_PATH = ${pathJSON};
         });
       });
     });
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      MathJax.typesetPromise(Array.from(body.querySelectorAll('.q-text, .q-options, .q-explanation.show'))).catch(function () {});
+    }
 
     // 分页按钮
     var prevBtn = document.getElementById('pg-prev');
@@ -2677,6 +2832,51 @@ const LEARNING_PATH = ${pathJSON};
   document.getElementById('path-close').addEventListener('click', function() {
     document.getElementById('path-panel').classList.remove('open');
   });
+  document.getElementById('progress-export').addEventListener('click', function() {
+    var backup = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(backup);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = 'learning-workbench-progress-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    showProgressMessage('备份已导出。请自行保管文件；另一台设备打开网站后点击“导入进度”。', false);
+  });
+  document.getElementById('progress-import').addEventListener('click', function() {
+    document.getElementById('progress-file').click();
+  });
+  document.getElementById('progress-file').addEventListener('change', function(e) {
+    var input = e.target;
+    var file = input.files && input.files[0];
+    if (!file) return;
+    if (file.size > 1024 * 1024) {
+      showProgressMessage('备份文件超过 1 MB，未导入。', true);
+      input.value = '';
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function() {
+      try { importProgress(JSON.parse(reader.result)); }
+      catch (err) { showProgressMessage('导入失败：' + err.message, true); }
+      input.value = '';
+    };
+    reader.onerror = function() {
+      showProgressMessage('无法读取备份文件。', true);
+      input.value = '';
+    };
+    reader.readAsText(file);
+  });
+  window.addEventListener('storage', function(e) {
+    if (e.key !== STORAGE_KEY && e.key !== OLD_STORAGE_KEY) return;
+    progress = loadProgress();
+    readNodes = progress.readNodes;
+    quizAttempts = progress.quizAttempts;
+    updateProgress();
+    if (document.getElementById('path-panel').classList.contains('open')) renderPathPanel();
+    renderQuiz();
+  });
 
   document.getElementById('search-input').addEventListener('input', function(e) {
     searchTerm = e.target.value.trim();
@@ -2725,6 +2925,8 @@ const LEARNING_PATH = ${pathJSON};
 
   // ---- Init ----
   function init() {
+    // 首次打开新版时，把旧版的浏览记录复制到新版存储。
+    saveProgress();
     initGraph();
     renderSidebar();
     renderQuizTabs();
